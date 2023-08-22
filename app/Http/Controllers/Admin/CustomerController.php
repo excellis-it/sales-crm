@@ -24,8 +24,8 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        $customers = User::Role('CUSTOMER')->get();
-        return view('admin.customer.list')->with(compact('customers'));
+        $sales_managers = User::Role('SALES_MANAGER')->get();
+        return view('admin.sales_manager.list')->with(compact('sales_managers'));
     }
 
     /**
@@ -35,7 +35,7 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        return view('admin.customer.create');
+        return view('admin.sales_manager.create');
     }
 
     /**
@@ -51,35 +51,29 @@ class CustomerController extends Controller
             'email' => 'required|unique:users|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',
             'password' => 'required|min:8',
             'confirm_password' => 'required|min:8|same:password',
-            'address' => 'required',
             'phone' => 'required',
             'profile_picture' => 'required|image|mimes:jpg,png,jpeg,gif,svg',
             'status' => 'required',
-            'pincode' => 'required',
         ]);
 
         $data = new User();
         $data->name = $request->name;
         $data->email = $request->email;
         $data->password = bcrypt($request->password);
-        $data->address = $request->address;
         $data->phone = $request->phone;
         $data->status = $request->status;
-        $data->city = $request->city;
-        $data->country = $request->country;
-        $data->pincode = $request->pincode;
-        $data->profile_picture = $this->imageUpload($request->file('profile_picture'), 'customer');
+        $data->profile_picture = $this->imageUpload($request->file('profile_picture'), 'sales_manager');
         $data->save();
-        $data->assignRole('CUSTOMER');
+        $data->assignRole('SALES_MANAGER');
         $maildata = [
             'name' => $request->name,
             'email' => $request->email,
             'password' => $request->password,
-            'type' => 'Customer',
+            'type' => 'Sales manager',
         ];
 
         Mail::to($request->email)->send(new RegistrationMail($maildata));
-        return redirect()->route('customers.index')->with('message', 'Customer created successfully.');
+        return redirect()->route('sales_managers.index')->with('message', 'Sales manager created successfully.');
     }
 
     /**
@@ -100,8 +94,8 @@ class CustomerController extends Controller
      */
     public function edit($id)
     {
-        $customer = User::findOrFail($id);
-        return view('admin.customer.edit')->with(compact('customer'));
+        $sales_manager = User::findOrFail($id);
+        return view('admin.sales_manager.edit')->with(compact('sales_manager'));
     }
 
     /**
@@ -116,20 +110,14 @@ class CustomerController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',
-            'address' => 'required',
             'phone' => 'required',
             'status' => 'required',
-            'pincode' => 'required',
         ]);
         $data = User::findOrFail($id);
         $data->name = $request->name;
         $data->email = $request->email;
-        $data->address = $request->address;
         $data->phone = $request->phone;
         $data->status = $request->status;
-        $data->city = $request->city;
-        $data->country = $request->country;
-        $data->pincode = $request->pincode;
         if ($request->password != null) {
             $request->validate([
                 'password' => 'min:8',
@@ -143,12 +131,12 @@ class CustomerController extends Controller
             ]);
             if ($data->profile_picture) {
                 $currentImageFilename = $data->profile_picture; // get current image name
-                Storage::delete('app/'.$currentImageFilename);
+                Storage::delete('app/' . $currentImageFilename);
             }
-            $data->profile_picture = $this->imageUpload($request->file('profile_picture'), 'customer');
+            $data->profile_picture = $this->imageUpload($request->file('profile_picture'), 'sales_manager');
         }
         $data->save();
-        return redirect()->route('customers.index')->with('message', 'Customer updated successfully.');
+        return redirect()->route('sales_managers.index')->with('message', 'Sales manager updated successfully.');
     }
 
     /**
@@ -174,6 +162,6 @@ class CustomerController extends Controller
     {
         $user = User::findOrFail($id);
         $user->delete();
-        return redirect()->route('customers.index')->with('error', 'Customer has been deleted successfully.');
+        return redirect()->route('sales_managers.index')->with('error', 'Sales manager has been deleted successfully.');
     }
 }

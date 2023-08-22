@@ -1,4 +1,4 @@
-@extends('admin.layouts.master')
+@extends('sales_manager.layouts.master')
 @section('title')
     {{ env('APP_NAME') }} | Profile
 @endsection
@@ -16,7 +16,7 @@
                     <div class="ps-3">
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb mb-0 p-0">
-                                {{-- <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}"><i class='bx bx-home-alt'></i></a>
+                                {{-- <li class="breadcrumb-item"><a href="{{route('sales_manager.dashboard')}}"><i class='bx bx-home-alt'></i></a>
                             </li> --}}
                                 {{-- <li class="breadcrumb-item active" aria-current="page">Admin Profile</li> --}}
                             </ol>
@@ -64,7 +64,8 @@
                                             <div class="form-body">
                                                 <div class="row">
                                                     <div class="col-12 col-lg-5 border-right">
-                                                        <form class="row g-3" action="{{ route('admin.profile.update') }}"
+                                                        <form class="row g-3"
+                                                            action="{{ route('sales-manager.profile.update') }}"
                                                             method="post" enctype="multipart/form-data">
                                                             @csrf
                                                             <div class="col-12">

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AccountManagerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\ForgetPasswordController;
@@ -8,6 +9,9 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\SellerController;
+use App\Http\Controllers\SalesManager\ProfileController as SalesManagerProfileController;
+use App\Http\Controllers\SalesManager\ProjectController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -33,39 +37,47 @@ Route::get('forget-password/show', [ForgetPasswordController::class, 'forgetPass
 Route::get('reset-password/{id}/{token}', [ForgetPasswordController::class, 'resetPassword'])->name('admin.reset.password');
 Route::post('change-password', [ForgetPasswordController::class, 'changePassword'])->name('admin.change.password');
 
-Route::group(['middleware' => ['admin'], 'prefix'=>'admin'], function () {
+Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('profile', [ProfileController::class, 'index'])->name('admin.profile');
     Route::post('profile/update', [ProfileController::class, 'profileUpdate'])->name('admin.profile.update');
     Route::get('logout', [AuthController::class, 'logout'])->name('admin.logout');
 
-    Route::prefix('detail')->group(function () {
-        Route::get('/',[AdminController::class,'index'])->name('admin.index');
-        Route::post('/store',[AdminController::class,'store'])->name('admin.store');
-        Route::post('/edit/{id}', [AdminController::class, 'edit'])->name('admin.edit');
-        Route::get('/delete/{id}', [AdminController::class, 'delete'])->name('admin.delete');
-        Route::post('/update',[AdminController::class, 'update'])->name('admin.update'); 
-    });   
-    
     Route::prefix('password')->group(function () {
         Route::get('/', [ProfileController::class, 'password'])->name('admin.password'); // password change
         Route::post('/update', [ProfileController::class, 'passwordUpdate'])->name('admin.password.update'); // password update
-    });    
+    });
 
     Route::resources([
-        'customers' => CustomerController::class,
-        'sellers' => SellerController::class,
+        'sales_managers' => CustomerController::class,
+        'account_managers' => AccountManagerController::class,
     ]);
-    //  Customer Routes
-    Route::prefix('customers')->group(function () {
-        Route::get('/customer-delete/{id}', [CustomerController::class, 'delete'])->name('customers.delete');
+    //  Sales manager Routes
+    Route::prefix('sales_managers')->group(function () {
+        Route::get('/sales_manager-delete/{id}', [CustomerController::class, 'delete'])->name('sales_managers.delete');
     });
-    Route::get('/changeCustomerStatus', [CustomerController::class, 'changeCustomersStatus'])->name('customers.change-status');
+    Route::get('/changeCustomerStatus', [CustomerController::class, 'changeCustomersStatus'])->name('sales_managers.change-status');
+    
+    //  Sales manager Routes
+     Route::prefix('account_managers')->group(function () {
+        Route::get('/account_manager-delete/{id}', [AccountManagerController::class, 'delete'])->name('account_managers.delete');
+    });
+    Route::get('/changeAccountManagerStatus', [AccountManagerController::class, 'changeAccountManagerStatus'])->name('account_managers.change-status');
+});
 
-    // Seller Routes
-    Route::get('/changeSellerStatus', [SellerController::class, 'changeSellersStatus'])->name('sellers.change-status');
-    Route::prefix('sellers')->group(function () {
-        Route::get('/seller-delete/{id}', [SellerController::class, 'delete'])->name('sellers.delete');
+/**---------------------------------------------------------------Sales Manager ---------------------------------------------------------------------------------- */
+
+Route::group(['middleware' => ['SalesManager'], 'prefix' => 'sales-manager'], function () {
+    Route::get('profile', [SalesManagerProfileController::class, 'index'])->name('sales-manager.profile');
+    Route::post('profile/update', [SalesManagerProfileController::class, 'profileUpdate'])->name('sales-manager.profile.update');
+    Route::get('logout', [AuthController::class, 'logout'])->name('sales-manager.logout');
+
+    Route::prefix('password')->group(function () {
+        Route::get('/', [SalesManagerProfileController::class, 'password'])->name('sales-manager.password'); // password change
+        Route::post('/update', [SalesManagerProfileController::class, 'passwordUpdate'])->name('sales-manager.password.update'); // password update
     });
 
+    Route::resources([
+        'projects' => ProjectController::class,
+    ]);
 });

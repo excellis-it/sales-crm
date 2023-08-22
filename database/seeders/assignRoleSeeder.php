@@ -20,13 +20,17 @@ class assignRoleSeeder extends Seeder
                 'guard_name' => 'web',
             ],
             [
-                'name' => 'CUSTOMER',
+                'name' => 'SALES_MANAGER',
                 'guard_name' => 'web',
             ],
             [
-                'name' => 'SELLER',
+                'name' => 'ACCOUNT_MANAGER',
                 'guard_name' => 'web',
-            ]
+            ],
+            [
+                'name' => 'SALES_EXCUETIVE',
+                'guard_name' => 'web',
+            ],
         ];
 
         foreach ($roles as $key => $value) {

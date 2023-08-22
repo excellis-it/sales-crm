@@ -11,9 +11,10 @@ use App\Traits\ImageTrait;
 use Illuminate\Support\Facades\Storage;
 use File;
 
-class SellerController extends Controller
+class AccountManagerController extends Controller
 {
     use ImageTrait;
+
     /**
      * Display a listing of the resource.
      *
@@ -21,8 +22,8 @@ class SellerController extends Controller
      */
     public function index()
     {
-        $sellers = User::Role('SELLER')->get();
-        return view('admin.seller.list')->with(compact('sellers'));
+        $account_managers = User::Role('ACCOUNT_MANAGER')->get();
+        return view('admin.account_manager.list')->with(compact('account_managers'));
     }
 
     /**
@@ -32,7 +33,7 @@ class SellerController extends Controller
      */
     public function create()
     {
-        return view('admin.seller.create');
+        return view('admin.account_manager.create');
     }
 
     /**
@@ -48,35 +49,29 @@ class SellerController extends Controller
             'email' => 'required|unique:users|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',
             'password' => 'required|min:8',
             'confirm_password' => 'required|min:8|same:password',
-            'address' => 'required',
             'phone' => 'required',
             'profile_picture' => 'required|image|mimes:jpg,png,jpeg,gif,svg',
             'status' => 'required',
-            'pincode' => 'required',
         ]);
 
         $data = new User();
         $data->name = $request->name;
         $data->email = $request->email;
         $data->password = bcrypt($request->password);
-        $data->address = $request->address;
         $data->phone = $request->phone;
         $data->status = $request->status;
-        $data->city = $request->city;
-        $data->country = $request->country;
-        $data->pincode = $request->pincode;
-        $data->profile_picture = $this->imageUpload($request->file('profile_picture'), 'seller');
+        $data->profile_picture = $this->imageUpload($request->file('profile_picture'), 'account_manager');
         $data->save();
-        $data->assignRole('SELLER');
+        $data->assignRole('ACCOUNT_MANAGER');
         $maildata = [
             'name' => $request->name,
             'email' => $request->email,
             'password' => $request->password,
-            'type' => 'Seller',
+            'type' => 'Account manager',
         ];
 
         Mail::to($request->email)->send(new RegistrationMail($maildata));
-        return redirect()->route('sellers.index')->with('message', 'Seller created successfully.');
+        return redirect()->route('account_managers.index')->with('message', 'Account manager created successfully.');
     }
 
     /**
@@ -87,7 +82,6 @@ class SellerController extends Controller
      */
     public function show($id)
     {
-        //
     }
 
     /**
@@ -98,8 +92,8 @@ class SellerController extends Controller
      */
     public function edit($id)
     {
-       $seller = User::findOrFail($id);
-         return view('admin.seller.edit')->with(compact('seller'));
+        $account_manager = User::findOrFail($id);
+        return view('admin.account_manager.edit')->with(compact('account_manager'));
     }
 
     /**
@@ -114,20 +108,14 @@ class SellerController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',
-            'address' => 'required',
             'phone' => 'required',
             'status' => 'required',
-            'pincode' => 'required',
         ]);
         $data = User::findOrFail($id);
         $data->name = $request->name;
         $data->email = $request->email;
-        $data->address = $request->address;
         $data->phone = $request->phone;
         $data->status = $request->status;
-        $data->city = $request->city;
-        $data->country = $request->country;
-        $data->pincode = $request->pincode;
         if ($request->password != null) {
             $request->validate([
                 'password' => 'min:8',
@@ -141,12 +129,12 @@ class SellerController extends Controller
             ]);
             if ($data->profile_picture) {
                 $currentImageFilename = $data->profile_picture; // get current image name
-                Storage::delete('app/'.$currentImageFilename);
+                Storage::delete('app/' . $currentImageFilename);
             }
-            $data->profile_picture = $this->imageUpload($request->file('profile_picture'), 'seller');
+            $data->profile_picture = $this->imageUpload($request->file('profile_picture'), 'account_manager');
         }
         $data->save();
-        return redirect()->route('sellers.index')->with('message', 'Seller updated successfully.');
+        return redirect()->route('account_managers.index')->with('message', 'Account manager updated successfully.');
     }
 
     /**
@@ -160,7 +148,7 @@ class SellerController extends Controller
         //
     }
 
-    public function changeSellersStatus(Request $request)
+    public function changeAccountManagerStatus(Request $request)
     {
         $user = User::find($request->user_id);
         $user->status = $request->status;
@@ -172,6 +160,6 @@ class SellerController extends Controller
     {
         $user = User::findOrFail($id);
         $user->delete();
-        return redirect()->route('sellers.index')->with('error', 'Seller has been deleted successfully.');
+        return redirect()->route('account_managers.index')->with('error', 'Account manager has been deleted successfully.');
     }
 }

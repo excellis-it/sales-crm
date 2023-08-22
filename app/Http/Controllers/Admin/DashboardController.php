@@ -10,10 +10,8 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $count['seller'] = User::Role('SELLER')->count();
-        $count['customer'] = User::Role('CUSTOMER')->count();
+        $count['sales_manager'] = User::Role('SALES_MANAGER')->count();
 
         return view('admin.dashboard')->with(compact('count'));
     }
-
 }

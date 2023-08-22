@@ -30,7 +30,9 @@ class AuthController extends Controller
             $user = User::where('email', $request->email)->select('id', 'email', 'status')->first();
             if ($user->hasRole('ADMIN') && $user->status == 1) {
                 return redirect()->route('admin.dashboard');
-            } else {
+            } else if($user->hasRole('SALES_MANAGER') && $user->status == 1){
+                return redirect()->route('sales-manager.profile');
+            }else{
                 Auth::logout();
                 return redirect()->back()->with('error', 'Email id & password was invalid!');
             }

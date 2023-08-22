@@ -1,6 +1,6 @@
 @extends('admin.layouts.master')
 @section('title')
-    All Customer Details - {{ env('APP_NAME') }}
+    All Account manager Details - {{ env('APP_NAME') }}
 @endsection
 @push('styles')
     <style>
@@ -21,15 +21,15 @@
             <div class="page-header">
                 <div class="row align-items-center">
                     <div class="col">
-                        <h3 class="page-title">Customers Information</h3>
+                        <h3 class="page-title">Account managers Information</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('customers.index') }}">Customers</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('account_managers.index') }}">Account managers</a></li>
                             <li class="breadcrumb-item active">List</li>
                         </ul>
                     </div>
                     <div class="col-auto float-end ms-auto">
-                        <a href="{{ route('customers.create') }}" class="btn add-btn"><i class="fa fa-plus"></i> Add a
-                            Customer</a>
+                        <a href="{{ route('account_managers.create') }}" class="btn add-btn"><i class="fa fa-plus"></i> Add a
+                            Account manager</a>
                     </div>
                 </div>
             </div>
@@ -39,7 +39,7 @@
                     <div class="card-title">
                         <div class="row">
                             <div class="col-md-6">
-                                <h4 class="mb-0">Customers Details</h4>
+                                <h4 class="mb-0">Account managers Details</h4>
                             </div>
 
                         </div>
@@ -53,38 +53,32 @@
                                     <th> Name</th>
                                     <th> Email</th>
                                     <th> Phone</th>
-                                    <th>City</th>
-                                    <th>State</th>
-                                    <th>Address</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($customers as $key => $customer)
+                                @foreach ($account_managers as $key => $account_manager)
                                     <tr>
-                                        <td>{{ $customer->name }}</td>
-                                        <td>{{ $customer->email }}</td>
-                                        <td>{{ $customer->phone }}</td>
-                                        <td>{{ $customer->city }}</td>
-                                        <td>{{ $customer->country }}</td>
-                                        <td>{{ $customer->address }}</td>
+                                        <td>{{ $account_manager->name }}</td>
+                                        <td>{{ $account_manager->email }}</td>
+                                        <td>{{ $account_manager->phone }}</td>
                                         <td>
                                             <div class="button-switch">
                                                 <input type="checkbox" id="switch-orange" class="switch toggle-class"
-                                                    data-id="{{ $customer['id'] }}"
-                                                    {{ $customer['status'] ? 'checked' : '' }} />
+                                                    data-id="{{ $account_manager['id'] }}"
+                                                    {{ $account_manager['status'] ? 'checked' : '' }} />
                                                 <label for="switch-orange" class="lbl-off"></label>
                                                 <label for="switch-orange" class="lbl-on"></label>
                                             </div>
                                         </td>
                                         <td>
-                                            <a title="Edit Customer" data-route=""
-                                                href="{{ route('customers.edit', $customer->id) }}"><i
+                                            <a title="Edit Account manager" data-route=""
+                                                href="{{ route('account_managers.edit', $account_manager->id) }}"><i
                                                     class="fas fa-edit"></i></a> &nbsp;&nbsp;
 
-                                            <a title="Delete Customer"
-                                                data-route="{{ route('customers.delete', $customer->id) }}"
+                                            <a title="Delete Account manager"
+                                                data-route="{{ route('account_managers.delete', $account_manager->id) }}"
                                                 href="javascipt:void(0);" id="delete"><i class="fas fa-trash"></i></a>
                                         </td>
                                     </tr>
@@ -108,11 +102,11 @@
                 "aaSorting": [],
                 "columnDefs": [{
                         "orderable": false,
-                        "targets": [6, 7]
+                        "targets": [3, 4]
                     },
                     {
                         "orderable": true,
-                        "targets": [0, 1, 2, 3, 4, 5]
+                        "targets": [0, 1, 2, ]
                     }
                 ]
             });
@@ -123,7 +117,7 @@
         $(document).on('click', '#delete', function(e) {
             swal({
                     title: "Are you sure?",
-                    text: "To delete this customer.",
+                    text: "To delete this account_manager.",
                     type: "warning",
                     confirmButtonText: "Yes",
                     showCancelButton: true
@@ -149,7 +143,7 @@
             $.ajax({
                 type: "GET",
                 dataType: "json",
-                url: '{{ route('customers.change-status') }}',
+                url: '{{ route("account_managers.change-status") }}',
                 data: {
                     'status': status,
                     'user_id': user_id
