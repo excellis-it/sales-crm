@@ -20,9 +20,9 @@
 
                     </ul>
                 </li>
-                {{-- <li class="menu-title">
+                <li class="menu-title">
                     <span>User Management</span>
-                </li> --}}
+                </li>
 
 
                 <li class="{{ Request::is('admin/sales_managers*') ? 'active' : ' ' }}">
@@ -31,13 +31,28 @@
                 </li>
 
                 <li class="{{ Request::is('admin/account_managers*') ? 'active' : ' ' }}">
-                    <a href="{{ route('account_managers.index') }}"><i class="la la-user"></i> <span>
+                    <a href="{{ route('account_managers.index') }}"><i class="la la-user-tie"></i> <span>
                             Account managers</span></a>
                 </li>
 
+                <li class="{{ Request::is('admin/sales-excecutive*') ? 'active' : ' ' }}">
+                    <a href="{{ route('sales-excecutive.index') }}"><i class="la la-user-friends"></i> <span>
+                        Sales Excecutive</span></a>
+                </li>
+
+                    <li class="menu-title">
+                    <span>Project Management</span>
+                </li>
+
+
                 <li class="{{ Request::is('admin/sales-projects*') ? 'active' : ' ' }}">
                     <a href="{{ route('sales-projects.index') }}"><i class="la la-book-open"></i> <span>
-                            Projects </span></a>
+                             Projects </span></a>
+                </li>
+
+                <li class="{{ Request::is('admin/prospects*') ? 'active' : ' ' }}">
+                    <a href="{{ route('admin.prospects.index') }}"><i class="la la-book-reader"></i> <span>
+                             Prospects </span></a>
                 </li>
 
 

@@ -39,7 +39,6 @@
                 </a>
                 <div class="dropdown-menu">
                     <a class="dropdown-item" href="{{ route('sales-manager.profile') }}">My Profile</a>
-                    <a class="dropdown-item" href="{{ route('projects.index') }}">My Projects</a>
                     <a class="dropdown-item" href="{{ route('sales-manager.password') }}">Change Password</a>
                     <a class="dropdown-item" href="{{ route('sales-manager.logout') }}">Logout</a>
                 </div>

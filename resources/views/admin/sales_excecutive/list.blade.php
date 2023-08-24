@@ -1,6 +1,6 @@
 @extends('admin.layouts.master')
 @section('title')
-    All Sales manager Details - {{ env('APP_NAME') }}
+    All Sales excecutive Details - {{ env('APP_NAME') }}
 @endsection
 @push('styles')
     <style>
@@ -21,15 +21,15 @@
             <div class="page-header">
                 <div class="row align-items-center">
                     <div class="col">
-                        <h3 class="page-title">Sales managers Information</h3>
+                        <h3 class="page-title">Sales Excecutives Information</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('sales_managers.index') }}">Sales managers</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('sales-excecutive.index') }}">Sales Excecutives</a></li>
                             <li class="breadcrumb-item active">List</li>
                         </ul>
                     </div>
                     <div class="col-auto float-end ms-auto">
-                        <a href="{{ route('sales_managers.create') }}" class="btn add-btn"><i class="fa fa-plus"></i> Add a
-                            Sales manager</a>
+                        <a href="{{ route('sales-excecutive.create') }}" class="btn add-btn"><i class="fa fa-plus"></i> Add a
+                            sales excecutive</a>
                     </div>
                 </div>
             </div>
@@ -39,7 +39,7 @@
                     <div class="card-title">
                         <div class="row">
                             <div class="col-md-6">
-                                <h4 class="mb-0">Sales managers Details</h4>
+                                <h4 class="mb-0">Sales Excecutives Details</h4>
                             </div>
 
                         </div>
@@ -50,41 +50,43 @@
                         <table id="myTable" class="dd table table-striped table-bordered" style="width:100%">
                             <thead>
                                 <tr>
+                                    <th>Report To</th>
                                     <th> Name</th>
                                     <th> Email</th>
                                     <th> Phone</th>
                                     <th>Employee Id</th>
                                     <th>Date Of Joining</th>
-                                    <th>No. of sales</th>
+                                    <th>No. of prospect</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($sales_managers as $key => $sales_manager)
+                                @foreach ($sales_excecutives as $key => $sales_excecutive)
                                     <tr>
-                                        <td>{{ $sales_manager->name }}</td>
-                                        <td>{{ $sales_manager->email }}</td>
-                                        <td>{{ $sales_manager->phone }}</td>
-                                        <td>{{ $sales_manager->employee_id }}</td>
-                                        <td>{{ $sales_manager->date_of_joining }}</td>
-                                        <td><a href="{{ route('sales-projects.index', ['sales_manager_id'=>$sales_manager->id]) }}">{{ $sales_manager->projects->count() }}</a></td>
+                                        <td> <a href="{{ route('sales_managers.index',['id'=> $sales_excecutive->report_to->id]) }}">{{ $sales_excecutive->report_to->name }}</a>   </td>
+                                        <td>{{ $sales_excecutive->name }}</td>
+                                        <td>{{ $sales_excecutive->email }}</td>
+                                        <td>{{ $sales_excecutive->phone }}</td>
+                                        <td>{{ $sales_excecutive->employee_id }}</td>
+                                        <td>{{ $sales_excecutive->date_of_joining }}</td>
+                                        <td><a href="{{ route('admin.prospects.index',['user_id'=>$sales_excecutive->id]) }}">{{ $sales_excecutive->prospects->count() }}</a></td>
                                         <td>
                                             <div class="button-switch">
                                                 <input type="checkbox" id="switch-orange" class="switch toggle-class"
-                                                    data-id="{{ $sales_manager['id'] }}"
-                                                    {{ $sales_manager['status'] ? 'checked' : '' }} />
+                                                    data-id="{{ $sales_excecutive['id'] }}"
+                                                    {{ $sales_excecutive['status'] ? 'checked' : '' }} />
                                                 <label for="switch-orange" class="lbl-off"></label>
                                                 <label for="switch-orange" class="lbl-on"></label>
                                             </div>
                                         </td>
                                         <td>
-                                            <a title="Edit Sales manager" data-route=""
-                                                href="{{ route('sales_managers.edit', $sales_manager->id) }}"><i
+                                            <a title="Edit Sales excecutive" data-route=""
+                                                href="{{ route('sales-excecutive.edit', $sales_excecutive->id) }}"><i
                                                     class="fas fa-edit"></i></a> &nbsp;&nbsp;
 
-                                            <a title="Delete Sales manager"
-                                                data-route="{{ route('sales_managers.delete', $sales_manager->id) }}"
+                                            <a title="Delete Sales excecutive"
+                                                data-route="{{ route('sales-excecutive.delete', $sales_excecutive->id) }}"
                                                 href="javascipt:void(0);" id="delete"><i class="fas fa-trash"></i></a>
                                         </td>
                                     </tr>
@@ -108,11 +110,11 @@
                 "aaSorting": [],
                 "columnDefs": [{
                         "orderable": false,
-                        "targets": [5, 6, 7]
+                        "targets": [5, 6]
                     },
                     {
                         "orderable": true,
-                        "targets": [0, 1, 2, 3,4]
+                        "targets": [0, 1, 2, 3, 4 ]
                     }
                 ]
             });
@@ -123,7 +125,7 @@
         $(document).on('click', '#delete', function(e) {
             swal({
                     title: "Are you sure?",
-                    text: "To delete this sales_manager.",
+                    text: "To delete this sales_excecutive.",
                     type: "warning",
                     confirmButtonText: "Yes",
                     showCancelButton: true
@@ -149,7 +151,7 @@
             $.ajax({
                 type: "GET",
                 dataType: "json",
-                url: '{{ route("sales_managers.change-status") }}',
+                url: '{{ route("sales-excecutive.change-status") }}',
                 data: {
                     'status': status,
                     'user_id': user_id

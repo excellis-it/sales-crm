@@ -42,4 +42,19 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function report_to()
+    {
+        return $this->belongsTo(User::class, 'sales_manager_id');
+    }
+
+    public function projects()
+    {
+        return $this->hasMany(Project::class, 'user_id');
+    }
+
+    public function prospects()
+    {
+        return $this->hasMany(Prospect::class, 'user_id');
+    }
 }

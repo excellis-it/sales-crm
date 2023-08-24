@@ -11,9 +11,14 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
+use App\Http\Controllers\Admin\ProspectController as AdminProspectController;
+use App\Http\Controllers\Admin\SalesExcecutiveController;
 use App\Http\Controllers\Admin\SellerController;
+use App\Http\Controllers\SalesExcecutive\ProfileController as SalesExcecutiveProfileController;
+use App\Http\Controllers\SalesExcecutive\ProspectController;
 use App\Http\Controllers\SalesManager\ProfileController as SalesManagerProfileController;
 use App\Http\Controllers\SalesManager\ProjectController;
+use App\Http\Controllers\SalesManager\ProspectController as SalesManagerProspectController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,8 +60,15 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
         'sales_managers' => CustomerController::class,
         'account_managers' => AccountManagerController::class,
         'sales-projects' => AdminProjectController::class,
+        'sales-excecutive' => SalesExcecutiveController::class,
     ]);
 
+    Route::name('admin.')->group(function () {
+        Route::resources([
+            'prospects' => AdminProspectController::class,
+        ]);
+        Route::get('/prospects-delete/{id}', [AdminProspectController::class, 'delete'])->name('prospects.delete');
+    });
     // delete project
     Route::get('/project-delete/{id}', [AdminProjectController::class, 'delete'])->name('sales-projects.delete');
     Route::get('/projectAssignTo', [AdminProjectController::class, 'projectAssignTo'])->name('sales-projects.updateAssignedTo');
@@ -72,6 +84,12 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
         Route::get('/account_manager-delete/{id}', [AccountManagerController::class, 'delete'])->name('account_managers.delete');
     });
     Route::get('/changeAccountManagerStatus', [AccountManagerController::class, 'changeAccountManagerStatus'])->name('account_managers.change-status');
+
+    // Sales Excecutive Routes
+    Route::prefix('sales-excecutive')->group(function () {
+        Route::get('/sales-excecutive-delete/{id}', [SalesExcecutiveController::class, 'delete'])->name('sales-excecutive.delete');
+    });
+    Route::get('/changeSalesExcecutiveStatus', [SalesExcecutiveController::class, 'changeSalesExcecutiveStatus'])->name('sales-excecutive.change-status');
 });
 
 /**---------------------------------------------------------------Sales Manager ---------------------------------------------------------------------------------- */
@@ -90,6 +108,11 @@ Route::group(['middleware' => ['SalesManager'], 'prefix' => 'sales-manager'], fu
         'projects' => ProjectController::class,
     ]);
 
+    Route::name('sales-manager.')->group(function () {
+        Route::resources([
+            'prospects' => SalesManagerProspectController::class,
+        ]);
+    });
     // delete project
     Route::get('/project-delete/{id}', [ProjectController::class, 'delete'])->name('projects.delete');
 });
@@ -110,4 +133,20 @@ Route::group(['middleware' => ['AccountManager'], 'prefix' => 'account-manager']
             'projects' => AccountManagerProjectController::class,
         ]);
     });
+});
+
+/**---------------------------------------------------------------Sales Excecutive ---------------------------------------------------------------------------------- */
+
+Route::group(['middleware' => ['SalesExcecutive'], 'prefix' => 'sales-excecutive'], function () {
+    Route::get('profile', [SalesExcecutiveProfileController::class, 'index'])->name('sales-excecutive.profile');
+    Route::post('profile/update', [SalesExcecutiveProfileController::class, 'profileUpdate'])->name('sales-excecutive.profile.update');
+    Route::get('logout', [AuthController::class, 'SalesExcecutivelogout'])->name('sales-excecutive.logout');
+
+    Route::prefix('password')->group(function () {
+        Route::get('/', [SalesExcecutiveProfileController::class, 'password'])->name('sales-excecutive.password'); // password change
+        Route::post('/update', [SalesExcecutiveProfileController::class, 'passwordUpdate'])->name('sales-excecutive.password.update'); // password update
+    });
+    Route::resources([
+        'prospects' => ProspectController::class,
+    ]);
 });

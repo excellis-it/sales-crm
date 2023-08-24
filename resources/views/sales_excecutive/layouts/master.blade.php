@@ -34,11 +34,11 @@
 
 <body>
     <!--header-->
-    @include('admin.includes.header')
+    @include('sales_excecutive.includes.header')
 
     <!--end header-->
     <!--sidebar-wrapper-->
-    @include('admin.includes.sidebar')
+    {{-- @include('sales_excecutive.includes.sidebar') --}}
     <!--end sidebar-wrapper-->
 
     <!--page-wrapper-->
@@ -47,7 +47,7 @@
     <!--end page-wrapper-->
 
     <!--footer -->
-    {{-- @include('admin.includes.footer') --}}
+    {{-- @include('sales_excecutive.includes.footer') --}}
 
     <!-- end footer -->
 

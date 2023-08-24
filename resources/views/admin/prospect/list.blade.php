@@ -1,6 +1,6 @@
-@extends('account_manager.layouts.master')
+@extends('admin.layouts.master')
 @section('title')
-    All Project Details - {{ env('APP_NAME') }}
+    All Prospect Details - {{ env('APP_NAME') }}
 @endsection
 @push('styles')
     <style>
@@ -21,17 +21,15 @@
             <div class="page-header">
                 <div class="row align-items-center">
                     <div class="col">
-                        <h3 class="page-title">Projects Information</h3>
+                        <h3 class="page-title">Prospects Information</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('account-manager.projects.index') }}">Projects</a>
-                            </li>
+                            <li class="breadcrumb-item"><a href="{{ route('admin.prospects.index') }}">Prospects</a></li>
                             <li class="breadcrumb-item active">List</li>
                         </ul>
                     </div>
                     <div class="col-auto float-end ms-auto">
-                        <a href="{{ route('account-manager.projects.create') }}" class="btn add-btn"><i
-                                class="fa fa-plus"></i> Add Project</a>
-                                    
+                        <a href="{{ route('admin.prospects.create') }}" class="btn add-btn"><i class="fa fa-plus"></i> Add a
+                            Prospect</a>
                     </div>
                 </div>
             </div>
@@ -41,7 +39,7 @@
                     <div class="card-title">
                         <div class="row">
                             <div class="col-md-6">
-                                <h4 class="mb-0">Projects Details</h4>
+                                <h4 class="mb-0">Prospects Details</h4>
                             </div>
 
                         </div>
@@ -52,72 +50,87 @@
                         <table id="myTable" class="dd table table-striped table-bordered" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th> Date</th>
-                                    <th> Business Name</th>
-                                    <th> Customer Name </th>
-                                    <th>Phone Number</th>
-                                    <th>Customer Address</th>
-                                    <th>Customer Website</th>
-                                    <th>Project Type</th>
-                                    <th>Project Value</th>
-                                    <th>Project Upfront</th>
-                                    <th>Currency</th>
-                                    <th>Payment Mode</th>
-                                    <th>Due Amount</th>
                                     <th>
-                                        Action
+                                        Prospect By
                                     </th>
+                                    <th>Date</th>
+                                    <th>Business Name</th>
+                                    <th>Business Address</th>
+                                    <th>Transfer Taken By</th>
+                                    <th>Website Link</th>
+                                    <th>Offered For</th>
+                                    <th>Price Quoted</th>
+                                    <th>Contact Person</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Status</th>
+                                    <th>Followup Date</th>
+                                    <th>
+                                        Followup Time
+                                    </th>
+                                    <th>Next Followup Date</th>
+                                    <th>Comments</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($projects as $key => $project)
+                                @foreach ($prospects as $key => $prospect)
                                     <tr>
                                         <td>
-                                            {{ date('d-m-Y', strtotime($project->sale_date)) }}
+                                           <a href="{{ route('sales-excecutive.index',['id'=>$prospect->user->id]) }}">{{ $prospect->user->name }}</a> 
                                         </td>
                                         <td>
-                                            {{ $project->business_name }}
+                                            {{ date('d M, Y', strtotime($prospect->created_at)) }}
                                         </td>
                                         <td>
-                                            {{ $project->client_name }}
+                                            {{ $prospect->business_name }}
                                         </td>
                                         <td>
-                                            {{ $project->client_phone }}
+                                            {{ $prospect->business_address }}
                                         </td>
                                         <td>
-                                            {{ $project->client_address }}
+                                            {{ $prospect->transfer_token_by }}
                                         </td>
                                         <td>
-                                            {{ $project->website }}
+                                            {{ $prospect->website }}
                                         </td>
                                         <td>
-                                            @foreach ($project->projectTypes as $project_type)
-                                                <span class="badge bg-info">{{ $project_type->type }}</span>
-                                            @endforeach
+                                            {{ $prospect->offered_for }}
                                         </td>
                                         <td>
-                                            {{ $project->project_value }}
-                                        </td>
-
-                                        <td>
-                                            {{ $project->project_upfront }}
+                                            {{ $prospect->price_quote }}
                                         </td>
                                         <td>
-                                            {{ $project->currency }}
+                                            {{ $prospect->client_name }}
                                         </td>
                                         <td>
-                                            {{ $project->payment_mode }}
+                                            {{ $prospect->client_email }}
                                         </td>
                                         <td>
-                                            {{ $project->project_value - $project->project_upfront }}
+                                            {{ $prospect->client_phone }}
                                         </td>
                                         <td>
-                                            <a title="View Project" data-route=""
-                                                href="{{ route('account-manager.projects.show', $project->id) }}"><i
-                                                    class="fas fa-eye"></i></a> &nbsp;&nbsp;
-                                            <a title="Edit Project" data-route=""
-                                                href="{{ route('account-manager.projects.edit', $project->id) }}"><i
+                                            {{ $prospect->status }}
+                                        </td>
+                                        <td>
+                                            {{ date('d M, Y', strtotime($prospect->followup_date)) }}
+                                        </td>
+                                        <td>
+                                            {{($prospect->followup_time) ? date('h:i A', strtotime($prospect->followup_time)) : ''}}
+                                        </td>
+                                        <td>
+                                            {{ date('d M, Y', strtotime($prospect->next_followup_date)) }}
+                                        </td>
+                                        <td>
+                                            {{ $prospect->comments }}
+                                        </td>
+                                        <td>
+                                            <a title="Edit Prospect" data-route=""
+                                                href="{{ route('admin.prospects.edit', $prospect->id) }}"><i
                                                     class="fas fa-edit"></i></a> &nbsp;&nbsp;
+                                                    <a title="Delete Account manager"
+                                                    data-route="{{ route('admin.prospects.delete', $prospect->id) }}"
+                                                    href="javascipt:void(0);" id="delete"><i class="fas fa-trash"></i></a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -140,11 +153,11 @@
                 "aaSorting": [],
                 "columnDefs": [{
                         "orderable": false,
-                        "targets": [12]
+                        "targets": [14]
                     },
                     {
                         "orderable": true,
-                        "targets": [0, 1, 2, 5, 6, 7, 8, 9, 10, 11]
+                        "targets": [0, 1, 2, 5, 6, 7, 8, 9, 10, 11, 12, 13]
                     }
                 ]
             });
@@ -155,7 +168,7 @@
         $(document).on('click', '#delete', function(e) {
             swal({
                     title: "Are you sure?",
-                    text: "To delete this project.",
+                    text: "To delete this prospect.",
                     type: "warning",
                     confirmButtonText: "Yes",
                     showCancelButton: true
@@ -181,7 +194,7 @@
             $.ajax({
                 type: "GET",
                 dataType: "json",
-                url: '{{ route('account-manager.projects.change-status') }}',
+                url: '{{ route('prospects.change-status') }}',
                 data: {
                     'status': status,
                     'user_id': user_id

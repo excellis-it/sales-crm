@@ -23,48 +23,52 @@
 
             <div class="row">
                 <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-                    <div class="card dash-widget">
-                        <div class="card-body">
-                            <span class="dash-widget-icon"><i class="fa fa-cubes"></i></span>
-                            <div class="dash-widget-info">
-                                <h3>112</h3>
-                                <span>Total Products</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-                    <div class="card dash-widget">
-                        <div class="card-body">
-                            <span class="dash-widget-icon"><i class="fa fa-usd"></i></span>
-                            <div class="dash-widget-info">
-                                <h3>44</h3>
-                                <span>Total Categories</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-                    <a href="#" style="color: black">
+                    <a href="{{ route('sales_managers.index') }}" style="color: black">
                         <div class="card dash-widget">
                             <div class="card-body">
                                 <span class="dash-widget-icon"><i class="fa fa-users"></i></span>
                                 <div class="dash-widget-info">
-
-                                    <span>Total Sellers</span>
+                                    <h3>{{ $count['sales_managers'] }}</h3>
+                                    <span>Total Sales managers</span>
                                 </div>
                             </div>
                         </div>
                     </a>
                 </div>
                 <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-                    <a href="{{ route('sales_managers.index') }}" style="color: black">
+                    <a href="{{ route('account_managers.index') }}" style="color: black">
                         <div class="card dash-widget">
                             <div class="card-body">
-                                <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
+                                <span class="dash-widget-icon"><i class="fas fa-user-tie"></i></span>
                                 <div class="dash-widget-info">
-                                    <h3>{{ $count['sales_manager'] }}</h3>
-                                    <span>Total Sales manager</span>
+                                    <h3>{{ $count['account_managers'] }}</h3>
+                                    <span>Total Account managers</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                    <a href="{{ route('sales-excecutive.index') }}" style="color: black">
+                        <div class="card dash-widget">
+                            <div class="card-body">
+                                <span class="dash-widget-icon"><i class="fas fa-user-friends"></i></span>
+                                <div class="dash-widget-info">
+                                    <h3>{{ $count['sales_excecutive'] }}</h3>
+                                    <span>Total Sales Excecutive</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                    <a href="{{ route('sales-projects.index') }}" style="color: black">
+                        <div class="card dash-widget">
+                            <div class="card-body">
+                                <span class="dash-widget-icon"><i class="fas fa-book-open"></i></span>
+                                <div class="dash-widget-info">
+                                    <h3>{{ $count['projects'] }}</h3>
+                                    <span>Total Projects</span>
                                 </div>
                             </div>
                         </div>

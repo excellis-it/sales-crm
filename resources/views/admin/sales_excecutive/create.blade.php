@@ -1,6 +1,6 @@
 @extends('admin.layouts.master')
 @section('title')
-    {{ env('APP_NAME') }} | Create Sales manager
+    {{ env('APP_NAME') }} | Create Sales Excecutive
 @endsection
 @push('styles')
 @endpush
@@ -15,13 +15,14 @@
                     <div class="col">
                         <h3 class="page-title">Create</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('sales_managers.index') }}">Sales managers</a></li>
-                            <li class="breadcrumb-item active">Create Sales manager</li>
+                            <li class="breadcrumb-item"><a href="{{ route('sales-excecutive.index') }}">Sales Excecutives</a>
+                            </li>
+                            <li class="breadcrumb-item active">Create Sales Excecutive</li>
                         </ul>
                     </div>
                     <div class="col-auto float-end ms-auto">
                         {{-- <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_group"><i
-                            class="fa fa-plus"></i> Add Sales manager</a> --}}
+                            class="fa fa-plus"></i> Add Sales Excecutive</a> --}}
                     </div>
                 </div>
             </div>
@@ -31,21 +32,35 @@
                     <div class="card-title">
                         <div class="row">
                             <div class="col-xl-12 mx-auto">
-                                <h6 class="mb-0 text-uppercase">Create A Sales manager</h6>
+                                <h6 class="mb-0 text-uppercase">Create a sales excecutive</h6>
                                 <hr>
                                 <div class="card border-0 border-4">
                                     <div class="card-body">
-                                        <form action="{{ route('sales_managers.store') }}" method="post"
+                                        <form action="{{ route('sales-excecutive.store') }}" method="post"
                                             enctype="multipart/form-data">
                                             @csrf
                                             <div class="border p-4 rounded">
                                                 <div class="row">
                                                     <div class="col-md-6">
+                                                        <label for="inputEnterYourName" class="col-form-label"> Report To <span
+                                                                style="color: red;">*</span></label>
+                                                        <select name="sales_manager_id" id="" class="form-control select2">
+                                                            <option value="">Select report to</option>
+                                                            @foreach($sales_managers as $sales_manager)
+                                                            <option value="{{ $sales_manager->id }}">  {{ $sales_manager->name }} ({{  $sales_manager->email }})</option>
+                                                            @endforeach
+                                                        </select>
+                                                        @if ($errors->has('sales_manager_id'))
+                                                            <div class="error" style="color:red;">
+                                                                {{ $errors->first('sales_manager_id') }}</div>
+                                                        @endif
+                                                    </div>
+                                                    <div class="col-md-6">
                                                         <label for="inputEnterYourName" class="col-form-label"> Name <span
                                                                 style="color: red;">*</span></label>
-                                                        <input type="text" name="name" id=""
-                                                            class="form-control" value="{{ old('name') }}"
-                                                            placeholder="Enter Sales manager Name">
+                                                        <input type="text" name="name" id="" 
+                                                            class="form-control " value="{{ old('name') }}"
+                                                            placeholder="Enter Sales Excecutive Name">
                                                         @if ($errors->has('name'))
                                                             <div class="error" style="color:red;">
                                                                 {{ $errors->first('name') }}</div>
@@ -76,7 +91,7 @@
                                                                 style="color: red;">*</span></label>
                                                         <input type="text" name="email" id=""
                                                             class="form-control" value="{{ old('email') }}"
-                                                            placeholder="Enter Sales manager Email">
+                                                            placeholder="Enter Sales Excecutive Email">
                                                         @if ($errors->has('email'))
                                                             <div class="error" style="color:red;">
                                                                 {{ $errors->first('email') }}</div>
@@ -130,8 +145,7 @@
                                                         @endif
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <label for="inputEnterYourName" class="col-form-label"> Profile
-                                                            Picture </label>
+                                                        <label for="inputEnterYourName" class="col-form-label"> Profile</label>
                                                         <input type="file" name="profile_picture" id=""
                                                             class="form-control" value="{{ old('profile_picture') }}">
                                                         @if ($errors->has('profile_picture'))
@@ -161,4 +175,9 @@
 @endsection
 
 @push('scripts')
+<script>
+    $(document).ready(function() {
+        $('.select2').select2();
+    });
+</script>
 @endpush

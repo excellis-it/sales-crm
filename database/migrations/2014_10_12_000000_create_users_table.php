@@ -15,6 +15,7 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('sales_manager_id')->nullable()->references('id')->on('users')->onDelete('cascade');
             $table->string('employee_id')->nullable();
             $table->string('date_of_joining')->nullable();
             $table->string('name');

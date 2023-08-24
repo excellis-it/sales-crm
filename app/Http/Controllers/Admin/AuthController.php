@@ -34,6 +34,8 @@ class AuthController extends Controller
                 return redirect()->route('sales-manager.profile');
             }else if($user->hasRole('ACCOUNT_MANAGER') && $user->status == 1){
                 return redirect()->route('account-manager.profile');
+            }else if($user->hasRole('SALES_EXCUETIVE') && $user->status == 1){
+                return redirect()->route('sales-excecutive.profile');
             }else{
                 Auth::logout();
                 return redirect()->back()->with('error', 'Email id & password was invalid!');
@@ -56,6 +58,12 @@ class AuthController extends Controller
     }
 
     public function AccountManagerlogout()
+    {
+        Auth::logout();
+        return redirect()->route('admin.login');
+    }
+
+    public function SalesExcecutivelogout()
     {
         Auth::logout();
         return redirect()->route('admin.login');

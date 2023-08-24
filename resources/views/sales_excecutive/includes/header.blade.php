@@ -19,7 +19,7 @@
         </a>
 
         <div class="page-title-box">
-            <h3>Welcome to account manager panel</h3>
+            <h3>Welcome to sales excecutive panel</h3>
         </div>
 
         <a id="mobile_btn" class="mobile_btn" href="#sidebar"><i class="fa fa-bars"></i></a>
@@ -38,9 +38,10 @@
                     <span>{{ Auth::user()->name }}</span>
                 </a>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="{{ route('account-manager.profile') }}">My Profile</a>
-                    <a class="dropdown-item" href="{{ route('account-manager.password') }}">Change Password</a>
-                    <a class="dropdown-item" href="{{ route('account-manager.logout') }}">Logout</a>
+                    <a class="dropdown-item" href="{{ route('sales-excecutive.profile') }}">My Profile</a>
+                    <a class="dropdown-item" href="{{ route('prospects.index') }}">My Prospect List</a>
+                    <a class="dropdown-item" href="{{ route('sales-excecutive.password') }}">Change Password</a>
+                    <a class="dropdown-item" href="{{ route('sales-excecutive.logout') }}">Logout</a>
                 </div>
             </li>
         </ul>
@@ -49,8 +50,8 @@
             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i
                     class="fa fa-ellipsis-v"></i></a>
             <div class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item" href="{{ route('account-manager.profile') }}">My Profile</a>
-                <a class="dropdown-item" href="{{ route('account-manager.logout') }}">Logout</a>
+                <a class="dropdown-item" href="{{ route('sales-excecutive.profile') }}">My Profile</a>
+                <a class="dropdown-item" href="{{ route('sales-excecutive.logout') }}">Logout</a>
             </div>
         </div>
     </div>

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg"
-    data-sidebar-image="none">
+<html lang="en" >
 
 <head>
     <meta charset="utf-8">
@@ -39,7 +38,7 @@
 
     <!--end header-->
     <!--sidebar-wrapper-->
-    {{-- @include('account_manager.includes.sidebar') --}}
+    @include('account_manager.includes.sidebar')
     <!--end sidebar-wrapper-->
 
     <!--page-wrapper-->
@@ -48,7 +47,7 @@
     <!--end page-wrapper-->
 
     <!--footer -->
-    @include('account_manager.includes.footer')
+    {{-- @include('account_manager.includes.footer') --}}
 
     <!-- end footer -->
 
@@ -68,7 +67,7 @@
 <script src="{{ asset('admin_assets/js/bootstrap-datetimepicker.min.js') }}"></script>
 
 <script src="{{ asset('admin_assets/js/layout.js') }}"></script>
-<script src="{{ asset('admin_assets/js/theme-settings.js') }}"></script>
+{{-- <script src="{{ asset('admin_assets/js/theme-settings.js') }}"></script> --}}
 <script src="{{ asset('admin_assets/js/app.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>

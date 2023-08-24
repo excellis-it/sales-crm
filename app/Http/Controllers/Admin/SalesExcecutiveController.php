@@ -11,9 +11,7 @@ use App\Traits\ImageTrait;
 use Illuminate\Support\Facades\Storage;
 use File;
 
-use function PHPUnit\Framework\fileExists;
-
-class CustomerController extends Controller
+class SalesExcecutiveController extends Controller
 {
     use ImageTrait;
 
@@ -25,11 +23,11 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         if ($request->id) {
-            $sales_managers = User::where('id', $request->id)->Role('SALES_MANAGER')->get();
-            return view('admin.sales_manager.list')->with(compact('sales_managers'));
+            $sales_excecutives = User::where('id', $request->id)->Role('SALES_EXCUETIVE')->get();
+            return view('admin.sales_excecutive.list')->with(compact('sales_excecutives'));
         }
-        $sales_managers = User::Role('SALES_MANAGER')->get();
-        return view('admin.sales_manager.list')->with(compact('sales_managers'));
+        $sales_excecutives = User::Role('SALES_EXCUETIVE')->get();
+        return view('admin.sales_excecutive.list')->with(compact('sales_excecutives'));
     }
 
     /**
@@ -39,7 +37,8 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        return view('admin.sales_manager.create');
+        $sales_managers = User::Role('SALES_MANAGER')->orderBy('name', 'DESC')->where('status', 1)->get();
+        return view('admin.sales_excecutive.create')->with(compact('sales_managers'));
     }
 
     /**
@@ -51,6 +50,7 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'sales_manager_id' => 'required', // 'required|exists:users,id',
             'name' => 'required',
             'email' => 'required|unique:users|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',
             'password' => 'required|min:8',
@@ -60,6 +60,7 @@ class CustomerController extends Controller
         ]);
 
         $data = new User();
+        $data->sales_manager_id = $request->sales_manager_id;
         $data->name = $request->name;
         $data->email = $request->email;
         $data->password = bcrypt($request->password);
@@ -71,11 +72,11 @@ class CustomerController extends Controller
             $request->validate([
                 'profile_picture' => 'image|mimes:jpg,png,jpeg,gif,svg',
             ]);
-            $data->profile_picture = $this->imageUpload($request->file('profile_picture'), 'sales_manager');
+            $data->profile_picture = $this->imageUpload($request->file('profile_picture'), 'sales_excecutive');
         }
-
+       
         $data->save();
-        $data->assignRole('SALES_MANAGER');
+        $data->assignRole('SALES_EXCUETIVE');
         $maildata = [
             'name' => $request->name,
             'email' => $request->email,
@@ -84,7 +85,7 @@ class CustomerController extends Controller
         ];
 
         Mail::to($request->email)->send(new RegistrationMail($maildata));
-        return redirect()->route('sales_managers.index')->with('message', 'Sales manager created successfully.');
+        return redirect()->route('sales-excecutive.index')->with('message', 'Sales manager created successfully.');
     }
 
     /**
@@ -105,8 +106,9 @@ class CustomerController extends Controller
      */
     public function edit($id)
     {
-        $sales_manager = User::findOrFail($id);
-        return view('admin.sales_manager.edit')->with(compact('sales_manager'));
+        $sales_managers = User::Role('SALES_MANAGER')->orderBy('name', 'DESC')->where('status', 1)->get();
+        $sales_excecutive = User::findOrFail($id);
+        return view('admin.sales_excecutive.edit')->with(compact('sales_excecutive','sales_managers'));
     }
 
     /**
@@ -119,12 +121,14 @@ class CustomerController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
+            'sales_manager_id' => 'required', // 'required|exists:users,id',
             'name' => 'required',
             'email' => 'required|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',
             'phone' => 'required',
             'status' => 'required',
         ]);
         $data = User::findOrFail($id);
+        $data->sales_manager_id = $request->sales_manager_id;
         $data->name = $request->name;
         $data->email = $request->email;
         $data->phone = $request->phone;
@@ -146,10 +150,10 @@ class CustomerController extends Controller
                 $currentImageFilename = $data->profile_picture; // get current image name
                 Storage::delete('app/' . $currentImageFilename);
             }
-            $data->profile_picture = $this->imageUpload($request->file('profile_picture'), 'sales_manager');
+            $data->profile_picture = $this->imageUpload($request->file('profile_picture'), 'sales_excecutive');
         }
         $data->save();
-        return redirect()->route('sales_managers.index')->with('message', 'Sales manager updated successfully.');
+        return redirect()->route('sales-excecutive.index')->with('message', 'Sales manager updated successfully.');
     }
 
     /**
@@ -163,7 +167,7 @@ class CustomerController extends Controller
         //
     }
 
-    public function changeCustomersStatus(Request $request)
+    public function changeSalesExcecutiveStatus(Request $request)
     {
         $user = User::find($request->user_id);
         $user->status = $request->status;
@@ -175,6 +179,6 @@ class CustomerController extends Controller
     {
         $user = User::findOrFail($id);
         $user->delete();
-        return redirect()->route('sales_managers.index')->with('error', 'Sales manager has been deleted successfully.');
+        return redirect()->route('sales-excecutive.index')->with('error', 'Sales manager has been deleted successfully.');
     }
 }

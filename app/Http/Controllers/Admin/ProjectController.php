@@ -17,8 +17,12 @@ class ProjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->sales_manager_id) {
+            $projects = Project::orderBy('id', 'desc')->where('user_id', $request->sales_manager_id)->get();
+            return view('admin.project.list')->with(compact('projects'));
+        }
         $projects = Project::orderBy('id', 'desc')->get();
         return view('admin.project.list')->with(compact('projects'));
     }
@@ -30,7 +34,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        $sales_managers = User::Role('SALES_MANAGER')->get();
+        $sales_managers = User::Role('SALES_MANAGER')->orderBy('name', 'DESC')->where('status', 1)->get();
         return view('admin.project.create')->with(compact('sales_managers'));
     }
 
@@ -101,7 +105,7 @@ class ProjectController extends Controller
     {
         try {
             $project = Project::find($id);
-            $account_managers = User::role('ACCOUNT_MANAGER')->get();
+            $account_managers = User::role('ACCOUNT_MANAGER')->orderBy('name', 'DESC')->where('status', 1)->get();
             return view('admin.project.view')->with(compact('project', 'account_managers'));
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
