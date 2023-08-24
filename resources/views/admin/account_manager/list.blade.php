@@ -28,8 +28,8 @@
                         </ul>
                     </div>
                     <div class="col-auto float-end ms-auto">
-                        <a href="{{ route('account_managers.create') }}" class="btn add-btn"><i class="fa fa-plus"></i> Add a
-                            Account manager</a>
+                        <a href="{{ route('account_managers.create') }}" class="btn add-btn"><i class="fa fa-plus"></i> Add an
+                            account manager</a>
                     </div>
                 </div>
             </div>
@@ -53,6 +53,8 @@
                                     <th> Name</th>
                                     <th> Email</th>
                                     <th> Phone</th>
+                                    <th>Employee Id</th>
+                                    <th>Date Of Joining</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
@@ -63,6 +65,8 @@
                                         <td>{{ $account_manager->name }}</td>
                                         <td>{{ $account_manager->email }}</td>
                                         <td>{{ $account_manager->phone }}</td>
+                                        <td>{{ $account_manager->employee_id }}</td>
+                                        <td>{{ $account_manager->date_of_joining }}</td>
                                         <td>
                                             <div class="button-switch">
                                                 <input type="checkbox" id="switch-orange" class="switch toggle-class"
@@ -102,11 +106,11 @@
                 "aaSorting": [],
                 "columnDefs": [{
                         "orderable": false,
-                        "targets": [3, 4]
+                        "targets": [5, 6]
                     },
                     {
                         "orderable": true,
-                        "targets": [0, 1, 2, ]
+                        "targets": [0, 1, 2, 3, 4 ]
                     }
                 ]
             });

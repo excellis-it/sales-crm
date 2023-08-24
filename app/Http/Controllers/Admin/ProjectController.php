@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\SalesManager;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Models\ProjectMilestone;
 use App\Models\ProjectType;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,8 +19,8 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects = Project::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->get();
-        return view('sales_manager.project.list')->with(compact('projects'));
+        $projects = Project::orderBy('id', 'desc')->get();
+        return view('admin.project.list')->with(compact('projects'));
     }
 
     /**
@@ -29,7 +30,8 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return view('sales_manager.project.create');
+        $sales_managers = User::Role('SALES_MANAGER')->get();
+        return view('admin.project.create')->with(compact('sales_managers'));
     }
 
     /**
@@ -44,7 +46,7 @@ class ProjectController extends Controller
         $data = $request->all();
 
         $project = new Project();
-        $project->user_id = Auth::user()->id;
+        $project->user_id = $data['user_id'];
         $project->client_name = $data['client_name'];
         $project->business_name = $data['business_name'];
         $project->client_email = $data['client_email'];
@@ -83,7 +85,7 @@ class ProjectController extends Controller
             $project_milestone->save();
         }
 
-        return redirect()->route('projects.index')->with('message', 'Project created successfully.');
+        return redirect()->route('sales-projects.index')->with('message', 'Project created successfully.');
         // } catch (\Throwable $th) {
         //     return redirect()->back()->with('error', $th->getMessage());
         // }
@@ -99,7 +101,8 @@ class ProjectController extends Controller
     {
         try {
             $project = Project::find($id);
-            return view('sales_manager.project.view')->with(compact('project'));
+            $account_managers = User::role('ACCOUNT_MANAGER')->get();
+            return view('admin.project.view')->with(compact('project', 'account_managers'));
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }
@@ -114,8 +117,9 @@ class ProjectController extends Controller
     public function edit($id)
     {
         try {
+            $sales_managers = User::Role('SALES_MANAGER')->get();
             $project = Project::find($id);
-            return view('sales_manager.project.edit')->with(compact('project'));
+            return view('admin.project.edit')->with(compact('project', 'sales_managers'));
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }
@@ -132,7 +136,7 @@ class ProjectController extends Controller
     {
         $data = $request->all();
         $project = Project::findOrfail($id);
-        $project->user_id = Auth::user()->id;
+        $project->user_id = $data['user_id'];
         $project->client_name = $data['client_name'];
         $project->business_name = $data['business_name'];
         $project->client_email = $data['client_email'];
@@ -173,7 +177,7 @@ class ProjectController extends Controller
             $project_milestone->save();
         }
 
-        return redirect()->route('projects.index')->with('message', 'Project updated successfully.');
+        return redirect()->route('sales-projects.index')->with('message', 'Project updated successfully.');
     }
 
     /**
@@ -192,5 +196,17 @@ class ProjectController extends Controller
         $project = Project::find($id);
         $project->delete();
         return redirect()->back()->with('message', 'Project deleted successfully.');
+    }
+
+    public function projectAssignTo(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = $request->all();
+            $project = Project::find($data['project_id']);
+            $project->assigned_to = $data['assigned_to'];
+            $project->assigned_date = date('Y-m-d');
+            $project->save();
+            return response()->json(['status' => 'success', 'message' => 'Project assigned successfully.']);
+        }
     }
 }

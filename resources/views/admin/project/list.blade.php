@@ -1,4 +1,4 @@
-@extends('sales_manager.layouts.master')
+@extends('admin.layouts.master')
 @section('title')
     All Project Details - {{ env('APP_NAME') }}
 @endsection
@@ -23,12 +23,12 @@
                     <div class="col">
                         <h3 class="page-title">Projects Information</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('projects.index') }}">Projects</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('sales-projects.index') }}">Projects</a></li>
                             <li class="breadcrumb-item active">List</li>
                         </ul>
                     </div>
                     <div class="col-auto float-end ms-auto">
-                        <a href="{{ route('projects.create') }}" class="btn add-btn"><i class="fa fa-plus"></i> Add a
+                        <a href="{{ route('sales-projects.create') }}" class="btn add-btn"><i class="fa fa-plus"></i> Add a
                             Project</a>
                     </div>
                 </div>
@@ -51,17 +51,17 @@
                             <thead>
                                 <tr>
                                     <th> Date</th>
-                                    <th> Business Name</th>
+                                    <th> Sale By</th>
+                                    <th> Sales Manager Email</th>
                                     <th> Customer Name </th>
                                     <th>Phone Number</th>
-                                    <th>Customer Address</th>
-                                    <th>Customer Website</th>
                                     <th>Project Type</th>
                                     <th>Project Value</th>
                                     <th>Project Upfront</th>
                                     <th>Currency</th>
                                     <th>Payment Mode</th>
                                     <th>Due Amount</th>
+                                    <th>Status</th>
                                     <th>
                                         Action
                                     </th>
@@ -74,19 +74,16 @@
                                             {{ date('d-m-Y', strtotime($project->sale_date)) }}
                                         </td>
                                         <td>
-                                            {{ $project->business_name }}
+                                            {{ $project->salesManager->name }}
+                                        </td>
+                                        <td>
+                                            {{ $project->salesManager->email }}
                                         </td>
                                         <td>
                                             {{ $project->client_name }}
                                         </td>
                                         <td>
                                             {{ $project->client_phone }}
-                                        </td>
-                                        <td>
-                                            {{ $project->client_address }}
-                                        </td>
-                                        <td>
-                                            {{ $project->website }}
                                         </td>
                                         <td>
                                            @foreach ($project->projectTypes as $project_type)
@@ -110,17 +107,24 @@
                                             {{ $project->project_value - $project->project_upfront }}
                                         </td>
                                         <td>
+                                            @if($project->assigned_to == null)
+                                                <span class="badge bg-danger">Not Assigned</span>
+                                            @else
+                                                <span class="badge bg-success">Assigned</span>
+                                            @endif
+                                        </td>
+                                        <td>
                                             <a title="Edit Project" data-route=""
-                                                href="{{ route('projects.edit', $project->id) }}"><i
+                                                href="{{ route('sales-projects.edit', $project->id) }}"><i
                                                     class="fas fa-edit"></i></a> &nbsp;&nbsp;
 
                                             <a title="View Project" data-route=""
-                                                href="{{ route('projects.show', $project->id) }}"><i
+                                                href="{{ route('sales-projects.show', $project->id) }}"><i
                                                     class="fas fa-eye"></i></a> &nbsp;&nbsp;
-
+                                                    
 
                                             <a title="Delete Project"
-                                                data-route="{{ route('projects.delete', $project->id) }}"
+                                                data-route="{{ route('sales-projects.delete', $project->id) }}"
                                                 href="javascipt:void(0);" id="delete"><i class="fas fa-trash"></i></a>
                                         </td>
                                     </tr>
@@ -185,7 +189,7 @@
             $.ajax({
                 type: "GET",
                 dataType: "json",
-                url: '{{ route('projects.change-status') }}',
+                url: '{{ route('sales-projects.change-status') }}',
                 data: {
                     'status': status,
                     'user_id': user_id

@@ -16,6 +16,7 @@ class CreateProjectTypesTable extends Migration
         Schema::create('project_types', function (Blueprint $table) {
             $table->id();
             $table->foreignId('project_id')->nullable()->references('id')->on('projects')->onDelete('cascade');
+            $table->string('name')->nullable();
             $table->string('type')->nullable();
             $table->timestamps();
         });

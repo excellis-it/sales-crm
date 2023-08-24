@@ -1,4 +1,4 @@
-@extends('sales_manager.layouts.master')
+@extends('account_manager.layouts.master')
 @section('title')
     {{ env('APP_NAME') }} | Change Password
 @endsection
@@ -15,7 +15,7 @@
                     <div class="col">
                         <h3 class="page-title">Change Password</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('sales-manager.profile') }}">Profile</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('account-manager.profile') }}">Profile</a></li>
                             <li class="breadcrumb-item active">Password</li>
                         </ul>
                     </div>
@@ -29,7 +29,7 @@
                     <div class="form-body">
                         <div class="row">
                             <div class="col-12 col-lg-5 border-right">
-                                <form class="row g-3" action="{{ route('sales-manager.password.update') }}" method="post"
+                                <form class="row g-3" action="{{ route('account-manager.password.update') }}" method="post"
                                     enctype="multipart/form-data">
                                     @csrf
 

@@ -50,7 +50,6 @@ class AccountManagerController extends Controller
             'password' => 'required|min:8',
             'confirm_password' => 'required|min:8|same:password',
             'phone' => 'required',
-            'profile_picture' => 'required|image|mimes:jpg,png,jpeg,gif,svg',
             'status' => 'required',
         ]);
 
@@ -60,7 +59,14 @@ class AccountManagerController extends Controller
         $data->password = bcrypt($request->password);
         $data->phone = $request->phone;
         $data->status = $request->status;
-        $data->profile_picture = $this->imageUpload($request->file('profile_picture'), 'account_manager');
+        $data->employee_id = $request->employee_id;
+        $data->date_of_joining = $request->date_of_joining;
+        if ($request->hasFile('profile_picture')) {
+            $request->validate([
+                'profile_picture' => 'image|mimes:jpg,png,jpeg,gif,svg',
+            ]);
+            $data->profile_picture = $this->imageUpload($request->file('profile_picture'), 'account_manager');
+        }
         $data->save();
         $data->assignRole('ACCOUNT_MANAGER');
         $maildata = [
@@ -115,6 +121,8 @@ class AccountManagerController extends Controller
         $data->name = $request->name;
         $data->email = $request->email;
         $data->phone = $request->phone;
+        $data->employee_id = $request->employee_id;
+        $data->date_of_joining = $request->date_of_joining;
         $data->status = $request->status;
         if ($request->password != null) {
             $request->validate([

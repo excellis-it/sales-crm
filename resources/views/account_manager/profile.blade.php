@@ -1,4 +1,4 @@
-@extends('sales_manager.layouts.master')
+@extends('account_manager.layouts.master')
 @section('title')
     {{ env('APP_NAME') }} | Profile
 @endsection
@@ -16,7 +16,7 @@
                     <div class="ps-3">
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb mb-0 p-0">
-                                {{-- <li class="breadcrumb-item"><a href="{{route('sales_manager.dashboard')}}"><i class='bx bx-home-alt'></i></a>
+                                {{-- <li class="breadcrumb-item"><a href="{{route('account_manager.dashboard')}}"><i class='bx bx-home-alt'></i></a>
                             </li> --}}
                                 {{-- <li class="breadcrumb-item active" aria-current="page">Admin Profile</li> --}}
                             </ol>
@@ -49,7 +49,7 @@
                                             <div class="d-flex align-items-center mb-1">
                                                 <h4 class="mb-0">{{ Auth::user()->name }}</h4>
                                             </div>
-                                            <p class="mb-0 text-muted">Sales Manager</p>
+                                            <p class="mb-0 text-muted">Account Manager</p>
                                         </div>
                                     </div>
                                 </div>
@@ -65,7 +65,7 @@
                                                 <div class="row">
                                                     <div class="col-12 col-lg-5 border-right">
                                                         <form class="row g-3"
-                                                            action="{{ route('sales-manager.profile.update') }}"
+                                                            action="{{ route('account-manager.profile.update') }}"
                                                             method="post" enctype="multipart/form-data">
                                                             @csrf
                                                             <div class="col-12">

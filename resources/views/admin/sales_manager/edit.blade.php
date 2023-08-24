@@ -53,6 +53,26 @@
                                                         @endif
                                                     </div>
                                                     <div class="col-md-6">
+                                                        <label for="inputEnterYourName" class="col-form-label"> Employee Id</label>
+                                                        <input type="text" name="employee_id" id=""
+                                                            class="form-control" value="{{ $sales_manager['employee_id'] }}"
+                                                            placeholder="Enter Employee Id">
+                                                        @if ($errors->has('employee_id'))
+                                                            <div class="error" style="color:red;">
+                                                                {{ $errors->first('employee_id') }}</div>
+                                                        @endif
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="inputEnterYourName" class="col-form-label"> Date Of Joining </label>
+                                                        <input type="date" name="date_of_joining" id="" max="{{ date('Y-m-d') }}"
+                                                            class="form-control" value="{{ $sales_manager['date_of_joining'] }}"
+                                                            >
+                                                        @if ($errors->has('date_of_joining'))
+                                                            <div class="error" style="color:red;">
+                                                                {{ $errors->first('date_of_joining') }}</div>
+                                                        @endif
+                                                    </div>
+                                                    <div class="col-md-6">
                                                         <label for="inputEnterYourName" class="col-form-label"> Email <span
                                                                 style="color: red;">*</span></label>
                                                         <input type="text" name="email" id=""

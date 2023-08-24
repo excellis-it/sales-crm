@@ -35,7 +35,7 @@
                         @endif
                         <span class="status online"></span>
                     </span>
-                    <span>Admin</span>
+                    <span>{{ Auth::user()->name }}</span>
                 </a>
                 <div class="dropdown-menu">
                     <a class="dropdown-item" href="{{ route('admin.profile') }}">My Profile</a>

@@ -52,7 +52,6 @@ class CustomerController extends Controller
             'password' => 'required|min:8',
             'confirm_password' => 'required|min:8|same:password',
             'phone' => 'required',
-            'profile_picture' => 'required|image|mimes:jpg,png,jpeg,gif,svg',
             'status' => 'required',
         ]);
 
@@ -61,8 +60,16 @@ class CustomerController extends Controller
         $data->email = $request->email;
         $data->password = bcrypt($request->password);
         $data->phone = $request->phone;
+        $data->employee_id = $request->employee_id;
+        $data->date_of_joining = $request->date_of_joining;
         $data->status = $request->status;
-        $data->profile_picture = $this->imageUpload($request->file('profile_picture'), 'sales_manager');
+        if ($request->hasFile('profile_picture')) {
+            $request->validate([
+                'profile_picture' => 'image|mimes:jpg,png,jpeg,gif,svg',
+            ]);
+            $data->profile_picture = $this->imageUpload($request->file('profile_picture'), 'sales_manager');
+        }
+       
         $data->save();
         $data->assignRole('SALES_MANAGER');
         $maildata = [
@@ -117,6 +124,8 @@ class CustomerController extends Controller
         $data->name = $request->name;
         $data->email = $request->email;
         $data->phone = $request->phone;
+        $data->employee_id = $request->employee_id;
+        $data->date_of_joining = $request->date_of_joining;
         $data->status = $request->status;
         if ($request->password != null) {
             $request->validate([

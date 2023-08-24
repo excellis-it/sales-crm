@@ -32,7 +32,7 @@
                     <div class="card-title">
                         <div class="row">
                             <div class="col-xl-12 mx-auto">
-                                <h6 class="mb-0 text-uppercase">Create A Account manager</h6>
+                                <h6 class="mb-0 text-uppercase">Create an account manager</h6>
                                 <hr>
                                 <div class="card border-0 border-4">
                                     <div class="card-body">
@@ -50,6 +50,26 @@
                                                         @if ($errors->has('name'))
                                                             <div class="error" style="color:red;">
                                                                 {{ $errors->first('name') }}</div>
+                                                        @endif
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="inputEnterYourName" class="col-form-label"> Employee Id </label>
+                                                        <input type="text" name="employee_id" id=""
+                                                            class="form-control" value="{{ old('employee_id') }}"
+                                                            placeholder="Enter Employee Id">
+                                                        @if ($errors->has('employee_id'))
+                                                            <div class="error" style="color:red;">
+                                                                {{ $errors->first('employee_id') }}</div>
+                                                        @endif
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="inputEnterYourName" class="col-form-label"> Date Of Joining </label>
+                                                        <input type="date" name="date_of_joining" id="" max="{{ date('Y-m-d') }}"
+                                                            class="form-control" value="{{ old('date_of_joining') }}"
+                                                            >
+                                                        @if ($errors->has('date_of_joining'))
+                                                            <div class="error" style="color:red;">
+                                                                {{ $errors->first('date_of_joining') }}</div>
                                                         @endif
                                                     </div>
                                                     <div class="col-md-6">
@@ -111,8 +131,7 @@
                                                         @endif
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <label for="inputEnterYourName" class="col-form-label"> Profile
-                                                            Picture <span style="color: red;">*</span></label>
+                                                        <label for="inputEnterYourName" class="col-form-label"> Profile</label>
                                                         <input type="file" name="profile_picture" id=""
                                                             class="form-control" value="{{ old('profile_picture') }}">
                                                         @if ($errors->has('profile_picture'))

@@ -20,9 +20,9 @@
 
                     </ul>
                 </li>
-                <li class="menu-title">
+                {{-- <li class="menu-title">
                     <span>User Management</span>
-                </li>
+                </li> --}}
 
 
                 <li class="{{ Request::is('admin/sales_managers*') ? 'active' : ' ' }}">
@@ -33,6 +33,11 @@
                 <li class="{{ Request::is('admin/account_managers*') ? 'active' : ' ' }}">
                     <a href="{{ route('account_managers.index') }}"><i class="la la-user"></i> <span>
                             Account managers</span></a>
+                </li>
+
+                <li class="{{ Request::is('admin/sales-projects*') ? 'active' : ' ' }}">
+                    <a href="{{ route('sales-projects.index') }}"><i class="la la-book-open"></i> <span>
+                            Projects </span></a>
                 </li>
 
 

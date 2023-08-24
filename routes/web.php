@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AccountManager\ProfileController as AccountManagerProfileController;
+use App\Http\Controllers\AccountManager\ProjectController as AccountManagerProjectController;
 use App\Http\Controllers\Admin\AccountManagerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController;
@@ -8,6 +10,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
 use App\Http\Controllers\Admin\SellerController;
 use App\Http\Controllers\SalesManager\ProfileController as SalesManagerProfileController;
 use App\Http\Controllers\SalesManager\ProjectController;
@@ -51,15 +54,21 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::resources([
         'sales_managers' => CustomerController::class,
         'account_managers' => AccountManagerController::class,
+        'sales-projects' => AdminProjectController::class,
     ]);
+
+    // delete project
+    Route::get('/project-delete/{id}', [AdminProjectController::class, 'delete'])->name('sales-projects.delete');
+    Route::get('/projectAssignTo', [AdminProjectController::class, 'projectAssignTo'])->name('sales-projects.updateAssignedTo');
+
     //  Sales manager Routes
     Route::prefix('sales_managers')->group(function () {
         Route::get('/sales_manager-delete/{id}', [CustomerController::class, 'delete'])->name('sales_managers.delete');
     });
     Route::get('/changeCustomerStatus', [CustomerController::class, 'changeCustomersStatus'])->name('sales_managers.change-status');
-    
+
     //  Sales manager Routes
-     Route::prefix('account_managers')->group(function () {
+    Route::prefix('account_managers')->group(function () {
         Route::get('/account_manager-delete/{id}', [AccountManagerController::class, 'delete'])->name('account_managers.delete');
     });
     Route::get('/changeAccountManagerStatus', [AccountManagerController::class, 'changeAccountManagerStatus'])->name('account_managers.change-status');
@@ -70,7 +79,7 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
 Route::group(['middleware' => ['SalesManager'], 'prefix' => 'sales-manager'], function () {
     Route::get('profile', [SalesManagerProfileController::class, 'index'])->name('sales-manager.profile');
     Route::post('profile/update', [SalesManagerProfileController::class, 'profileUpdate'])->name('sales-manager.profile.update');
-    Route::get('logout', [AuthController::class, 'logout'])->name('sales-manager.logout');
+    Route::get('logout', [AuthController::class, 'SalesManagerlogout'])->name('sales-manager.logout');
 
     Route::prefix('password')->group(function () {
         Route::get('/', [SalesManagerProfileController::class, 'password'])->name('sales-manager.password'); // password change
@@ -80,4 +89,25 @@ Route::group(['middleware' => ['SalesManager'], 'prefix' => 'sales-manager'], fu
     Route::resources([
         'projects' => ProjectController::class,
     ]);
+
+    // delete project
+    Route::get('/project-delete/{id}', [ProjectController::class, 'delete'])->name('projects.delete');
+});
+
+/**---------------------------------------------------------------Account Manager ---------------------------------------------------------------------------------- */
+
+Route::group(['middleware' => ['AccountManager'], 'prefix' => 'account-manager'], function () {
+    Route::get('profile', [AccountManagerProfileController::class, 'index'])->name('account-manager.profile');
+    Route::post('profile/update', [AccountManagerProfileController::class, 'profileUpdate'])->name('account-manager.profile.update');
+    Route::get('logout', [AuthController::class, 'AccountManagerlogout'])->name('account-manager.logout');
+
+    Route::prefix('password')->group(function () {
+        Route::get('/', [AccountManagerProfileController::class, 'password'])->name('account-manager.password'); // password change
+        Route::post('/update', [AccountManagerProfileController::class, 'passwordUpdate'])->name('account-manager.password.update'); // password update
+    });
+    Route::name('account-manager.')->group(function () {
+        Route::resources([
+            'projects' => AccountManagerProjectController::class,
+        ]);
+    });
 });

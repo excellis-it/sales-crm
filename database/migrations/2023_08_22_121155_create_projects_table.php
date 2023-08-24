@@ -25,11 +25,11 @@ class CreateProjectsTable extends Migration
             $table->string('project_name')->nullable();
             $table->text('project_description')->nullable();
             $table->string('project_value')->nullable();
+            $table->string('project_upfront')->nullable();
             $table->string('currency')->nullable();
             $table->string('payment_mode')->nullable();
             $table->string('project_opener')->nullable();
             $table->string('project_closer')->nullable();
-            $table->string('project_upfront')->nullable();
             $table->string('website')->nullable();
             $table->string('sale_date')->nullable();
             $table->string('assigned_date')->nullable();

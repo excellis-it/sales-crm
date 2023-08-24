@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class SalesManager
+class AccountManager
 {
     /**
      * Handle an incoming request.
@@ -17,7 +17,7 @@ class SalesManager
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->hasRole('SALES_MANAGER')) {
+        if (Auth::check() && Auth::user()->hasRole('ACCOUNT_MANAGER')) {
             return $next($request);
         } else {
             return redirect()->route('admin.login');

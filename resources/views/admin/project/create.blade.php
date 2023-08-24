@@ -1,4 +1,4 @@
-@extends('sales_manager.layouts.master')
+@extends('admin.layouts.master')
 @section('title')
     {{ env('APP_NAME') }} | Create Project
 @endsection
@@ -15,7 +15,7 @@
                     <div class="col">
                         <h3 class="page-title">Create</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('projects.index') }}">Projects</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('sales-projects.index') }}">Projects</a></li>
                             <li class="breadcrumb-item active">Create Project</li>
                         </ul>
                     </div>
@@ -35,11 +35,22 @@
                                 <hr>
                                 <div class="card border-0 border-4">
                                     <div class="card-body">
-                                        <form action="{{ route('projects.store') }}" method="post" data-parsley-validate=""
+                                        <form action="{{ route('sales-projects.store') }}" method="post" data-parsley-validate=""
                                             enctype="multipart/form-data">
                                             @csrf
                                             <div class="border p-4 rounded">
                                                 <div class="row">
+                                                    {{-- salemangers select option --}}
+                                                    <div class="col-md-6">
+                                                        <label for="inputEnterYourName" class="col-form-label"> Sales Manager
+                                                            <span style="color: red;">*</span></label>
+                                                        <select name="user_id" id="user_id" required data-parsley-trigger="keyup" class="form-control" >
+                                                            <option value="">Select a sales manager</option>
+                                                            @foreach ($sales_managers as $sales_manager)
+                                                                <option value="{{ $sales_manager->id }}">{{ $sales_manager->name }} ({{ $sales_manager->email }})</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
                                                     <div class="col-md-6">
                                                         <label for="inputEnterYourName" class="col-form-label"> Client Name
                                                             <span style="color: red;">*</span></label>

@@ -1,4 +1,4 @@
-@extends('sales_manager.layouts.master')
+@extends('account_manager.layouts.master')
 @section('title')
     All Project Details - {{ env('APP_NAME') }}
 @endsection
@@ -23,13 +23,13 @@
                     <div class="col">
                         <h3 class="page-title">Projects Information</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('projects.index') }}">Projects</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('account-manager.projects.index') }}">Projects</a>
+                            </li>
                             <li class="breadcrumb-item active">List</li>
                         </ul>
                     </div>
                     <div class="col-auto float-end ms-auto">
-                        <a href="{{ route('projects.create') }}" class="btn add-btn"><i class="fa fa-plus"></i> Add a
-                            Project</a>
+
                     </div>
                 </div>
             </div>
@@ -89,14 +89,14 @@
                                             {{ $project->website }}
                                         </td>
                                         <td>
-                                           @foreach ($project->projectTypes as $project_type)
-                                               <span class="badge bg-info">{{ $project_type->type }}</span>
-                                             @endforeach
+                                            @foreach ($project->projectTypes as $project_type)
+                                                <span class="badge bg-info">{{ $project_type->type }}</span>
+                                            @endforeach
                                         </td>
                                         <td>
                                             {{ $project->project_value }}
                                         </td>
-                                        
+
                                         <td>
                                             {{ $project->project_upfront }}
                                         </td>
@@ -110,18 +110,9 @@
                                             {{ $project->project_value - $project->project_upfront }}
                                         </td>
                                         <td>
-                                            <a title="Edit Project" data-route=""
-                                                href="{{ route('projects.edit', $project->id) }}"><i
-                                                    class="fas fa-edit"></i></a> &nbsp;&nbsp;
-
                                             <a title="View Project" data-route=""
-                                                href="{{ route('projects.show', $project->id) }}"><i
+                                                href="{{ route('account-manager.projects.show', $project->id) }}"><i
                                                     class="fas fa-eye"></i></a> &nbsp;&nbsp;
-
-
-                                            <a title="Delete Project"
-                                                data-route="{{ route('projects.delete', $project->id) }}"
-                                                href="javascipt:void(0);" id="delete"><i class="fas fa-trash"></i></a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -185,7 +176,7 @@
             $.ajax({
                 type: "GET",
                 dataType: "json",
-                url: '{{ route('projects.change-status') }}',
+                url: '{{ route('account-manager.projects.change-status') }}',
                 data: {
                     'status': status,
                     'user_id': user_id
