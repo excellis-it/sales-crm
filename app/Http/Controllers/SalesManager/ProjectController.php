@@ -78,6 +78,14 @@ class ProjectController extends Controller
             $project_type->save();
         }
 
+        foreach ($data['milestone_value'] as $key => $milestone) {
+            $project_milestone = new ProjectMilestone();
+            $project_milestone->project_id = $project->id;
+            $project_milestone->milestone_name = $data['milestone_name'][$key];
+            $project_milestone->milestone_value = $milestone;
+            $project_milestone->save();
+        }
+
         foreach ($data['pdf'] as $key => $pdfFile) {
             if ($pdfFile) {
                 $project_pdf = new ProjectDocument();
@@ -85,14 +93,6 @@ class ProjectController extends Controller
                 $project_pdf->document_file = $this->imageUpload($pdfFile, 'project_pdf');
                 $project_pdf->save();
             }
-        }
-
-        foreach ($data['milestone_value'] as $key => $milestone) {
-            $project_milestone = new ProjectMilestone();
-            $project_milestone->project_id = $project->id;
-            $project_milestone->milestone_name = $data['milestone_name'][$key];
-            $project_milestone->milestone_value = $milestone;
-            $project_milestone->save();
         }
 
         return redirect()->route('projects.index')->with('message', 'Project created successfully.');
@@ -110,8 +110,10 @@ class ProjectController extends Controller
     public function show($id)
     {
         try {
+
             $project = Project::find($id);
-            return view('sales_manager.project.view')->with(compact('project'));
+            $documents = ProjectDocument::where('project_id', $id)->orderBy('id', 'desc')->get();
+            return view('sales_manager.project.view')->with(compact('project','documents'));
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }
@@ -195,6 +197,14 @@ class ProjectController extends Controller
         }
 
         return redirect()->route('projects.index')->with('message', 'Project updated successfully.');
+    }
+
+    public function projectDocumentDownload($id)
+    {
+        $project_document = ProjectDocument::find($id);
+        $file_path = $project_document->document_file;
+
+        return response()->download(storage_path('app/public/' . $file_path));
     }
 
     /**

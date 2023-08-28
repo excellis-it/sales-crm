@@ -6,12 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Models\ProjectMilestone;
 use App\Models\ProjectType;
+use App\Models\ProjectDocument;
 use App\Models\User;
+use App\Traits\ImageTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
+    use ImageTrait;
     /**
      * Display a listing of the resource.
      *
@@ -89,6 +92,16 @@ class ProjectController extends Controller
             $project_milestone->save();
         }
 
+        foreach ($data['pdf'] as $key => $pdfFile) {
+            
+            if ($pdfFile) {
+                $project_pdf = new ProjectDocument();
+                $project_pdf->project_id = $project->id;
+                $project_pdf->document_file = $this->imageUpload($pdfFile, 'project_pdf');
+                $project_pdf->save();
+            }
+        }
+
         return redirect()->route('sales-projects.index')->with('message', 'Project created successfully.');
         // } catch (\Throwable $th) {
         //     return redirect()->back()->with('error', $th->getMessage());
@@ -105,8 +118,9 @@ class ProjectController extends Controller
     {
         try {
             $project = Project::find($id);
+            $documents = ProjectDocument::where('project_id', $id)->orderBy('id', 'desc')->get();
             $account_managers = User::role('ACCOUNT_MANAGER')->orderBy('name', 'DESC')->where('status', 1)->get();
-            return view('admin.project.view')->with(compact('project', 'account_managers'));
+            return view('admin.project.view')->with(compact('project', 'account_managers','documents'));
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }
@@ -181,7 +195,24 @@ class ProjectController extends Controller
             $project_milestone->save();
         }
 
+        foreach ($data['pdf'] as $key => $pdfFile) {
+            if ($pdfFile) {
+                $project_pdf = new ProjectDocument();
+                $project_pdf->project_id = $project->id;
+                $project_pdf->document_file = $this->imageUpload($pdfFile, 'project_pdf');
+                $project_pdf->save();
+            }
+        }
+
         return redirect()->route('sales-projects.index')->with('message', 'Project updated successfully.');
+    }
+
+    public function DocumentDownload($id)
+    {
+        $project_document = ProjectDocument::find($id);
+        $file_path = $project_document->document_file;
+
+        return response()->download(storage_path('app/public/' . $file_path));
     }
 
     /**

@@ -109,6 +109,7 @@
                                         <td>
                                             {{ $project->project_value - $project->project_upfront }}
                                         </td>
+                                                  
                                         <td>
                                             <a title="Edit Project" data-route=""
                                                 href="{{ route('projects.edit', $project->id) }}"><i
