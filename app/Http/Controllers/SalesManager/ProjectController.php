@@ -4,13 +4,16 @@ namespace App\Http\Controllers\SalesManager;
 
 use App\Http\Controllers\Controller;
 use App\Models\Project;
+use App\Models\ProjectDocument;
 use App\Models\ProjectMilestone;
 use App\Models\ProjectType;
+use App\Traits\ImageTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
+    use ImageTrait;
     /**
      * Display a listing of the resource.
      *
@@ -73,6 +76,15 @@ class ProjectController extends Controller
             }
             $project_type->type = $value;
             $project_type->save();
+        }
+
+        foreach ($data['pdf'] as $key => $pdfFile) {
+            if ($pdfFile) {
+                $project_pdf = new ProjectDocument();
+                $project_pdf->project_id = $project->id;
+                $project_pdf->document_file = $this->imageUpload($pdfFile, 'project_pdf');
+                $project_pdf->save();
+            }
         }
 
         foreach ($data['milestone_value'] as $key => $milestone) {
@@ -171,6 +183,15 @@ class ProjectController extends Controller
             $project_milestone->milestone_name = $data['milestone_name'][$key];
             $project_milestone->milestone_value = $milestone;
             $project_milestone->save();
+        }
+
+        foreach ($data['pdf'] as $key => $pdfFile) {
+            if ($pdfFile) {
+                $project_pdf = new ProjectDocument();
+                $project_pdf->project_id = $project->id;
+                $project_pdf->document_file = $this->imageUpload($pdfFile, 'project_pdf');
+                $project_pdf->save();
+            }
         }
 
         return redirect()->route('projects.index')->with('message', 'Project updated successfully.');

@@ -205,6 +205,27 @@
                                                         </div>
                                                         {{-- </br> --}}
                                                     </div>
+                                                    <h3 class="mt-4 text-uppercase">Upload PDF</h3>
+                                                    <hr>
+                                                    {{-- add more functionality for milestone --}}
+                                                    <div class="add-pdf">
+
+                                                        <div class="row">
+                                                            <div class="col-md-4 pb-3">
+                                                                <div style="display: flex">
+                                                                    <input type="file" name="pdf[]" 
+                                                                        class="form-control" value="" data-parsley-required="false" data-parsley-trigger="keyup" accept="application/pdf"   
+                                                                        id="">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <button type="button"
+                                                                    class="btn btn-success add-pdf-button good-button"><i
+                                                                        class="fas fa-plus"></i> Add PDF</button>
+                                                            </div>
+                                                        </div>
+                                                        {{-- </br> --}}
+                                                    </div>
                                                     <div class="row" style="margin-top: 20px; float: left;">
                                                         <div class="col-sm-9">
                                                             <button type="submit"
@@ -265,6 +286,25 @@
                 $('.add-milestone').append(html);
             });
             $(document).on('click', '.remove', function() {
+                $(this).closest('.row').remove();
+            });
+
+            // add more functionality for pdf
+            $('.add-pdf-button').click(function() {
+                var html = '';
+                html += '<div class="row">';
+                html += '<div class="col-md-4 pb-3">';
+                html += '<div style="display: flex">';
+                html += '<input type="file" name="pdf[]" class="form-control" value="" id="" data-parsley-required="false" data-parsley-trigger="keyup" accept="application/pdf">';
+                html += '</div>';
+                html += '</div>';
+                html += '<div class="col-md-4">';
+                html += '<button type="button" class="btn btn-danger remove-pdf"><i class="fas fa-minus"></i> Remove</button>';
+                html += '</div>';
+                html += '</div>';
+                $('.add-pdf').append(html);
+            });
+            $(document).on('click', '.remove-pdf', function() {
                 $(this).closest('.row').remove();
             });
 
