@@ -10,7 +10,7 @@
         content="admin, estimates, bootstrap, business, corporate, creative, management, minimal, modern, accounts, invoice, html5, responsive, CRM, Projects">
     <meta name="author" content="Dreamguys - Bootstrap Admin Template">
     <meta name="robots" content="noindex, nofollow">
-    <title>Login - {{env('APP_NAME')}} Admin Panel</title>
+    <title>Login - {{env('APP_NAME')}}</title>
 
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('admin_assets/img/favicon.png') }}">
 
@@ -38,22 +38,22 @@
         <div class="account-content">
             <div class="container">
 
-                <div class="account-logo">
-                    <a href="admin-dashboard.html"><img src="{{ asset('admin_assets/img/logo2.png') }}"
-                            alt="Dreamguy's Technologies"></a>
-                </div>
+                
 
                 <div class="account-box">
                     <div class="account-wrapper">
+                        <div class="account-logo">
+                            <a href="admin-dashboard.html"><img src="{{ asset('admin_assets/img/logopns.png') }}" alt="Dreamguy's Technologies"></a>
+                        </div>
                         <h3 class="account-title">Login</h3>
-                        <p class="account-subtitle">Access to our dashboard</p>
+                        <!--<p class="account-subtitle">Access to our dashboard</p>-->
 
                         <form action="{{ route('admin.login.check') }}" method="POST">
                             @csrf
                             <div class="form-group">
-                                <label>Email Address</label>
+                                <!--<label>Email Address</label>-->
                                 <input type="email" class="form-control" name="email" id="inputEmailAddress"
-                                    placeholder="Email Address">
+                                    placeholder="E-mail Address">
                                 @if ($errors->has('email'))
                                     <div class="error" style="color:red;">{{ $errors->first('email') }}</div>
                                 @endif
@@ -61,7 +61,7 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col">
-                                        <label>Password</label>
+                                        <!--<label>Password</label>-->
                                     </div>
                                     {{-- <div class="col-auto">
                                         <a class="text-muted" href="forgot-password.html">
@@ -70,8 +70,8 @@
                                     </div> --}}
                                 </div>
                                 <div class="position-relative" id="show_hide_password">
-                                    <input type="password" class="form-control border-end-0" name="password"
-                                        id="inputChoosePassword" placeholder="Enter Password">
+                                    <input type="password" class="form-control" name="password"
+                                        id="inputChoosePassword" placeholder="Password">
                                     <a href="javascript:;" class=""><span class="fa fa-eye-slash" id="toggle-password"></span></a>
                                 </div>
                                 @if ($errors->has('password'))

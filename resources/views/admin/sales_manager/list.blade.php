@@ -106,6 +106,7 @@
             //Default data table
             $('#myTable').DataTable({
                 "aaSorting": [],
+   
                 "columnDefs": [{
                         "orderable": false,
                         "targets": [5, 6, 7]

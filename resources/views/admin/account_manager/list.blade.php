@@ -20,16 +20,23 @@
 
             <div class="page-header">
                 <div class="row align-items-center">
-                    <div class="col">
+                    <div class="col-md-8">
                         <h3 class="page-title">Account managers Information</h3>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ route('account_managers.index') }}">Account managers</a></li>
                             <li class="breadcrumb-item active">List</li>
                         </ul>
                     </div>
-                    <div class="col-auto float-end ms-auto">
-                        <a href="{{ route('account_managers.create') }}" class="btn add-btn"><i class="fa fa-plus"></i> Add an
-                            account manager</a>
+                    <div class="col-md-4">
+                        <div class="d-flex">
+                            <select class="form-select w-50 rounded-0" aria-label="Default select example">
+                              <option selected>All (29)</option>
+                              <option value="1">Active (20)</option>
+                              <option value="2">Inactive (9)</option>
+                            </select>
+                            <a href="{{ route('account_managers.create') }}" class="btn add-btn"> Add New
+                                account manager</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -47,7 +54,7 @@
 
                     <hr />
                     <div class="table-responsive">
-                        <table id="myTable" class="dd table table-striped table-bordered" style="width:100%">
+                        <table id="myTable" class="dd table table-striped" style="width:100%">
                             <thead>
                                 <tr>
                                     <th> Name</th>
@@ -68,21 +75,24 @@
                                         <td>{{ $account_manager->employee_id }}</td>
                                         <td>{{ $account_manager->date_of_joining }}</td>
                                         <td>
-                                            <div class="button-switch">
-                                                <input type="checkbox" id="switch-orange" class="switch toggle-class"
-                                                    data-id="{{ $account_manager['id'] }}"
-                                                    {{ $account_manager['status'] ? 'checked' : '' }} />
-                                                <label for="switch-orange" class="lbl-off"></label>
-                                                <label for="switch-orange" class="lbl-on"></label>
-                                            </div>
+                                            <!--<div class="button-switch">-->
+                                            <!--    <input type="checkbox" id="switch-orange" class="switch toggle-class"-->
+                                            <!--        data-id="{{ $account_manager['id'] }}"-->
+                                            <!--        {{ $account_manager['status'] ? 'checked' : '' }} />-->
+                                            <!--    <label for="switch-orange" class="lbl-off"></label>-->
+                                            <!--    <label for="switch-orange" class="lbl-on"></label>-->
+                                            <!--</div>-->
+                                            <span class="edit_active">
+                                                <i class="fas fa-edit"></i> Active
+                                            </span>
                                         </td>
                                         <td>
                                             <a title="Edit Account manager" data-route=""
-                                                href="{{ route('account_managers.edit', $account_manager->id) }}"><i
+                                                href="{{ route('account_managers.edit', $account_manager->id) }}" class="edit_acma"><i
                                                     class="fas fa-edit"></i></a> &nbsp;&nbsp;
 
                                             <a title="Delete Account manager"
-                                                data-route="{{ route('account_managers.delete', $account_manager->id) }}"
+                                                data-route="{{ route('account_managers.delete', $account_manager->id) }}  class="delete_acma""
                                                 href="javascipt:void(0);" id="delete"><i class="fas fa-trash"></i></a>
                                         </td>
                                     </tr>

@@ -6,11 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Models\ProjectMilestone;
 use App\Models\ProjectType;
+use App\Traits\ImageTrait;
+use App\Models\ProjectDocument;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
+    use ImageTrait;
     /**
      * Display a listing of the resource.
      *
@@ -83,6 +86,15 @@ class ProjectController extends Controller
             $project_milestone->save();
         }
 
+        foreach ($data['pdf'] as $key => $pdfFile) {
+            if ($pdfFile) {
+                $project_pdf = new ProjectDocument();
+                $project_pdf->project_id = $project->id;
+                $project_pdf->document_file = $this->imageUpload($pdfFile, 'project_pdf');
+                $project_pdf->save();
+            }
+        }
+
         return redirect()->route('account-manager.projects.index')->with('message', 'Project created successfully.');
     }
 
@@ -95,7 +107,8 @@ class ProjectController extends Controller
     public function show($id)
     {
         $project = Project::findOrFail($id);
-        return view('account_manager.project.view', compact('project'));
+        $documents = ProjectDocument::where('project_id', $id)->orderBy('id', 'desc')->get();
+        return view('account_manager.project.view', compact('project','documents'));
     }
 
     /**
@@ -166,8 +179,26 @@ class ProjectController extends Controller
             $project_milestone->milestone_value = $milestone;
             $project_milestone->save();
         }
+        
+        foreach ($data['pdf'] as $key => $pdfFile) {
+            
+            if ($pdfFile) {
+                $project_pdf = new ProjectDocument();
+                $project_pdf->project_id = $project->id;
+                $project_pdf->document_file = $this->imageUpload($pdfFile, 'project_pdf');
+                $project_pdf->save();
+            }
+        }
 
         return redirect()->route('account-manager.projects.index')->with('message', 'Project updated successfully.');
+    }
+
+    public function accountManagerdocumentDownload($id)
+    {
+        $project_document = ProjectDocument::find($id);
+        $file_path = $project_document->document_file;
+
+        return response()->download(storage_path('app/public/' . $file_path));
     }
 
     /**

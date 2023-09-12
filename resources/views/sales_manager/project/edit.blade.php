@@ -281,6 +281,9 @@
                                                         @endforeach
                                                     </div>
                                                     {{-- add more functionality for milestone --}}
+
+                                                    <h3 class="mt-4 text-uppercase">Upload PDF</h3>
+                                                    <hr>
                                                     <div class="add-pdf">
 
                                                         <div class="row">

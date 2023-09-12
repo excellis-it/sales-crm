@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\GoalsController;
 use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
 use App\Http\Controllers\Admin\ProspectController as AdminProspectController;
 use App\Http\Controllers\Admin\SalesExcecutiveController;
@@ -61,6 +62,7 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
         'account_managers' => AccountManagerController::class,
         'sales-projects' => AdminProjectController::class,
         'sales-excecutive' => SalesExcecutiveController::class,
+        'goals' => GoalsController::class,
     ]);
 
     Route::name('admin.')->group(function () {
@@ -90,6 +92,10 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
         Route::get('/sales-excecutive-delete/{id}', [SalesExcecutiveController::class, 'delete'])->name('sales-excecutive.delete');
     });
     Route::get('/changeSalesExcecutiveStatus', [SalesExcecutiveController::class, 'changeSalesExcecutiveStatus'])->name('sales-excecutive.change-status');
+    // Goals Routes
+    Route::prefix('goals')->group(function () {
+        Route::get('/goals-delete/{id}', [GoalsController::class, 'delete'])->name('goals.delete');
+    });
 });
 
 /**---------------------------------------------------------------Sales Manager ---------------------------------------------------------------------------------- */

@@ -33,7 +33,6 @@
             min-height: 100%;
             align-items: center;
             justify-content: center;
-            background-color: #f9f9f9;
         }
 
         .cardStyle {
@@ -167,7 +166,7 @@
             <form action="{{ route('admin.change.password') }}" method="post" name="signupForm" id="signupForm">
                 @csrf
 
-                <img src="{{ asset('admin_assets/img/logo2.png') }}" id="signupLogo" />
+                <img src="{{ asset('admin_assets/img/logopns.png') }}" id="signupLogo" />
 
                 <h2 class="formTitle">
                     Reset Password
