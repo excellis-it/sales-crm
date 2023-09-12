@@ -74,6 +74,8 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     // delete project
     Route::get('/project-delete/{id}', [AdminProjectController::class, 'delete'])->name('sales-projects.delete');
     Route::get('/projectAssignTo', [AdminProjectController::class, 'projectAssignTo'])->name('sales-projects.updateAssignedTo');
+    Route::get('/projectDocumentDownload/{id}', [AdminProjectController::class, 'DocumentDownload'])->name('sales-projects.document.download');
+    
 
     //  Sales manager Routes
     Route::prefix('sales_managers')->group(function () {
@@ -121,6 +123,8 @@ Route::group(['middleware' => ['SalesManager'], 'prefix' => 'sales-manager'], fu
     });
     // delete project
     Route::get('/project-delete/{id}', [ProjectController::class, 'delete'])->name('projects.delete');
+    // Route::get('/project-document/{id}', [ProjectController::class, 'projectDocument'])->name('projects.document');
+    Route::get('/project-document_download/{id}', [ProjectController::class, 'projectDocumentDownload'])->name('projects.document.download');
 });
 
 /**---------------------------------------------------------------Account Manager ---------------------------------------------------------------------------------- */
@@ -139,6 +143,8 @@ Route::group(['middleware' => ['AccountManager'], 'prefix' => 'account-manager']
             'projects' => AccountManagerProjectController::class,
         ]);
     });
+
+    Route::get('/projects-document_download/{id}', [AccountManagerProjectController::class, 'accountManagerdocumentDownload'])->name('account-manager.projects.document.download');
 });
 
 /**---------------------------------------------------------------Sales Excecutive ---------------------------------------------------------------------------------- */

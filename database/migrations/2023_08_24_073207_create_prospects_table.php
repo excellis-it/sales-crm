@@ -16,7 +16,7 @@ class CreateProspectsTable extends Migration
         Schema::create('prospects', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->references('id')->on('users')->onDelete('cascade');
-            $table->foreignId('repoert_to')->nullable()->references('id')->on('users')->onDelete('cascade');
+            $table->foreignId('report_to')->nullable()->references('id')->on('users')->onDelete('cascade');
             $table->string('client_name')->nullable();
             $table->string('business_name')->nullable();
             $table->string('transfer_token_by')->nullable();
