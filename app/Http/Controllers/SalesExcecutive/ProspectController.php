@@ -14,9 +14,17 @@ class ProspectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($type = null)
     {
-        $prospects = Prospect::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->get();
+        $type = request()->get('type');
+
+        if ($type) {
+            // return $type;
+            $prospects = Prospect::where(['user_id'=> Auth::user()->id, 'status'=>$type])->orderBy('id', 'desc')->get();
+        } else {
+            $prospects = Prospect::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->get();
+        }
+        
         return view('sales_excecutive.prospect.list')->with(compact('prospects'));
     }
 

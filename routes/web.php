@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountManager\DashboardController as AccountManagerDashboardController;
 use App\Http\Controllers\AccountManager\ProfileController as AccountManagerProfileController;
 use App\Http\Controllers\AccountManager\ProjectController as AccountManagerProjectController;
 use App\Http\Controllers\Admin\AccountManagerController;
@@ -15,8 +16,10 @@ use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
 use App\Http\Controllers\Admin\ProspectController as AdminProspectController;
 use App\Http\Controllers\Admin\SalesExcecutiveController;
 use App\Http\Controllers\Admin\SellerController;
+use App\Http\Controllers\SalesExcecutive\DashboardController as SalesExcecutiveDashboardController;
 use App\Http\Controllers\SalesExcecutive\ProfileController as SalesExcecutiveProfileController;
 use App\Http\Controllers\SalesExcecutive\ProspectController;
+use App\Http\Controllers\SalesManager\DashboardController as SalesManagerDashboardController;
 use App\Http\Controllers\SalesManager\ProfileController as SalesManagerProfileController;
 use App\Http\Controllers\SalesManager\ProjectController;
 use App\Http\Controllers\SalesManager\ProspectController as SalesManagerProspectController;
@@ -98,11 +101,14 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::prefix('goals')->group(function () {
         Route::get('/goals-delete/{id}', [GoalsController::class, 'delete'])->name('goals.delete');
     });
+    Route::post('/goals-get-user', [GoalsController::class, 'getUser'])->name('goals.get.user');
 });
 
 /**---------------------------------------------------------------Sales Manager ---------------------------------------------------------------------------------- */
 
 Route::group(['middleware' => ['SalesManager'], 'prefix' => 'sales-manager'], function () {
+
+    Route::get('dashboard', [SalesManagerDashboardController::class, 'index'])->name('sales-manager.dashboard');
     Route::get('profile', [SalesManagerProfileController::class, 'index'])->name('sales-manager.profile');
     Route::post('profile/update', [SalesManagerProfileController::class, 'profileUpdate'])->name('sales-manager.profile.update');
     Route::get('logout', [AuthController::class, 'SalesManagerlogout'])->name('sales-manager.logout');
@@ -130,6 +136,7 @@ Route::group(['middleware' => ['SalesManager'], 'prefix' => 'sales-manager'], fu
 /**---------------------------------------------------------------Account Manager ---------------------------------------------------------------------------------- */
 
 Route::group(['middleware' => ['AccountManager'], 'prefix' => 'account-manager'], function () {
+    Route::get('dashboard', [AccountManagerDashboardController::class, 'index'])->name('account-manager.dashboard');
     Route::get('profile', [AccountManagerProfileController::class, 'index'])->name('account-manager.profile');
     Route::post('profile/update', [AccountManagerProfileController::class, 'profileUpdate'])->name('account-manager.profile.update');
     Route::get('logout', [AuthController::class, 'AccountManagerlogout'])->name('account-manager.logout');
@@ -150,6 +157,7 @@ Route::group(['middleware' => ['AccountManager'], 'prefix' => 'account-manager']
 /**---------------------------------------------------------------Sales Excecutive ---------------------------------------------------------------------------------- */
 
 Route::group(['middleware' => ['SalesExcecutive'], 'prefix' => 'sales-excecutive'], function () {
+    Route::get('dashboard', [SalesExcecutiveDashboardController::class, 'index'])->name('sales-excecutive.dashboard');
     Route::get('profile', [SalesExcecutiveProfileController::class, 'index'])->name('sales-excecutive.profile');
     Route::post('profile/update', [SalesExcecutiveProfileController::class, 'profileUpdate'])->name('sales-excecutive.profile.update');
     Route::get('logout', [AuthController::class, 'SalesExcecutivelogout'])->name('sales-excecutive.logout');

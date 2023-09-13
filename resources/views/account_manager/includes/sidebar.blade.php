@@ -2,7 +2,9 @@
     <div class="sidebar-inner slimscroll">
         <div id="sidebar-menu" class="sidebar-menu">
             <ul class="sidebar-vertical">
-              
+                <li class="{{ Request::is('account-manager/dashboard*') ? 'active' : ' ' }}">
+                    <a href="{{ route('account-manager.dashboard') }}"><i class="la la-dashboard"></i> <span>Dashboard</span></a>
+                </li>
                 <li class="submenu">
                     <a href="#"
                         class="{{ Request::is('account-manager/profile*') || Request::is('account-manager/password*') || Request::is('account-manager/detail*') ? 'active' : ' ' }}"><i

@@ -32,7 +32,7 @@
                 </div>
               </a>
               <div class="dropdown-menu dropdown-menu-end">
-                <a href="javascript:;">
+                <a href="javascript:void(0);">
                   <div class="msg-header">
                     <p class="msg-header-title">Notifications</p>
                     <p class="msg-header-clear ms-auto">Marks all as read</p>

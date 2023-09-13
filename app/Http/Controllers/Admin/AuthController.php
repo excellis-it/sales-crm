@@ -31,11 +31,11 @@ class AuthController extends Controller
             if ($user->hasRole('ADMIN') && $user->status == 1) {
                 return redirect()->route('admin.dashboard');
             } else if($user->hasRole('SALES_MANAGER') && $user->status == 1){
-                return redirect()->route('sales-manager.profile');
+                return redirect()->route('sales-manager.dashboard');
             }else if($user->hasRole('ACCOUNT_MANAGER') && $user->status == 1){
                 return redirect()->route('account-manager.profile');
             }else if($user->hasRole('SALES_EXCUETIVE') && $user->status == 1){
-                return redirect()->route('sales-excecutive.profile');
+                return redirect()->route('sales-excecutive.dashboard');
             }else{
                 Auth::logout();
                 return redirect()->back()->with('error', 'Email id & password was invalid!');

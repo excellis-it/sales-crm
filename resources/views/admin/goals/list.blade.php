@@ -58,8 +58,7 @@
                                                 <span style="color: red;">*</span></label>
                                             <select name="goals_type" id="goals_type" class="form-control">
                                                 <option value="">Select a goal type</option>
-                                                <option value="1">Gross</option>
-                                                <option value="2">Net</option>
+                                               
                                             </select>
                                         </div>
                                         <div class="col-md-6">
@@ -131,7 +130,7 @@
                                         @foreach ($salesManagerGoals as $key => $goal)
                                             <tr>
                                                 <td>
-                                                    {{ date('M ,Y', strtotime($goals->goal_date)) }}
+                                                    {{ date('M ,Y', strtotime($goal->goals_date)) }}
                                                 </td>
                                                 <td>
                                                     {{ $goal->goals_type == 1 ? 'Gross' : 'Net' }}
@@ -146,10 +145,9 @@
                                                     {{ $goal->goals_achieve ?? 0 }}
                                                 </td>
                                                 <td>
-                                                    <a href="{{ route('goals.edit', $goal->id) }}"
-                                                        class="btn btn-sm btn-info"><i class="fa fa-edit"></i> Edit</a>
+                                                    <a href="{{ route('goals.edit', $goal->id) }}"><i class="fas fa-edit"></i> </a> &nbsp; 
                                                     <a title="Delete Project"
-                                                        data-route="{{ route('goals.delete', $project->id) }}"
+                                                        data-route="{{ route('goals.delete', $goal->id) }}"
                                                         href="javascipt:void(0);" id="delete"><i
                                                             class="fas fa-trash"></i></a>
                                                 </td>
@@ -192,7 +190,7 @@
                                         @foreach ($accountManagerGoals as $key => $goal)
                                             <tr>
                                                 <td>
-                                                    {{ date('M ,Y', strtotime($goals->goal_date)) }}
+                                                    {{ date('M ,Y', strtotime($goal->goals_date)) }}
                                                 </td>
                                                 <td>
                                                     {{ $goal->goals_type == 1 ? 'Gross' : 'Net' }}
@@ -207,10 +205,9 @@
                                                     {{ $goal->goals_achieve ?? 0 }}
                                                 </td>
                                                 <td>
-                                                    <a href="{{ route('goals.edit', $goal->id) }}"
-                                                        class="btn btn-sm btn-info"><i class="fa fa-edit"></i> Edit</a>
+                                                    <a href="javascript:void(0);" data-route="{{ route('goals.edit', $goal->id) }}" id="goals-edit"><i class="fas fa-edit"></i> </a> &nbsp;
                                                     <a title="Delete Project"
-                                                        data-route="{{ route('goals.delete', $project->id) }}"
+                                                        data-route="{{ route('goals.delete', $goal->id) }}"
                                                         href="javascipt:void(0);" id="delete"><i
                                                             class="fas fa-trash"></i></a>
                                                 </td>
@@ -256,6 +253,10 @@
             // toogle create goal
             $('#add-btn').click(function() {
                 $('#goal-create').toggle();
+            });
+
+            $('#goals-edit').on('click', function() {
+                
             });
         });
     </script>
@@ -330,6 +331,28 @@
                         )
                     }
                 })
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#user_id').on('change', function() {
+                var user_id = $(this).val();
+                $.ajax({
+                    url: "{{ route('goals.get.user') }}",
+                    type: "POST",
+                    data: {
+                        user_id: user_id,
+                        _token: "{{ csrf_token() }}",
+                    },
+                    success: function(data) {
+                        if(data.role == 'SALES_MANAGER'){
+                            $('#goals_type').html('<option value="">Select a goal type</option><option value="1">Gross</option><option value="2">Net</option>');
+                        }else{
+                            $('#goals_type').html('<option value="">Select a goal type</option><option value="2">Net</option>');
+                        }
+                    }
+                });
+            });
         });
     </script>
 @endpush

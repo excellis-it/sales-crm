@@ -2,12 +2,12 @@
     <div class="header">
         <div class="header-left">
             <a href="javascript:void(0);" class="logo">
-                {{-- <img src="{{ asset('admin_assets/img/logo2.png') }}" width="40" height="40" alt=""> --}}
-                <h2>{{ env('APP_NAME') }}</h2>
+                <img src="{{ asset('admin_assets/img/logopns.png') }}" width="40" height="40" alt="">
+                {{-- <h2>{{ env('APP_NAME') }}</h2> --}}
             </a>
             <a href="javascript:void(0);" class="logo2">
-                {{-- <img src="{{ asset('admin_assets/img/logo2.png') }}" width="40" height="40" alt=""> --}}
-                <h2>{{ env('APP_NAME') }}</h2>
+                <img src="{{ asset('admin_assets/img/logopns.png') }}" width="40" height="40" alt="">
+                {{-- <h2>{{ env('APP_NAME') }}</h2> --}}
             </a>
         </div>
         <a id="toggle_btn" href="javascript:void(0);">

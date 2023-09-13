@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\SalesManager;
 
 use App\Http\Controllers\Controller;
+use App\Models\Goal;
 use App\Models\Project;
 use App\Models\ProjectDocument;
 use App\Models\ProjectMilestone;
@@ -65,6 +66,20 @@ class ProjectController extends Controller
         $project->assigned_date = '';
         $project->save();
 
+        $countGross = Goal::where('user_id', Auth::user()->id)->whereMonth('goals_date', date('m', strtotime($data['sale_date'])))->whereYear('goals_date', date('Y', strtotime($data['sale_date'])))->where('goals_type', 1)->count();
+        if ($countGross > 0) {
+            $goals = Goal::where('user_id', Auth::user()->id)->whereMonth('goals_date', date('m', strtotime($data['sale_date'])))->whereYear('goals_date', date('Y', strtotime($data['sale_date'])))->where('goals_type', 1)->first();
+            $goals->goals_achieve = $goals->goals_achieve + $data['project_value'];
+            $goals->save();
+        }
+
+        $countNet = Goal::where('user_id', Auth::user()->id)->whereMonth('goals_date', date('m', strtotime($data['sale_date'])))->whereYear('goals_date', date('Y', strtotime($data['sale_date'])))->where('goals_type', 2)->count();
+        if ($countNet > 0) {
+            $goals = Goal::where('user_id', Auth::user()->id)->whereMonth('goals_date', date('m', strtotime($data['sale_date'])))->whereYear('goals_date', date('Y', strtotime($data['sale_date'])))->where('goals_type', 2)->first();
+            $goals->goals_achieve = $goals->goals_achieve + $data['project_upfront'];
+            $goals->save();
+        }
+
         foreach ($data['project_type'] as $key => $value) {
             $project_type = new ProjectType();
             $project_type->project_id = $project->id;
@@ -78,23 +93,24 @@ class ProjectController extends Controller
             $project_type->save();
         }
 
-        foreach ($data['milestone_value'] as $key => $milestone) {
-            $project_milestone = new ProjectMilestone();
-            $project_milestone->project_id = $project->id;
-            $project_milestone->milestone_name = $data['milestone_name'][$key];
-            $project_milestone->milestone_value = $milestone;
-            $project_milestone->save();
+        if ($data['milestone_value']) {
+            foreach ($data['milestone_value'] as $key => $milestone) {
+                $project_milestone = new ProjectMilestone();
+                $project_milestone->project_id = $project->id;
+                $project_milestone->milestone_name = $data['milestone_name'][$key];
+                $project_milestone->milestone_value = $milestone;
+                $project_milestone->save();
+            }
         }
 
-        foreach ($data['pdf'] as $key => $pdfFile) {
-            if ($pdfFile) {
+        if ($data['pdf']) {
+            foreach ($data['pdf'] as $key => $pdfFile) {
                 $project_pdf = new ProjectDocument();
                 $project_pdf->project_id = $project->id;
                 $project_pdf->document_file = $this->imageUpload($pdfFile, 'project_pdf');
                 $project_pdf->save();
             }
         }
-
         return redirect()->route('projects.index')->with('message', 'Project created successfully.');
         // } catch (\Throwable $th) {
         //     return redirect()->back()->with('error', $th->getMessage());
@@ -110,10 +126,9 @@ class ProjectController extends Controller
     public function show($id)
     {
         try {
-
             $project = Project::find($id);
             $documents = ProjectDocument::where('project_id', $id)->orderBy('id', 'desc')->get();
-            return view('sales_manager.project.view')->with(compact('project','documents'));
+            return view('sales_manager.project.view')->with(compact('project', 'documents'));
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }
@@ -146,6 +161,9 @@ class ProjectController extends Controller
     {
         $data = $request->all();
         $project = Project::findOrfail($id);
+        $project_value = $project->project_value;
+        $project_upfront = $project->project_upfront;
+
         $project->user_id = Auth::user()->id;
         $project->client_name = $data['client_name'];
         $project->business_name = $data['business_name'];
@@ -164,7 +182,22 @@ class ProjectController extends Controller
         $project->assigned_date = '';
         $project->save();
 
+        $countGross = Goal::where('user_id', Auth::user()->id)->whereMonth('goals_date', date('m', strtotime($data['sale_date'])))->whereYear('goals_date', date('Y', strtotime($data['sale_date'])))->where('goals_type', 1)->count();
+        if ($countGross > 0) {
+            $goals = Goal::where('user_id', Auth::user()->id)->whereMonth('goals_date', date('m', strtotime($data['sale_date'])))->whereYear('goals_date', date('Y', strtotime($data['sale_date'])))->where('goals_type', 1)->first();
+            $goals->goals_achieve = ($goals->goals_achieve - $project_value) + $data['project_value'];
+            $goals->save();
+        }
+
+        $countNet = Goal::where('user_id', Auth::user()->id)->whereMonth('goals_date', date('m', strtotime($data['sale_date'])))->whereYear('goals_date', date('Y', strtotime($data['sale_date'])))->where('goals_type', 2)->count();
+        if ($countNet > 0) {
+            $goals = Goal::where('user_id', Auth::user()->id)->whereMonth('goals_date', date('m', strtotime($data['sale_date'])))->whereYear('goals_date', date('Y', strtotime($data['sale_date'])))->where('goals_type', 2)->first();
+            $goals->goals_achieve = ($goals->goals_achieve - $project_upfront) + $data['project_upfront'];
+            $goals->save();
+        }
+
         ProjectType::where('project_id', $id)->delete();
+
         foreach ($data['project_type'] as $key => $value) {
             $project_type = new ProjectType();
             $project_type->project_id = $project->id;
@@ -179,16 +212,18 @@ class ProjectController extends Controller
         }
 
         ProjectMilestone::where('project_id', $id)->delete();
-        foreach ($data['milestone_value'] as $key => $milestone) {
-            $project_milestone = new ProjectMilestone();
-            $project_milestone->project_id = $project->id;
-            $project_milestone->milestone_name = $data['milestone_name'][$key];
-            $project_milestone->milestone_value = $milestone;
-            $project_milestone->save();
+        if ($data['milestone_value']) {
+            foreach ($data['milestone_value'] as $key => $milestone) {
+                $project_milestone = new ProjectMilestone();
+                $project_milestone->project_id = $project->id;
+                $project_milestone->milestone_name = $data['milestone_name'][$key];
+                $project_milestone->milestone_value = $milestone;
+                $project_milestone->save();
+            }
         }
 
-        foreach ($data['pdf'] as $key => $pdfFile) {
-            if ($pdfFile) {
+        if ($data['pdf']) {
+            foreach ($data['pdf'] as $key => $pdfFile) {
                 $project_pdf = new ProjectDocument();
                 $project_pdf->project_id = $project->id;
                 $project_pdf->document_file = $this->imageUpload($pdfFile, 'project_pdf');
