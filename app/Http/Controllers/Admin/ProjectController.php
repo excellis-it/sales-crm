@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Goal;
 use App\Models\Project;
 use App\Models\ProjectMilestone;
 use App\Models\ProjectType;
@@ -49,10 +50,10 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        
+
         // try {
         $data = $request->all();
-        
+
         $project = new Project();
         $project->user_id = $data['user_id'];
         $project->client_name = $data['client_name'];
@@ -84,12 +85,12 @@ class ProjectController extends Controller
         $project_type->start_date = $data['start_date'];
         $project_type->end_date = $data['end_date'];
         $project_type->save();
-        
-       
-        if($data['payment_type'] == 'Milestone'){
+
+
+        if ($data['payment_type'] == 'Milestone') {
             foreach ($data['milestone_name'] as $key => $milestone) {
                 //check if data is null
-                if($data['milestone_name'][$key] != null){
+                if ($data['milestone_name'][$key] != null) {
                     $project_milestone = new ProjectMilestone();
                     $project_milestone->project_id = $project->id;
                     $project_milestone->milestone_name = $milestone;
@@ -100,11 +101,11 @@ class ProjectController extends Controller
                     $project_milestone->save();
                 }
             }
-        }else{
+        } else {
             foreach ($data['milestone_value'] as $key => $milestone) {
                 //check if data is null
-                if($data['milestone_value'][$key] != null){
-                   
+                if ($data['milestone_value'][$key] != null) {
+
                     $project_milestone = new ProjectMilestone();
                     $project_milestone->project_id = $project->id;
                     $project_milestone->milestone_value = $milestone;
@@ -115,9 +116,9 @@ class ProjectController extends Controller
                 }
             }
         }
-        
-        if(isset($data['pdf'])) {
-        foreach ($data['pdf'] as $key => $pdfFile) {
+
+        if (isset($data['pdf'])) {
+            foreach ($data['pdf'] as $key => $pdfFile) {
                 $project_pdf = new ProjectDocument();
                 $project_pdf->project_id = $project->id;
                 $project_pdf->document_file = $this->imageUpload($pdfFile, 'project_pdf');
@@ -143,7 +144,7 @@ class ProjectController extends Controller
             $project = Project::find($id);
             $documents = ProjectDocument::where('project_id', $id)->orderBy('id', 'desc')->get();
             $account_managers = User::role('ACCOUNT_MANAGER')->orderBy('name', 'DESC')->where('status', 1)->get();
-            return view('admin.project.view')->with(compact('project', 'account_managers','documents'));
+            return view('admin.project.view')->with(compact('project', 'account_managers', 'documents'));
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }
@@ -196,7 +197,7 @@ class ProjectController extends Controller
         $project->save();
 
         ProjectType::where('project_id', $id)->delete();
-        
+
         $project_type = new ProjectType();
         $project_type->project_id = $project->id;
         $project_type->type = $data['project_type'];
@@ -262,6 +263,14 @@ class ProjectController extends Controller
             $project->assigned_to = $data['assigned_to'];
             $project->assigned_date = date('Y-m-d');
             $project->save();
+
+            $countGoal = Goal::where('user_id', $data['assigned_to'])->whereMonth('goals_date', date('m'))->whereYear('goals_date', date('Y'))->count();
+            if ($countGoal > 0) {
+                $milestone = ProjectMilestone::where(['project_id' => $data['project_id'], 'payment_status' => 'Paid'])->whereMonth('payment_date', date('m'))->whereYear('payment_date', date('Y'))->sum('milestone_value');
+                $goal = Goal::where('user_id', $data['assigned_to'])->whereMonth('goals_date', date('m'))->whereYear('goals_date', date('Y'))->first();
+                $goal->goals_achieve = $goal->goals_achieve + $milestone;
+                $goal->save();
+            }
             return response()->json(['status' => 'success', 'message' => 'Project assigned successfully.']);
         }
     }

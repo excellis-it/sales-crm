@@ -40,7 +40,7 @@
                                                 {{ $project->client_name }}
                                             </div>
                                         </li>
-                                       
+
                                         <li>
                                             <div class="title">Client Email:-</div>
                                             <div class="text">
@@ -62,7 +62,8 @@
                                         <li>
                                             <div class="title">Client Website:-</div>
                                             <div class="text">
-                                              <a href="{{ $project->website }}" target="blank"> {{ $project->website }}</a> 
+                                                <a href="{{ $project->website }}" target="blank">
+                                                    {{ $project->website }}</a>
                                             </div>
                                         </li>
                                         <li>
@@ -96,17 +97,20 @@
                                                 <select name="assigned_to" id="assigned_to" class="form-control">
                                                     <option value="">Select a account manager</option>
                                                     @foreach ($account_managers as $account_manager)
-                                                        <option value="{{ $account_manager->id }}" @if ($project->assigned_to == $account_manager->id) selected @endif>{{ $account_manager->name }} ({{ $account_manager->email }})</option>
+                                                        <option value="{{ $account_manager->id }}"
+                                                            @if ($project->assigned_to == $account_manager->id) selected @endif>
+                                                            {{ $account_manager->name }} ({{ $account_manager->email }})
+                                                        </option>
                                                     @endforeach
                                                 </select>
                                             </div>
                                         </li>
                                     </ul>
 
-                                    <h4 >Documents Details :</h4>   
+                                    <h4>Documents Details :</h4>
                                     @if ($documents->count() > 0)
                                         @foreach ($documents as $key => $document)
-                                            <a href="{{ route('sales-projects.document.download',$document->id) }}">
+                                            <a href="{{ route('sales-projects.document.download', $document->id) }}">
                                                 <i class="fas fa-download"></i></a>&nbsp;&nbsp;
                                         @endforeach
                                     @endif
@@ -157,8 +161,8 @@
                                                 {{ $project->payment_mode }}
                                             </div>
                                         </li>
-                                       
-                                       
+
+
                                         <li class="">
                                             <div class="title  ">Project Opener:-</div>
                                             <div class="text">
@@ -176,38 +180,39 @@
                             </div>
                         </div>
                     </div>
-                    @if($project->projectMilestones->count() > 0)
-                    <div class="row">
-                        <div class="col-md-12 d-flex">
-                            <div class="card profile-box flex-fill">
-                                <div class="card-body">
-                                    <h3 class="card-title">Milestone Details
+                    @if ($project->projectMilestones->count() > 0)
+                        <div class="row">
+                            <div class="col-md-12 d-flex">
+                                <div class="card profile-box flex-fill">
+                                    <div class="card-body">
+                                        <h3 class="card-title">Milestone Details
 
-                                    </h3>
-                                    <table id="myTable" class="dd table table-striped table-bordered" style="width:100%">
-                                        <thead>
-                                            <tr>
-                                                <th>Milestone Name</th>
-                                                <th>Milestone value ({{ $project->currency }})</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($project->projectMilestones as $key => $milestone)
+                                        </h3>
+                                        <table id="myTable" class="dd table table-striped table-bordered"
+                                            style="width:100%">
+                                            <thead>
                                                 <tr>
-                                                    <td>
-                                                        {{ $milestone->milestone_name }}
-                                                    </td>
-                                                    <td>
-                                                        {{ $milestone->milestone_value }}
-                                                    </td>
+                                                    <th>Milestone Name</th>
+                                                    <th>Milestone value ({{ $project->currency }})</th>
                                                 </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($project->projectMilestones as $key => $milestone)
+                                                    <tr>
+                                                        <td>
+                                                            {{ $milestone->milestone_name }}
+                                                        </td>
+                                                        <td>
+                                                            {{ $milestone->milestone_value }}
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                     @endif
                 </div>
 
@@ -217,30 +222,37 @@
         </div>
     @endsection
 
-@push('scripts')
-<script>
-    $(document).ready(function() {
-        $('#myTable').DataTable();
-    });
-    $(document).on('change', '#assigned_to', function() {
-        var assigned_to = $(this).val();
-        var project_id = "{{ $project->id }}";
-        $.ajax({
-            url: "{{ route('sales-projects.updateAssignedTo') }}",
-            type: "GET",
-            data: {
-                "_token": "{{ csrf_token() }}",
-                "assigned_to": assigned_to,
-                "project_id": project_id
-            },
-            success: function(response) {
-                if (response.status) {
-                    toastr.success(response.message);
-                } else {
-                    toastr.error(response.message);
-                }
-            }
-        });
-    });
-</script>
-@endpush
+    @push('scripts')
+        <script>
+            $(document).ready(function() {
+                $('#myTable').DataTable();
+            });
+            $(document).on('change', '#assigned_to', function() {
+                // loader show
+                $('#loading').addClass('loading');
+                $('#loading-content').addClass('loading-content');
+
+                var assigned_to = $(this).val();
+                var project_id = "{{ $project->id }}";
+                $.ajax({
+                    url: "{{ route('sales-projects.updateAssignedTo') }}",
+                    type: "GET",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        "assigned_to": assigned_to,
+                        "project_id": project_id
+                    },
+                    success: function(response) {
+                        if (response.status) {
+                            // loader hide
+                            $('#loading').removeClass('loading');
+                            $('#loading-content').removeClass('loading-content');
+                            toastr.success(response.message);
+                        } else {
+                            toastr.error(response.message);
+                        }
+                    }
+                });
+            });
+        </script>
+    @endpush

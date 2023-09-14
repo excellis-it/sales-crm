@@ -263,6 +263,12 @@
             $('#goal-create').hide();
             // toogle create goal
             $('#add-btn').click(function() {
+                $('#id').val('');
+                $('#user_id').val('');
+                $('#goals_type').val('');
+                $('#goals_amount').val('');
+                $('#goals_date').val('');
+                $('.form-button').html('Create');
                 $('#goal-create').toggle();
             });
 
