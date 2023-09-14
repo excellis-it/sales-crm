@@ -232,40 +232,38 @@
                                                                 <div class="col-md-4 pb-3">
                                                                     <div style="display: flex">
                                                                         <input type="text" name="milestone_name[]"
-                                                                            class="form-control" value="" required
+                                                                            class="form-control" 
                                                                             data-parsley-trigger="keyup"
                                                                             placeholder="Milestone name" id=""
-                                                                            required>
+                                                                            >
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-4 pb-3">
                                                                     <div style="display: flex">
                                                                         <input type="text" name="milestone_value[]"
-                                                                            class="form-control" value=""
+                                                                            class="form-control" 
                                                                             placeholder="Milestone value"
                                                                             data-parsley-trigger="keyup"
                                                                             data-parsley-type="number"
                                                                             data-parsley-type-message="Please enter a valid number."
-                                                                            id="" required>
+                                                                            id="" >
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-4 pb-3">
                                                                     <div style="display: flex">
-                                                                        <select name="payment[]" id="payment"
-                                                                            class="form-control" required
+                                                                        <select name="payment_status[]" id="payment"
+                                                                            class="form-control" 
                                                                             data-parsley-trigger="keyup">
-                                                                            <option value="" disabled selected>Select
-                                                                                Payment Status
-                                                                            </option>
+                                                                        
                                                                             <option value="Paid">Paid</option>
-                                                                            <option value="Due">Due</option>
+                                                                            <option value="Due" selected>Due</option>
                                                                         </select>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-4 pb-3">
                                                                     <div style="display: flex">
                                                                         <input type="date" name="payment_date[]"
-                                                                            class="form-control" required>
+                                                                            class="form-control" >
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-4 pb-3">
@@ -291,15 +289,14 @@
                                                         <div class="row">
                                                             <div class="col-md-4 pb-3">
                                                                 <div style="display: flex">
-                                                                    <input type="date" name="start_date"
-                                                                        class="form-control" id="start_date" required
-                                                                        data-parsley-trigger="keyup">
+                                                                    <input placeholder="Start Date" name="start_date" class="form-control textbox-n" type="text" onfocus="(this.type='date')" id="start_date" required/>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4 pb-3">
                                                                 <div style="display: flex">
-                                                                    <input type="date" id="end_date" name="end_date"
-                                                                        class="form-control" required>
+                                                                    {{-- <input type="date" id="end_date" name="end_date"
+                                                                        class="form-control" required> --}}
+                                                                    <input placeholder="End Date" name="end_date" class="form-control textbox-n" type="text" onfocus="(this.type='date')" id="end_date" required/>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4">
@@ -337,7 +334,7 @@
                                                     <div class="row" style="margin-top: 20px; float: left;">
                                                         <div class="col-sm-9">
                                                             <button type="submit"
-                                                                class="btn px-5 submit-btn">Create</button>
+                                                                class="btn px-5 submit-btn" id="submit">Create</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -388,7 +385,7 @@
                 html += '<div class="col-md-4 pb-3">';
                 html += '<div style="display: flex">';
                 html +=
-                    '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value="" disabled selected>Select Payment Status</option><option value="Paid">Paid</option><option value="Due">Due</option></select>';
+                    '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value="" disabled >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
                 html += '</div>';
                 html += '</div>';
                 html += '<div class="col-md-4 pb-3">';
@@ -454,16 +451,19 @@
     </script>
 
     <script>
-        // when select2 other option in project type then show other value
+        //when payment_type milestone monthly field arenot required
         $('#payment_type').on('change', function() {
-            //    select 2 value get and seo,other value check
             var payment_type = $(this).val();
             if (payment_type.includes('Milestone')) {
                 $('#milestone_field').show();
                 $('#monthly_field').hide();
+                $('#milestone_name').prop('required', true);
+                $('#milestone_value').prop('required', true);
+                $('#payment_status').prop('required', true);
+                $('#payment_date').prop('required', true);
+                //monthly field required false
                 $('#start_date').prop('required', false);
                 $('#end_date').prop('required', false);
-
             } else if (payment_type.includes('Monthly')) {
                 $('#monthly_field').show();
                 $('#milestone_field').hide();
@@ -474,13 +474,18 @@
                 $('#milestone_value').prop('required', false);
                 $('#payment_status').prop('required', false);
                 $('#payment_date').prop('required', false);
-
             } else {
+                $('#milestone_name').prop('required', false);
+                $('#milestone_value').prop('required', false);
+                $('#payment_status').prop('required', false);
+                $('#payment_date').prop('required', false);
+                $('#start_date').prop('required', false);
+                $('#end_date').prop('required', false);
                 $('#milestone_field').hide();
                 $('#monthly_field').hide();
             }
         });
-    </script>
+        </script>
 
     <script>
         $(document).ready(function() {
@@ -514,6 +519,8 @@
                 var new_project_value = project_value / total;
                 console.log(project_value);
                 console.log(new_project_value);
+                //show amount in 2 decimal point
+                var update_project_value = new_project_value.toFixed(2);
                 console.log(total);
                 for (let index = 1; index <= total; index++) {
                 console.log(total);
@@ -523,20 +530,20 @@
                     html += '<div style="display: flex">';
                     html +=
                         '<input type="text" name="milestone_value[]" class="form-control" value="' +
-                        new_project_value +
+                        update_project_value +
                         '" placeholder="Milestone value" id="" required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number.">';
                     html += '</div>';
                     html += '</div>';
                     html += '<div class="col-md-4 pb-3">';
                     html += '<div style="display: flex">';
                     html +=
-                        '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value="" disabled selected>Select Payment Status</option><option value="Paid">Paid</option><option value="Due">Due</option></select>';
+                        '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value="" disabled >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
                     html += '</div>';
                     html += '</div>';
                     html += '<div class="col-md-4 pb-3">';
                     html += '<div style="display: flex">';
                     html +=
-                        '<input type="date" name="payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
+                        '<input type="date" name="payment_date[]" class="form-control"  id="" required data-parsley-trigger="keyup" >';
                     html += '</div>';
                     html += '</div>';
                     html += '<div class="col-md-4 pb-3">';
