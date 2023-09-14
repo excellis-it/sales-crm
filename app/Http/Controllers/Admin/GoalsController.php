@@ -50,9 +50,11 @@ class GoalsController extends Controller
      */
     public function store(Request $request)
     {
-        $count = Goal::where('user_id', $request->user_id)->whereMonth('goals_date', date('m', strtotime($request->goals_date)))->whereYear('goals_date', date('Y', strtotime($request->goals_date)))->where('goals_type', $request->goals_type)->count();
-        if ($count > 0) {
-            return redirect()->route('goals.index')->with('error', 'Goal already exists for this month.');
+        if (!$request->id) {
+            $count = Goal::where('user_id', $request->user_id)->whereMonth('goals_date', date('m', strtotime($request->goals_date)))->whereYear('goals_date', date('Y', strtotime($request->goals_date)))->where('goals_type', $request->goals_type)->count();
+            if ($count > 0) {
+                return redirect()->route('goals.index')->with('error', 'Goal already exists for this month.');
+            }
         }
         //  check role by user id
         $user = User::find($request->user_id);
@@ -83,7 +85,13 @@ class GoalsController extends Controller
                 $goals_achieve = 0;
             }
         }
-        $goal = new Goal();
+        if ($request->id) {
+            $goal = Goal::find($request->id);
+            $message = 'Goal updated successfully.';
+        } else {
+            $goal = new Goal();
+            $message = 'Goal added successfully.';
+        }
         $goal->user_id = $request->user_id;
         $goal->goals_date = $request->goals_date;
         $goal->goals_amount = $request->goals_amount;
@@ -91,7 +99,7 @@ class GoalsController extends Controller
         $goal->goals_type = $request->goals_type;
         $goal->save();
 
-        return redirect()->route('goals.index')->with('success', 'Goal created successfully.');
+        return redirect()->route('goals.index')->with('success', $message);
     }
 
     /**
@@ -111,9 +119,16 @@ class GoalsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
-        //
+        if ($request->ajax()) {
+            $goal = Goal::find($id);
+            if ($goal) {
+                return response()->json(['status' => 'success', 'data' => $goal]);
+            } else {
+                return response()->json(['status' => 'error', 'message' => 'Goal not found.']);
+            }
+        }
     }
 
     /**

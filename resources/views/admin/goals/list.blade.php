@@ -33,14 +33,16 @@
                     </div>
                 </div>
             </div>
-            <div class="row" >
+            <div class="row">
                 <div class="col-xl-12 mx-auto" id="goal-create">
                     <h6 class="mb-0 text-uppercase">Goals Create</h6>
                     <hr>
                     <div class="card border-0 border-4">
                         <div class="card-body">
-                            <form action="{{ route('goals.store') }}" method="post" id="createGoals" enctype="multipart/form-data">
+                            <form action="{{ route('goals.store') }}" method="post" id="createGoals"
+                                enctype="multipart/form-data">
                                 @csrf
+                                <input type="hidden" name="id" id="id">
                                 <div class="border p-4 rounded">
                                     <div class="row">
                                         <div class="col-md-6">
@@ -49,7 +51,9 @@
                                             <select name="user_id" id="user_id" class="form-control">
                                                 <option value="">Select a User</option>
                                                 @foreach ($users as $user)
-                                                    <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->email }})</option>
+                                                    <option value="{{ $user->id }}">{{ $user->name }}
+                                                        ({{ $user->email }})
+                                                    </option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -58,13 +62,13 @@
                                                 <span style="color: red;">*</span></label>
                                             <select name="goals_type" id="goals_type" class="form-control">
                                                 <option value="">Select a goal type</option>
-                                               
+
                                             </select>
                                         </div>
                                         <div class="col-md-6">
                                             <label for="inputEnterYourName" class="col-form-label"> Target Amount </label>
                                             <input type="text" name="goals_amount" id="goals_amount" class="form-control"
-                                                 placeholder="Enter Target Amount">
+                                                placeholder="Enter Target Amount">
                                         </div>
                                         <div class="col-md-6">
                                             <label for="inputEnterYourName" class="col-form-label"> Goal Month
@@ -85,10 +89,11 @@
                                                 <option value="{{ date('Y') }}-12-01">December</option>
                                             </select>
                                         </div>
-                                       
+
                                         <div class="row" style="margin-top: 20px; float: left;">
                                             <div class="col-sm-9">
-                                                <button type="submit" class="btn px-5 submit-btn ">Create</button>
+                                                <button type="submit"
+                                                    class="btn px-5 submit-btn form-button">Create</button>
                                             </div>
                                         </div>
                                     </div>
@@ -145,7 +150,10 @@
                                                     {{ $goal->goals_achieve ?? 0 }}
                                                 </td>
                                                 <td>
-                                                    <a href="{{ route('goals.edit', $goal->id) }}"><i class="fas fa-edit"></i> </a> &nbsp; 
+                                                    <a href="javascript:void(0);"
+                                                        data-route="{{ route('goals.edit', $goal->id) }}"
+                                                        data-role="SALES_MANAGER" class="edit-data"><i
+                                                            class="fas fa-edit"></i> </a> &nbsp;
                                                     <a title="Delete Project"
                                                         data-route="{{ route('goals.delete', $goal->id) }}"
                                                         href="javascipt:void(0);" id="delete"><i
@@ -205,7 +213,10 @@
                                                     {{ $goal->goals_achieve ?? 0 }}
                                                 </td>
                                                 <td>
-                                                    <a href="javascript:void(0);" data-route="{{ route('goals.edit', $goal->id) }}" id="goals-edit"><i class="fas fa-edit"></i> </a> &nbsp;
+                                                    <a href="javascript:void(0);"
+                                                        data-route="{{ route('goals.edit', $goal->id) }}"
+                                                        data-role="ACCOUNT_MANAGER" class="edit-data"><i
+                                                            class="fas fa-edit"></i> </a> &nbsp;
                                                     <a title="Delete Project"
                                                         data-route="{{ route('goals.delete', $goal->id) }}"
                                                         href="javascipt:void(0);" id="delete"><i
@@ -255,8 +266,36 @@
                 $('#goal-create').toggle();
             });
 
-            $('#goals-edit').on('click', function() {
-                
+            $('.edit-data').on('click', function() {
+                var route = $(this).data('route');
+                // add loader
+                $('#loading').addClass('loading');
+                $('#loading-content').addClass('loading-content');
+                var role = $(this).data('role');
+                if (role == 'SALES_MANAGER') {
+                    $('#goals_type').html(
+                        '<option value="">Select a goal type</option><option value="1">Gross</option><option value="2">Net</option>'
+                    );
+                } else {
+                    $('#goals_type').html(
+                        '<option value="">Select a goal type</option><option value="2">Net</option>'
+                    );
+                }
+                $.ajax({
+                    url: route,
+                    type: "GET",
+                    success: function(resp) {
+                        $('#goal-create').show();
+                        $('#id').val(resp.data.id);
+                        $('#user_id').val(resp.data.user_id);
+                        $('#goals_type').val(resp.data.goals_type);
+                        $('#goals_amount').val(resp.data.goals_amount);
+                        $('#goals_date').val(resp.data.goals_date);
+                        $('.form-button').html('Update');
+                        $('#loading').removeClass('loading');
+                        $('#loading-content').removeClass('loading-content');
+                    }
+                });
             });
         });
     </script>
@@ -345,10 +384,14 @@
                         _token: "{{ csrf_token() }}",
                     },
                     success: function(data) {
-                        if(data.role == 'SALES_MANAGER'){
-                            $('#goals_type').html('<option value="">Select a goal type</option><option value="1">Gross</option><option value="2">Net</option>');
-                        }else{
-                            $('#goals_type').html('<option value="">Select a goal type</option><option value="2">Net</option>');
+                        if (data.role == 'SALES_MANAGER') {
+                            $('#goals_type').html(
+                                '<option value="">Select a goal type</option><option value="1">Gross</option><option value="2">Net</option>'
+                            );
+                        } else {
+                            $('#goals_type').html(
+                                '<option value="">Select a goal type</option><option value="2">Net</option>'
+                            );
                         }
                     }
                 });
