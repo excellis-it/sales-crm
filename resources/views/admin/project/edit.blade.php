@@ -109,9 +109,9 @@
                                                     <div class="col-md-6">
                                                         <label for="inputEnterYourName" class="col-form-label">Project
                                                             Type <span style="color: red;">*</span></label>
-                                                        <select name="project_type[]" id="project_type" required
-                                                            data-parsley-trigger="keyup" class="form-control select2"
-                                                            multiple>
+                                                        <select name="project_type" id="project_type" required
+                                                            data-parsley-trigger="keyup" class="form-control"
+                                                            >
                                                             <option value="" disabled>Select Project Type</option>
                                                             <option value="Website Design & Development"
                                                                 @foreach ($project['projectTypes'] as $type) @if ($type['type'] == 'Website Design & Development') {{ 'selected' }} @endif @endforeach>
@@ -386,11 +386,11 @@
             successClass: 'has-success'
         };
     </script>
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             $('.select2').select2();
         });
-    </script>
+    </script> --}}
     <script>
         // add more functionality for milestone
         $(document).ready(function() {

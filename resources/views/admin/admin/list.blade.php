@@ -44,7 +44,6 @@
                         <table id="example" class="dd table table-striped table-bordered" style="width:100%">
                             <thead>
                                 <tr>
-
                                     <th>Name</th>
                                     <th>Email</th>
                                     <th>Created Date</th>
