@@ -17,7 +17,7 @@ class Project extends Model
 
     public function projectTypes()
     {
-        return $this->hasMany(ProjectType::class);
+        return $this->hasOne(ProjectType::class);
     }
 
     public function salesManager()

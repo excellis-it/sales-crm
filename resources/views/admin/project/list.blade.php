@@ -86,9 +86,7 @@
                                             {{ $project->client_phone }}
                                         </td>
                                         <td>
-                                           @foreach ($project->projectTypes as $project_type)
-                                               <span class="badge bg-info">{{ $project_type->type }}</span>
-                                             @endforeach
+                                            <span class="badge bg-info">{{ $project->projectTypes->type }}</span>
                                         </td>
                                         <td>
                                             {{ $project->project_value }}

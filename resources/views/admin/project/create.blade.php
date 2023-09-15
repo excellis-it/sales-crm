@@ -6,6 +6,9 @@
 @endpush
 
 @section('content')
+<section id="loading">
+    <div id="loading-content"></div>
+</section>
     <div class="page-wrapper">
 
         <div class="content container-fluid">
@@ -485,11 +488,12 @@
                 $('#monthly_field').hide();
             }
         });
-        </script>
+    </script>
 
     <script>
         $(document).ready(function() {
             $('.calculate_date').on('click', function() {
+                
                 $('#fetch_month').html('');
                 // 
                 var startDate = new Date($('#start_date').val());
@@ -497,7 +501,19 @@
                 var project_value = $('#project_value').val();
                 //validation start date and end date
                 $('#end_date').next('span').remove();
+                $('#start_date').next('span').remove();
                 $('#project_value').next('span').remove();
+                //if start_datewiil be blank
+                if (startDate == 'Invalid Date') {
+                    $('#start_date').after(
+                        '<span class="error" style="color:red;">Start date is required</span>');
+                    return false;
+                }
+                if (endDate == 'Invalid Date') {
+                    $('#end_date').after(
+                        '<span class="error" style="color:red;">Start date is required</span>');
+                    return false;
+                }
                 if (startDate > endDate || startDate == endDate) {
                     $('#end_date').after(
                         '<span class="error" style="color:red;">End date must be greater than to start date</span>');
@@ -509,7 +525,8 @@
                     return false;
                 }
                 
-
+                $('#loading').addClass('loading');
+                $('#loading-content').addClass('loading-content');
                 // count month between two dates
                 var months = (endDate.getFullYear() - startDate.getFullYear()) * 12;
                 months -= startDate.getMonth();
@@ -522,6 +539,7 @@
                 //show amount in 2 decimal point
                 var update_project_value = new_project_value.toFixed(2);
                 console.log(total);
+                
                 for (let index = 1; index <= total; index++) {
                 console.log(total);
                     var html = '';
@@ -557,8 +575,13 @@
                         '<button type="button" class="btn btn-danger remove"><i class="fas fa-minus"></i> Remove</button>';
                     html += '</div>';
                     html += '</div>';
-                    $('#fetch_month').append(html);
+                    
+                    $('#fetch_month').append(html);    
                 }
+
+                $('#loading').removeClass('loading');
+                $('#loading-content').removeClass('loading-content');
+               
             });
         });
     </script>
