@@ -144,7 +144,7 @@
                                                                 Value <span style="color: red;">*</span></label>
                                                             <input type="text" name="other_value" id="other_value"
                                                                 required data-parsley-trigger="keyup" class="form-control"
-                                                                value="{{ $project_type['name'] }}"
+                                                                value="{{ $project['projectTypes']['name'] }}"
                                                                 placeholder="Enter Other Value">
                                                         @endif
                                                     </div>

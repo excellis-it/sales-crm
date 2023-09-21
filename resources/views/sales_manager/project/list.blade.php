@@ -89,14 +89,12 @@
                                             {{ $project->website }}
                                         </td>
                                         <td>
-                                           @foreach ($project->projectTypes as $project_type)
-                                               <span class="badge bg-info">{{ $project_type->type }}</span>
-                                             @endforeach
+                                               <span class="badge bg-info">{{$project->projectTypes->type }}</span>
                                         </td>
                                         <td>
                                             {{ $project->project_value }}
                                         </td>
-                                        
+
                                         <td>
                                             {{ $project->project_upfront }}
                                         </td>
@@ -109,7 +107,7 @@
                                         <td>
                                             {{ $project->project_value - $project->project_upfront }}
                                         </td>
-                                                  
+
                                         <td>
                                             <a title="Edit Project" data-route=""
                                                 href="{{ route('projects.edit', $project->id) }}"><i

@@ -91,7 +91,7 @@
                                         <td>
                                             {{ $project->project_value }}
                                         </td>
-                                        
+
                                         <td>
                                             {{ $project->project_upfront }}
                                         </td>
@@ -119,7 +119,7 @@
                                             <a title="View Project" data-route=""
                                                 href="{{ route('sales-projects.show', $project->id) }}"><i
                                                     class="fas fa-eye"></i></a> &nbsp;&nbsp;
-                                                    
+
 
                                             <a title="Delete Project"
                                                 data-route="{{ route('sales-projects.delete', $project->id) }}"
