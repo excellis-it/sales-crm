@@ -86,28 +86,28 @@
                             <h5 class="card-title">Prospects</h5>
                             <div class="stats-list">
                                 <div class="stats-info">
-                                    <p>Win <strong>4 <small>/ 65</small></strong></p>
+                                    <p>Win <strong>{{$count['win']}} <small>/ {{$count['prospects']}}</small></strong></p>
                                     <div class="progress">
                                         <div class="progress-bar bg-primary" role="progressbar" style="width: 31%"
                                             aria-valuenow="31" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                 </div>
                                 <div class="stats-info">
-                                    <p>Follow Up <strong>15 <small>/ 92</small></strong></p>
+                                    <p>Follow Up <strong>{{$count['follow_up']}} <small>/ {{$count['prospects']}}</small></strong></p>
                                     <div class="progress">
                                         <div class="progress-bar bg-warning" role="progressbar" style="width: 31%"
                                             aria-valuenow="31" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                 </div>
                                 <div class="stats-info">
-                                    <p>Sent Proposal <strong>85 <small>/ 112</small></strong></p>
+                                    <p>Sent Proposal <strong>{{$count['sent_proposal']}} <small>/ {{$count['prospects']}}</small></strong></p>
                                     <div class="progress">
                                         <div class="progress-bar bg-success" role="progressbar" style="width: 62%"
                                             aria-valuenow="62" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                 </div>
                                 <div class="stats-info">
-                                    <p>Close <strong>190 <small>/ 212</small></strong></p>
+                                    <p>Close <strong>{{$count['close']}} <small>/ {{$count['prospects']}}</small></strong></p>
                                     <div class="progress">
                                         <div class="progress-bar bg-danger" role="progressbar" style="width: 62%"
                                             aria-valuenow="62" aria-valuemin="0" aria-valuemax="100"></div>
