@@ -137,7 +137,7 @@
                                                             required data-parsley-trigger="keyup"
                                                             data-parsley-type="number"
                                                             data-parsley-type-message="Please enter a valid number."
-                                                            class="form-control" 
+                                                            class="form-control"
                                                             placeholder="Enter Project Value">
                                                     </div>
                                                     {{-- Project project_upfront --}}
@@ -235,7 +235,7 @@
                                                                 <div class="col-md-4 pb-3">
                                                                     <div style="display: flex">
                                                                         <input type="text" name="milestone_name[]"
-                                                                            class="form-control" 
+                                                                            class="form-control"
                                                                             data-parsley-trigger="keyup"
                                                                             placeholder="Milestone name" id=""
                                                                             >
@@ -244,7 +244,7 @@
                                                                 <div class="col-md-4 pb-3">
                                                                     <div style="display: flex">
                                                                         <input type="text" name="milestone_value[]"
-                                                                            class="form-control" 
+                                                                            class="form-control"
                                                                             placeholder="Milestone value"
                                                                             data-parsley-trigger="keyup"
                                                                             data-parsley-type="number"
@@ -255,9 +255,9 @@
                                                                 <div class="col-md-4 pb-3">
                                                                     <div style="display: flex">
                                                                         <select name="payment_status[]" id="payment"
-                                                                            class="form-control" 
+                                                                            class="form-control"
                                                                             data-parsley-trigger="keyup">
-                                                                        
+
                                                                             <option value="Paid">Paid</option>
                                                                             <option value="Due" selected>Due</option>
                                                                         </select>
@@ -493,9 +493,9 @@
     <script>
         $(document).ready(function() {
             $('.calculate_date').on('click', function() {
-                
+
                 $('#fetch_month').html('');
-                // 
+                //
                 var startDate = new Date($('#start_date').val());
                 var endDate = new Date($('#end_date').val());
                 var project_value = $('#project_value').val();
@@ -524,7 +524,7 @@
                         '<span class="error" style="color:red;">Project value is required</span>');
                     return false;
                 }
-                
+
                 $('#loading').addClass('loading');
                 $('#loading-content').addClass('loading-content');
                 // count month between two dates
@@ -539,7 +539,7 @@
                 //show amount in 2 decimal point
                 var update_project_value = new_project_value.toFixed(2);
                 console.log(total);
-                
+
                 for (let index = 1; index <= total; index++) {
                 console.log(total);
                     var html = '';
@@ -575,13 +575,13 @@
                         '<button type="button" class="btn btn-danger remove"><i class="fas fa-minus"></i> Remove</button>';
                     html += '</div>';
                     html += '</div>';
-                    
-                    $('#fetch_month').append(html);    
+
+                    $('#fetch_month').append(html);
                 }
 
                 $('#loading').removeClass('loading');
                 $('#loading-content').removeClass('loading-content');
-               
+
             });
         });
     </script>

@@ -126,6 +126,10 @@ class ProjectController extends Controller
             }
         }
 
+        // goals count
+        $countGross = Goal::where(['user_id'=> $data['user_id'], 'goals_type' => 1])->whereMonth('goals_date', date('m'))->whereYear('goals_date', date('Y'))->count();
+        
+
         return redirect()->route('sales-projects.index')->with('message', 'Project created successfully.');
         // } catch (\Throwable $th) {
         //     return redirect()->back()->with('error', $th->getMessage());
@@ -207,14 +211,15 @@ class ProjectController extends Controller
         } else {
             $project_type->name = $data['project_type'];
         }
-        
+
         if(isset($data['start_date'])){
             $project_type->start_date = $data['start_date'];
             $project_type->end_date = $data['end_date'];
         }
-        
+
         $project_type->save();
 
+        $previous_milestone_value = ProjectMilestone::where('project_id', $id)->sum('milestone_value');
 
         ProjectMilestone::where('project_id', $id)->delete();
         if($data['payment_types'] == 'Milestone'){
@@ -235,7 +240,7 @@ class ProjectController extends Controller
             foreach ($data['milestone_value'] as $key => $milestone) {
                 //check if data is null
                 if($data['milestone_value'][$key] != null){
-                   
+
                     $project_milestone = new ProjectMilestone();
                     $project_milestone->project_id = $project->id;
                     $project_milestone->milestone_value = $milestone;

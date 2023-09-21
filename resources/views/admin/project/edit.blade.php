@@ -6,6 +6,9 @@
 @endpush
 
 @section('content')
+<section id="loading">
+    <div id="loading-content"></div>
+</section>
     <div class="page-wrapper">
 
         <div class="content container-fluid">
@@ -363,6 +366,7 @@
                                                                 <button type="button"
                                                                     class="btn btn-success calculate_date good-button">Process</button>
                                                             </div>
+                                                            <div id="fetch_month">
                                                             @if ($project->projectMilestones->count() > 0 && $project->payment_type == 'Monthly')
                                                                 @foreach ($project->projectMilestones as $key => $monthly)
                                                                     <div class="row">
@@ -421,8 +425,7 @@
                                                                     </div>
                                                                 @endforeach
                                                             @endif
-
-                                                            <div id="fetch_month"></div>
+                                                            </div>
                                                         </div>
 
                                                     @endif
@@ -578,7 +581,7 @@
         $(document).ready(function() {
             $('.calculate_date').on('click', function() {
                 $('#fetch_month').html('');
-                // 
+                //
                 var startDate = new Date($('#start_date').val());
                 var endDate = new Date($('#end_date').val());
                 var project_value = $('#project_value').val();
@@ -670,5 +673,5 @@
         });
     </script>
 
-    
+
 @endpush
