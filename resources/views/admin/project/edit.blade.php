@@ -348,7 +348,7 @@
                                                                         class="form-control textbox-n"
                                                                         value="{{ $project->projectTypes->start_date }}"
                                                                         type="text" onfocus="(this.type='date')"
-                                                                        id="start_date" required />
+                                                                        id="start_date" required readonly/>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4 pb-3">
@@ -366,7 +366,7 @@
                                                                 <button type="button"
                                                                     class="btn btn-success calculate_date good-button">Process</button>
                                                             </div>
-                                                            <div id="fetch_month">
+                                                            
                                                             @if ($project->projectMilestones->count() > 0 && $project->payment_type == 'Monthly')
                                                                 @foreach ($project->projectMilestones as $key => $monthly)
                                                                     <div class="row">
@@ -425,6 +425,7 @@
                                                                     </div>
                                                                 @endforeach
                                                             @endif
+                                                            <div id="fetch_month">
                                                             </div>
                                                         </div>
 
@@ -581,7 +582,6 @@
         $(document).ready(function() {
             $('.calculate_date').on('click', function() {
                 $('#fetch_month').html('');
-                //
                 var startDate = new Date($('#start_date').val());
                 var endDate = new Date($('#end_date').val());
                 var project_value = $('#project_value').val();
@@ -619,7 +619,9 @@
                 months -= startDate.getMonth();
                 months += endDate.getMonth();
                 months = months <= 0 ? 0 : months;
-                var total = months + 1;
+                var total_count = months + 1;
+                var projectmilestone = '{{ $project->projectMilestones->count() }}';
+                var total = total_count - projectmilestone;
                 var new_project_value = project_value / total;
                 console.log(project_value);
                 console.log(new_project_value);
@@ -634,9 +636,7 @@
                     html += '<div class="col-md-4 pb-3">';
                     html += '<div style="display: flex">';
                     html +=
-                        '<input type="text" name="milestone_value[]" class="form-control" value="' +
-                        update_project_value +
-                        '" placeholder="Milestone value" id="" required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number.">';
+                        '<input type="text" name="milestone_value[]" class="form-control" placeholder="Milestone value" id="" required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number.">';
                     html += '</div>';
                     html += '</div>';
                     html += '<div class="col-md-4 pb-3">';
