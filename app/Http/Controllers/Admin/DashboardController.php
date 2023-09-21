@@ -15,6 +15,7 @@ class DashboardController extends Controller
         $count['account_managers'] = User::Role('ACCOUNT_MANAGER')->count();
         $count['sales_excecutive'] = User::Role('SALES_EXCUETIVE')->count();
         $count['projects'] = Project::count();
+        $count['prospects'] = Prospect
         return view('admin.dashboard')->with(compact('count'));
     }
 }

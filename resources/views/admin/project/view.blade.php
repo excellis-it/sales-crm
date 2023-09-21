@@ -126,9 +126,7 @@
                                         <li>
                                             <div class="title">Project Type:-</div>
                                             <div class="text">
-                                                @foreach ($project->projectTypes as $project_type)
-                                                    <span class="badge bg-info">{{ $project_type->name }}</span>
-                                                @endforeach
+                                                <span class="badge bg-info">{{ $project->projectTypes->name }}</span>
                                             </div>
                                         </li>
                                         <li>
@@ -181,38 +179,87 @@
                         </div>
                     </div>
                     @if ($project->projectMilestones->count() > 0)
-                        <div class="row">
-                            <div class="col-md-12 d-flex">
-                                <div class="card profile-box flex-fill">
-                                    <div class="card-body">
-                                        <h3 class="card-title">Milestone Details
+                        @if ($project->payment_type == 'Monthly')
+                            <div class="row">
+                                <div class="col-md-12 d-flex">
+                                    <div class="card profile-box flex-fill">
+                                        <div class="card-body">
+                                            <h3 class="card-title">Monthly Milestone
 
-                                        </h3>
-                                        <table id="myTable" class="dd table table-striped table-bordered"
-                                            style="width:100%">
-                                            <thead>
-                                                <tr>
-                                                    <th>Milestone Name</th>
-                                                    <th>Milestone value ({{ $project->currency }})</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($project->projectMilestones as $key => $milestone)
+                                            </h3>
+                                            <table id="myTable" class="dd table table-striped table-bordered"
+                                                style="width:100%">
+                                                <thead>
                                                     <tr>
-                                                        <td>
-                                                            {{ $milestone->milestone_name }}
-                                                        </td>
-                                                        <td>
-                                                            {{ $milestone->milestone_value }}
-                                                        </td>
+                                                        <th>Milestone value ({{ $project->currency }})</th>
+                                                        <th>Status</th>
+                                                        <th>Pay Date</th>
                                                     </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($project->projectMilestones as $key => $milestone)
+                                                        <tr>
+                                                            <td>
+                                                                {{ $milestone->milestone_value }}
+                                                            </td>
+                                                            <td>
+                                                                @if ($milestone->payment_status)
+                                                                    <span
+                                                                        class="badge bg-success">{{ $milestone->payment_status }}</span>
+                                                                @else
+                                                                    <span>N/A</span>
+                                                                @endif
+                                                            </td>
+                                                            <td>
+                                                                @if ($milestone->pay_date == null)
+                                                                    N/A
+                                                                @else
+                                                                    {{ date('d-m-Y', strtotime($milestone->pay_date)) }}
+                                                                @endif
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        @else
+                            <div class="row">
+                                <div class="col-md-12 d-flex">
+                                    <div class="card profile-box flex-fill">
+                                        <div class="card-body">
+                                            <h3 class="card-title">Milestone Details
+
+                                            </h3>
+                                            <table id="myTable" class="dd table table-striped table-bordered"
+                                                style="width:100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Milestone Name</th>
+                                                        <th>Milestone value ({{ $project->currency }})</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($project->projectMilestones as $key => $milestone)
+                                                        <tr>
+                                                            <td>
+                                                                {{ $milestone->milestone_name }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $milestone->milestone_value }}
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
                     @endif
                 </div>
 
