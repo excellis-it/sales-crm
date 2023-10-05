@@ -62,6 +62,7 @@
                                     <th> Phone</th>
                                     <th>Employee Id</th>
                                     <th>Date Of Joining</th>
+                                    <th>No. of Project</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
@@ -74,6 +75,7 @@
                                         <td>{{ $account_manager->phone }}</td>
                                         <td>{{ $account_manager->employee_id }}</td>
                                         <td>{{ $account_manager->date_of_joining }}</td>
+                                        <td><a href="{{ route('sales-projects.index', ['account_manager_id'=>$account_manager->id]) }}">{{ $account_manager->accountManagerProjects->count() }}</a></td>
                                         <td>
                                             <!--<div class="button-switch">-->
                                             <!--    <input type="checkbox" id="switch-orange" class="switch toggle-class"-->

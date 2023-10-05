@@ -57,4 +57,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Prospect::class, 'user_id');
     }
+
+    public function accountManagerProjects()
+    {
+        return $this->hasMany(Project::class, 'assigned_to');
+    }
 }

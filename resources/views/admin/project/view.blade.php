@@ -106,9 +106,8 @@
                                             </div>
                                         </li>
                                     </ul>
-
-                                    <h4>Documents Details :</h4>
                                     @if ($documents->count() > 0)
+                                        <h4>Documents Details :</h4>
                                         @foreach ($documents as $key => $document)
                                             <a href="{{ route('sales-projects.document.download', $document->id) }}">
                                                 <i class="fas fa-download"></i></a>&nbsp;&nbsp;

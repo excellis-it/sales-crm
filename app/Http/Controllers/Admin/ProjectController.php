@@ -27,6 +27,13 @@ class ProjectController extends Controller
             $projects = Project::orderBy('id', 'desc')->where('user_id', $request->sales_manager_id)->get();
             return view('admin.project.list')->with(compact('projects'));
         }
+
+        if ($request->account_manager_id) {
+            $projects = Project::orderBy('id', 'desc')->where('assigned_to', $request->account_manager_id)->get();
+            return view('admin.project.list')->with(compact('projects'));
+        }
+
+        
         $projects = Project::orderBy('id', 'desc')->get();
         return view('admin.project.list')->with(compact('projects'));
     }
@@ -127,8 +134,8 @@ class ProjectController extends Controller
         }
 
         // goals count
-        $countGross = Goal::where(['user_id'=> $data['user_id'], 'goals_type' => 1])->whereMonth('goals_date', date('m'))->whereYear('goals_date', date('Y'))->count();
-        
+        $countGross = Goal::where(['user_id' => $data['user_id'], 'goals_type' => 1])->whereMonth('goals_date', date('m'))->whereYear('goals_date', date('Y'))->count();
+
 
         return redirect()->route('sales-projects.index')->with('message', 'Project created successfully.');
         // } catch (\Throwable $th) {
@@ -212,7 +219,7 @@ class ProjectController extends Controller
             $project_type->name = $data['project_type'];
         }
 
-        if(isset($data['start_date'])){
+        if (isset($data['start_date'])) {
             $project_type->start_date = $data['start_date'];
             $project_type->end_date = $data['end_date'];
         }
@@ -222,10 +229,10 @@ class ProjectController extends Controller
         $previous_milestone_value = ProjectMilestone::where('project_id', $id)->sum('milestone_value');
 
         ProjectMilestone::where('project_id', $id)->delete();
-        if($data['payment_types'] == 'Milestone'){
+        if ($data['payment_types'] == 'Milestone') {
             foreach ($data['milestone_name'] as $key => $milestone) {
                 //check if data is null
-                if($data['milestone_name'][$key] != null){
+                if ($data['milestone_name'][$key] != null) {
                     $project_milestone = new ProjectMilestone();
                     $project_milestone->project_id = $project->id;
                     $project_milestone->milestone_name = $milestone;
@@ -236,10 +243,10 @@ class ProjectController extends Controller
                     $project_milestone->save();
                 }
             }
-        }else{
+        } else {
             foreach ($data['milestone_value'] as $key => $milestone) {
                 //check if data is null
-                if($data['milestone_value'][$key] != null){
+                if ($data['milestone_value'][$key] != null) {
 
                     $project_milestone = new ProjectMilestone();
                     $project_milestone->project_id = $project->id;
@@ -252,7 +259,7 @@ class ProjectController extends Controller
             }
         }
 
-        if(isset($data['pdf'])) {
+        if (isset($data['pdf'])) {
             foreach ($data['pdf'] as $key => $pdfFile) {
                 $project_pdf = new ProjectDocument();
                 $project_pdf->project_id = $project->id;
