@@ -46,15 +46,19 @@
                                 <div class="border p-4 rounded">
                                     <div class="row">
                                         <div class="col-md-6">
+                                            <label for="inputEnterYourName" class="col-form-label"> User Type
+                                                <span style="color: red;">*</span></label>
+                                            <select name="user_type" id="user_type" class="form-control">
+                                                <option value="">Select a User</option>
+                                                <option value="SALES_MANAGER">Sales Manager</option>
+                                                <option value="ACCOUNT_MANAGER">Account Manager</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
                                             <label for="inputEnterYourName" class="col-form-label"> Goal Assign For
                                                 <span style="color: red;">*</span></label>
                                             <select name="user_id" id="user_id" class="form-control">
                                                 <option value="">Select a User</option>
-                                                @foreach ($users as $user)
-                                                    <option value="{{ $user->id }}">{{ $user->name }}
-                                                        ({{ $user->email }})
-                                                    </option>
-                                                @endforeach
                                             </select>
                                         </div>
                                         <div class="col-md-6">
@@ -290,7 +294,25 @@
                 $.ajax({
                     url: route,
                     type: "GET",
+                    data: {
+                        role: role
+                    },
                     success: function(resp) {
+                        if (role == 'SALES_MANAGER') {
+                            // select user type
+                            $('#user_type').val('SALES_MANAGER');
+                        } else {
+                            $('#user_type').val('ACCOUNT_MANAGER');
+                        }
+                        console.log(resp.users);
+                        var html = '<option value="">Select a user</option>';
+                        $.each(resp.users, function(key, value) {
+                            html += '<option value="' + value.id + '">' + value
+                                .name +
+                                '</option>';
+                        });
+
+                        $('#user_id').html(html);
                         $('#goal-create').show();
                         $('#id').val(resp.data.id);
                         $('#user_id').val(resp.data.user_id);
@@ -336,11 +358,18 @@
                     goals_date: {
                         required: true,
                     },
+                    user_type: {
+                        required: true,
+                    },
                 },
                 messages: {
                     user_id: {
                         required: "Please select a user",
                     },
+                    user_type: {
+                        required: "Please select a user type",
+                    },
+
                     goals_type: {
                         required: "Please select a goal type",
                     },
@@ -382,6 +411,9 @@
         $(document).ready(function() {
             $('#user_id').on('change', function() {
                 var user_id = $(this).val();
+                // add loader
+                $('#loading').addClass('loading');
+                $('#loading-content').addClass('loading-content');
                 $.ajax({
                     url: "{{ route('goals.get.user') }}",
                     type: "POST",
@@ -398,6 +430,40 @@
                             $('#goals_type').html(
                                 '<option value="">Select a goal type</option><option value="2">Net</option>'
                             );
+                        }
+                        $('#loading').removeClass('loading');
+                        $('#loading-content').removeClass('loading-content');
+                    }
+                });
+            });
+
+            $('#user_type').on('change', function() {
+                var user_type = $(this).val();
+                $('#loading').addClass('loading');
+                $('#loading-content').addClass('loading-content');
+                $.ajax({
+                    url: "{{ route('goals.get.user-by-type') }}",
+                    type: "POST",
+                    data: {
+                        user_type: user_type,
+                        _token: "{{ csrf_token() }}",
+                    },
+                    success: function(data) {
+                        if (data.status == true) {
+                            var html = '<option value="">Select a user</option>';
+                            $.each(data.users, function(key, value) {
+                                html += '<option value="' + value.id + '">' + value
+                                    .name +
+                                    '</option>';
+                            });
+
+                            $('#user_id').html(html);
+                            $('#loading').removeClass('loading');
+                            $('#loading-content').removeClass('loading-content');
+                        } else {
+                            $('#loading').removeClass('loading');
+                            $('#loading-content').removeClass('loading-content');
+                            toastr.error(data.message);
                         }
                     }
                 });

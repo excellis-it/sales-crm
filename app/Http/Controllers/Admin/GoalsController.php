@@ -99,7 +99,7 @@ class GoalsController extends Controller
         $goal->goals_type = $request->goals_type;
         $goal->save();
 
-        return redirect()->route('goals.index')->with('success', $message);
+        return redirect()->route('goals.index')->with('message', $message);
     }
 
     /**
@@ -122,9 +122,11 @@ class GoalsController extends Controller
     public function edit(Request $request, $id)
     {
         if ($request->ajax()) {
+            // return $request->all();
             $goal = Goal::find($id);
+            $users = User::role($request->role)->orderBy('name', 'asc')->get();
             if ($goal) {
-                return response()->json(['status' => 'success', 'data' => $goal]);
+                return response()->json(['status' => 'success', 'data' => $goal, 'users' => $users]);
             } else {
                 return response()->json(['status' => 'error', 'message' => 'Goal not found.']);
             }
@@ -174,5 +176,18 @@ class GoalsController extends Controller
             $role = 'ACCOUNT_MANAGER';
         }
         return response()->json(['role' => $role]);
+    }
+
+    public function getUserByType(Request $request)
+    {
+        if ($request->ajax()) {
+            $user_type = $request->user_type;
+            $users = User::role($user_type)->orderBy('name', 'asc')->get();
+            if ($users) {
+                return response()->json(['status' => true, 'users' => $users]);
+            } else {
+                return response()->json(['status' => false, 'message' => 'User not found.']);
+            }
+        }
     }
 }

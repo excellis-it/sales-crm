@@ -104,6 +104,7 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
         Route::get('/goals-delete/{id}', [GoalsController::class, 'delete'])->name('goals.delete');
     });
     Route::post('/goals-get-user', [GoalsController::class, 'getUser'])->name('goals.get.user');
+    Route::post('/goals-get-user-by-type', [GoalsController::class, 'getUserByType'])->name('goals.get.user-by-type');
 });
 
 /**---------------------------------------------------------------Sales Manager ---------------------------------------------------------------------------------- */
