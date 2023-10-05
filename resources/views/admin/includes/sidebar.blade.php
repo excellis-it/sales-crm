@@ -24,7 +24,10 @@
                     <span>User Management</span>
                 </li>
 
-
+                <li class="{{ Request::is('admin/goals*') ? 'active' : ' ' }}">
+                    <a href="{{ route('goals.index') }}"><i class="la la-bullseye"></i> <span>
+                             Users Goals </span></a>
+                </li>
                 <li class="{{ Request::is('admin/sales_managers*') ? 'active' : ' ' }}">
                     <a href="{{ route('sales_managers.index') }}"><i class="la la-users"></i> <span>
                             Sales managers</span></a>
@@ -44,10 +47,7 @@
                     <span>Project Management</span>
                 </li>
 
-                <li class="{{ Request::is('admin/goals*') ? 'active' : ' ' }}">
-                    <a href="{{ route('goals.index') }}"><i class="la la-bullseye"></i> <span>
-                             Users Goals </span></a>
-                </li>
+
 
                 <li class="{{ Request::is('admin/sales-projects*') ? 'active' : ' ' }}">
                     <a href="{{ route('sales-projects.index') }}"><i class="la la-book-open"></i> <span>
@@ -77,7 +77,7 @@
                     <ul style="display: none;">
                         <li class="{{ Request::is('admin/cms/sub-admin*') ? 'active' : ' ' }}">
                             <a href="{{ route('cms.sub-admin.get-started') }}">Get Started Page</a>
-                        </li>                   
+                        </li>
                     </ul>
                 </li>
 
@@ -87,7 +87,7 @@
                     <ul style="display: none;">
                         <li class="{{ Request::is('admin/cms/user*') ? 'active' : ' ' }}">
                             <a href="{{ route('cms.user.get-started') }}">Get Started Page</a>
-                        </li>                  
+                        </li>
                     </ul>
                 </li> --}}
 

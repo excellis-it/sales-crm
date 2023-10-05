@@ -1,33 +1,29 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\SalesManager;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\User;
-use Illuminate\Support\Facades\Mail;
 use App\Mail\RegistrationMail;
+use App\Models\User;
 use App\Traits\ImageTrait;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
-use File;
 
 class SalesExcecutiveController extends Controller
 {
     use ImageTrait;
 
-    /**
+     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        if ($request->id) {
-            $sales_excecutives = User::where('id', $request->id)->Role('SALES_EXCUETIVE')->get();
-            return view('admin.sales_excecutive.list')->with(compact('sales_excecutives'));
-        }
-        $sales_excecutives = User::Role('SALES_EXCUETIVE')->get();
-        return view('admin.sales_excecutive.list')->with(compact('sales_excecutives'));
+        $sales_excecutives = User::role('SALES_EXCUETIVE')->where('sales_manager_id', Auth::user()->id)->get();
+        return view('sales_manager.sales_excecutive.list')->with(compact('sales_excecutives'));
     }
 
     /**
@@ -37,8 +33,7 @@ class SalesExcecutiveController extends Controller
      */
     public function create()
     {
-        $sales_managers = User::Role('SALES_MANAGER')->orderBy('name', 'DESC')->where('status', 1)->get();
-        return view('admin.sales_excecutive.create')->with(compact('sales_managers'));
+        return view('sales_manager.sales_excecutive.create');
     }
 
     /**
@@ -50,7 +45,6 @@ class SalesExcecutiveController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'sales_manager_id' => 'required', // 'required|exists:users,id',
             'name' => 'required',
             'email' => 'required|unique:users|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',
             'password' => 'required|min:8',
@@ -60,7 +54,7 @@ class SalesExcecutiveController extends Controller
         ]);
 
         $data = new User();
-        $data->sales_manager_id = $request->sales_manager_id;
+        $data->sales_manager_id = Auth::user()->id;
         $data->name = $request->name;
         $data->email = $request->email;
         $data->password = bcrypt($request->password);
@@ -85,7 +79,7 @@ class SalesExcecutiveController extends Controller
         ];
 
         Mail::to($request->email)->send(new RegistrationMail($maildata));
-        return redirect()->route('sales-excecutive.index')->with('message', 'Sales excecutive created successfully.');
+        return redirect()->route('sales-manager.sales-excecutive.index')->with('message', 'Sales excecutive created successfully.');
     }
 
     /**
@@ -96,6 +90,7 @@ class SalesExcecutiveController extends Controller
      */
     public function show($id)
     {
+        //
     }
 
     /**
@@ -106,9 +101,8 @@ class SalesExcecutiveController extends Controller
      */
     public function edit($id)
     {
-        $sales_managers = User::Role('SALES_MANAGER')->orderBy('name', 'DESC')->where('status', 1)->get();
-        $sales_excecutive = User::findOrFail($id);
-        return view('admin.sales_excecutive.edit')->with(compact('sales_excecutive','sales_managers'));
+        $sales_excecutive = User::find($id);
+        return view('sales_manager.sales_excecutive.edit')->with(compact('sales_excecutive'));
     }
 
     /**
@@ -121,14 +115,12 @@ class SalesExcecutiveController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'sales_manager_id' => 'required', // 'required|exists:users,id',
             'name' => 'required',
             'email' => 'required|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',
             'phone' => 'required',
             'status' => 'required',
         ]);
         $data = User::findOrFail($id);
-        $data->sales_manager_id = $request->sales_manager_id;
         $data->name = $request->name;
         $data->email = $request->email;
         $data->phone = $request->phone;
@@ -153,7 +145,7 @@ class SalesExcecutiveController extends Controller
             $data->profile_picture = $this->imageUpload($request->file('profile_picture'), 'sales_excecutive');
         }
         $data->save();
-        return redirect()->route('sales-excecutive.index')->with('message', 'Sales manager updated successfully.');
+        return redirect()->route('sales-manager.sales-excecutive.index')->with('message', 'Sales manager updated successfully.');
     }
 
     /**
@@ -179,6 +171,6 @@ class SalesExcecutiveController extends Controller
     {
         $user = User::findOrFail($id);
         $user->delete();
-        return redirect()->route('sales-excecutive.index')->with('error', 'Sales excecutive has been deleted successfully.');
+        return redirect()->route('sales-manager.sales-excecutive.index')->with('error', 'Sales excecutive has been deleted successfully.');
     }
 }

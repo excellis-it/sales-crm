@@ -3,7 +3,8 @@
         <div id="sidebar-menu" class="sidebar-menu">
             <ul class="sidebar-vertical">
                 <li class="{{ Request::is('sales-manager/dashboard*') ? 'active' : ' ' }}">
-                    <a href="{{ route('sales-manager.dashboard') }}"><i class="la la-dashboard"></i> <span>Dashboard</span></a>
+                    <a href="{{ route('sales-manager.dashboard') }}"><i class="la la-dashboard"></i>
+                        <span>Dashboard</span></a>
                 </li>
                 <li class="submenu">
                     <a href="#"
@@ -20,7 +21,7 @@
 
                     </ul>
                 </li>
-               
+
                 {{-- My project --}}
                 <li class="{{ Request::is('sales-manager/projects*') ? 'active' : ' ' }}">
                     <a href="{{ route('projects.index') }}"><i class="la la-briefcase"></i> <span>My Projects</span></a>
@@ -28,8 +29,12 @@
 
                 {{-- My prospect --}}
                 <li class="{{ Request::is('sales-manager/prospects*') ? 'active' : ' ' }}">
-                    <a href="{{ route('sales-manager.prospects.index') }}"><i class="la la-user"></i> <span>My Prospects</span></a>
-
+                    <a href="{{ route('sales-manager.prospects.index') }}"><i class="la la-user"></i> <span>My
+                            Prospects</span></a>
+                <li class="{{ Request::is('sales-manager/sales-excecutive*') ? 'active' : ' ' }}">
+                    <a href="{{ route('sales-manager.sales-excecutive.index') }}"><i class="la la-user-tie"></i> <span>
+                            Sales Excecutive</span></a>
+                </li>
 
                 {{-- <li class="{{ Request::is('sales-manager/members*') ? 'active' : ' ' }}">
                     <a href="{{ route('user.index') }}"><i class="la la-users"></i> <span>Members</span></a>
@@ -47,7 +52,7 @@
                     <ul style="display: none;">
                         <li class="{{ Request::is('sales-manager/cms/sub-sales-manager*') ? 'active' : ' ' }}">
                             <a href="{{ route('cms.sub-sales-manager.get-started') }}">Get Started Page</a>
-                        </li>                   
+                        </li>
                     </ul>
                 </li>
 
@@ -57,7 +62,7 @@
                     <ul style="display: none;">
                         <li class="{{ Request::is('sales-manager/cms/user*') ? 'active' : ' ' }}">
                             <a href="{{ route('cms.user.get-started') }}">Get Started Page</a>
-                        </li>                  
+                        </li>
                     </ul>
                 </li> --}}
 

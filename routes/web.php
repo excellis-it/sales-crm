@@ -23,6 +23,8 @@ use App\Http\Controllers\SalesManager\DashboardController as SalesManagerDashboa
 use App\Http\Controllers\SalesManager\ProfileController as SalesManagerProfileController;
 use App\Http\Controllers\SalesManager\ProjectController;
 use App\Http\Controllers\SalesManager\ProspectController as SalesManagerProspectController;
+use App\Http\Controllers\SalesManager\SalesExcecutiveController as SalesManagerSalesExcecutiveController;
+use Illuminate\Support\Facades\Artisan;
 
 /*
 |--------------------------------------------------------------------------
@@ -78,7 +80,7 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('/project-delete/{id}', [AdminProjectController::class, 'delete'])->name('sales-projects.delete');
     Route::get('/projectAssignTo', [AdminProjectController::class, 'projectAssignTo'])->name('sales-projects.updateAssignedTo');
     Route::get('/projectDocumentDownload/{id}', [AdminProjectController::class, 'DocumentDownload'])->name('sales-projects.document.download');
-    
+
 
     //  Sales manager Routes
     Route::prefix('sales_managers')->group(function () {
@@ -125,7 +127,14 @@ Route::group(['middleware' => ['SalesManager'], 'prefix' => 'sales-manager'], fu
     Route::name('sales-manager.')->group(function () {
         Route::resources([
             'prospects' => SalesManagerProspectController::class,
+            'sales-excecutive' => SalesManagerSalesExcecutiveController::class,
         ]);
+    });
+    // change status sales excecutive
+    Route::get('/changeSalesExcecutiveStatus', [SalesManagerSalesExcecutiveController::class, 'changeSalesExcecutiveStatus'])->name('sales-manager.sales-excecutive.change-status');
+    // Sales Excecutive Routes
+    Route::prefix('sales-excecutive')->group(function () {
+        Route::get('/sales-excecutive-delete/{id}', [SalesManagerSalesExcecutiveController::class, 'delete'])->name('sales-manager.sales-excecutive.delete');
     });
     // delete project
     Route::get('/project-delete/{id}', [ProjectController::class, 'delete'])->name('projects.delete');
