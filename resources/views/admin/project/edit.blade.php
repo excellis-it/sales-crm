@@ -326,12 +326,20 @@
                                                                                 Milestone</button>
                                                                         </div>
                                                                     @else
-                                                                        <div class="col-md-4">
+                                                                    <div class="col-md-4">
+                                                                        @if($milestone->payment_status == 'Paid')                                                                       
+                                                                        <button type="button"
+                                                                        class="btn btn-danger remove" disabled><i
+                                                                            class="fas fa-minus"></i>
+                                                                        Remove</button>                                                         
+                                                                        @else
                                                                             <button type="button"
-                                                                                class="btn btn-danger remove"><i
-                                                                                    class="fas fa-minus"></i>
-                                                                                Remove</button>
-                                                                        </div>
+                                                                            class="btn btn-danger remove"><i
+                                                                                class="fas fa-minus"></i>
+                                                                            Remove</button>
+                                                                        @endif    
+                                                                        
+                                                                    </div>
                                                                     @endif
                                                                 </div>
                                                             @endforeach
@@ -416,11 +424,18 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-md-4">
-
+                                                                            @if($monthly->payment_status == 'Paid')                                                                       
                                                                             <button type="button"
+                                                                            class="btn btn-danger remove" disabled><i
+                                                                                class="fas fa-minus"></i>
+                                                                            Remove</button>                                                         
+                                                                            @else
+                                                                                <button type="button"
                                                                                 class="btn btn-danger remove"><i
                                                                                     class="fas fa-minus"></i>
                                                                                 Remove</button>
+                                                                            @endif    
+                                                                            
                                                                         </div>
                                                                     </div>
                                                                 @endforeach
@@ -487,11 +502,7 @@
             successClass: 'has-success'
         };
     </script>
-    {{-- <script>
-        $(document).ready(function() {
-            $('.select2').select2();
-        });
-    </script> --}}
+    
     <script>
         // add more functionality for milestone
         $(document).ready(function() {
