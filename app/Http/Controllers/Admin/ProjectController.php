@@ -33,7 +33,7 @@ class ProjectController extends Controller
             return view('admin.project.list')->with(compact('projects'));
         }
 
-        
+
         $projects = Project::orderBy('id', 'desc')->get();
         return view('admin.project.list')->with(compact('projects'));
     }
@@ -78,7 +78,8 @@ class ProjectController extends Controller
         $project->website = $data['website'];
         $project->sale_date = $data['sale_date'];
         $project->assigned_date = '';
-        $project->payment_type = $data['payment_type'];
+        $project->delivery_tat = $data['delivery_tat'];
+        $project->comment = $data['comment'];
         $project->save();
 
         $project_type = new ProjectType();
@@ -89,12 +90,9 @@ class ProjectController extends Controller
         } else {
             $project_type->name = $data['project_type'];
         }
-        $project_type->start_date = $data['start_date'];
-        $project_type->end_date = $data['end_date'];
         $project_type->save();
 
 
-        if ($data['payment_type'] == 'Milestone') {
             foreach ($data['milestone_name'] as $key => $milestone) {
                 //check if data is null
                 if ($data['milestone_name'][$key] != null) {
@@ -103,26 +101,11 @@ class ProjectController extends Controller
                     $project_milestone->milestone_name = $milestone;
                     $project_milestone->milestone_value = $data['milestone_value'][$key];
                     $project_milestone->payment_status = $data['payment_status'][$key];
-                    $project_milestone->payment_date = $data['payment_date'][$key];
+                    $project_milestone->payment_date = $data['payment_date'][$key] ?? '';
                     $project_milestone->milestone_comment = $data['milestone_comment'][$key];
                     $project_milestone->save();
                 }
             }
-        } else {
-            foreach ($data['milestone_value'] as $key => $milestone) {
-                //check if data is null
-                if ($data['milestone_value'][$key] != null) {
-
-                    $project_milestone = new ProjectMilestone();
-                    $project_milestone->project_id = $project->id;
-                    $project_milestone->milestone_value = $milestone;
-                    $project_milestone->payment_status = $data['payment_status'][$key];
-                    $project_milestone->payment_date = $data['payment_date'][$key];
-                    $project_milestone->milestone_comment = $data['milestone_comment'][$key];
-                    $project_milestone->save();
-                }
-            }
-        }
 
         if (isset($data['pdf'])) {
             foreach ($data['pdf'] as $key => $pdfFile) {
@@ -205,7 +188,8 @@ class ProjectController extends Controller
         $project->website = $data['website'];
         $project->sale_date = $data['sale_date'];
         $project->assigned_date = '';
-        $project->payment_type = $data['payment_types'];
+        $project->delivery_tat = $data['delivery_tat'];
+        $project->comment = $data['comment'];
         $project->save();
 
         ProjectType::where('project_id', $id)->delete();
@@ -229,7 +213,6 @@ class ProjectController extends Controller
         $previous_milestone_value = ProjectMilestone::where('project_id', $id)->sum('milestone_value');
 
         ProjectMilestone::where('project_id', $id)->delete();
-        if ($data['payment_types'] == 'Milestone') {
             foreach ($data['milestone_name'] as $key => $milestone) {
                 //check if data is null
                 if ($data['milestone_name'][$key] != null) {
@@ -238,26 +221,12 @@ class ProjectController extends Controller
                     $project_milestone->milestone_name = $milestone;
                     $project_milestone->milestone_value = $data['milestone_value'][$key];
                     $project_milestone->payment_status = $data['payment_status'][$key];
-                    $project_milestone->payment_date = $data['payment_date'][$key];
+                    $project_milestone->payment_date = $data['payment_date'][$key] ?? '';
                     $project_milestone->milestone_comment = $data['milestone_comment'][$key];
                     $project_milestone->save();
                 }
             }
-        } else {
-            foreach ($data['milestone_value'] as $key => $milestone) {
-                //check if data is null
-                if ($data['milestone_value'][$key] != null) {
-
-                    $project_milestone = new ProjectMilestone();
-                    $project_milestone->project_id = $project->id;
-                    $project_milestone->milestone_value = $milestone;
-                    $project_milestone->payment_status = $data['payment_status'][$key];
-                    $project_milestone->payment_date = $data['payment_date'][$key];
-                    $project_milestone->milestone_comment = $data['milestone_comment'][$key];
-                    $project_milestone->save();
-                }
-            }
-        }
+        
 
         if (isset($data['pdf'])) {
             foreach ($data['pdf'] as $key => $pdfFile) {

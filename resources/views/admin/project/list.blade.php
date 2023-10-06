@@ -55,7 +55,6 @@
                                     <th> Sales Manager Email</th>
                                     <th> Customer Name </th>
                                     <th>Phone Number</th>
-                                    <th>Project Type</th>
                                     <th>Project Value</th>
                                     <th>Project Upfront</th>
                                     <th>Currency</th>
@@ -84,9 +83,6 @@
                                         </td>
                                         <td>
                                             {{ $project->client_phone }}
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-info">{{ $project->projectTypes->type }}</span>
                                         </td>
                                         <td>
                                             {{ $project->project_value }}
@@ -146,11 +142,11 @@
                 "aaSorting": [],
                 "columnDefs": [{
                         "orderable": false,
-                        "targets": [12]
+                        "targets": [11]
                     },
                     {
                         "orderable": true,
-                        "targets": [0, 1, 2, 5, 6, 7, 8, 9, 10, 11]
+                        "targets": [0, 1, 2, 5, 6, 7, 8, 9, 10]
                     }
                 ]
             });

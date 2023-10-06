@@ -17,7 +17,7 @@ class AuthController extends Controller
             return view('admin.auth.login');
         }
     }
-    
+
     public function loginCheck(Request $request)
     {
         $request->validate([
@@ -33,7 +33,7 @@ class AuthController extends Controller
             } else if($user->hasRole('SALES_MANAGER') && $user->status == 1){
                 return redirect()->route('sales-manager.dashboard');
             }else if($user->hasRole('ACCOUNT_MANAGER') && $user->status == 1){
-                return redirect()->route('account-manager.profile');
+                return redirect()->route('account-manager.dashboard');
             }else if($user->hasRole('SALES_EXCUETIVE') && $user->status == 1){
                 return redirect()->route('sales-excecutive.dashboard');
             }else{

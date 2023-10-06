@@ -15,7 +15,8 @@
                     <div class="col">
                         <h3 class="page-title">#{{ $project->client_name }}</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('account-manager.projects.index') }}">Project</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('account-manager.projects.index') }}">Project</a>
+                            </li>
                             <li class="breadcrumb-item active">View Project Details</li>
                         </ul>
                     </div>
@@ -40,7 +41,7 @@
                                                 {{ $project->client_name }}
                                             </div>
                                         </li>
-                                       
+
                                         <li>
                                             <div class="title">Client Email:-</div>
                                             <div class="text">
@@ -62,7 +63,8 @@
                                         <li>
                                             <div class="title">Client Website:-</div>
                                             <div class="text">
-                                               <a href="{{ $project->website }}" target="blank"> {{ $project->website }}</a>
+                                                <a href="{{ $project->website }}" target="blank">
+                                                    {{ $project->website }}</a>
                                             </div>
                                         </li>
                                         <li>
@@ -72,10 +74,11 @@
                                             </div>
                                         </li>
                                     </ul>
-                                    <h4 >Documents Details :</h4>   
+                                    <h4>Documents Details :</h4>
                                     @if ($documents->count() > 0)
                                         @foreach ($documents as $key => $document)
-                                            <a href="{{ route('account-manager.projects.document.download',$document->id) }}">
+                                            <a
+                                                href="{{ route('account-manager.projects.document.download', $document->id) }}">
                                                 <i class="fas fa-download"></i></a>&nbsp;&nbsp;
                                         @endforeach
                                     @endif
@@ -91,9 +94,7 @@
                                         <li>
                                             <div class="title">Project Type:-</div>
                                             <div class="text">
-                                                @foreach ($project->projectTypes as $project_type)
-                                                    <span class="badge bg-info">{{ $project_type->name }}</span>
-                                                @endforeach
+                                                <span class="badge bg-info">{{ $project->projectTypes->name }}</span>
                                             </div>
                                         </li>
                                         <li>
@@ -126,7 +127,7 @@
                                                 {{ $project->payment_mode }}
                                             </div>
                                         </li>
-                                       
+
                                         <li class="">
                                             <div class="title  ">Sale Date:-</div>
                                             <div class="text">
@@ -150,38 +151,39 @@
                             </div>
                         </div>
                     </div>
-                    @if($project->projectMilestones->count() > 0)
-                    <div class="row">
-                        <div class="col-md-12 d-flex">
-                            <div class="card profile-box flex-fill">
-                                <div class="card-body">
-                                    <h3 class="card-title">Milestone Details
+                    @if ($project->projectMilestones->count() > 0)
+                        <div class="row">
+                            <div class="col-md-12 d-flex">
+                                <div class="card profile-box flex-fill">
+                                    <div class="card-body">
+                                        <h3 class="card-title">Milestone Details
 
-                                    </h3>
-                                    <table id="myTable" class="dd table table-striped table-bordered" style="width:100%">
-                                        <thead>
-                                            <tr>
-                                                <th>Milestone Name</th>
-                                                <th>Milestone value ({{ $project->currency }})</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($project->projectMilestones as $key => $milestone)
+                                        </h3>
+                                        <table id="myTable" class="dd table table-striped table-bordered"
+                                            style="width:100%">
+                                            <thead>
                                                 <tr>
-                                                    <td>
-                                                        {{ $milestone->milestone_name }}
-                                                    </td>
-                                                    <td>
-                                                        {{ $milestone->milestone_value }}
-                                                    </td>
+                                                    <th>Milestone Name</th>
+                                                    <th>Milestone value ({{ $project->currency }})</th>
                                                 </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($project->projectMilestones as $key => $milestone)
+                                                    <tr>
+                                                        <td>
+                                                            {{ $milestone->milestone_name }}
+                                                        </td>
+                                                        <td>
+                                                            {{ $milestone->milestone_value }}
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                     @endif
                 </div>
 
@@ -191,5 +193,5 @@
         </div>
     @endsection
 
-@push('scripts')
-@endpush
+    @push('scripts')
+    @endpush

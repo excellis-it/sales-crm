@@ -6,9 +6,9 @@
 @endpush
 
 @section('content')
-<section id="loading">
-    <div id="loading-content"></div>
-</section>
+    <section id="loading">
+        <div id="loading-content"></div>
+    </section>
     <div class="page-wrapper">
 
         <div class="content container-fluid">
@@ -247,23 +247,38 @@
                                                             placeholder="Enter Website">
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <label for="inputEnterYourName" class="col-form-label">Payment
-                                                            Type</label>
-                                                        <select name="payment_type" id="payment_type" disabled
-                                                            class="form-control" required data-parsley-trigger="keyup">
-                                                            <option value="Monthly"
-                                                                {{ $project->payment_type == 'Monthly' ? 'selected' : '' }}>
-                                                                Monthly</option>
-                                                            <option value="Milestone"
-                                                                {{ $project->payment_type == 'Milestone' ? 'selected' : '' }}>
-                                                                Milestone</option>
-                                                        </select>
+                                                        <label for="inputEnterYourName" class="col-form-label">Delivery
+                                                            TAT
+                                                            <span style="color: red;">*</span></label>
+                                                        <input type="date" name="delivery_tat" id="delivery_tat"
+                                                            required data-parsley-trigger="keyup" data-parsley-type="date"
+                                                            data-parsley-type-message="Please enter a valid date."
+                                                            class="form-control" value="{{ $project->delivery_tat }}"
+                                                            placeholder="Enter Sale Date">
+                                                    </div>
+                                                    {{-- comment --}}
+                                                    <div class="col-md-6">
+                                                        <label for="inputEnterYourName"
+                                                            class="col-form-label">Comment</label>
+                                                        <textarea name="comment" id="comment" data-parsley-trigger="keyup" class="form-control"
+                                                            placeholder="Enter Comment">{{ $project->comment }}</textarea>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="inputEnterYourName" class="col-form-label">No. of
+                                                            Milestone</label>
+                                                        <input type="number" id="number_of_milestone" value="{{$project->projectMilestones->count()}}" required
+                                                            name="number_of_milestone" class="form-control">
+                                                    </div>
+                                                    <div class="col-md-4" style="margin-top:40px;">
+                                                        <button type="button"
+                                                            class="btn btn-success milestone-print">Process</button>
                                                     </div>
 
-                                                    <input type="hidden"  value="{{ $project->payment_type }}" name="payment_types">
+                                                    <input type="hidden" value="{{ $project->payment_type }}"
+                                                        name="payment_types">
 
 
-                                                    @if ($project->projectMilestones->count() > 0 && $project->payment_type == 'Milestone')
+                                                    @if ($project->projectMilestones->count() > 0)
                                                         <h3 class="mt-4 text-uppercase">Milestone</h3>
                                                         <hr>
                                                         <div class="add-milestone">
@@ -305,145 +320,38 @@
                                                                             </select>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-md-4 pb-3">
+                                                                    {{-- <div class="col-md-4 pb-3">
                                                                         <div style="display: flex">
                                                                             <input type="date" name="payment_date[]"
                                                                                 class="form-control"
                                                                                 value="{{ $milestone->payment_date }}">
                                                                         </div>
-                                                                    </div>
+                                                                    </div> --}}
                                                                     <div class="col-md-4 pb-3">
                                                                         <div style="display: flex">
                                                                             <textarea name="milestone_comment[]" class="form-control" placeholder="Milestone Comment" id=""
                                                                                 cols="3" rows="2">{{ $milestone->milestone_comment }}</textarea>
                                                                         </div>
                                                                     </div>
-                                                                    @if ($key == 0)
-                                                                        <div class="col-md-4">
-                                                                            <button type="button"
-                                                                                class="btn btn-success add good-button"><i
-                                                                                    class="fas fa-plus"></i> Add
-                                                                                Milestone</button>
-                                                                        </div>
-                                                                    @else
+
                                                                     <div class="col-md-4">
-                                                                        @if($milestone->payment_status == 'Paid')                                                                       
-                                                                        <button type="button"
-                                                                        class="btn btn-danger remove" disabled><i
-                                                                            class="fas fa-minus"></i>
-                                                                        Remove</button>                                                         
+                                                                        @if ($milestone->payment_status == 'Paid')
+                                                                            <button type="button"
+                                                                                class="btn btn-danger remove" disabled><i
+                                                                                    class="fas fa-minus"></i>
+                                                                                Remove</button>
                                                                         @else
                                                                             <button type="button"
-                                                                            class="btn btn-danger remove"><i
-                                                                                class="fas fa-minus"></i>
-                                                                            Remove</button>
-                                                                        @endif    
-                                                                        
+                                                                                class="btn btn-danger remove"><i
+                                                                                    class="fas fa-minus"></i>
+                                                                                Remove</button>
+                                                                        @endif
+
                                                                     </div>
-                                                                    @endif
                                                                 </div>
                                                             @endforeach
 
                                                         </div>
-                                                    @else
-                                                        <h3 class="mt-4 text-uppercase" id="monthly_hd">Monthly</h3>
-                                                        <hr>
-
-                                                        <div class="row">
-                                                            <div class="col-md-4 pb-3">
-                                                                <div style="display: flex">
-                                                                    <input placeholder="Start Date" name="start_date"
-                                                                        class="form-control textbox-n"
-                                                                        value="{{ $project->projectTypes->start_date }}"
-                                                                        type="text" onfocus="(this.type='date')"
-                                                                        id="start_date" required readonly/>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4 pb-3">
-                                                                <div style="display: flex">
-                                                                    {{-- <input type="date" id="end_date" name="end_date"
-                                                                        class="form-control" required> --}}
-                                                                    <input placeholder="End Date" name="end_date"
-                                                                        class="form-control textbox-n"
-                                                                        value="{{ $project->projectTypes->end_date }}"
-                                                                        type="text" onfocus="(this.type='date')"
-                                                                        id="end_date" required />
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <button type="button"
-                                                                    class="btn btn-success calculate_date good-button">Process</button>
-                                                            </div>
-                                                            
-                                                            @if ($project->projectMilestones->count() > 0 && $project->payment_type == 'Monthly')
-                                                                @foreach ($project->projectMilestones as $key => $monthly)
-                                                                    <div class="row">
-                                                                        <div class="col-md-4 pb-3">
-                                                                            <div style="display: flex">
-                                                                                <input type="text"
-                                                                                    name="milestone_value[]"
-                                                                                    class="form-control"
-                                                                                    value="{{ $monthly->milestone_value }}"
-                                                                                    placeholder="Milestone value"
-                                                                                    id="" required
-                                                                                    data-parsley-trigger="keyup"
-                                                                                    data-parsley-type="number"
-                                                                                    data-parsley-type-message="Please enter a valid number.">
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-4 pb-3">
-                                                                            <div style="display: flex">
-                                                                                <select name="payment_status[]"
-                                                                                    id="payment_status"
-                                                                                    class="form-control" required
-                                                                                    data-parsley-trigger="keyup">
-                                                                                    <option value="Paid"
-                                                                                        {{ $monthly->payment_status == 'Paid' ? 'selected' : '' }}>
-                                                                                        Paid</option>
-                                                                                    <option value="Due"
-                                                                                        {{ $monthly->payment_status == 'Due' ? 'selected' : '' }}>
-                                                                                        Due</option>
-                                                                                </select>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-4 pb-3">
-                                                                            <div style="display: flex">
-
-                                                                                <input type="date"
-                                                                                    name="payment_date[]"
-                                                                                    class="form-control"
-                                                                                    value="{{ $monthly->payment_date }}"
-                                                                                    required data-parsley-trigger="keyup">
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-4 pb-3">
-                                                                            <div style="display: flex">
-
-                                                                                <textarea name="milestone_comment[]" class="form-control" placeholder="Milestone Comment" id=""
-                                                                                    cols="3" rows="2">{{ $monthly->milestone_comment }}</textarea>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-4">
-                                                                            @if($monthly->payment_status == 'Paid')                                                                       
-                                                                            <button type="button"
-                                                                            class="btn btn-danger remove" disabled><i
-                                                                                class="fas fa-minus"></i>
-                                                                            Remove</button>                                                         
-                                                                            @else
-                                                                                <button type="button"
-                                                                                class="btn btn-danger remove"><i
-                                                                                    class="fas fa-minus"></i>
-                                                                                Remove</button>
-                                                                            @endif    
-                                                                            
-                                                                        </div>
-                                                                    </div>
-                                                                @endforeach
-                                                            @endif
-                                                            <div id="fetch_month">
-                                                            </div>
-                                                        </div>
-
                                                     @endif
 
 
@@ -502,7 +410,7 @@
             successClass: 'has-success'
         };
     </script>
-    
+
     <script>
         // add more functionality for milestone
         $(document).ready(function() {
@@ -527,12 +435,12 @@
                     '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value="" disabled >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
                 html += '</div>';
                 html += '</div>';
-                html += '<div class="col-md-4 pb-3">';
-                html += '<div style="display: flex">';
-                html +=
-                    '<input type="date" name="payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
-                html += '</div>';
-                html += '</div>';
+                // html += '<div class="col-md-4 pb-3">';
+                // html += '<div style="display: flex">';
+                // html +=
+                //     '<input type="date" name="payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
+                // html += '</div>';
+                // html += '</div>';
                 html += '<div class="col-md-4 pb-3">';
                 html += '<div style="display: flex">';
                 html +=
@@ -656,12 +564,12 @@
                         '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value="" disabled >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
                     html += '</div>';
                     html += '</div>';
-                    html += '<div class="col-md-4 pb-3">';
-                    html += '<div style="display: flex">';
-                    html +=
-                        '<input type="date" name="payment_date[]" class="form-control"  id="" required data-parsley-trigger="keyup" >';
-                    html += '</div>';
-                    html += '</div>';
+                    // html += '<div class="col-md-4 pb-3">';
+                    // html += '<div style="display: flex">';
+                    // html +=
+                    //     '<input type="date" name="payment_date[]" class="form-control"  id="" required data-parsley-trigger="keyup" >';
+                    // html += '</div>';
+                    // html += '</div>';
                     html += '<div class="col-md-4 pb-3">';
                     html += '<div style="display: flex">';
                     html +=
@@ -683,6 +591,59 @@
             });
         });
     </script>
+    <script>
+        $('.milestone-print').on('click', function() {
+            var number_of_milestone = $('#number_of_milestone').val();
+            if (number_of_milestone == '') {
+                console.log(number_of_milestone);
+                $('#number_of_milestone').after(
+                    '<span class="error" style="color:red;">Number of milestone is required</span>');
+                return false;
+            }
 
-
+            // show milestone field as per number of milestone
+            for (let index = 1; index <= number_of_milestone; index++) {
+                console.log(number_of_milestone);
+                var html = '';
+                html += '<div class="row">';
+                html += '<div class="col-md-4 pb-3">';
+                html += '<div style="display: flex">';
+                html +=
+                    '<input type="text" name="milestone_name[]" class="form-control" value="" placeholder="Milestone name" id="" required data-parsley-trigger="keyup">';
+                html += '</div>';
+                html += '</div>';
+                html += '<div class="col-md-4 pb-3">';
+                html += '<div style="display: flex">';
+                html +=
+                    '<input type="text" name="milestone_value[]" class="form-control" value="" placeholder="Milestone value" id="" required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number.">';
+                html += '</div>';
+                html += '</div>';
+                html += '<div class="col-md-4 pb-3">';
+                html += '<div style="display: flex">';
+                html +=
+                    '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value="" disabled >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
+                html += '</div>';
+                html += '</div>';
+                // html += '<div class="col-md-4 pb-3">';
+                // html += '<div style="display: flex">';
+                // html +=
+                //     '<input type="date" name="payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
+                // html += '</div>';
+                // html += '</div>';
+                html += '<div class="col-md-4 pb-3">';
+                html += '<div style="display: flex">';
+                html +=
+                    '<textarea name="milestone_comment[]" class="form-control" placeholder="Milestone Comment" id="" cols="3" rows="2" ></textarea>';
+                html += '</div>';
+                html += '</div>';
+                html += '<div class="col-md-4">';
+                html +=
+                    '<button type="button" class="btn btn-danger remove"><i class="fas fa-minus"></i> Remove</button>';
+                html += '</div>';
+                html += '</div>';
+                console.log(html);
+                $('.add-milestone').append(html);
+            }
+        });
+    </script>
 @endpush

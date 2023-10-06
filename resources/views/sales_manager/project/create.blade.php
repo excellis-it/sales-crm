@@ -196,105 +196,36 @@
                                                             placeholder="Enter Website">
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <label for="inputEnterYourName" class="col-form-label">Payment
-                                                            Type</label>
-                                                        <select name="payment_type" id="payment_type"
-                                                            class="form-control" required data-parsley-trigger="keyup">
-                                                            <option value="" disabled selected>Select Payment Type
-                                                            </option>
-                                                            <option value="Monthly">Monthly</option>
-                                                            <option value="Milestone">Milestone</option>
-                                                        </select>
+                                                        <label for="inputEnterYourName" class="col-form-label">Delivery
+                                                            TAT
+                                                            <span style="color: red;">*</span></label>
+                                                        <input type="date" name="delivery_tat" id="delivery_tat" required
+                                                            data-parsley-trigger="keyup" max="{{ date('Y-m-d') }}"
+                                                            class="form-control" value="{{ old('delivery_tat') }}"
+                                                            placeholder="Enter Sale Date">
                                                     </div>
-                                                    <div id="milestone_field" style="display:none;">
+                                                    {{-- comment --}}
+                                                    <div class="col-md-6">
+                                                        <label for="inputEnterYourName" class="col-form-label">Comment</label>
+                                                        <textarea name="comment" id="comment" data-parsley-trigger="keyup" class="form-control"
+                                                            placeholder="Enter Comment">{{ old('comment') }}</textarea>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="inputEnterYourName" class="col-form-label">No. of
+                                                            Milestone</label>
+                                                        <input type="number" id="number_of_milestone" required
+                                                            name="number_of_milestone" class="form-control">
+                                                    </div>
+                                                    <div class="col-md-4" style="margin-top:40px;">
+                                                        <button type="button"
+                                                            class="btn btn-success milestone-print">Process</button>
+                                                    </div>
+                                                    <div id="milestone_field" >
                                                         <h3 class="mt-4 text-uppercase">Milestone</h3>
                                                         <hr>
                                                         {{-- add more functionality for milestone --}}
                                                         <div class="add-milestone">
-
-                                                            <div class="row">
-                                                                <div class="col-md-4 pb-3">
-                                                                    <div style="display: flex">
-                                                                        <input type="text" name="milestone_name[]"
-                                                                            class="form-control"
-                                                                            data-parsley-trigger="keyup"
-                                                                            placeholder="Milestone name" id="">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-4 pb-3">
-                                                                    <div style="display: flex">
-                                                                        <input type="text" name="milestone_value[]"
-                                                                            class="form-control"
-                                                                            placeholder="Milestone value"
-                                                                            data-parsley-trigger="keyup"
-                                                                            data-parsley-type="number"
-                                                                            data-parsley-type-message="Please enter a valid number."
-                                                                            id="">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-4 pb-3">
-                                                                    <div style="display: flex">
-                                                                        <select name="payment_status[]" id="payment"
-                                                                            class="form-control"
-                                                                            data-parsley-trigger="keyup">
-
-                                                                            <option value="Paid">Paid</option>
-                                                                            <option value="Due" selected>Due</option>
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-4 pb-3">
-                                                                    <div style="display: flex">
-                                                                        <input type="date" name="payment_date[]"
-                                                                            class="form-control">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-4 pb-3">
-                                                                    <div style="display: flex">
-                                                                        <textarea name="milestone_comment[]" class="form-control" placeholder="Milestone Comment" id=""
-                                                                            cols="3" rows="2"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-4">
-                                                                    <button type="button"
-                                                                        class="btn btn-success add good-button"><i
-                                                                            class="fas fa-plus"></i> Add Milestone</button>
-                                                                </div>
-                                                            </div>
-                                                            {{-- </br> --}}
                                                         </div>
-                                                    </div>
-                                                    <div id="monthly_field" style="display:none;">
-                                                        <h3 class="mt-4 text-uppercase">Monthly</h3>
-                                                        <hr>
-                                                        {{-- add more functionality for milestone --}}
-
-                                                        <div class="row">
-                                                            <div class="col-md-4 pb-3">
-                                                                <div style="display: flex">
-                                                                    <input placeholder="Start Date" name="start_date"
-                                                                        class="form-control textbox-n" type="text"
-                                                                        onfocus="(this.type='date')" id="start_date"
-                                                                        required />
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4 pb-3">
-                                                                <div style="display: flex">
-                                                                    {{-- <input type="date" id="end_date" name="end_date"
-                                                                        class="form-control" required> --}}
-                                                                    <input placeholder="End Date" name="end_date"
-                                                                        class="form-control textbox-n" type="text"
-                                                                        onfocus="(this.type='date')" id="end_date"
-                                                                        required />
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <button type="button"
-                                                                    class="btn btn-success calculate_date good-button">Process</button>
-                                                            </div>
-                                                        </div>
-                                                        {{-- </br> --}}
-                                                        <div id="fetch_month"></div>
                                                     </div>
 
                                                     <h3 class="mt-4 text-uppercase">Upload PDF</h3>
@@ -377,12 +308,12 @@
                 '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value="" disabled >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
             html += '</div>';
             html += '</div>';
-            html += '<div class="col-md-4 pb-3">';
-            html += '<div style="display: flex">';
-            html +=
-                '<input type="date" name="payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
-            html += '</div>';
-            html += '</div>';
+            // html += '<div class="col-md-4 pb-3">';
+            // html += '<div style="display: flex">';
+            // html +=
+            //     '<input type="date" name="payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
+            // html += '</div>';
+            // html += '</div>';
             html += '<div class="col-md-4 pb-3">';
             html += '<div style="display: flex">';
             html +=
@@ -544,12 +475,12 @@
                     '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value="" disabled >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
                 html += '</div>';
                 html += '</div>';
-                html += '<div class="col-md-4 pb-3">';
-                html += '<div style="display: flex">';
-                html +=
-                    '<input type="date" name="payment_date[]" class="form-control"  id="" required data-parsley-trigger="keyup" >';
-                html += '</div>';
-                html += '</div>';
+                // html += '<div class="col-md-4 pb-3">';
+                // html += '<div style="display: flex">';
+                // html +=
+                //     '<input type="date" name="payment_date[]" class="form-control"  id="" required data-parsley-trigger="keyup" >';
+                // html += '</div>';
+                // html += '</div>';
                 html += '<div class="col-md-4 pb-3">';
                 html += '<div style="display: flex">';
                 html +=
@@ -569,6 +500,61 @@
             $('#loading-content').removeClass('loading-content');
 
         });
+    });
+</script>
+<script>
+    $('.milestone-print').on('click', function() {
+        var number_of_milestone = $('#number_of_milestone').val();
+        if (number_of_milestone == '') {
+            console.log(number_of_milestone);
+            $('#number_of_milestone').after(
+                '<span class="error" style="color:red;">Number of milestone is required</span>');
+            return false;
+        }
+
+        // show milestone field as per number of milestone
+        for (let index = 1; index <= number_of_milestone; index++) {
+            console.log(number_of_milestone);
+            var html = '';
+            html += '<div class="row">';
+            html += '<div class="col-md-4 pb-3">';
+            html += '<div style="display: flex">';
+            html +=
+                '<input type="text" name="milestone_name[]" class="form-control" value="" placeholder="Milestone name" id="" required data-parsley-trigger="keyup">';
+            html += '</div>';
+            html += '</div>';
+            html += '<div class="col-md-4 pb-3">';
+            html += '<div style="display: flex">';
+            html +=
+                '<input type="text" name="milestone_value[]" class="form-control" value="" placeholder="Milestone value" id="" required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number.">';
+            html += '</div>';
+            html += '</div>';
+            html += '<div class="col-md-4 pb-3">';
+            html += '<div style="display: flex">';
+            html +=
+                '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value="" disabled >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
+            html += '</div>';
+            html += '</div>';
+            // html += '<div class="col-md-4 pb-3">';
+            // html += '<div style="display: flex">';
+            // html +=
+            //     '<input type="date" name="payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
+            // html += '</div>';
+            // html += '</div>';
+            html += '<div class="col-md-4 pb-3">';
+            html += '<div style="display: flex">';
+            html +=
+                '<textarea name="milestone_comment[]" class="form-control" placeholder="Milestone Comment" id="" cols="3" rows="2" ></textarea>';
+            html += '</div>';
+            html += '</div>';
+            html += '<div class="col-md-4">';
+            html +=
+                '<button type="button" class="btn btn-danger remove"><i class="fas fa-minus"></i> Remove</button>';
+            html += '</div>';
+            html += '</div>';
+            console.log(html);
+            $('.add-milestone').append(html);
+        }
     });
 </script>
 @endpush
