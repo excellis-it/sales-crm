@@ -263,7 +263,7 @@
 
 
                                                     @if ($project->projectMilestones->count() > 0)
-                                                        <h3 class="mt-4 text-uppercase">Milestone</h3>
+                                                         <h3 class="mt-4 text-uppercase">Milestone</h3>
                                                         <hr>
                                                         <div class="add-milestone">
                                                             @foreach ($project->projectMilestones as $key => $milestone)
