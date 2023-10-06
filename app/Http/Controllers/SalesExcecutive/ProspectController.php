@@ -24,7 +24,7 @@ class ProspectController extends Controller
         } else {
             $prospects = Prospect::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->get();
         }
-        
+
         return view('sales_excecutive.prospect.list')->with(compact('prospects'));
     }
 
@@ -35,7 +35,7 @@ class ProspectController extends Controller
      */
     public function create()
     {
-       
+
         return view('sales_excecutive.prospect.create');
     }
 
@@ -67,6 +67,8 @@ class ProspectController extends Controller
         $prospect->price_quote = $data['price_quote'];
         $prospect->offered_for = $data['offered_for'];
         $prospect->transfer_token_by = $data['transfer_token_by'];
+        // date add in created_at and updated_at
+        $prospect->created_at = date('Y-m-d H:i:s', strtotime($data['date']));
         $prospect->save();
 
         return redirect()->route('prospects.index')->with('message', 'Prospect created successfully.');
@@ -131,6 +133,7 @@ class ProspectController extends Controller
         $prospect->price_quote = $data['price_quote'];
         $prospect->offered_for = $data['offered_for'];
         $prospect->transfer_token_by = $data['transfer_token_by'];
+        $prospect->created_at = date('Y-m-d H:i:s', strtotime($data['date']));
         $prospect->save();
         return redirect()->route('prospects.index')->with('message', 'Prospect updated successfully.');
     }
