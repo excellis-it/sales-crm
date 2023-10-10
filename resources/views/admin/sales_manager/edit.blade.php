@@ -33,7 +33,7 @@
                             <div class="col-xl-12 mx-auto">
                                 <h6 class="mb-0 text-uppercase">Edit A Sales manager</h6>
                                 <hr>
-                                <div class="card border-0 border-4">
+                                <div class="border-0 border-4">
                                     <div class="card-body">
                                         <form action="{{ route('sales_managers.update', $sales_manager->id) }}"
                                             method="POST" enctype="multipart/form-data">

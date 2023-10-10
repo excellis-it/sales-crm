@@ -15,7 +15,8 @@
                     <div class="col">
                         <h3 class="page-title">Create</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('sales-manager.sales-excecutive.index') }}">Sales Excecutives</a>
+                            <li class="breadcrumb-item"><a href="{{ route('sales-manager.sales-excecutive.index') }}">Sales
+                                    Excecutives</a>
                             </li>
                             <li class="breadcrumb-item active">Create Sales Excecutive</li>
                         </ul>
@@ -34,7 +35,7 @@
                             <div class="col-xl-12 mx-auto">
                                 <h6 class="mb-0 text-uppercase">Create a sales excecutive</h6>
                                 <hr>
-                                <div class="card border-0 border-4">
+                                <div class="border-0 border-4">
                                     <div class="card-body">
                                         <form action="{{ route('sales-manager.sales-excecutive.store') }}" method="post"
                                             enctype="multipart/form-data">
@@ -53,7 +54,8 @@
                                                         @endif
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <label for="inputEnterYourName" class="col-form-label"> Employee Id </label>
+                                                        <label for="inputEnterYourName" class="col-form-label"> Employee Id
+                                                        </label>
                                                         <input type="text" name="employee_id" id=""
                                                             class="form-control" value="{{ old('employee_id') }}"
                                                             placeholder="Enter Employee Id">
@@ -63,10 +65,11 @@
                                                         @endif
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <label for="inputEnterYourName" class="col-form-label"> Date Of Joining </label>
-                                                        <input type="date" name="date_of_joining" id="" max="{{ date('Y-m-d') }}"
-                                                            class="form-control" value="{{ old('date_of_joining') }}"
-                                                            >
+                                                        <label for="inputEnterYourName" class="col-form-label"> Date Of
+                                                            Joining </label>
+                                                        <input type="date" name="date_of_joining" id=""
+                                                            max="{{ date('Y-m-d') }}" class="form-control"
+                                                            value="{{ old('date_of_joining') }}">
                                                         @if ($errors->has('date_of_joining'))
                                                             <div class="error" style="color:red;">
                                                                 {{ $errors->first('date_of_joining') }}</div>
@@ -131,7 +134,8 @@
                                                         @endif
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <label for="inputEnterYourName" class="col-form-label"> Profile</label>
+                                                        <label for="inputEnterYourName" class="col-form-label">
+                                                            Profile</label>
                                                         <input type="file" name="profile_picture" id=""
                                                             class="form-control" value="{{ old('profile_picture') }}">
                                                         @if ($errors->has('profile_picture'))
@@ -161,9 +165,9 @@
 @endsection
 
 @push('scripts')
-<script>
-    $(document).ready(function() {
-        $('.select2').select2();
-    });
-</script>
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2();
+        });
+    </script>
 @endpush

@@ -13,7 +13,7 @@
         <a id="toggle_btn" href="javascript:void(0);">
             <span class="bar-icon">
                 <span></span>
-                <span></span>   
+                <span></span>
                 <span></span>
             </span>
         </a>
@@ -40,9 +40,6 @@
                 <div class="dropdown-menu">
                     <a class="dropdown-item" href="{{ route('sales-excecutive.dashboard') }}">My Dashboard</a>
                     <a class="dropdown-item" href="{{ route('sales-excecutive.profile') }}">My Profile</a>
-                    <a class="dropdown-item" href="{{ route('prospects.index') }}">Prospect List</a>
-                    <a class="dropdown-item" href="{{ route('sales-excecutive.password') }}">Change Password</a>
-                    <a class="dropdown-item" href="{{ route('sales-excecutive.logout') }}">Logout</a>
                 </div>
             </li>
         </ul>

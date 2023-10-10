@@ -33,12 +33,12 @@
                             <div class="col-xl-12 mx-auto">
                                 <h3 class="mb-0 text-uppercase">Edit A Prospect</h3>
                                 <hr>
-                                <div class="card border-0 border-4">
+                                <div class="border-0 border-4">
                                     <div class="card-body">
                                         <form action="{{ route('admin.prospects.update', $prospect->id) }}"
                                             method="POST" enctype="multipart/form-data">
                                             @method('PUT')
-                                            @csrf   
+                                            @csrf
                                             <div class="border p-4 rounded">
                                                 <div class="row">
                                                     <div class="col-md-6">
@@ -68,7 +68,7 @@
                                                     <div class="col-md-6">
                                                         <label for="inputEnterYourName" class="col-form-label">Client Email
                                                             <span style="color: red;">*</span></label>
-                                                        <input type="text" name="client_email" id="client_email" required data-parsley-trigger="keyup" data-parsley-type="email" data-parsley-type-message="Please enter a valid email address." 
+                                                        <input type="text" name="client_email" id="client_email" required data-parsley-trigger="keyup" data-parsley-type="email" data-parsley-type-message="Please enter a valid email address."
                                                             class="form-control" value="{{ $prospect->client_email }}"
                                                             placeholder="Enter Client Email">
                                                     </div>
@@ -84,11 +84,11 @@
                                                     <div class="col-md-6">
                                                         <label for="inputEnterYourName" class="col-form-label">Business
                                                             Address <span style="color: red;">*</span></label>
-                                                        <input type="text" name="business_address" id="business_address" required data-parsley-trigger="keyup" 
+                                                        <input type="text" name="business_address" id="business_address" required data-parsley-trigger="keyup"
                                                             class="form-control" value="{{ $prospect->business_address }}"
                                                             placeholder="Enter Address">
                                                     </div>
-                                                    
+
                                                      {{-- website --}}
                                                      <div class="col-md-6">
                                                         <label for="inputEnterYourName" class="col-form-label">Website Link</label>
@@ -127,36 +127,36 @@
                                                     {{-- transfer_token_by --}}
                                                     <div class="col-md-6">
                                                         <label for="inputEnterYourName" class="col-form-label">Transfer Token By</label>
-                                                        <input type="text" name="transfer_token_by" id="transfer_token_by" 
+                                                        <input type="text" name="transfer_token_by" id="transfer_token_by"
                                                             class="form-control"  value="{{ $prospect->transfer_token_by }}"
                                                             placeholder="Transfer Token By">
                                                     </div>
                                                     {{-- followup_date --}}
                                                     <div class="col-md-6">
                                                         <label for="inputEnterYourName" class="col-form-label">Followup Date</label>
-                                                        <input type="date" name="followup_date" id="followup_date" 
+                                                        <input type="date" name="followup_date" id="followup_date"
                                                             class="form-control" value="{{ $prospect->followup_date }}"
                                                             placeholder="Enter Followup Date">
                                                     </div>
                                                     {{-- followup_time --}}
                                                     <div class="col-md-6">
                                                         <label for="inputEnterYourName" class="col-form-label">Followup Time</label>
-                                                        <input type="time" name="followup_time" id="followup_time" 
+                                                        <input type="time" name="followup_time" id="followup_time"
                                                             class="form-control" value="{{ $prospect->followup_time }}"
                                                             placeholder="Enter Followup Time">
                                                     </div>
                                                     {{-- next_followup_date --}}
                                                     <div class="col-md-6">
                                                         <label for="inputEnterYourName" class="col-form-label">Next Followup Date</label>
-                                                        <input type="date" name="next_followup_date" id="next_followup_date" 
+                                                        <input type="date" name="next_followup_date" id="next_followup_date"
                                                             class="form-control"  value="{{ $prospect->next_followup_date }}"
                                                             placeholder="Enter Next Followup Date">
                                                     </div>
                                                     {{-- comments --}}
                                                     <div class="col-md-6">
                                                         <label for="inputEnterYourName" class="col-form-label">Comments</label>
-                                                        <textarea name="comments" id="comments" cols="30" rows="10" 
-                                                            class="form-control" 
+                                                        <textarea name="comments" id="comments" cols="30" rows="10"
+                                                            class="form-control"
                                                             placeholder="Enter Comments"> {{ $prospect['comments'] }} </textarea>
                                                     </div>
                                                     <div class="row" style="margin-top: 20px; float: left;">

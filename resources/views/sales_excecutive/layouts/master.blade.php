@@ -38,7 +38,7 @@
 
     <!--end header-->
     <!--sidebar-wrapper-->
-    {{-- @include('sales_excecutive.includes.sidebar') --}}
+    @include('sales_excecutive.includes.sidebar')
     <!--end sidebar-wrapper-->
 
     <!--page-wrapper-->

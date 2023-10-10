@@ -36,7 +36,7 @@
                             <div class="col-xl-12 mx-auto">
                                 <h3 class="mb-0 text-uppercase">Create A Project</h3>
                                 <hr>
-                                <div class="card border-0 border-4">
+                                <div class="border-0 border-4">
                                     <div class="card-body">
                                         <form action="{{ route('sales-projects.store') }}" method="post"
                                             data-parsley-validate="" enctype="multipart/form-data">
@@ -233,7 +233,7 @@
                                                     <div class="col-md-6">
                                                         <label for="inputEnterYourName" class="col-form-label">No. of
                                                             Milestone</label>
-                                                        <input type="number" id="number_of_milestone" required 
+                                                        <input type="number" id="number_of_milestone" required
                                                             name="number_of_milestone" class="form-control">
                                                     </div>
                                                     <div class="col-md-4" style="margin-top:40px;">

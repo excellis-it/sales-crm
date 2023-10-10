@@ -34,7 +34,7 @@
                             <div class="col-xl-12 mx-auto">
                                 <h6 class="mb-0 text-uppercase">Create a sales excecutive</h6>
                                 <hr>
-                                <div class="card border-0 border-4">
+                                <div class="border-0 border-4">
                                     <div class="card-body">
                                         <form action="{{ route('sales-excecutive.store') }}" method="post"
                                             enctype="multipart/form-data">
@@ -58,7 +58,7 @@
                                                     <div class="col-md-6">
                                                         <label for="inputEnterYourName" class="col-form-label"> Name <span
                                                                 style="color: red;">*</span></label>
-                                                        <input type="text" name="name" id="" 
+                                                        <input type="text" name="name" id=""
                                                             class="form-control " value="{{ old('name') }}"
                                                             placeholder="Enter Sales Excecutive Name">
                                                         @if ($errors->has('name'))

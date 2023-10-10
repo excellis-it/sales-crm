@@ -34,7 +34,7 @@
                             <div class="col-xl-12 mx-auto">
                                 <h6 class="mb-0 text-uppercase">Create an account manager</h6>
                                 <hr>
-                                <div class="card border-0 border-4">
+                                <div class="border-0 border-4">
                                     <div class="card-body">
                                         <form action="{{ route('account_managers.store') }}" method="post"
                                             enctype="multipart/form-data">

@@ -33,7 +33,7 @@
                             <div class="col-xl-12 mx-auto">
                                 <h3 class="mb-0 text-uppercase">Create A Prospect</h3>
                                 <hr>
-                                <div class="card border-0 border-4">
+                                <div class="border-0 border-4">
                                     <div class="card-body">
                                         <form action="{{ route('prospects.store') }}" method="post" data-parsley-validate=""
                                             enctype="multipart/form-data">

@@ -37,7 +37,7 @@
                 <div class="col-xl-12 mx-auto" id="goal-create">
                     <h6 class="mb-0 text-uppercase">Goals Create</h6>
                     <hr>
-                    <div class="card border-0 border-4">
+                    <div class="border-0 border-4">
                         <div class="card-body">
                             <form action="{{ route('goals.store') }}" method="post" id="createGoals"
                                 enctype="multipart/form-data">
