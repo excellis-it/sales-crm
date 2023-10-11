@@ -45,8 +45,9 @@ class ProjectController extends Controller
      */
     public function create()
     {
+        $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->orderBy('id', 'desc')->get();
         $sales_managers = User::Role('SALES_MANAGER')->orderBy('name', 'DESC')->where('status', 1)->get();
-        return view('admin.project.create')->with(compact('sales_managers'));
+        return view('admin.project.create')->with(compact('sales_managers','users'));
     }
 
     /**
@@ -92,7 +93,7 @@ class ProjectController extends Controller
         }
         $project_type->save();
 
-
+        if (isset($data['milestone_name'])) {
             foreach ($data['milestone_name'] as $key => $milestone) {
                 //check if data is null
                 if ($data['milestone_name'][$key] != null) {
@@ -106,6 +107,8 @@ class ProjectController extends Controller
                     $project_milestone->save();
                 }
             }
+        }
+
 
         if (isset($data['pdf'])) {
             foreach ($data['pdf'] as $key => $pdfFile) {
@@ -153,9 +156,10 @@ class ProjectController extends Controller
     public function edit($id)
     {
         try {
+            $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->orderBy('id', 'desc')->get();
             $sales_managers = User::Role('SALES_MANAGER')->get();
             $project = Project::find($id);
-            return view('admin.project.edit')->with(compact('project', 'sales_managers'));
+            return view('admin.project.edit')->with(compact('project', 'sales_managers','users'));
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }
@@ -213,6 +217,7 @@ class ProjectController extends Controller
         $previous_milestone_value = ProjectMilestone::where('project_id', $id)->sum('milestone_value');
 
         ProjectMilestone::where('project_id', $id)->delete();
+        if (isset($data['milestone_name'])) {
             foreach ($data['milestone_name'] as $key => $milestone) {
                 //check if data is null
                 if ($data['milestone_name'][$key] != null) {
@@ -226,7 +231,9 @@ class ProjectController extends Controller
                     $project_milestone->save();
                 }
             }
-        
+        }
+
+
 
         if (isset($data['pdf'])) {
             foreach ($data['pdf'] as $key => $pdfFile) {

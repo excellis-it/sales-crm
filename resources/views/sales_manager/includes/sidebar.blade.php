@@ -21,20 +21,24 @@
 
                     </ul>
                 </li>
-
-                {{-- My project --}}
-                <li class="{{ Request::is('sales-manager/projects*') ? 'active' : ' ' }}">
-                    <a href="{{ route('projects.index') }}"><i class="la la-briefcase"></i> <span>My Projects</span></a>
-                </li>
-
-                {{-- My prospect --}}
-                <li class="{{ Request::is('sales-manager/prospects*') ? 'active' : ' ' }}">
-                    <a href="{{ route('sales-manager.prospects.index') }}"><i class="la la-user"></i> <span>My
-                            Prospects</span></a>
+                {{-- My sales excecutive --}}
                 <li class="{{ Request::is('sales-manager/sales-excecutive*') ? 'active' : ' ' }}">
                     <a href="{{ route('sales-manager.sales-excecutive.index') }}"><i class="la la-user-tie"></i> <span>
                             Sales Excecutive</span></a>
                 </li>
+                {{-- My project --}}
+                <li class="{{ Request::is('sales-manager/projects*') ? 'active' : ' ' }}">
+                    <a href="{{ route('projects.index') }}"><i class="la la-briefcase"></i> <span>My
+                            Projects</span></a>
+                </li>
+
+                {{-- My prospect --}}
+                <li class="{{ Request::is('sales-manager/prospects*') ? 'active' : ' ' }}">
+                    <a href="{{ route('sales-manager.prospects.index') }}"><i class="la la-book-reader"></i> <span>My
+                            Prospects</span></a>
+                </li>
+
+
 
                 {{-- <li class="{{ Request::is('sales-manager/members*') ? 'active' : ' ' }}">
                     <a href="{{ route('user.index') }}"><i class="la la-users"></i> <span>Members</span></a>

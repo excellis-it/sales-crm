@@ -14,6 +14,19 @@
     <section id="loading">
         <div id="loading-content"></div>
     </section>
+    <div class="modal modal_view fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Business Details</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="show-details">
+                    @include('admin.prospect.show-details')
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="page-wrapper">
 
         <div class="content container-fluid">
@@ -27,10 +40,7 @@
                             <li class="breadcrumb-item active">List</li>
                         </ul>
                     </div>
-                    <div class="col-auto float-end ms-auto">
-                        <a href="{{ route('admin.prospects.create') }}" class="btn add-btn"><i class="fa fa-plus"></i> Add a
-                            Prospect</a>
-                    </div>
+
                 </div>
             </div>
 
@@ -41,101 +51,50 @@
                             <div class="col-md-6">
                                 <h4 class="mb-0">Prospects Details</h4>
                             </div>
-
+                            <div class="col-md-6 text-end">
+                                <a href="{{ route('admin.prospects.create') }}" class="btn px-5 submit-btn"><i class="fa fa-plus"></i> Add a
+                                    Prospect</a>
+                            </div>
                         </div>
                     </div>
 
                     <hr />
-                    <div class="table-responsive">
-                        <table id="myTable" class="dd table table-striped table-bordered" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        Prospect By
-                                    </th>
-                                    <th>Date</th>
-                                    <th>Business Name</th>
-                                    <th>Business Address</th>
-                                    <th>Transfer Taken By</th>
-                                    <th>Website Link</th>
-                                    <th>Offered For</th>
-                                    <th>Price Quoted</th>
-                                    <th>Contact Person</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
-                                    <th>Status</th>
-                                    <th>Followup Date</th>
-                                    <th>
-                                        Followup Time
-                                    </th>
-                                    <th>Next Followup Date</th>
-                                    <th>Comments</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($prospects as $key => $prospect)
-                                    <tr>
-                                        <td>
-                                           <a href="{{ route('sales-excecutive.index',['id'=>$prospect->user->id]) }}">{{ $prospect->user->name }}</a> 
-                                        </td>
-                                        <td>
-                                            {{ date('d M, Y', strtotime($prospect->created_at)) }}
-                                        </td>
-                                        <td>
-                                            {{ $prospect->business_name }}
-                                        </td>
-                                        <td>
-                                            {{ $prospect->business_address }}
-                                        </td>
-                                        <td>
-                                            {{ $prospect->transfer_token_by }}
-                                        </td>
-                                        <td>
-                                            {{ $prospect->website }}
-                                        </td>
-                                        <td>
-                                            {{ $prospect->offered_for }}
-                                        </td>
-                                        <td>
-                                            {{ $prospect->price_quote }}
-                                        </td>
-                                        <td>
-                                            {{ $prospect->client_name }}
-                                        </td>
-                                        <td>
-                                            {{ $prospect->client_email }}
-                                        </td>
-                                        <td>
-                                            {{ $prospect->client_phone }}
-                                        </td>
-                                        <td>
-                                            {{ $prospect->status }}
-                                        </td>
-                                        <td>
-                                            {{ date('d M, Y', strtotime($prospect->followup_date)) }}
-                                        </td>
-                                        <td>
-                                            {{($prospect->followup_time) ? date('h:i A', strtotime($prospect->followup_time)) : ''}}
-                                        </td>
-                                        <td>
-                                            {{ date('d M, Y', strtotime($prospect->next_followup_date)) }}
-                                        </td>
-                                        <td>
-                                            {{ $prospect->comments }}
-                                        </td>
-                                        <td>
-                                            <a title="Edit Prospect" data-route=""
-                                                href="{{ route('admin.prospects.edit', $prospect->id) }}"><i
-                                                    class="fas fa-edit"></i></a> &nbsp;&nbsp;
-                                                    <a title="Delete Account manager"
-                                                    data-route="{{ route('admin.prospects.delete', $prospect->id) }}"
-                                                    href="javascipt:void(0);" id="delete"><i class="fas fa-trash"></i></a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                    <div class="card-title">
+                        <div class="row filter-gap align-items-center">
+                            <div class="col">
+                                <a href="javascript:void(0);" data-value="All" class="desin-filter active-filter">
+                                    <p>All</p>
+                                    <h5>{{ count($prospects) }}</h5>
+                                </a>
+                            </div>
+                            <div class="col">
+                                <a href="javascript:void(0);" data-value="Win" class="desin-filter">
+                                    <p>On Board</p>
+                                    <h5>{{ $count['win'] }}</h5>
+                                </a>
+                            </div>
+                            <div class="col">
+                                <a href="javascript:void(0);" data-value="Follow Up" class="desin-filter">
+                                    <p>Follow Up</p>
+                                    <h5>{{ $count['follow_up'] }}</h5>
+                                </a>
+                            </div>
+                            <div class="col">
+                                <a href="javascript:void(0);" data-value="Sent Proposal" class="desin-filter">
+                                    <p>Sent Proposal</p>
+                                    <h5>{{ $count['sent_proposal'] }}</h5>
+                                </a>
+                            </div>
+                            <div class="col">
+                                <a href="javascript:void(0);" data-value="Close" class="desin-filter">
+                                    <p>Cancel</p>
+                                    <h5>{{ $count['close'] }}</h5>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive" id="show-prospect">
+                        @include('admin.prospect.table')
                     </div>
                 </div>
             </div>
@@ -153,11 +112,11 @@
                 "aaSorting": [],
                 "columnDefs": [{
                         "orderable": false,
-                        "targets": [14]
+                        "targets": [11]
                     },
                     {
                         "orderable": true,
-                        "targets": [0, 1, 2, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+                        "targets": [0, 1, 2, 5, 6, 7, 8, 9, 10]
                     }
                 ]
             });
@@ -205,4 +164,49 @@
             });
         });
     </script> --}}
+    <script>
+        $(document).on('click', '.view-details-btn', function(e) {
+            e.preventDefault();
+            var route = $(this).data('route');
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: route,
+                success: function(resp) {
+                    // console.log(resp.view);
+                    $('#show-details').html(resp.view);
+                }
+            });
+        });
+    </script>
+    <script>
+        $(document).on('click', '.desin-filter', function(e) {
+            var status = $(this).data('value');
+            //remove active class from all
+            $('.desin-filter').removeClass('active-filter');
+            //add active class to clicked
+            $(this).addClass('active-filter');
+            var url = "{{ route('admin.prospects.filter') }}";
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: url,
+                data: {
+                    'status': status,
+                },
+                success: function(resp) {
+                    $('#show-prospect').html(resp.view);
+
+                }
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+           //how to place holder in "jquery datatable" search box
+            $('#myTable_filter input').attr("placeholder", "Search");
+        });
+
+
+    </script>
 @endpush

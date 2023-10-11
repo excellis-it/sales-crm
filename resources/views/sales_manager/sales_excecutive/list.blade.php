@@ -27,10 +27,7 @@
                             <li class="breadcrumb-item active">List</li>
                         </ul>
                     </div>
-                    <div class="col-auto float-end ms-auto">
-                        <a href="{{ route('sales-manager.sales-excecutive.create') }}" class="btn add-btn"><i class="fa fa-plus"></i> Add a
-                            sales excecutive</a>
-                    </div>
+
                 </div>
             </div>
 
@@ -41,7 +38,10 @@
                             <div class="col-md-6">
                                 <h4 class="mb-0">Sales Excecutives Details</h4>
                             </div>
-
+                            <div class="col-md-6 text-end">
+                                <a href="{{ route('sales-manager.sales-excecutive.create') }}" class="btn px-5 submit-btn"><i class="fa fa-plus"></i> Add a
+                                    sales excecutive</a>
+                            </div>
                         </div>
                     </div>
 
@@ -159,5 +159,13 @@
                 }
             });
         });
+    </script>
+    <script>
+        $(document).ready(function() {
+           //how to place holder in "jquery datatable" search box
+            $('#myTable_filter input').attr("placeholder", "Search");
+        });
+
+
     </script>
 @endpush

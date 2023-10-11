@@ -97,7 +97,7 @@
 
                                                             <div class="col-6">
                                                                 <button type="submit"
-                                                                    class="btn btn-primary">Update</button>
+                                                                    class="btn px-5 submit-btn">Update</button>
                                                             </div>
 
                                                         </form>

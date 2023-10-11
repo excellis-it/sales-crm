@@ -31,8 +31,8 @@
                     <div class="card-title">
                         <div class="row">
                             <div class="col-xl-12 mx-auto">
-                                <h3 class="mb-0 text-uppercase">Create A Project</h3>
-                                <hr>
+                                {{-- <h3 class="mb-0 text-uppercase">Create A Project</h3>
+                                <hr> --}}
                                 <div class="border-0 border-4">
                                     <div class="card-body">
                                         <form action="{{ route('projects.store') }}" method="post"
@@ -41,7 +41,7 @@
                                             <div class="border p-4 rounded">
                                                 <div class="row">
 
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label"> Client Name
                                                             <span style="color: red;">*</span></label>
                                                         <input type="text" name="client_name" id="client_name" required
@@ -49,7 +49,7 @@
                                                             value="{{ old('client_name') }}"
                                                             placeholder="Enter Client Name">
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">Business Name
                                                             <span style="color: red;">*</span></label>
                                                         <input type="text" name="business_name" id="business_name"
@@ -57,7 +57,7 @@
                                                             value="{{ old('business_name') }}"
                                                             placeholder="Enter Business Name">
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">Client Email
                                                             <span style="color: red;">*</span></label>
                                                         <input type="text" name="client_email" id="client_email" required
@@ -66,7 +66,7 @@
                                                             class="form-control" value="{{ old('client_email') }}"
                                                             placeholder="Enter Client Email">
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">Client Phone
                                                             <span style="color: red;">*</span></label>
                                                         <input type="text" name="client_phone" id="client_phone" required
@@ -77,7 +77,7 @@
                                                     </div>
 
                                                     {{-- clinent address --}}
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">Client
                                                             Address <span style="color: red;">*</span></label>
                                                         <input type="text" name="client_address" id="client_address"
@@ -91,7 +91,7 @@
                                                     <h3 class="mt-4 text-uppercase">Project Details</h3>
                                                     <hr>
                                                     {{-- project type in select2 box --}}
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">Project
                                                             Type <span style="color: red;">*</span></label>
                                                         <select name="project_type" id="project_type" required
@@ -108,11 +108,11 @@
                                                             <option value="Other">Other</option>
                                                         </select>
                                                     </div>
-                                                    <div id="other-value" class="col-md-6">
+                                                    <div id="other-value" class="col-md-4 mb-3">
 
                                                     </div>
                                                     {{-- Project value --}}
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">Project
                                                             Value <span style="color: red;">*</span></label>
                                                         <input type="text" name="project_value" id="project_value"
@@ -122,7 +122,7 @@
                                                             class="form-control" placeholder="Enter Project Value">
                                                     </div>
                                                     {{-- Project project_upfront --}}
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">Project
                                                             Upfront <span style="color: red;">*</span></label>
                                                         <input type="text" name="project_upfront" id="project_upfront"
@@ -133,7 +133,7 @@
                                                             placeholder="Enter Project Upfront">
                                                     </div>
                                                     {{-- currency select box --}}
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">Currency
                                                             <span style="color: red;">*</span></label>
                                                         <select name="currency" id="currency" class="form-control"
@@ -149,7 +149,7 @@
                                                     </div>
 
                                                     {{-- Project payment_mode --}}
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">Project
                                                             Payment Mode <span style="color: red;">*</span></label>
                                                         <input type="text" name="payment_mode" required
@@ -158,25 +158,39 @@
                                                             placeholder="Enter Project Payment Mode">
                                                     </div>
                                                     {{-- Project opener --}}
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">Project
                                                             Opener <span style="color: red;">*</span></label>
-                                                        <input type="text" name="project_opener" id="project_opener"
-                                                            required data-parsley-trigger="keyup" class="form-control"
-                                                            value="{{ old('project_opener') }}"
-                                                            placeholder="Enter Project Opener">
+                                                        <select name="project_opener" id="project_opener" required
+                                                            class="form-control select2" required>
+                                                            <option value="" disabled>Select Project
+                                                                Opener
+                                                            </option>
+                                                            @foreach ($users as $user)
+                                                                <option value="{{ $user->id }}">{{ $user->name }}
+                                                                    ({{ $user->email }})
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
                                                     </div>
                                                     {{-- Project closer --}}
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">Project
                                                             Closer <span style="color: red;">*</span></label>
-                                                        <input type="text" name="project_closer" id="project_closer"
-                                                            required data-parsley-trigger="keyup" class="form-control"
-                                                            value="{{ old('project_closer') }}"
-                                                            placeholder="Enter Project Closer">
+                                                        <select name="project_closer" id="project_closer" required
+                                                            class="form-control select2" required>
+                                                            <option value="" disabled>Select Project
+                                                                Closer
+                                                            </option>
+                                                            @foreach ($users as $user)
+                                                                <option value="{{ $user->id }}">{{ $user->name }}
+                                                                    ({{ $user->email }})
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
                                                     </div>
                                                     {{-- sale date --}}
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">Sale Date
                                                             <span style="color: red;">*</span></label>
                                                         <input type="date" name="sale_date" id="sale_date" required
@@ -185,7 +199,7 @@
                                                             placeholder="Enter Sale Date">
                                                     </div>
                                                     {{-- website --}}
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName"
                                                             class="col-form-label">Website</label>
                                                         <input type="text" name="website" id="website"
@@ -195,22 +209,22 @@
                                                             class="form-control" value="{{ old('website') }}"
                                                             placeholder="Enter Website">
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">Delivery
                                                             TAT
                                                             <span style="color: red;">*</span></label>
                                                         <input type="date" name="delivery_tat" id="delivery_tat" required
-                                                            data-parsley-trigger="keyup" max="{{ date('Y-m-d') }}"
+                                                            data-parsley-trigger="keyup" min="{{ date('Y-m-d') }}"
                                                             class="form-control" value="{{ old('delivery_tat') }}"
                                                             placeholder="Enter Sale Date">
                                                     </div>
                                                     {{-- comment --}}
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-12 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">Comment</label>
                                                         <textarea name="comment" id="comment" data-parsley-trigger="keyup" class="form-control"
                                                             placeholder="Enter Comment">{{ old('comment') }}</textarea>
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">No. of
                                                             Milestone</label>
                                                         <input type="number" id="number_of_milestone" required
@@ -287,6 +301,7 @@
 <script>
     // add more functionality for milestone
     $(document).ready(function() {
+        $('.select2').select2();
         $('.add').click(function() {
             var html = '';
             html += '<div class="row">';

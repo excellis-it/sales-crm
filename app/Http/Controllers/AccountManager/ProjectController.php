@@ -8,6 +8,7 @@ use App\Models\ProjectMilestone;
 use App\Models\ProjectType;
 use App\Traits\ImageTrait;
 use App\Models\ProjectDocument;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -32,7 +33,8 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return view('account_manager.project.create');
+        $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->orderBy('id', 'desc')->get();
+        return view('account_manager.project.create')->with(compact('users'));
     }
 
     /**
@@ -77,20 +79,22 @@ class ProjectController extends Controller
         }
         $project_type->save();
 
-
-        foreach ($data['milestone_name'] as $key => $milestone) {
-            //check if data is null
-            if ($data['milestone_name'][$key] != null) {
-                $project_milestone = new ProjectMilestone();
-                $project_milestone->project_id = $project->id;
-                $project_milestone->milestone_name = $milestone;
-                $project_milestone->milestone_value = $data['milestone_value'][$key];
-                $project_milestone->payment_status = $data['payment_status'][$key];
-                $project_milestone->payment_date = $data['payment_date'][$key] ?? '';
-                $project_milestone->milestone_comment = $data['milestone_comment'][$key];
-                $project_milestone->save();
+        if (isset($data['milestone_name'])) {
+            foreach ($data['milestone_name'] as $key => $milestone) {
+                //check if data is null
+                if ($data['milestone_name'][$key] != null) {
+                    $project_milestone = new ProjectMilestone();
+                    $project_milestone->project_id = $project->id;
+                    $project_milestone->milestone_name = $milestone;
+                    $project_milestone->milestone_value = $data['milestone_value'][$key];
+                    $project_milestone->payment_status = $data['payment_status'][$key];
+                    $project_milestone->payment_date = $data['payment_date'][$key] ?? '';
+                    $project_milestone->milestone_comment = $data['milestone_comment'][$key];
+                    $project_milestone->save();
+                }
             }
         }
+
 
 
         if (isset($data['pdf'])) {
@@ -127,9 +131,9 @@ class ProjectController extends Controller
     public function edit($id)
     {
         try {
-
+            $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->orderBy('id', 'desc')->get();
             $project = Project::find($id);
-            return view('account_manager.project.edit')->with(compact('project'));
+            return view('account_manager.project.edit')->with(compact('project', 'users'));
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }
@@ -184,20 +188,22 @@ class ProjectController extends Controller
         $previous_milestone_value = ProjectMilestone::where('project_id', $id)->sum('milestone_value');
 
         ProjectMilestone::where('project_id', $id)->delete();
-
-        foreach ($data['milestone_name'] as $key => $milestone) {
-            //check if data is null
-            if ($data['milestone_name'][$key] != null) {
-                $project_milestone = new ProjectMilestone();
-                $project_milestone->project_id = $project->id;
-                $project_milestone->milestone_name = $milestone;
-                $project_milestone->milestone_value = $data['milestone_value'][$key];
-                $project_milestone->payment_status = $data['payment_status'][$key];
-                $project_milestone->payment_date = $data['payment_date'][$key] ?? '';
-                $project_milestone->milestone_comment = $data['milestone_comment'][$key];
-                $project_milestone->save();
+        if (isset($data['milestone_name'])) {
+            foreach ($data['milestone_name'] as $key => $milestone) {
+                //check if data is null
+                if ($data['milestone_name'][$key] != null) {
+                    $project_milestone = new ProjectMilestone();
+                    $project_milestone->project_id = $project->id;
+                    $project_milestone->milestone_name = $milestone;
+                    $project_milestone->milestone_value = $data['milestone_value'][$key];
+                    $project_milestone->payment_status = $data['payment_status'][$key];
+                    $project_milestone->payment_date = $data['payment_date'][$key] ?? '';
+                    $project_milestone->milestone_comment = $data['milestone_comment'][$key];
+                    $project_milestone->save();
+                }
             }
         }
+
 
 
         if (isset($data['pdf'])) {

@@ -14,5 +14,8 @@ class Prospect extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    
+    public function transferTakenBy()
+    {
+        return $this->belongsTo(User::class, 'transfer_token_by');
+    }
 }

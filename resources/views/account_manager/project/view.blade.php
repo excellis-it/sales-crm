@@ -137,13 +137,13 @@
                                         <li class="">
                                             <div class="title  ">Project Opener:-</div>
                                             <div class="text">
-                                                {{ $project->project_opener }}
+                                                {{ $project->projectOpener->name ?? '' }}
                                             </div>
                                         </li>
                                         <li class="">
                                             <div class="title  ">Project Closer:-</div>
                                             <div class="text">
-                                                {{ $project->project_closer }}
+                                                {{ $project->projectCloser->name ?? ''}}
                                             </div>
                                         </li>
                                     </ul>

@@ -27,10 +27,7 @@
                             <li class="breadcrumb-item active">List</li>
                         </ul>
                     </div>
-                    <div class="col-auto float-end ms-auto">
-                        <a href="{{ route('projects.create') }}" class="btn add-btn"><i class="fa fa-plus"></i> Add a
-                            Project</a>
-                    </div>
+
                 </div>
             </div>
 
@@ -41,7 +38,10 @@
                             <div class="col-md-6">
                                 <h4 class="mb-0">Projects Details</h4>
                             </div>
-
+                            <div class="col-md-6 text-end">
+                                <a href="{{ route('projects.create') }}" class="btn px-5 submit-btn"><i class="fa fa-plus"></i> Add a
+                                    Project</a>
+                            </div>
                         </div>
                     </div>
 
@@ -89,7 +89,7 @@
                                             {{ $project->website }}
                                         </td>
                                         <td>
-                                               <span class="badge bg-info">{{$project->projectTypes->type }}</span>
+                                               <span>{{$project->projectTypes->type }}</span>
                                         </td>
                                         <td>
                                             {{ $project->project_value }}
@@ -195,4 +195,12 @@
             });
         });
     </script> --}}
+    <script>
+        $(document).ready(function() {
+           //how to place holder in "jquery datatable" search box
+            $('#myTable_filter input').attr("placeholder", "Search");
+        });
+
+
+    </script>
 @endpush

@@ -86,7 +86,7 @@
                             <h5 class="card-title">Prospects</h5>
                             <div class="stats-list">
                                 <div class="stats-info">
-                                    <p>Win <strong>{{$count['win']}} <small>/ {{$count['prospects']}}</small></strong></p>
+                                    <p>On Board <strong>{{$count['win']}} <small>/ {{$count['prospects']}}</small></strong></p>
                                     <div class="progress">
                                         <div class="progress-bar bg-primary" role="progressbar" style="width: 31%"
                                             aria-valuenow="31" aria-valuemin="0" aria-valuemax="100"></div>
@@ -107,7 +107,7 @@
                                     </div>
                                 </div>
                                 <div class="stats-info">
-                                    <p>Close <strong>{{$count['close']}} <small>/ {{$count['prospects']}}</small></strong></p>
+                                    <p>Cancel <strong>{{$count['close']}} <small>/ {{$count['prospects']}}</small></strong></p>
                                     <div class="progress">
                                         <div class="progress-bar bg-danger" role="progressbar" style="width: 62%"
                                             aria-valuenow="62" aria-valuemin="0" aria-valuemax="100"></div>

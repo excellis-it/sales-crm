@@ -27,10 +27,7 @@
                             <li class="breadcrumb-item active">List</li>
                         </ul>
                     </div>
-                    <div class="col-auto float-end ms-auto">
-                        <a href="{{ route('sales_managers.create') }}" class="btn add-btn"><i class="fa fa-plus"></i> Add a
-                            Sales manager</a>
-                    </div>
+
                 </div>
             </div>
 
@@ -41,7 +38,10 @@
                             <div class="col-md-6">
                                 <h4 class="mb-0">Sales managers Details</h4>
                             </div>
-
+                            <div class="col-md-6 text-end">
+                                <a href="{{ route('sales_managers.create') }}" class="btn px-5 submit-btn"><i class="fa fa-plus"></i> Add a
+                                    Sales manager</a>
+                            </div>
                         </div>
                     </div>
 
@@ -106,7 +106,7 @@
             //Default data table
             $('#myTable').DataTable({
                 "aaSorting": [],
-   
+
                 "columnDefs": [{
                         "orderable": false,
                         "targets": [5, 6, 7]
@@ -160,5 +160,13 @@
                 }
             });
         });
+    </script>
+    <script>
+        $(document).ready(function() {
+           //how to place holder in "jquery datatable" search box
+            $('#myTable_filter input').attr("placeholder", "Search");
+        });
+
+
     </script>
 @endpush

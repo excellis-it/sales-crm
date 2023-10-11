@@ -24,4 +24,14 @@ class Project extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function projectOpener()
+    {
+        return $this->belongsTo(User::class, 'project_opener');
+    }
+
+    public function projectCloser()
+    {
+        return $this->belongsTo(User::class, 'project_closer');
+    }
 }

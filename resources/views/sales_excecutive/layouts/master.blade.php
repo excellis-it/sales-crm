@@ -107,7 +107,14 @@
         toastr.warning("{{ session('warning') }}");
     @endif
 </script>
+<script>
+    $(document).ready(function() {
+       //how to place holder in "jquery datatable" search box
+        $('#myTable_filter input').attr("placeholder", "Search");
+    });
 
+
+</script>
 
 @stack('scripts')
 

@@ -2390,7 +2390,7 @@ button.bg-danger:hover {
 }
 
 .page-wrapper .content {
-    padding: 0 30px 30px;
+    padding: 0 100px 30px 30px;
 }
 
 @media (max-width: 575px) {
@@ -2400,10 +2400,11 @@ button.bg-danger:hover {
 }
 
 .page-wrapper .content .page-header {
-    margin-bottom: 1.875rem;
-    background: #ff6000;
-    padding: 13px 20px 13px 0;
+    margin-bottom: 1rem;
+    background: linear-gradient(268deg,#f37e20 38%,#ad1e23 93.09%);
+    padding: 30px 20px 30px 0;
     position: relative;
+    border-radius: 0 10px 0 0;
 }
 .page-wrapper .content .page-header:before{
     content: '';
@@ -2413,7 +2414,7 @@ button.bg-danger:hover {
     background: url(https://webexstudio.com/crm/admin_assets/img/web_lag1.png);
     width: 35%;
     height: 100%;
-    background-size: contain;
+    background-size: cover;
     background-repeat: no-repeat;
     border-radius: 0 10px 0 0;
 }
@@ -2422,7 +2423,7 @@ button.bg-danger:hover {
     position: absolute;
     left: -100px;
     top: 0;
-    background: #ff6000;
+    background: #ad1e23;
     width: 100px;
     height: 100%;
 }
@@ -2453,9 +2454,9 @@ button.bg-danger:hover {
 .card {
         border: none;
     margin-bottom: 30px;
-    -webkit-box-shadow: 20px 40px 50px rgb(0 0 0 / 15%);
-    -moz-box-shadow: 20px 40px 50px rgb(0 0 0 / 15%);
-    box-shadow: 20px 40px 50px rgb(0 0 0 / 15%);
+    -webkit-box-shadow: 1px 7px 50px rgb(0 0 0 / 15%);
+    -moz-box-shadow: 1px 7px 50px rgb(0 0 0 / 15%);
+    box-shadow: 1px 7px 50px rgb(0 0 0 / 15%);
     border-radius: 10px;
 }
 
@@ -2563,7 +2564,7 @@ input[type="file"].form-control {
 .form-control {
     display: block;
     width: 100%;
-    padding: 12px 16px;
+    padding: 10px 16px;
     font-size: 16px;
     font-weight: 500;
     line-height: 1.5;
@@ -2893,6 +2894,23 @@ input[type="file"].form-control {
     /*-moz-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2);*/
     /*box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2);*/
 }
+.header:before {
+    content:'';
+    position: absolute;
+    background:linear-gradient(265deg,#f37e20 46%,#ad1e23 85.09%);
+    left:0;
+    top:0;
+    width:100%;
+    height:2px;
+}
+
+
+
+
+
+
+
+
 
 .header .header-left {
     float: left;
@@ -3401,7 +3419,7 @@ input[type="file"].form-control {
     -webkit-transition: all 0.2s ease;
     -ms-transition: all 0.2s ease;
     transition: all 0.2s ease;
-    padding-top: 30px;
+    padding-top: 10px;
 }
 
 .sidebar .sidebar-menu,
@@ -3467,13 +3485,13 @@ input[type="file"].form-control {
     font-weight:500;
     justify-content: flex-start;
     position: relative;
-    font-size: 13px;
+    font-size: 14px;
     color: #202124;
     height: auto;
     -webkit-transition: all 0.2s ease;
     -ms-transition: all 0.2s ease;
     transition: all 0.2s ease;
-    padding: 8px 15px;
+    padding: 13px 15px;
     border-radius: 0px;
 }
 
@@ -3529,11 +3547,11 @@ input[type="file"].form-control {
 .sidebar .sidebar-menu ul li a i,
 .two-col-bar .sidebar-menu ul li a i {
     display: inline-block;
-    font-size: 24px;
+    font-size: 30px;
     line-height: 24px;
     text-align: left;
     vertical-align: middle;
-    width: 28px;
+    width: 30px;
     -webkit-transition: all 0.2s ease;
     -ms-transition: all 0.2s ease;
     transition: all 0.2s ease;
@@ -3610,7 +3628,7 @@ input[type="file"].form-control {
 .sidebar .sidebar-menu ul li.active a,
 .two-col-bar .sidebar-menu ul li.active a {
     color: #fff;
-    background-color: #ffa000;
+    background-color: #f37e20;
 }
 
 .sidebar .sidebar-menu ul ul,
@@ -3832,7 +3850,7 @@ table.dataTable thead th{
     position: absolute;
     left: 0;
     top: 0;
-    background: #ff6000;
+    background: #ac1e23;
     width: 60px;
     height: 100%;
     border-radius: 0 5px 0 0;
@@ -4659,11 +4677,11 @@ table.dataTable thead th{
 }
 
 .table-bordered td {
-    border: 1px solid #dee2e6;
+    border: 1px solid rgb(0 0 0 / 10%);
 }
 
 .table-bordered th {
-    border: 1px solid #dee2e6;
+    border: 1px solid rgb(0 0 0 / 10%);
 }
 
 .filter-row .btn {
@@ -7446,8 +7464,26 @@ textarea.form-control {
     color: #fff;
 }
 .dataTables_wrapper .dataTables_filter input{
-    width:800px;
+    width: 350px;
+    border-radius: 20px !important;
+    border: 1px solid #f37e20 !important;
+    background: #feeed3 url(https://webexstudio.com/crm/admin_assets/img/search_icon.png) !important;
+    outline: 0;
+    color: #f5821f;
+    position: relative;
+    font-family: Muli,sans-serif;
+    font-weight: 500;
+    background-repeat: no-repeat !important;
+    background-size: 18px !important;
+    background-position: center left 8px !important;
+    padding-left: 35px !important;
 }
+#myTable_filter label{
+    color:#fff;
+}
+
+
+
 .dataTables_wrapper .dataTables_filter {
     float: left;
     text-align: left;
@@ -9894,27 +9930,144 @@ button.close {
 /* End Toogle   */
 
 .submit-btn {
-    background: #008000bf;
-    border: 0;
-    border-radius: 2px;
+    background: #f37e20;
     color: #fff;
-    cursor: pointer;
+    border: 1px solid #f37e20;
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    -ms-border-radius: 50px;
+    -o-border-radius: 50px;
+    border-radius: 50px;
     display: inline-block;
-    font-size: 14px;
-    font-weight: 500;
-    height: 36px;
-    line-height: 36px;
-    margin: 0;
-    outline: 0;
-    padding: 0 16px;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 12.5px 34px;
+    line-height: 1;
+    text-decoration: none;
     text-transform: uppercase;
-    vertical-align: middle;
-    -webkit-tap-highlight-color: transparent;
-    -webkit-transition: background-color 0.3s;
-    transition: background-color 0.3s;
-    will-change: box-shadow, transform;
-    border-radius: 20px;
+    white-space: nowrap;
+    text-align: center;
+    -webkit-transition: opacity .2s;
+    -moz-transition: opacity .2s;
+    -ms-transition: opacity .2s;
+    -o-transition: opacity .2s;
+    transition: opacity .2s;
+    cursor: pointer;
+
 }
+.submit-btn:hover, .submit-btn:focus {
+    background-color: #fff;
+    color: #f37e20;
+    transition: all ease-in .3s;
+    text-decoration: none;
+}
+
+
+table.dataTable thead th{
+   background: #ffdfc5;
+    color: #ac1e23;
+}
+table.dataTable tbody th, table.dataTable tbody td {
+    padding: 14px 14px;
+}
+
+
+.table-responsive{
+    padding-bottom: 20px;
+}
+
+.table-responsive::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	border-radius: 10px;
+	background-color: #F5F5F5;
+}
+
+.table-responsive::-webkit-scrollbar
+{
+    width: 5px;
+	height: 5px;
+	background-color: #F5F5F5;
+}
+
+.table-responsive::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: #555;
+}
+
+::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	border-radius: 10px;
+	background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar
+{
+    width: 5px;
+	background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: #555;
+}
+
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 2px 10px !important;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+    background: #e9e9e9 !important;
+}
+
+.desin-filter{
+    border: 1px solid #0003;
+    width: 100% !important;
+    display: inline-block;
+    border-radius: 11px;
+    padding: 10px;
+}
+.desin-filter p{
+    font-size: 14px;
+    color: rgb(0 0 0 / 50%);
+    margin-bottom: 2px;
+}
+.desin-filter h5{
+    color: #000000c2;
+    font-size: 15px;
+    margin-bottom: 0;
+    font-weight: 600;
+}
+
+.active-filter{
+    border: 1px solid #f37e20 !important;
+}
+
+.modal_view .modal-header{
+    background: linear-gradient(268deg,#f37e20 38%,#ad1e23 93.09%);
+    color: #fff;
+}
+.modal_view .modal-body p{
+    font-size:16px;
+}
+.modal_view .modal-body p span{
+    color:#f37e20;
+    padding-right:10px;
+}
+.filter-gap .col{
+    padding-left:5px;
+    padding-right:5px;
+}
+
+
 
 .error {
     color: red;

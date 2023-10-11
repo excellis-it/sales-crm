@@ -75,6 +75,7 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
             'prospects' => AdminProspectController::class,
         ]);
         Route::get('/prospects-delete/{id}', [AdminProspectController::class, 'delete'])->name('prospects.delete');
+        Route::get('/filter', [AdminProspectController::class, 'filter'])->name('prospects.filter'); // filter
     });
     // delete project
     Route::get('/project-delete/{id}', [AdminProjectController::class, 'delete'])->name('sales-projects.delete');
@@ -131,6 +132,8 @@ Route::group(['middleware' => ['SalesManager'], 'prefix' => 'sales-manager'], fu
             'sales-excecutive' => SalesManagerSalesExcecutiveController::class,
         ]);
     });
+
+    Route::get('/filter', [SalesManagerProspectController::class, 'filter'])->name('sales-manager.prospects.filter'); // filter
     // change status sales excecutive
     Route::get('/changeSalesExcecutiveStatus', [SalesManagerSalesExcecutiveController::class, 'changeSalesExcecutiveStatus'])->name('sales-manager.sales-excecutive.change-status');
     // Sales Excecutive Routes
@@ -179,4 +182,6 @@ Route::group(['middleware' => ['SalesExcecutive'], 'prefix' => 'sales-excecutive
     Route::resources([
         'prospects' => ProspectController::class,
     ]);
+    Route::get('/filter', [ProspectController::class, 'filter'])->name('prospects.filter'); // password change
+
 });

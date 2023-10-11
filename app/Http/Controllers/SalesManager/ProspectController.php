@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Prospect;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\View;
 
 class ProspectController extends Controller
 {
@@ -17,8 +18,12 @@ class ProspectController extends Controller
      */
     public function index()
     {
+        $count['win'] = Prospect::where('report_to', auth()->user()->id)->where('status', 'Win')->count();
+        $count['follow_up'] = Prospect::where('report_to', auth()->user()->id)->where('status', 'Follow Up')->count();
+        $count['close'] = Prospect::where('report_to', auth()->user()->id)->where('status', 'Close')->count();
+        $count['sent_proposal'] = Prospect::where('report_to', auth()->user()->id)->where('status', 'Sent Proposal')->count();
         $prospects = Prospect::where('report_to', Auth::user()->id)->orderBy('id', 'desc')->get();
-        return view('sales_manager.prospect.list')->with(compact('prospects'));
+        return view('sales_manager.prospect.list')->with(compact('prospects','count'));
     }
 
     /**
@@ -28,8 +33,9 @@ class ProspectController extends Controller
      */
     public function create()
     {
+        $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->get();
         $sales_executives = User::role('SALES_EXCUETIVE')->where(['status' => 1, 'sales_manager_id' => Auth::user()->id])->orderBy('id', 'desc')->get();
-        return view('sales_manager.prospect.create')->with(compact('sales_executives'));
+        return view('sales_manager.prospect.create')->with(compact('sales_executives','users'));
     }
 
     /**
@@ -58,7 +64,11 @@ class ProspectController extends Controller
         $prospect->next_followup_date = $data['next_followup_date'];
         $prospect->comments = $data['comments'];
         $prospect->price_quote = $data['price_quote'];
-        $prospect->offered_for = $data['offered_for'];
+        if ($data['offered_for'] == 'Other') {
+            $prospect->offered_for = $data['other_value'];
+        } else {
+            $prospect->offered_for = $data['offered_for'];
+        }
         $prospect->transfer_token_by = $data['transfer_token_by'];
         $prospect->save();
 
@@ -75,7 +85,8 @@ class ProspectController extends Controller
     {
         try {
             $prospect = Prospect::find($id);
-            return view('sales_manager.prospect.view')->with(compact('prospect'));
+            $isThat = 'view';
+            return response()->json(['view'=>(String)View::make('sales_manager.prospect.show-details')->with(compact('prospect','isThat'))]);
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }
@@ -91,8 +102,9 @@ class ProspectController extends Controller
     {
         try {
             $prospect = Prospect::find($id);
+            $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->get();
             $sales_executives = User::role('SALES_EXCUETIVE')->where(['status' => 1])->orderBy('id', 'desc')->get();
-            return view('sales_manager.prospect.edit')->with(compact('prospect','sales_executives'));
+            return view('sales_manager.prospect.edit')->with(compact('prospect','sales_executives', 'users'));
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }
@@ -123,7 +135,11 @@ class ProspectController extends Controller
         $prospect->next_followup_date = $data['next_followup_date'];
         $prospect->comments = $data['comments'];
         $prospect->price_quote = $data['price_quote'];
-        $prospect->offered_for = $data['offered_for'];
+        if ($data['offered_for'] == 'Other') {
+            $prospect->offered_for = $data['other_value'];
+        } else {
+            $prospect->offered_for = $data['offered_for'];
+        }
         $prospect->transfer_token_by = $data['transfer_token_by'];
         $prospect->save();
         return redirect()->route('sales-manager.prospects.index')->with('message', 'Prospect updated successfully.');
@@ -145,5 +161,19 @@ class ProspectController extends Controller
         $prospect = Prospect::find($id);
         $prospect->delete();
         return redirect()->back()->with('message', 'Prospect deleted successfully.');
+    }
+
+    public function filter(Request $request)
+    {
+        if ($request->ajax()) {
+            $status = $request->status;
+            if ($status == 'All') {
+                $prospects = Prospect::where(['report_to' => Auth::user()->id])->orderBy('id', 'desc')->get();
+            } else {
+                $prospects = Prospect::where(['report_to' => Auth::user()->id, 'status' => $status])->orderBy('id', 'desc')->get();
+            }
+
+            return response()->json(['view'=>(String)View::make('sales_manager.prospect.table')->with(compact('prospects'))]);
+        }
     }
 }

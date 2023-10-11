@@ -3,6 +3,11 @@
     {{ env('APP_NAME') }} | View Project Details
 @endsection
 @push('styles')
+<style>
+    .dataTables_filter {
+        margin-bottom: 10px !important;
+    }
+</style>
 @endpush
 
 @section('content')
@@ -163,13 +168,13 @@
                                         <li class="">
                                             <div class="title  ">Project Opener:-</div>
                                             <div class="text">
-                                                {{ $project->project_opener }}
+                                                {{ $project->projectOpener->name ?? '' }}
                                             </div>
                                         </li>
                                         <li class="">
                                             <div class="title  ">Project Closer:-</div>
                                             <div class="text">
-                                                {{ $project->project_closer }}
+                                                {{ $project->projectCloser->name ?? ''}}
                                             </div>
                                         </li>
                                     </ul>
@@ -300,5 +305,13 @@
                     }
                 });
             });
+        </script>
+        <script>
+            $(document).ready(function() {
+               //how to place holder in "jquery datatable" search box
+                $('#myTable_filter input').attr("placeholder", "Search");
+            });
+
+
         </script>
     @endpush

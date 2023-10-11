@@ -34,8 +34,8 @@
                     <div class="card-title">
                         <div class="row">
                             <div class="col-xl-12 mx-auto">
-                                <h3 class="mb-0 text-uppercase">Edit A Project</h3>
-                                <hr>
+                                {{-- <h3 class="mb-0 text-uppercase">Edit A Project</h3>
+                                <hr> --}}
                                 <div class="border-0 border-4">
                                     <div class="card-body">
                                         <form action="{{ route('account-manager.projects.update', $project->id) }}"
@@ -45,14 +45,14 @@
                                             <div class="border p-4 rounded">
                                                 <div class="row">
 
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label"> Client Name
                                                             <span style="color: red;">*</span></label>
                                                         <input type="text" name="client_name" id="client_name" required
                                                             data-parsley-trigger="keyup" value="{{ $project->client_name }}"
                                                             class="form-control" placeholder="Enter Client Name">
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">Business Name
                                                             <span style="color: red;">*</span></label>
                                                         <input type="text" name="business_name" id="business_name"
@@ -60,7 +60,7 @@
                                                             value="{{ $project->business_name }}" class="form-control"
                                                             placeholder="Enter Business Name">
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">Client Email
                                                             <span style="color: red;">*</span></label>
                                                         <input type="text" name="client_email" id="client_email" required
@@ -69,7 +69,7 @@
                                                             class="form-control" value="{{ $project->client_email }}"
                                                             placeholder="Enter Client Email">
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">Client Phone
                                                             <span style="color: red;">*</span></label>
                                                         <input type="text" name="client_phone" id="client_phone" required
@@ -80,7 +80,7 @@
                                                     </div>
 
                                                     {{-- clinent address --}}
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">Client
                                                             Address <span style="color: red;">*</span></label>
                                                         <input type="text" name="client_address" id="client_address"
@@ -95,7 +95,7 @@
                                                     <h3 class="mt-4 text-uppercase">Project Details</h3>
                                                     <hr>
                                                     {{-- project type in select2 box --}}
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">Project
                                                             Type <span style="color: red;">*</span></label>
                                                         <select name="project_type" id="project_type" required
@@ -124,7 +124,7 @@
                                                                 Other</option>
                                                         </select>
                                                     </div>
-                                                    <div id="other-value" class="col-md-6">
+                                                    <div id="other-value" class="col-md-4 mb-3">
                                                         @if ($project['projectTypes']['type'] == 'Other')
                                                             <label for="inputEnterYourName" class="col-form-label">Other
                                                                 Value <span style="color: red;">*</span></label>
@@ -135,7 +135,7 @@
                                                         @endif
                                                     </div>
                                                     {{-- Project value --}}
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">Project
                                                             Value <span style="color: red;">*</span></label>
                                                         <input type="text" name="project_value" id="project_value"
@@ -146,7 +146,7 @@
                                                             placeholder="Enter Project Value">
                                                     </div>
                                                     {{-- Project project_upfront --}}
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">Project
                                                             Upfront <span style="color: red;">*</span></label>
                                                         <input type="text" name="project_upfront" id="project_upfront"
@@ -157,7 +157,7 @@
                                                             placeholder="Enter Project Upfront">
                                                     </div>
                                                     {{-- currency select box --}}
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">Currency
                                                             <span style="color: red;">*</span></label>
                                                         <select name="currency" id="currency" class="form-control"
@@ -185,7 +185,7 @@
                                                     </div>
 
                                                     {{-- Project payment_mode --}}
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">Project
                                                             Payment Mode <span style="color: red;">*</span></label>
                                                         <input type="text" name="payment_mode" required
@@ -194,25 +194,39 @@
                                                             placeholder="Enter Project Payment Mode">
                                                     </div>
                                                     {{-- Project opener --}}
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">Project
                                                             Opener <span style="color: red;">*</span></label>
-                                                        <input type="text" name="project_opener" id="project_opener"
-                                                            required data-parsley-trigger="keyup" class="form-control"
-                                                            value="{{ $project->project_opener }}"
-                                                            placeholder="Enter Project Opener">
+                                                        <select name="project_opener" id="project_opener" required
+                                                            class="form-control select2">
+                                                            <option value="" disabled>Select Project
+                                                                Opener
+                                                            </option>
+                                                            @foreach ($users as $user)
+                                                                <option value="{{ $user->id }}"
+                                                                    {{ $project->project_opener == $user->id ? 'selected' : '' }}>
+                                                                    {{ $user->name }}</option>
+                                                            @endforeach
+                                                        </select>
                                                     </div>
                                                     {{-- Project closer --}}
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">Project
                                                             Closer <span style="color: red;">*</span></label>
-                                                        <input type="text" name="project_closer" id="project_closer"
-                                                            required data-parsley-trigger="keyup" class="form-control"
-                                                            value="{{ $project->project_closer }}"
-                                                            placeholder="Enter Project Closer">
+                                                        <select name="project_closer" id="project_closer" required
+                                                            class="form-control select2">
+                                                            <option value="" disabled>Select Project
+                                                                Closer
+                                                            </option>
+                                                            @foreach ($users as $user)
+                                                                <option value="{{ $user->id }}"
+                                                                    {{ $project->project_closer == $user->id ? 'selected' : '' }}>
+                                                                    {{ $user->name }}</option>
+                                                            @endforeach
+                                                        </select>
                                                     </div>
                                                     {{-- sale date --}}
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">Sale Date
                                                             <span style="color: red;">*</span></label>
                                                         <input type="date" name="sale_date" id="sale_date" required
@@ -222,7 +236,7 @@
                                                             placeholder="Enter Sale Date">
                                                     </div>
                                                     {{-- website --}}
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName"
                                                             class="col-form-label">Website</label>
                                                         <input type="text" name="website" id="website"
@@ -232,7 +246,7 @@
                                                             class="form-control" value="{{ $project->website }}"
                                                             placeholder="Enter Website">
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">Delivery
                                                             TAT
                                                             <span style="color: red;">*</span></label>
@@ -243,13 +257,13 @@
                                                             placeholder="Enter Sale Date">
                                                     </div>
                                                     {{-- comment --}}
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName"
                                                             class="col-form-label">Comment</label>
                                                         <textarea name="comment" id="comment" data-parsley-trigger="keyup" class="form-control"
                                                             placeholder="Enter Comment">{{ $project->comment }}</textarea>
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">No. of
                                                             Milestone</label>
                                                         <input type="number" id="number_of_milestone"
@@ -265,10 +279,11 @@
                                                         name="payment_types">
 
 
-                                                    @if ($project->projectMilestones->count() > 0)
-                                                        <h3 class="mt-4 text-uppercase">Milestone</h3>
-                                                        <hr>
-                                                        <div class="add-milestone">
+
+                                                    <h3 class="mt-4 text-uppercase">Milestone</h3>
+                                                    <hr>
+                                                    <div class="add-milestone">
+                                                        @if ($project->projectMilestones->count() > 0)
                                                             @foreach ($project->projectMilestones as $key => $milestone)
                                                                 <div class="row">
                                                                     <div class="col-md-4 pb-3">
@@ -338,11 +353,8 @@
 
                                                                 </div>
                                                             @endforeach
-
-                                                        </div>
-                                                    @endif
-
-
+                                                        @endif
+                                                    </div>
                                                     <h3 class="mt-4 text-uppercase">Upload PDF</h3>
                                                     <hr>
                                                     <div class="add-pdf">
@@ -487,6 +499,7 @@
 
     <script>
         $(document).ready(function() {
+            $('.select2').select2();
             $('.calculate_date').on('click', function() {
                 $('#fetch_month').html('');
                 var startDate = new Date($('#start_date').val());

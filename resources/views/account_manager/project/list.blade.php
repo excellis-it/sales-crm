@@ -28,11 +28,6 @@
                             <li class="breadcrumb-item active">List</li>
                         </ul>
                     </div>
-                    <div class="col-auto float-end ms-auto">
-                        <a href="{{ route('account-manager.projects.create') }}" class="btn add-btn"><i
-                                class="fa fa-plus"></i> Add Project</a>
-                                    
-                    </div>
                 </div>
             </div>
 
@@ -43,7 +38,11 @@
                             <div class="col-md-6">
                                 <h4 class="mb-0">Projects Details</h4>
                             </div>
+                            <div class="col-md-6 text-end">
+                                <a href="{{ route('account-manager.projects.create') }}" class="btn px-5 submit-btn"><i
+                                        class="fa fa-plus"></i> Add Project</a>
 
+                            </div>
                         </div>
                     </div>
 
@@ -56,8 +55,6 @@
                                     <th> Business Name</th>
                                     <th> Customer Name </th>
                                     <th>Phone Number</th>
-                                    <th>Customer Address</th>
-                                    <th>Customer Website</th>
                                     <th>Project Type</th>
                                     <th>Project Value</th>
                                     <th>Project Upfront</th>
@@ -85,13 +82,7 @@
                                             {{ $project->client_phone }}
                                         </td>
                                         <td>
-                                            {{ $project->client_address }}
-                                        </td>
-                                        <td>
-                                            {{ $project->website }}
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-info">{{ $project->projectTypes->type }}</span>                                         
+                                            <span class="">{{ $project->projectTypes->type }}</span>
                                         </td>
                                         <td>
                                             {{ $project->project_value }}
@@ -138,11 +129,11 @@
                 "aaSorting": [],
                 "columnDefs": [{
                         "orderable": false,
-                        "targets": [12]
+                        "targets": [10]
                     },
                     {
                         "orderable": true,
-                        "targets": [0, 1, 2, 5, 6, 7, 8, 9, 10, 11]
+                        "targets": [0, 1, 2, 5, 6, 7, 8, 9]
                     }
                 ]
             });
@@ -190,4 +181,10 @@
             });
         });
     </script> --}}
+    <script>
+        $(document).ready(function() {
+           //how to place holder in "jquery datatable" search box
+            $('#myTable_filter input').attr("placeholder", "Search");
+        });
+    </script>
 @endpush

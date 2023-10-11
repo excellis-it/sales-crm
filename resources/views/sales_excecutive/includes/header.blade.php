@@ -38,8 +38,8 @@
                     <span>{{ Auth::user()->name }}</span>
                 </a>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="{{ route('sales-excecutive.dashboard') }}">My Dashboard</a>
                     <a class="dropdown-item" href="{{ route('sales-excecutive.profile') }}">My Profile</a>
+                    <a class="dropdown-item" href="{{ route('sales-excecutive.logout') }}">Logout</a>
                 </div>
             </li>
         </ul>

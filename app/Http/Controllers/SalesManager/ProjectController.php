@@ -8,6 +8,7 @@ use App\Models\Project;
 use App\Models\ProjectDocument;
 use App\Models\ProjectMilestone;
 use App\Models\ProjectType;
+use App\Models\User;
 use App\Traits\ImageTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -33,7 +34,8 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return view('sales_manager.project.create');
+        $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->orderBy('id', 'desc')->get();
+        return view('sales_manager.project.create')->with(compact('users'));
     }
 
     /**
@@ -92,8 +94,7 @@ class ProjectController extends Controller
         }
         $project_type->save();
 
-
-
+        if (isset($data['milestone_name'])) {
             foreach ($data['milestone_name'] as $key => $milestone) {
                 //check if data is null
                 if ($data['milestone_name'][$key] != null) {
@@ -107,9 +108,10 @@ class ProjectController extends Controller
                     $project_milestone->save();
                 }
             }
+        }
 
 
-        if(isset($data['pdf'])) {
+        if (isset($data['pdf'])) {
             foreach ($data['pdf'] as $key => $pdfFile) {
                 $project_pdf = new ProjectDocument();
                 $project_pdf->project_id = $project->id;
@@ -149,8 +151,9 @@ class ProjectController extends Controller
     public function edit($id)
     {
         try {
+            $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->orderBy('id', 'desc')->get();
             $project = Project::find($id);
-            return view('sales_manager.project.edit')->with(compact('project'));
+            return view('sales_manager.project.edit')->with(compact('project', 'users'));
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }
@@ -220,9 +223,10 @@ class ProjectController extends Controller
         $previous_milestone_value = ProjectMilestone::where('project_id', $id)->sum('milestone_value');
 
         ProjectMilestone::where('project_id', $id)->delete();
+        if (isset($data['milestone_name'])) {
             foreach ($data['milestone_name'] as $key => $milestone) {
                 //check if data is null
-                if($data['milestone_name'][$key] != null){
+                if ($data['milestone_name'][$key] != null) {
                     $project_milestone = new ProjectMilestone();
                     $project_milestone->project_id = $project->id;
                     $project_milestone->milestone_name = $milestone;
@@ -233,9 +237,11 @@ class ProjectController extends Controller
                     $project_milestone->save();
                 }
             }
+        }
 
 
-        if(isset($data['pdf'])) {
+
+        if (isset($data['pdf'])) {
             foreach ($data['pdf'] as $key => $pdfFile) {
                 $project_pdf = new ProjectDocument();
                 $project_pdf->project_id = $project->id;

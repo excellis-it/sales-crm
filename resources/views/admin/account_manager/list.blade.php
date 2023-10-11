@@ -23,11 +23,12 @@
                     <div class="col-md-8">
                         <h3 class="page-title">Account managers Information</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('account_managers.index') }}">Account managers</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('account_managers.index') }}">Account managers</a>
+                            </li>
                             <li class="breadcrumb-item active">List</li>
                         </ul>
                     </div>
-                    <div class="col-md-4">
+                    {{-- <div class="col-md-4">
                         <div class="d-flex">
                             <select class="form-select w-50 rounded-0" aria-label="Default select example">
                               <option selected>All (29)</option>
@@ -37,7 +38,7 @@
                             <a href="{{ route('account_managers.create') }}" class="btn add-btn"> Add New
                                 account manager</a>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
 
@@ -48,7 +49,10 @@
                             <div class="col-md-6">
                                 <h4 class="mb-0">Account managers Details</h4>
                             </div>
-
+                            <div class="col-md-6 text-end">
+                                <a href="{{ route('account_managers.create') }}" class="btn px-5 submit-btn"><i class="fas fa-plus"></i> Add New
+                                    account manager</a>
+                            </div>
                         </div>
                     </div>
 
@@ -75,7 +79,9 @@
                                         <td>{{ $account_manager->phone }}</td>
                                         <td>{{ $account_manager->employee_id }}</td>
                                         <td>{{ $account_manager->date_of_joining }}</td>
-                                        <td><a href="{{ route('sales-projects.index', ['account_manager_id'=>$account_manager->id]) }}">{{ $account_manager->accountManagerProjects->count() }}</a></td>
+                                        <td><a
+                                                href="{{ route('sales-projects.index', ['account_manager_id' => $account_manager->id]) }}">{{ $account_manager->accountManagerProjects->count() }}</a>
+                                        </td>
                                         <td>
                                             <!--<div class="button-switch">-->
                                             <!--    <input type="checkbox" id="switch-orange" class="switch toggle-class"-->
@@ -90,8 +96,8 @@
                                         </td>
                                         <td>
                                             <a title="Edit Account manager" data-route=""
-                                                href="{{ route('account_managers.edit', $account_manager->id) }}" class="edit_acma"><i
-                                                    class="fas fa-edit"></i></a> &nbsp;&nbsp;
+                                                href="{{ route('account_managers.edit', $account_manager->id) }}"
+                                                class="edit_acma"><i class="fas fa-edit"></i></a> &nbsp;&nbsp;
 
                                             <a title="Delete Account manager"
                                                 data-route="{{ route('account_managers.delete', $account_manager->id) }}  class="delete_acma""
@@ -122,7 +128,7 @@
                     },
                     {
                         "orderable": true,
-                        "targets": [0, 1, 2, 3, 4 ]
+                        "targets": [0, 1, 2, 3, 4]
                     }
                 ]
             });
@@ -159,7 +165,7 @@
             $.ajax({
                 type: "GET",
                 dataType: "json",
-                url: '{{ route("account_managers.change-status") }}',
+                url: '{{ route('account_managers.change-status') }}',
                 data: {
                     'status': status,
                     'user_id': user_id
@@ -169,5 +175,13 @@
                 }
             });
         });
+    </script>
+    <script>
+        $(document).ready(function() {
+           //how to place holder in "jquery datatable" search box
+            $('#myTable_filter input').attr("placeholder", "Search");
+        });
+
+
     </script>
 @endpush

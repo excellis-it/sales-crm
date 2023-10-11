@@ -1,6 +1,6 @@
 @extends('sales_manager.layouts.master')
 @section('title')
-    Dashboard - {{ env('APP_NAME') }} 
+    Dashboard - {{ env('APP_NAME') }}
 @endsection
 @push('styles')
 @endpush
@@ -41,7 +41,7 @@
                     <a href="{{ route('sales-manager.prospects.index') }}" style="color: black">
                         <div class="card dash-widget">
                             <div class="card-body">
-                                <span class="dash-widget-icon"><i class="fas fa-user"></i></span>
+                                <span class="dash-widget-icon"><i class="fas fa-book-reader"></i></span>
                                 <div class="dash-widget-info">
                                     <h3>{{ $count['prospects'] }}</h3>
                                     <span>Total Prospect</span>

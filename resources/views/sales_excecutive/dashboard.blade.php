@@ -44,7 +44,7 @@
                                 <span class="dash-widget-icon"><i class="fas fa-trophy"></i></span>
                                 <div class="dash-widget-info">
                                     <h3>{{ $count['win'] }}</h3>
-                                    <span>Total Win Prospect</span>
+                                    <span>Total On Board Prospect</span>
                                 </div>
                             </div>
                         </div>
@@ -70,7 +70,7 @@
                                 <span class="dash-widget-icon"><i class="fas fa-close"></i></span>
                                 <div class="dash-widget-info">
                                     <h3>{{ $count['close'] }}</h3>
-                                    <span>Total Close Prosepect</span>
+                                    <span>Total Cancel Prosepect</span>
                                 </div>
                             </div>
                         </div>
