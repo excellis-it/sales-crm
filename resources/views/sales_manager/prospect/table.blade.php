@@ -36,7 +36,15 @@
                     {{ $prospect->transferTakenBy->name ?? '' }}
                 </td>
                 <td>
-                    {{ $prospect->status }}
+                    @if ($prospect->status == 'Win')
+                    <span>On Board</span>
+                    @elseif ($prospect->status == 'Follow Up')
+                    <span>Follow Up</span>
+                    @elseif ($prospect->status == 'Sent Proposal')
+                    <span>Sent Proposal</span>
+                    @elseif ($prospect->status == 'Close')
+                    <span>Cancel</span>
+                @endif
                 </td>
                 <td>
                     {{ $prospect->offered_for }}
@@ -52,9 +60,14 @@
                 </td>
 
                 <td>
-                    <a title="Edit Prospect" data-route=""
-                    href="{{ route('sales-manager.prospects.edit', $prospect->id) }}"><i
-                        class="fas fa-edit"></i></a> &nbsp;&nbsp;
+                    @if ($prospect->status != 'Win')
+                        <a title="Edit Prospect" data-route="" href="{{ route('sales-manager.prospects.edit', $prospect->id) }}"><i
+                                class="fas fa-edit"></i></a> &nbsp;&nbsp;
+                    @endif
+                    @if ($prospect->status == 'Win' && $prospect->is_project == false)
+                    <a title="Assign to project" data-route="" href="{{ route('sales-manager.prospects.assign-project', $prospect->id) }}"><i
+                        class="fa fa-shield"></i></a> &nbsp;&nbsp;
+                    @endif
 
                     <a title="View Prospect" class="view-details-btn"
                         data-route="{{ route('sales-manager.prospects.show', $prospect->id) }}"

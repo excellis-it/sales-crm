@@ -102,7 +102,7 @@
                                                             <span style="color: red;">*</span></label>
                                                         <select name="offered_for" id="prospect_type" required
                                                             data-parsley-trigger="keyup" class="form-control">
-                                                            <option value="" disabled>Select prospect Type</option>
+                                                            <option value="" >Select Service Offered</option>
                                                             <option value="Website Design & Development"
                                                                 {{ $prospect->offered_for == 'Website Design & Development' ? 'selected' : '' }}>
                                                                 Website Design & Development</option>
@@ -171,7 +171,7 @@
                                                         </label>
                                                         <select name="transfer_token_by" id="transfer_token_by"
                                                             class="form-control select2" required>
-                                                            <option value="" disabled>Select Transfer Token By</option>
+                                                            <option value="" >Select Transfer Token By</option>
                                                             @foreach ($users as $user)
                                                                 <option value="{{ $user->id }}" {{ $prospect->transfer_token_by == $user->id ? 'selected' : '' }}>
                                                                     {{ $user->name }}</option>
@@ -193,12 +193,48 @@
                                                             class="form-control" value="{{ $prospect->followup_time }}"
                                                             placeholder="Enter Followup Time">
                                                     </div>
-                                                    {{-- next_followup_date --}}
+                                                    {{-- status --}}
                                                     <div class="col-md-4 mb-3">
-                                                        <label for="inputEnterYourName" class="col-form-label">Next Followup Date</label>
-                                                        <input type="date" name="next_followup_date" id="next_followup_date"
-                                                            class="form-control"  value="{{ $prospect->next_followup_date }}"
-                                                            placeholder="Enter Next Followup Date">
+                                                        <label for="inputEnterYourName" class="col-form-label">Status
+                                                            <span style="color: red;">*</span></label>
+                                                        <select name="status" id="status" class="form-control"
+                                                            required data-parsley-trigger="keyup">
+                                                            <option value="">Select Status</option>
+                                                            <option value="Win"
+                                                                {{ $prospect->status == 'Win' ? 'selected' : '' }}>On board
+                                                            </option>
+                                                            <option value="Follow Up"
+                                                                {{ $prospect->status == 'Follow Up' ? 'selected' : '' }}>
+                                                                Follow Up</option>
+                                                            <option value="Sent Proposal"
+                                                                {{ $prospect->status == 'Sent Proposal' ? 'selected' : '' }}>
+                                                                Sent Proposal</option>
+                                                            <option value="Close"
+                                                                {{ $prospect->status == 'Close' ? 'selected' : '' }}>Cancel
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="row" id="upfront_value_show">
+                                                        @if ($prospect->status == 'Win')
+                                                            <div class="col-md-4 mb-3">
+                                                                <label for="inputEnterYourName"
+                                                                    class="col-form-label">Upfront
+                                                                    Value</label>
+                                                                <input type="text" name="upfront_value"
+                                                                    id="upfront_value" class="form-control"
+                                                                    value="{{ $prospect->upfront_value ?? '' }}"
+                                                                    placeholder="Enter Upfront Value">
+                                                            </div>
+                                                            <div class="col-md-4 mb-3">
+                                                                <label for="inputEnterYourName"
+                                                                    class="col-form-label">Sale
+                                                                    Date</label>
+                                                                <input type="date" name="sale_date" id="sale_date"
+                                                                    class="form-control"
+                                                                    value="{{ $prospect->sale_date ?? '' }}"
+                                                                    placeholder="Enter Sale Date">
+                                                            </div>
+                                                        @endif
                                                     </div>
                                                     {{-- comments --}}
                                                     <div class="col-md-12 mb-3">
@@ -260,6 +296,24 @@
                 $('#other-value').html(html);
             } else {
                 $('#other-value').html('');
+            }
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('#status').on('change', function() {
+            // get value win show the upfront value
+            var status = $(this).val();
+            // alert(status);
+            if (status.includes('Win')) {
+                var html = '';
+                html +=
+                    '<div class="col-md-4 mb-3"><label for="inputEnterYourName" class="col-form-label">Upfront Value<span style="color: red;">*</span></label><input type="text" name="upfront_value" id="upfront_value" class="form-control" value="{{ $prospect->upfront_value ?? '' }}" placeholder="Enter Upfront Value"></div> <div class="col-md-4 mb-3"><label for="inputEnterYourName" class="col-form-label">Sale Date <span style="color: red;">*</span></label><input type="date" name="sale_date" id="sale_date" class="form-control" value="{{ $prospect->sale_date ?? '' }}" placeholder="Enter Sale Date"></div>';
+                $('#upfront_value_show').html(html);
+            } else {
+                $('#upfront_value_show').html('');
             }
         });
     });

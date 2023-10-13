@@ -3,9 +3,22 @@
     Dashboard - {{ env('APP_NAME') }} admin
 @endsection
 @push('styles')
+    <style>
+        .dataTables_filter {
+            margin-bottom: 10px !important;
+        }
+    </style>
 @endpush
 
 @section('content')
+    @php
+        $totalProspects = $count['prospects'];
+        $winProspects = $count['win'];
+        $percentage['win'] = round(($winProspects / $totalProspects) * 100, 0);
+        $percentage['follow_up'] = round(($count['follow_up'] / $totalProspects) * 100, 0);
+        $percentage['sent_proposal'] = round(($count['sent_proposal'] / $totalProspects) * 100, 0);
+        $percentage['close'] = round(($count['close'] / $totalProspects) * 100, 0);
+    @endphp
     <div class="page-wrapper">
 
         <div class="content container-fluid">
@@ -22,208 +35,432 @@
             </div>
 
             <div class="row">
-                <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-                    <a href="{{ route('prospects.index') }}" style="color: black">
-                        <div class="card dash-widget">
-                            <div class="card-body">
-                                <div class="dash-widget-info">
-                                    <h3>{{ $count['prospects'] }}</h3>
+                @if ($goal['gross_goals'])
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="stats-card-one mb-30">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <p class="mb-10 line-height-1">Gross Sales</p>
+                                    <h3 class="mb-0 fs-25">${{ $goal['gross_goals']['goals_achieve'] }}</h3>
+                                </div>
+                                <?php
+                                $target = $goal['gross_goals']['goals_amount'];
+                                $achieve = $goal['gross_goals']['goals_achieve'];
+                                // round percentage
+                                $percentage['gross_goals'] = round(($achieve / $target) * 100, 0);
+                                ?>
+                                <span class="badge badge-cyan fs-12">
+                                    <i class="icofont-swoosh-up"></i>
+                                    <span class="fw-600 m-l-5">{{ $percentage['gross_goals'] }}%</span>
+                                </span>
+                            </div>
+
+                            <div class="mt-15">
+                                <div class="d-flex justify-content-between">
+                                    <div class="d-flex align-items-center">
+                                        <span>Monthly Goal</span>
+                                    </div>
+                                    <span class="fw-600">{{ $percentage['gross_goals'] }}%</span>
+                                </div>
+
+                                <div class="progress progress-sm mt-1">
+                                    <div class="progress-bar bg-primary" style="width: {{ $percentage['gross_goals'] }}%">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+                @if ($goal['net_goals'])
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="stats-card-one mb-30">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <p class="mb-10 line-height-1">Revenue</p>
+                                    <h3 class="mb-0 fs-25">${{ $goal['net_goals']['goals_achieve'] }}</h3>
+                                </div>
+                                <?php
+                                $target = $goal['net_goals']['goals_amount'];
+                                $achieve = $goal['net_goals']['goals_achieve'];
+                                // round percentage
+                                $percentage['net_goals'] = round(($achieve / $target) * 100, 0);
+                                ?>
+                                <span class="badge badge-cyan font-size-12">
+                                    <i class="icofont-swoosh-up"></i>
+                                    <span class="fw-600 m-l-5">{{ $percentage['net_goals'] }}%</span>
+                                </span>
+                            </div>
+
+                            <div class="mt-15">
+                                <div class="d-flex justify-content-between">
+                                    <div class="d-flex align-items-center">
+                                        <span>Monthly Goal</span>
+                                    </div>
+                                    <span class="fw-600">{{ $percentage['net_goals'] }}%</span>
+                                </div>
+
+                                <div class="progress progress-sm mt-1">
+                                    <div class="progress-bar bg-danger" style="width: {{ $percentage['net_goals'] }}%">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+                <div class="col-lg-3 col-sm-6">
+                    <div class="stats-card-one mb-30">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="mb-10 line-height-1">New Customers</p>
+                                <h3 class="mb-0 fs-25">{{ $count['win'] }}</h3>
+                            </div>
+
+                            <span class="badge badge-red font-size-12">
+                                <i class="icofont-swoosh-down"></i>
+                                <span class="fw-600 m-l-5">{{ $percentage['win']}}%</span>
+                            </span>
+                        </div>
+
+                        <div class="mt-15">
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex align-items-center">
+                                    <span>Monthly Goal</span>
+                                </div>
+                                <span class="fw-600">{{$percentage['win']}}%</span>
+                            </div>
+
+                            <div class="progress progress-sm mt-1">
+                                <div class="progress-bar bg-purple" style="width: {{$percentage['win']}}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card mb-30">
+                        <div class="card-body" style="position: relative;">
+                            <div class="card-header">
+                                <h5 class="card-title">Monthly Revenue</h5>
+                            </div>
+
+
+                            <div class="resize-triggers">
+                                <div class="expand-trigger">
+                                    <canvas id="canvas"></canvas>
+                                </div>
+                                <div class="contract-trigger"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card mb-30">
+                        <div class="card-body" style="position: relative;">
+                            <div class="card-header">
+                                <h5 class="card-title">Prospects Statistics</h5>
+                            </div>
+
+
+                            <div class="resize-triggers">
+                                <div class="expand-trigger">
+                                    <canvas id="oilChart" ></canvas>
+
+                                </div>
+                                <div class="contract-trigger"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="card mb-30">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex align-items-center">
                                     <span>Total Prospects</span>
                                 </div>
-                                <div class="">
-                                    <span class="dash-widget-icon"><i class="fa fa-users"></i></span>
-                                </div>
+
+                                <span class="fw-600">{{ $count['prospects'] }}</span>
+                            </div>
+
+                            <div class="progress progress-sm mt-2">
+                                <div class="progress-bar bg-primary" style="width: 100%"></div>
                             </div>
                         </div>
-                    </a>
+                    </div>
                 </div>
-                <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-                    <a href="{{ route('prospects.index',['type' => 'Win']) }}" style="color: black">
-                        <div class="card dash-widget">
-                            <div class="card-body">
-                                <span class="dash-widget-icon"><i class="fas fa-trophy"></i></span>
-                                <div class="dash-widget-info">
-                                    <h3>{{ $count['win'] }}</h3>
-                                    <span>Total On Board Prospect</span>
+
+                <div class="col-lg-3">
+                    <div class="card mb-30">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex align-items-center">
+                                    <span>Follow Up Prospects</span>
                                 </div>
+                                <span class="fw-600">{{ $count['follow_up'] }}</span>
+                            </div>
+
+                            <div class="progress progress-sm mt-2">
+                                <div class="progress-bar bg-danger" style="width: {{ $percentage['follow_up'] }}%"></div>
                             </div>
                         </div>
-                    </a>
+                    </div>
                 </div>
-                <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-                    <a href="{{ route('prospects.index',['type' => 'Follow Up']) }}" style="color: black">
-                        <div class="card dash-widget">
-                            <div class="card-body">
-                                <span class="dash-widget-icon"><i class="fas fa-arrow-up"></i></span>
-                                <div class="dash-widget-info">
-                                    <h3>{{ $count['follow_up'] }}</h3>
-                                    <span>Total Follow Up Prospect</span>
+
+                <div class="col-lg-3">
+                    <div class="card mb-30">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex align-items-center">
+                                    <span>Sent Proposal Prospects</span>
+                                </div>
+                                <span class="fw-600">{{ $count['sent_proposal'] }}</span>
+                            </div>
+
+                            <div class="progress progress-sm mt-2">
+                                <div class="progress-bar bg-danger" style="width: {{ $percentage['sent_proposal'] }}%">
                                 </div>
                             </div>
                         </div>
-                    </a>
+                    </div>
                 </div>
-                <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-                    <a href="{{ route('prospects.index',['type' => 'Close']) }}" style="color: black">
-                        <div class="card dash-widget">
-                            <div class="card-body">
-                                <span class="dash-widget-icon"><i class="fas fa-close"></i></span>
-                                <div class="dash-widget-info">
-                                    <h3>{{ $count['close'] }}</h3>
-                                    <span>Total Cancel Prosepect</span>
+
+                <div class="col-lg-3">
+                    <div class="card mb-30">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex align-items-center">
+                                    <span>Close Prospects</span>
                                 </div>
+                                <span class="fw-600">{{ $count['close'] }}</span>
+                            </div>
+
+                            <div class="progress progress-sm mt-2">
+                                <div class="progress-bar bg-danger" style="width: {{ $percentage['close'] }}%"></div>
                             </div>
                         </div>
-                    </a>
+                    </div>
                 </div>
             </div>
 
             <div class="row">
-                {{-- <div class="col-md-12 col-lg-12 col-xl-4 d-flex">
-                    <div class="card flex-fill dash-statistics">
-                        <div class="card-body">
-                            <h5 class="card-title">Statistics</h5>
-                            <div class="stats-list">
-                                <div class="stats-info">
-                                    <p>Today Leave <strong>4 <small>/ 65</small></strong></p>
-                                    <div class="progress">
-                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 31%"
-                                            aria-valuenow="31" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                                <div class="stats-info">
-                                    <p>Pending Invoice <strong>15 <small>/ 92</small></strong></p>
-                                    <div class="progress">
-                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 31%"
-                                            aria-valuenow="31" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                                <div class="stats-info">
-                                    <p>Completed Projects <strong>85 <small>/ 112</small></strong></p>
-                                    <div class="progress">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: 62%"
-                                            aria-valuenow="62" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                                <div class="stats-info">
-                                    <p>Open Tickets <strong>190 <small>/ 212</small></strong></p>
-                                    <div class="progress">
-                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 62%"
-                                            aria-valuenow="62" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                                <div class="stats-info">
-                                    <p>Closed Tickets <strong>22 <small>/ 212</small></strong></p>
-                                    <div class="progress">
-                                        <div class="progress-bar bg-info" role="progressbar" style="width: 22%"
-                                            aria-valuenow="22" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="col-md-12">
+                    <table id="myTable" class="dd table table-striped table-bordered" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Business Name</th>
+                                <th>Client Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Transfer Taken By</th>
+                                <th>Status</th>
+                                <th>Service Offered</th>
+                                <th>Followup Date</th>
+                                <th>Price Quoted</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($prospects as $key => $prospect)
+                                <tr>
+                                    <td>
+                                        {{ date('d M, Y', strtotime($prospect->created_at)) }}
+                                    </td>
+                                    <td>
+                                        {{ $prospect->business_name }}
+                                    </td>
+                                    <td>
+                                        {{ $prospect->client_name }}
+                                    </td>
+                                    <td>
+                                        {{ $prospect->client_email }}
+                                    </td>
+                                    <td>
+                                        {{ $prospect->client_phone }}
+                                    </td>
+                                    <td>
+                                        {{ $prospect->transferTakenBy->name ?? '' }}
+                                    </td>
+                                    <td>
+                                        @if ($prospect->status == 'Win')
+                                            <span>On Board</span>
+                                        @elseif ($prospect->status == 'Follow Up')
+                                            <span>Follow Up</span>
+                                        @elseif ($prospect->status == 'Sent Proposal')
+                                            <span>Sent Proposal</span>
+                                        @elseif ($prospect->status == 'Close')
+                                            <span>Cancel</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        {{ $prospect->offered_for }}
+                                    </td>
+
+
+
+                                    <td>
+                                        {{ date('d M, Y', strtotime($prospect->followup_date)) }}
+                                    </td>
+                                    <td>
+                                        {{ $prospect->price_quote }}
+                                    </td>
+
+
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
-                <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
-                    <div class="card flex-fill">
-                        <div class="card-body">
-                            <h4 class="card-title">Task Statistics</h4>
-                            <div class="statistics">
-                                <div class="row">
-                                    <div class="col-md-6 col-6 text-center">
-                                        <div class="stats-box mb-4">
-                                            <p>Total Tasks</p>
-                                            <h3>385</h3>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-6 text-center">
-                                        <div class="stats-box mb-4">
-                                            <p>Overdue Tasks</p>
-                                            <h3>19</h3>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="progress mb-4">
-                                <div class="progress-bar bg-purple" role="progressbar" style="width: 30%" aria-valuenow="30"
-                                    aria-valuemin="0" aria-valuemax="100">30%</div>
-                                <div class="progress-bar bg-warning" role="progressbar" style="width: 22%"
-                                    aria-valuenow="18" aria-valuemin="0" aria-valuemax="100">22%</div>
-                                <div class="progress-bar bg-success" role="progressbar" style="width: 24%"
-                                    aria-valuenow="12" aria-valuemin="0" aria-valuemax="100">24%</div>
-                                <div class="progress-bar bg-danger" role="progressbar" style="width: 26%"
-                                    aria-valuenow="14" aria-valuemin="0" aria-valuemax="100">21%</div>
-                                <div class="progress-bar bg-info" role="progressbar" style="width: 10%"
-                                    aria-valuenow="14" aria-valuemin="0" aria-valuemax="100">10%</div>
-                            </div>
-                            <div>
-                                <p><i class="fa fa-dot-circle-o text-purple me-2"></i>Completed Tasks <span
-                                        class="float-end">166</span></p>
-                                <p><i class="fa fa-dot-circle-o text-warning me-2"></i>Inprogress Tasks <span
-                                        class="float-end">115</span></p>
-                                <p><i class="fa fa-dot-circle-o text-success me-2"></i>On Hold Tasks <span
-                                        class="float-end">31</span></p>
-                                <p><i class="fa fa-dot-circle-o text-danger me-2"></i>Pending Tasks <span
-                                        class="float-end">47</span></p>
-                                <p class="mb-0"><i class="fa fa-dot-circle-o text-info me-2"></i>Review Tasks <span
-                                        class="float-end">5</span></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
-                    <div class="card flex-fill">
-                        <div class="card-body">
-                            <h4 class="card-title">Today Absent <span class="badge bg-inverse-danger ms-2">5</span></h4>
-                            <div class="leave-info-box">
-                                <div class="media d-flex align-items-center">
-                                    <a href="profile.html" class="avatar"><img alt=""
-                                            src="assets/img/user.jpg"></a>
-                                    <div class="media-body flex-grow-1">
-                                        <div class="text-sm my-0">Martin Lewis</div>
-                                    </div>
-                                </div>
-                                <div class="row align-items-center mt-3">
-                                    <div class="col-6">
-                                        <h6 class="mb-0">4 Sep 2019</h6>
-                                        <span class="text-sm text-muted">Leave Date</span>
-                                    </div>
-                                    <div class="col-6 text-end">
-                                        <span class="badge bg-inverse-danger">Pending</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="leave-info-box">
-                                <div class="media d-flex align-items-center">
-                                    <a href="profile.html" class="avatar"><img alt=""
-                                            src="assets/img/user.jpg"></a>
-                                    <div class="media-body flex-grow-1">
-                                        <div class="text-sm my-0">Martin Lewis</div>
-                                    </div>
-                                </div>
-                                <div class="row align-items-center mt-3">
-                                    <div class="col-6">
-                                        <h6 class="mb-0">4 Sep 2019</h6>
-                                        <span class="text-sm text-muted">Leave Date</span>
-                                    </div>
-                                    <div class="col-6 text-end">
-                                        <span class="badge bg-inverse-success">Approved</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="load-more text-center">
-                                <a class="text-dark" href="javascript:void(0);">Load More</a>
-                            </div>
-                        </div>
-                    </div>
-                </div> --}}
             </div>
 
-        </div>
-
     </div>
-
+    </div>
     </div>
 @endsection
 
 @push('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.min.js"></script>
+    <script>
+        var barChartData = {
+            labels: [
+                "Jan",
+                "Febr",
+                "Mar",
+                "Apr",
+                "May",
+                "Jun",
+                "Jul",
+                'Aug',
+                'Sept',
+                'Oct',
+                'Nov',
+                'Dec'
+            ],
+            datasets: [{
+                    label: "Gross Sales",
+                    backgroundColor: "#fa8d35",
+                    borderColor: "#fa8d35",
+                    borderWidth: 1,
+                    data: [{{ $goal['gross_goals_january'] ?? 0 }}, {{ $goal['gross_goals_february'] ?? 0 }},
+                        {{ $goal['gross_goals_march'] ?? 0 }}, {{ $goal['gross_goals_april'] ?? 0 }},
+                        {{ $goal['gross_goals_may'] ?? 0 }}, {{ $goal['gross_goals_june'] ?? 0 }},
+                        {{ $goal['gross_goals_july'] ?? 0 }}, {{ $goal['gross_goals_august'] ?? 0 }},
+                        {{ $goal['gross_goals_september'] ?? 0 }}, {{ $goal['gross_goals_october'] ?? 0 }},
+                        {{ $goal['gross_goals_november'] ?? 0 }}, {{ $goal['gross_goals_december'] ?? 0 }}
+                    ]
+                },
+                {
+                    label: "Revenue",
+                    backgroundColor: "#ad1e23",
+                    borderColor: "#ad1e23",
+                    borderWidth: 1,
+                    data: [{{ $goal['net_goals_january'] ?? 0 }}, {{ $goal['net_goals_february'] ?? 0 }},
+                        {{ $goal['net_goals_march'] ?? 0 }}, {{ $goal['net_goals_april'] ?? 0 }},
+                        {{ $goal['net_goals_may'] ?? 0 }}, {{ $goal['net_goals_june'] ?? 0 }},
+                        {{ $goal['net_goals_july'] ?? 0 }}, {{ $goal['net_goals_august'] ?? 0 }},
+                        {{ $goal['net_goals_september'] ?? 0 }}, {{ $goal['net_goals_october'] ?? 0 }},
+                        {{ $goal['net_goals_november'] ?? 0 }}, {{ $goal['net_goals_december'] ?? 0 }}
+                    ]
+                },
+                {
+                    label: "Prospect",
+                    backgroundColor: "#6c757d",
+                    borderColor: "#6c757d",
+                    borderWidth: 1,
+                    data: [{{ $goal['prospect_december'] ?? 0 }}, {{ $goal['prospect_january'] ?? 0 }},
+                        {{ $goal['prospect_february'] ?? 0 }}, {{ $goal['prospect_march'] ?? 0 }},
+                        {{ $goal['prospect_april'] ?? 0 }}, {{ $goal['prospect_may'] ?? 0 }},
+                        {{ $goal['prospect_june'] ?? 0 }}, {{ $goal['prospect_july'] ?? 0 }},
+                        {{ $goal['prospect_august'] ?? 0 }}, {{ $goal['prospect_september'] ?? 0 }},
+                        {{ $goal['prospect_october'] ?? 0 }}, {{ $goal['prospect_november'] ?? 0 }}
+                    ]
+                },
+            ]
+        };
+
+        var chartOptions = {
+            responsive: true,
+            legend: {
+                position: "top"
+            },
+            title: {
+                display: true,
+                text: ""
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+
+        window.onload = function() {
+            var ctx = document.getElementById("canvas").getContext("2d");
+            window.myBar = new Chart(ctx, {
+                type: "bar",
+                data: barChartData,
+                options: chartOptions
+            });
+        };
+    </script>
+    <script>
+        $(document).ready(function() {
+            //Default data table
+            $('#myTable').DataTable({
+                "aaSorting": [],
+                "columnDefs": [{
+                        "orderable": false,
+                        "targets": []
+                    },
+                    {
+                        "orderable": true,
+                        "targets": [0, 1, 2, 5, 6, 7, 8, 9]
+                    }
+                ]
+            });
+
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            //how to place holder in "jquery datatable" search box
+            $('#myTable_filter input').attr("placeholder", "Search");
+        });
+    </script>
+    <script>
+        var oilCanvas = document.getElementById("oilChart");
+
+Chart.defaults.global.defaultFontFamily = "Lato";
+Chart.defaults.global.defaultFontSize = 18;
+
+var oilData = {
+    labels: [
+        "On Board",
+        "Follow Up",
+        "Sent Proposal",
+        "Close",
+    ],
+    datasets: [
+        {
+            data: [{{$count['win']}}, {{$count['follow_up']}}, {{$count['sent_proposal']}}, {{$count['close']}}],
+            backgroundColor: [
+                "#ad1e23",
+                "#fa8d35",
+                "#297dd7",
+                "#6c757d",
+            ]
+        }]
+};
+
+var pieChart = new Chart(oilCanvas, {
+  type: 'pie',
+  data: oilData
+});
+    </script>
 @endpush

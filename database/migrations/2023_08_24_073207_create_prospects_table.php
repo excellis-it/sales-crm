@@ -28,7 +28,7 @@ class CreateProspectsTable extends Migration
             $table->string('status')->nullable();
             $table->string('followup_date')->nullable();
             $table->string('followup_time')->nullable();
-            $table->string('next_followup_date')->nullable();
+            $table->string('sale_date')->nullable();
             $table->text('comments')->nullable();
             $table->string('website')->nullable();
             $table->timestamps();

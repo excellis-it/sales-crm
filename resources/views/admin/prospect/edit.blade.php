@@ -113,11 +113,12 @@
                                                     </div>
                                                     {{-- offer for --}}
                                                     <div class="col-md-4 mb-3">
-                                                        <label for="inputEnterYourName" class="col-form-label">Service Offered
+                                                        <label for="inputEnterYourName" class="col-form-label">Service
+                                                            Offered
                                                             <span style="color: red;">*</span></label>
                                                         <select name="offered_for" id="prospect_type" required
                                                             data-parsley-trigger="keyup" class="form-control">
-                                                            <option value="" disabled>Select prospect Type</option>
+                                                            <option value="">Select prospect Type</option>
                                                             <option value="Website Design & Development"
                                                                 {{ $prospect->offered_for == 'Website Design & Development' ? 'selected' : '' }}>
                                                                 Website Design & Development</option>
@@ -142,7 +143,13 @@
                                                         </select>
                                                     </div>
                                                     <div id="other-value" class="col-md-4 mb-3">
-                                                        @if ($prospect->offered_for != 'SMO' && $prospect->offered_for != 'SEO' && $prospect->offered_for != 'Logo Design' && $prospect->offered_for != 'Digital Marketing & SEO' && $prospect->offered_for != 'Mobile Application Development' && $prospect->offered_for != 'Website Design & Development')
+                                                        @if (
+                                                            $prospect->offered_for != 'SMO' &&
+                                                                $prospect->offered_for != 'SEO' &&
+                                                                $prospect->offered_for != 'Logo Design' &&
+                                                                $prospect->offered_for != 'Digital Marketing & SEO' &&
+                                                                $prospect->offered_for != 'Mobile Application Development' &&
+                                                                $prospect->offered_for != 'Website Design & Development')
                                                             <label for="inputEnterYourName" class="col-form-label">Other
                                                                 Value <span style="color: red;">*</span></label>
                                                             <input type="text" name="other_value" id="other_value"
@@ -161,6 +168,39 @@
                                                             data-parsley-type-message="Please enter a valid number."
                                                             class="form-control" value="{{ $prospect->price_quote }}"
                                                             placeholder="Enter Price Quote">
+                                                    </div>
+
+                                                    {{-- transfer_token_by --}}
+                                                    <div class="col-md-4 mb-3">
+                                                        <label for="inputEnterYourName" class="col-form-label">Transfer
+                                                            Taken By <span style="color: red;">*</span>
+                                                        </label>
+                                                        <select name="transfer_token_by" id="transfer_token_by"
+                                                            class="form-control select2" required>
+                                                            <option value="">Select Transfer Token By</option>
+                                                            @foreach ($users as $user)
+                                                                <option value="{{ $user->id }}"
+                                                                    {{ $prospect->transfer_token_by == $user->id ? 'selected' : '' }}>
+                                                                    {{ $user->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    {{-- followup_date --}}
+                                                    <div class="col-md-4 mb-3">
+                                                        <label for="inputEnterYourName" class="col-form-label">Followup
+                                                            Date <span style="color: red;">*</span></label>
+                                                        <input type="date" name="followup_date" id="followup_date"
+                                                            required class="form-control"
+                                                            value="{{ $prospect->followup_date }}"
+                                                            placeholder="Enter Followup Date">
+                                                    </div>
+                                                    {{-- followup_time --}}
+                                                    <div class="col-md-4 mb-3">
+                                                        <label for="inputEnterYourName" class="col-form-label">Followup
+                                                            Time</label>
+                                                        <input type="time" name="followup_time" id="followup_time"
+                                                            class="form-control" value="{{ $prospect->followup_time }}"
+                                                            placeholder="Enter Followup Time">
                                                     </div>
                                                     {{-- status --}}
                                                     <div class="col-md-4 mb-3">
@@ -183,43 +223,27 @@
                                                             </option>
                                                         </select>
                                                     </div>
-                                                    {{-- transfer_token_by --}}
-                                                    <div class="col-md-4 mb-3">
-                                                        <label for="inputEnterYourName" class="col-form-label">Transfer Taken By <span style="color: red;">*</span>
-                                                        </label>
-                                                        <select name="transfer_token_by" id="transfer_token_by"
-                                                            class="form-control select2" required>
-                                                            <option value="" disabled>Select Transfer Token By</option>
-                                                            @foreach ($users as $user)
-                                                                <option value="{{ $user->id }}" {{ $prospect->transfer_token_by == $user->id ? 'selected' : '' }}>
-                                                                    {{ $user->name }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                    {{-- followup_date --}}
-                                                    <div class="col-md-4 mb-3">
-                                                        <label for="inputEnterYourName" class="col-form-label">Followup
-                                                            Date <span style="color: red;">*</span></label>
-                                                        <input type="date" name="followup_date" id="followup_date" required
-                                                            class="form-control" value="{{ $prospect->followup_date }}"
-                                                            placeholder="Enter Followup Date">
-                                                    </div>
-                                                    {{-- followup_time --}}
-                                                    <div class="col-md-4 mb-3">
-                                                        <label for="inputEnterYourName" class="col-form-label">Followup
-                                                            Time</label>
-                                                        <input type="time" name="followup_time" id="followup_time"
-                                                            class="form-control" value="{{ $prospect->followup_time }}"
-                                                            placeholder="Enter Followup Time">
-                                                    </div>
-                                                    {{-- next_followup_date --}}
-                                                    <div class="col-md-4 mb-3">
-                                                        <label for="inputEnterYourName" class="col-form-label">Next
-                                                            Followup Date</label>
-                                                        <input type="date" name="next_followup_date"
-                                                            id="next_followup_date" class="form-control"
-                                                            value="{{ $prospect->next_followup_date }}"
-                                                            placeholder="Enter Next Followup Date">
+                                                    <div class="row" id="upfront_value_show">
+                                                        @if ($prospect->status == 'Win')
+                                                            <div class="col-md-4 mb-3">
+                                                                <label for="inputEnterYourName"
+                                                                    class="col-form-label">Upfront
+                                                                    Value</label>
+                                                                <input type="text" name="upfront_value"
+                                                                    id="upfront_value" class="form-control"
+                                                                    value="{{ $prospect->upfront_value ?? '' }}"
+                                                                    placeholder="Enter Upfront Value">
+                                                            </div>
+                                                            <div class="col-md-4 mb-3">
+                                                                <label for="inputEnterYourName"
+                                                                    class="col-form-label">Sale
+                                                                    Date</label>
+                                                                <input type="date" name="sale_date" id="sale_date"
+                                                                    class="form-control"
+                                                                    value="{{ $prospect->sale_date ?? '' }}"
+                                                                    placeholder="Enter Sale Date">
+                                                            </div>
+                                                        @endif
                                                     </div>
                                                     {{-- comments --}}
                                                     <div class="col-md-12 mb-3">
@@ -275,6 +299,23 @@
                     $('#other-value').html(html);
                 } else {
                     $('#other-value').html('');
+                }
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#status').on('change', function() {
+                // get value win show the upfront value
+                var status = $(this).val();
+                // alert(status);
+                if (status.includes('Win')) {
+                    var html = '';
+                    html +=
+                        '<div class="col-md-4 mb-3"><label for="inputEnterYourName" class="col-form-label">Upfront Value<span style="color: red;">*</span></label><input type="text" name="upfront_value" id="upfront_value" class="form-control" value="{{ $prospect->upfront_value ?? '' }}" placeholder="Enter Upfront Value"></div> <div class="col-md-4 mb-3"><label for="inputEnterYourName" class="col-form-label">Sale Date <span style="color: red;">*</span></label><input type="date" name="sale_date" id="sale_date" class="form-control" value="{{ $prospect->sale_date ?? '' }}" placeholder="Enter Sale Date"></div>';
+                    $('#upfront_value_show').html(html);
+                } else {
+                    $('#upfront_value_show').html('');
                 }
             });
         });

@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\SalesManager;
 
 use App\Http\Controllers\Controller;
+use App\Models\Goal;
+use App\Models\Project;
+use App\Models\ProjectType;
 use Illuminate\Http\Request;
 use App\Models\Prospect;
 use App\Models\User;
@@ -61,7 +64,8 @@ class ProspectController extends Controller
         $prospect->status = $data['status'];
         $prospect->followup_date = $data['followup_date'];
         $prospect->followup_time = $data['followup_time'];
-        $prospect->next_followup_date = $data['next_followup_date'];
+        $prospect->sale_date = $data['sale_date'];
+        $prospect->upfront_value = $data['upfront_value'] ?? '';
         $prospect->comments = $data['comments'];
         $prospect->price_quote = $data['price_quote'];
         if ($data['offered_for'] == 'Other') {
@@ -103,7 +107,7 @@ class ProspectController extends Controller
         try {
             $prospect = Prospect::find($id);
             $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->get();
-            $sales_executives = User::role('SALES_EXCUETIVE')->where(['status' => 1])->orderBy('id', 'desc')->get();
+            $sales_executives = User::role('SALES_EXCUETIVE')->where(['status' => 1, 'sales_manager_id' =>Auth::user()->id ])->orderBy('id', 'desc')->get();
             return view('sales_manager.prospect.edit')->with(compact('prospect','sales_executives', 'users'));
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
@@ -132,7 +136,8 @@ class ProspectController extends Controller
         $prospect->status = $data['status'];
         $prospect->followup_date = $data['followup_date'];
         $prospect->followup_time = $data['followup_time'];
-        $prospect->next_followup_date = $data['next_followup_date'];
+        $prospect->sale_date = $data['sale_date'];
+        $prospect->upfront_value = $data['upfront_value'] ?? '';
         $prospect->comments = $data['comments'];
         $prospect->price_quote = $data['price_quote'];
         if ($data['offered_for'] == 'Other') {
@@ -174,6 +179,81 @@ class ProspectController extends Controller
             }
 
             return response()->json(['view'=>(String)View::make('sales_manager.prospect.table')->with(compact('prospects'))]);
+        }
+    }
+
+    public function assignToProject($id)
+    {
+        try {
+
+            $prospect = Prospect::findOrFail($id);
+            $prospect->is_project = true;
+            $prospect->save();
+            $user = User::where(['id' => $prospect->user_id])->first();
+            //sales executive goal
+            $net_goal = Goal::where(['user_id' => $user->sales_manager_id, 'goals_type' => 1])->whereMonth('goals_date', date('m', strtotime($prospect->sale_date)))->whereYear('goals_date', date('Y', strtotime($prospect->sale_date)))->first();
+            if ($net_goal) {
+                $net_goal->goals_achieve = $net_goal->goals_achieve + $prospect->upfront_value;
+                $net_goal->save();
+            }
+            $gross_goal = Goal::where(['user_id' => $user->sales_manager_id, 'goals_type' => 2])->whereMonth('goals_date', date('m', strtotime($prospect->sale_date)))->whereYear('goals_date', date('Y', strtotime($prospect->sale_date)))->first();
+            if ($gross_goal) {
+                $gross_goal->goals_achieve = $gross_goal->goals_achieve + $prospect->price_quote;
+                $gross_goal->save();
+            }
+
+            //sales manager goal
+            $net_goal = Goal::where(['user_id' => $user->report_to, 'goals_type' => 1])->whereMonth('goals_date', date('m', strtotime($prospect->sale_date)))->whereYear('goals_date', date('Y', strtotime($prospect->sale_date)))->first();
+            if ($net_goal) {
+                $net_goal->goals_achieve = $net_goal->goals_achieve + $prospect->upfront_value;
+                $net_goal->save();
+            }
+
+            $gross_goal = Goal::where(['user_id' => $user->report_to, 'goals_type' => 2])->whereMonth('goals_date', date('m', strtotime($prospect->sale_date)))->whereYear('goals_date', date('Y', strtotime($prospect->sale_date)))->first();
+            if ($gross_goal) {
+                $gross_goal->goals_achieve = $gross_goal->goals_achieve + $prospect->price_quote;
+                $gross_goal->save();
+            }
+
+            $project = new Project();
+            $project->user_id = $user->sales_manager_id;
+            $project->client_name = $prospect->client_name;
+            $project->business_name = $prospect->business_name;
+            $project->client_email = $prospect->client_email;
+            $project->client_phone = $prospect->client_phone;
+            $project->client_address = $prospect->business_address;
+            $project->project_value = $prospect->price_quote;
+            $project->currency = 'USD'; // default currency 'USD
+            $project->payment_mode = '';
+            $project->project_opener = $user->id;
+            $project->project_closer = '';
+            $project->project_upfront = $prospect->upfront_value;
+            $project->website = $prospect->website;
+            $project->sale_date = $prospect->sale_date;
+            $project->comment = $prospect->comments;
+            $project->save();
+
+            $project_type = new ProjectType();
+            $project_type->project_id = $project->id;
+            $project_type->type = $prospect->offered_for;
+            if (
+                $prospect->offered_for != 'SMO' &&
+                $prospect->offered_for != 'SEO' &&
+                $prospect->offered_for != 'Logo Design' &&
+                $prospect->offered_for != 'Digital Marketing & SEO' &&
+                $prospect->offered_for != 'Mobile Application Development' &&
+                $prospect->offered_for != 'Website Design & Development'
+            ) {
+                $project_type->name = 'Other';
+            } else {
+                $project_type->name = $prospect->offered_for;
+            }
+
+            $project_type->save();
+
+            return redirect()->route('sales-manager.prospects.index')->with('message', 'Prospect converted to project successfully.');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', $th->getMessage());
         }
     }
 }

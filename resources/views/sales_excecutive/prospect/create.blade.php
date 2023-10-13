@@ -30,8 +30,8 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-xl-12 mx-auto">
-                            <h3 class="mb-0 text-uppercase">Create A Prospect</h3>
-                            <hr>
+                            {{-- <h3 class="mb-0 text-uppercase">Create A Prospect</h3>
+                            <hr> --}}
                             <form action="{{ route('prospects.store') }}" method="post" data-parsley-validate=""
                                 enctype="multipart/form-data">
                                 @csrf
@@ -108,7 +108,7 @@
                                                     style="color: red;">*</span></label>
                                             <select name="offered_for" id="project_type" required
                                                 data-parsley-trigger="keyup" class="form-control">
-                                                <option value="" disabled>Select Project Type</option>
+                                                <option value="">Select Project Type</option>
                                                 <option value="Website Design & Development">Website Design &
                                                     Development</option>
                                                 <option value="Mobile Application Development">Mobile
@@ -133,6 +133,36 @@
                                                 class="form-control" value="{{ old('price_quote') }}"
                                                 placeholder="Enter Price Quote">
                                         </div>
+
+                                        {{-- transfer_token_by --}}
+                                        <div class="col-md-4 mb-3">
+                                            <label for="inputEnterYourName" class="col-form-label">Transfer Taken By <span
+                                                    style="color: red;">*</span>
+                                            </label>
+                                            <select name="transfer_token_by" id="transfer_token_by"
+                                                class="form-control select2" required>
+                                                <option value="">Select Transfer Token By</option>
+                                                @foreach ($users as $user)
+                                                    <option value="{{ $user->id }}">{{ $user->name }}
+                                                        ({{ $user->email }})
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        {{-- followup_date --}}
+                                        <div class="col-md-4 mb-3">
+                                            <label for="inputEnterYourName" class="col-form-label">Followup Date <span
+                                                    style="color: red;">*</span></label>
+                                            <input type="date" name="followup_date" id="followup_date" required
+                                                class="form-control" placeholder="Enter Followup Date">
+                                        </div>
+                                        {{-- followup_time --}}
+                                        <div class="col-md-4 mb-3">
+                                            <label for="inputEnterYourName" class="col-form-label">Followup Time</label>
+                                            <input type="time" name="followup_time" id="followup_time"
+                                                class="form-control" placeholder="Enter Followup Time">
+                                        </div>
+
                                         {{-- status --}}
                                         <div class="col-md-4 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Status
@@ -146,37 +176,11 @@
                                                 <option value="Close">Cancel</option>
                                             </select>
                                         </div>
-                                        {{-- transfer_token_by --}}
-                                        <div class="col-md-4 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Transfer Taken By <span style="color: red;">*</span>
-                                            </label>
-                                            <select name="transfer_token_by" id="transfer_token_by"
-                                                class="form-control select2" required>
-                                                <option value="" disabled>Select Transfer Token By</option>
-                                                @foreach ($users as $user)
-                                                    <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->email }}) </option>
-                                                @endforeach
-                                            </select>
+                                    </div>
+                                        {{-- upfront_value --}}
+                                        <div class="row" id="upfront_value_show">
                                         </div>
-                                        {{-- followup_date --}}
-                                        <div class="col-md-4 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Followup Date <span style="color: red;">*</span></label>
-                                            <input type="date" name="followup_date" id="followup_date" required
-                                                class="form-control" placeholder="Enter Followup Date">
-                                        </div>
-                                        {{-- followup_time --}}
-                                        <div class="col-md-4 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Followup Time</label>
-                                            <input type="time" name="followup_time" id="followup_time"
-                                                class="form-control" placeholder="Enter Followup Time">
-                                        </div>
-                                        {{-- next_followup_date --}}
-                                        <div class="col-md-4 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Next Followup
-                                                Date</label>
-                                            <input type="date" name="next_followup_date" id="next_followup_date"
-                                                class="form-control" placeholder="Enter Next Followup Date">
-                                        </div>
+
                                         {{-- comments --}}
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Comments</label>
@@ -188,7 +192,6 @@
                                                 <button type="submit" class="btn px-5 submit-btn">Create</button>
                                             </div>
                                         </div>
-                                    </div>
                             </form>
                         </div>
                     </div>
@@ -227,6 +230,22 @@
                     $('#other-value').html(html);
                 } else {
                     $('#other-value').html('');
+                }
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $('#status').on('change', function() {
+                // get value win show the upfront value
+                var status = $(this).val();
+                if (status.includes('Win')) {
+                    $('#upfront_value_show').html(
+                        ' <div class="col-md-4 mb-3" ><label for="inputEnterYourName" data-parsley-type="number" class="col-form-label">Upfront Value <span style="color: red;">*</span></label><input type="text" name="upfront_value" id="upfront_value"  required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number." class="form-control" value="{{ old('upfront_value') }}" placeholder="Enter Upfront Value"></div><div class="col-md-4 mb-3"> <label for = "inputEnterYourName" class="col-form-label"> Sale Date <span style="color: red;">*</span></label></label> <input type="date" name ="sale_date" id ="sale_date" class ="form-control"></div>'
+                    );
+                } else {
+                    $('#upfront_value_show').html('');
                 }
             });
         });

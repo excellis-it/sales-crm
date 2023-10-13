@@ -100,7 +100,7 @@
                                                             Type <span style="color: red;">*</span></label>
                                                         <select name="project_type" id="project_type" required
                                                             data-parsley-trigger="keyup" class="form-control">
-                                                            <option value="" disabled>Select Project Type</option>
+                                                            <option value="" >Select Project Type</option>
                                                             <option value="Website Design & Development"
                                                                 @if ($project['projectTypes']['type'] == 'Website Design & Development') {{ 'selected' }} @endif>
                                                                 Website Design & Development</option>
@@ -162,7 +162,7 @@
                                                             <span style="color: red;">*</span></label>
                                                         <select name="currency" id="currency" class="form-control"
                                                             required data-parsley-trigger="keyup">
-                                                            <option value="" disabled>Select Currency</option>
+                                                            <option value="" >Select Currency</option>
                                                             <option value="INR"
                                                                 {{ $project->currency == 'INR' ? 'selected' : '' }}>
                                                                 INR</option>
@@ -199,7 +199,7 @@
                                                             Opener <span style="color: red;">*</span></label>
                                                         <select name="project_opener" id="project_opener" required
                                                             class="form-control select2">
-                                                            <option value="" disabled>Select Project
+                                                            <option value="" >Select Project
                                                                 Opener
                                                             </option>
                                                             @foreach ($users as $user)
@@ -215,7 +215,7 @@
                                                             Closer <span style="color: red;">*</span></label>
                                                         <select name="project_closer" id="project_closer" required
                                                             class="form-control select2">
-                                                            <option value="" disabled>Select Project
+                                                            <option value="" >Select Project
                                                                 Closer
                                                             </option>
                                                             @foreach ($users as $user)
@@ -432,7 +432,7 @@
                 html += '<div class="col-md-4 pb-3">';
                 html += '<div style="display: flex">';
                 html +=
-                    '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value="" disabled >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
+                    '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value=""  >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
                 html += '</div>';
                 html += '</div>';
                 // html += '<div class="col-md-4 pb-3">';
@@ -562,7 +562,7 @@
                     html += '<div class="col-md-4 pb-3">';
                     html += '<div style="display: flex">';
                     html +=
-                        '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value="" disabled >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
+                        '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value=""  >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
                     html += '</div>';
                     html += '</div>';
                     // html += '<div class="col-md-4 pb-3">';
@@ -622,7 +622,7 @@
                 html += '<div class="col-md-4 pb-3">';
                 html += '<div style="display: flex">';
                 html +=
-                    '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value="" disabled >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
+                    '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value=""  >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
                 html += '</div>';
                 html += '</div>';
                 // html += '<div class="col-md-4 pb-3">';

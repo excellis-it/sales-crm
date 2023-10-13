@@ -27,10 +27,7 @@
                             <li class="breadcrumb-item active">List</li>
                         </ul>
                     </div>
-                    <div class="col-auto float-end ms-auto">
-                        <a href="javascript:void(0);" class="btn add-btn" id="add-btn"><i class="fa fa-plus"></i> Add a
-                            Project Goals</a>
-                    </div>
+
                 </div>
             </div>
             <div class="row">
@@ -52,6 +49,7 @@
                                                 <option value="">Select a User</option>
                                                 <option value="SALES_MANAGER">Sales Manager</option>
                                                 <option value="ACCOUNT_MANAGER">Account Manager</option>
+                                                <option value="SALES_EXCUETIVE">Sales Exceutive</option>
                                             </select>
                                         </div>
                                         <div class="col-md-6">
@@ -59,14 +57,6 @@
                                                 <span style="color: red;">*</span></label>
                                             <select name="user_id" id="user_id" class="form-control">
                                                 <option value="">Select a User</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="inputEnterYourName" class="col-form-label"> Goal Type
-                                                <span style="color: red;">*</span></label>
-                                            <select name="goals_type" id="goals_type" class="form-control">
-                                                <option value="">Select a goal type</option>
-
                                             </select>
                                         </div>
                                         <div class="col-md-6">
@@ -108,15 +98,19 @@
             </div>
 
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
                             <div class="card-title">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <h4 class="mb-0">Project Goals For Sales Manager</h4>
+                                        <h4 class="mb-0">Goals</h4>
                                     </div>
-
+                                    <div class="col-md-6 text-end">
+                                        <a href="javascript:void(0);" class="btn px-5 submit-btn" id="add-btn"><i
+                                                class="fa fa-plus"></i> Add a
+                                            Project Goals</a>
+                                    </div>
                                 </div>
                             </div>
 
@@ -154,10 +148,13 @@
                                                     {{ $goal->goals_achieve ?? 0 }}
                                                 </td>
                                                 <td>
-                                                    <a href="javascript:void(0);"
-                                                        data-route="{{ route('goals.edit', $goal->id) }}"
-                                                        data-role="SALES_MANAGER" class="edit-data"><i
-                                                            class="fas fa-edit"></i> </a> &nbsp;
+                                                    @if ($goal->goals_type == 1)
+                                                        <a href="javascript:void(0);"
+                                                            data-route="{{ route('goals.edit', $goal->id) }}"
+                                                            data-role="SALES_MANAGER" class="edit-data"><i
+                                                                class="fas fa-edit"></i> </a> &nbsp;
+                                                    @endif
+
                                                     <a title="Delete Project"
                                                         data-route="{{ route('goals.delete', $goal->id) }}"
                                                         href="javascipt:void(0);" id="delete"><i
@@ -171,7 +168,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                {{-- <div class="col-md-6">
                     <div class="card">
                         <div class="card-body">
                             <div class="card-title">
@@ -234,7 +231,7 @@
                         </div>
                     </div>
 
-                </div>
+                </div> --}}
             </div>
 
         </div>
@@ -348,9 +345,6 @@
                     user_id: {
                         required: true,
                     },
-                    goals_type: {
-                        required: true,
-                    },
                     goals_amount: {
                         required: true,
                         number: true,
@@ -368,10 +362,6 @@
                     },
                     user_type: {
                         required: "Please select a user type",
-                    },
-
-                    goals_type: {
-                        required: "Please select a goal type",
                     },
                     goals_amount: {
                         required: "Please enter a target amount",

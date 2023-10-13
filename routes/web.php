@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\SalesExcecutiveController;
 use App\Http\Controllers\Admin\SellerController;
 use App\Http\Controllers\SalesExcecutive\DashboardController as SalesExcecutiveDashboardController;
 use App\Http\Controllers\SalesExcecutive\ProfileController as SalesExcecutiveProfileController;
+use App\Http\Controllers\SalesExcecutive\ProjectController as SalesExcecutiveProjectController;
 use App\Http\Controllers\SalesExcecutive\ProspectController;
 use App\Http\Controllers\SalesManager\DashboardController as SalesManagerDashboardController;
 use App\Http\Controllers\SalesManager\ProfileController as SalesManagerProfileController;
@@ -76,6 +77,7 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
         ]);
         Route::get('/prospects-delete/{id}', [AdminProspectController::class, 'delete'])->name('prospects.delete');
         Route::get('/filter', [AdminProspectController::class, 'filter'])->name('prospects.filter'); // filter
+        Route::get('/assign-to-project/{id}', [AdminProspectController::class, 'assignToProject'])->name('prospects.assign-project'); // assign project
     });
     // delete project
     Route::get('/project-delete/{id}', [AdminProjectController::class, 'delete'])->name('sales-projects.delete');
@@ -134,6 +136,7 @@ Route::group(['middleware' => ['SalesManager'], 'prefix' => 'sales-manager'], fu
     });
 
     Route::get('/filter', [SalesManagerProspectController::class, 'filter'])->name('sales-manager.prospects.filter'); // filter
+    Route::get('/assign-to-project/{id}', [SalesManagerProspectController::class, 'assignToProject'])->name('sales-manager.prospects.assign-project'); // assign project
     // change status sales excecutive
     Route::get('/changeSalesExcecutiveStatus', [SalesManagerSalesExcecutiveController::class, 'changeSalesExcecutiveStatus'])->name('sales-manager.sales-excecutive.change-status');
     // Sales Excecutive Routes
@@ -182,6 +185,14 @@ Route::group(['middleware' => ['SalesExcecutive'], 'prefix' => 'sales-excecutive
     Route::resources([
         'prospects' => ProspectController::class,
     ]);
-    Route::get('/filter', [ProspectController::class, 'filter'])->name('prospects.filter'); // password change
+
+    Route::name('sales-excecutive.')->group(function () {
+        Route::resources([
+            'projects' => SalesExcecutiveProjectController::class,
+        ]);
+    });
+
+    Route::get('/filter', [ProspectController::class, 'filter'])->name('prospects.filter'); // filter
+    Route::get('/assign-to-project/{id}', [ProspectController::class, 'assignToProject'])->name('prospects.assign-project'); // assign project
 
 });

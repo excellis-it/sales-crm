@@ -86,13 +86,13 @@
                                         <li class="">
                                             <div class="title  ">Sale By:-</div>
                                             <div class="text">
-                                                {{ $project->salesManager->name }}
+                                                {{ $project->salesManager->name ?? '' }}
                                             </div>
                                         </li>
                                         <li class="">
                                             <div class="title  ">Sales Manager Email:-</div>
                                             <div class="text">
-                                                {{ $project->salesManager->email }}
+                                                {{ $project->salesManager->email ?? '' }}
                                             </div>
                                         </li>
                                         <li class="">
@@ -130,13 +130,13 @@
                                         <li>
                                             <div class="title">Project Type:-</div>
                                             <div class="text">
-                                                <span class="badge bg-info">{{ $project->projectTypes->name }}</span>
+                                                <span class="badge bg-info">{{ $project->projectTypes->name ?? '' }}</span>
                                             </div>
                                         </li>
                                         <li>
                                             <div class="title">Project Value:-</div>
                                             <div class="text">
-                                                {{ $project->project_value }}
+                                                {{ $project->project_value ?? '' }}
                                             </div>
                                         </li>
                                         <li>

@@ -35,46 +35,55 @@
                                 <hr> --}}
                                 <div class="border-0 border-4">
                                     <div class="card-body">
-                                        <form action="{{ route('admin.prospects.store') }}" method="post" data-parsley-validate=""
-                                            enctype="multipart/form-data">
+                                        <form action="{{ route('admin.prospects.store') }}" method="post"
+                                            data-parsley-validate="" enctype="multipart/form-data">
                                             @csrf
                                             <div class="border p-4 rounded">
                                                 <div class="row">
                                                     <div class="col-md-4 mb-3">
-                                                        <label for="inputEnterYourName" class="col-form-label"> Sales Executive
+                                                        <label for="inputEnterYourName" class="col-form-label"> Sales
+                                                            Executive
                                                             <span style="color: red;">*</span></label>
-                                                        <select name="user_id" id="user_id" class="form-control select2" required data-parsley-trigger="keyup">
+                                                        <select name="user_id" id="user_id" class="form-control select2"
+                                                            required data-parsley-trigger="keyup">
                                                             <option value="">Select sales executive</option>
                                                             @foreach ($sales_executives as $sales_executive)
-                                                                <option value="{{ $sales_executive->id }}">{{ $sales_executive->name }}</option>
+                                                                <option value="{{ $sales_executive->id }}">
+                                                                    {{ $sales_executive->name }}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
                                                     <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label"> Client Name
                                                             <span style="color: red;">*</span></label>
-                                                        <input type="text" name="client_name" id="client_name" required data-parsley-trigger="keyup"
-                                                            class="form-control" value="{{ old('client_name') }}"
+                                                        <input type="text" name="client_name" id="client_name" required
+                                                            data-parsley-trigger="keyup" class="form-control"
+                                                            value="{{ old('client_name') }}"
                                                             placeholder="Enter Client Name">
                                                     </div>
                                                     <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">Business Name
                                                             <span style="color: red;">*</span></label>
-                                                        <input type="text" name="business_name" id="business_name" required data-parsley-trigger="keyup"
-                                                            class="form-control" value="{{ old('business_name') }}"
+                                                        <input type="text" name="business_name" id="business_name"
+                                                            required data-parsley-trigger="keyup" class="form-control"
+                                                            value="{{ old('business_name') }}"
                                                             placeholder="Enter Business Name">
                                                     </div>
                                                     <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">Client Email
                                                             <span style="color: red;">*</span></label>
-                                                        <input type="text" name="client_email" id="client_email" required data-parsley-trigger="keyup" data-parsley-type="email" data-parsley-type-message="Please enter a valid email address."
+                                                        <input type="text" name="client_email" id="client_email" required
+                                                            data-parsley-trigger="keyup" data-parsley-type="email"
+                                                            data-parsley-type-message="Please enter a valid email address."
                                                             class="form-control" value="{{ old('client_email') }}"
                                                             placeholder="Enter Client Email">
                                                     </div>
                                                     <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">Client Phone
                                                             <span style="color: red;">*</span></label>
-                                                        <input type="text" name="client_phone" id="client_phone" required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid phone number."
+                                                        <input type="text" name="client_phone" id="client_phone" required
+                                                            data-parsley-trigger="keyup" data-parsley-type="number"
+                                                            data-parsley-type-message="Please enter a valid phone number."
                                                             class="form-control" value="{{ old('client_phone') }}"
                                                             placeholder="Enter Client Phone Number">
                                                     </div>
@@ -83,25 +92,30 @@
                                                     <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">Business
                                                             Address <span style="color: red;">*</span></label>
-                                                        <input type="text" name="business_address" id="business_address" required data-parsley-trigger="keyup"
-                                                            class="form-control" value="{{ old('business_address') }}"
+                                                        <input type="text" name="business_address" id="business_address"
+                                                            required data-parsley-trigger="keyup" class="form-control"
+                                                            value="{{ old('business_address') }}"
                                                             placeholder="Enter Address">
                                                     </div>
 
-                                                     {{-- website --}}
-                                                     <div class="col-md-4 mb-3">
-                                                        <label for="inputEnterYourName" class="col-form-label">Website Link</label>
-                                                        <input type="text" name="website" id="website" data-parsley-required="false" data-parsley-trigger="keyup" data-parsley-type="url" data-parsley-type-message="Please enter a valid url."
+                                                    {{-- website --}}
+                                                    <div class="col-md-4 mb-3">
+                                                        <label for="inputEnterYourName" class="col-form-label">Website
+                                                            Link</label>
+                                                        <input type="text" name="website" id="website"
+                                                            data-parsley-required="false" data-parsley-trigger="keyup"
+                                                            data-parsley-type="url"
+                                                            data-parsley-type-message="Please enter a valid url."
                                                             class="form-control" value="{{ old('website') }}"
                                                             placeholder="Enter Website">
                                                     </div>
                                                     {{-- offer for --}}
                                                     <div class="col-md-4 mb-3">
-                                                        <label for="inputEnterYourName" class="col-form-label">Service Offered <span
-                                                                style="color: red;">*</span></label>
+                                                        <label for="inputEnterYourName" class="col-form-label">Service
+                                                            Offered <span style="color: red;">*</span></label>
                                                         <select name="offered_for" id="project_type" required
                                                             data-parsley-trigger="keyup" class="form-control">
-                                                            <option value="" disabled>Select Project Type</option>
+                                                            <option value="">Select Project Type</option>
                                                             <option value="Website Design & Development">Website Design &
                                                                 Development</option>
                                                             <option value="Mobile Application Development">Mobile
@@ -120,23 +134,14 @@
                                                     <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">Price Quote
                                                             <span style="color: red;">*</span></label>
-                                                        <input type="text" name="price_quote" id="price_quote" required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number."
+                                                        <input type="text" name="price_quote" id="price_quote"
+                                                            required data-parsley-trigger="keyup"
+                                                            data-parsley-type="number"
+                                                            data-parsley-type-message="Please enter a valid number."
                                                             class="form-control" value="{{ old('price_quote') }}"
                                                             placeholder="Enter Price Quote">
                                                     </div>
-                                                  {{-- status --}}
-                                                  <div class="col-md-4 mb-3">
-                                                    <label for="inputEnterYourName" class="col-form-label">Status
-                                                        <span style="color: red;">*</span></label>
-                                                    <select name="status" id="status" class="form-control"
-                                                        required data-parsley-trigger="keyup">
-                                                        <option value="">Select Status</option>
-                                                        <option value="Win">On board</option>
-                                                        <option value="Follow Up">Follow Up</option>
-                                                        <option value="Sent Proposal">Sent Proposal</option>
-                                                        <option value="Close">Cancel</option>
-                                                    </select>
-                                                </div>
+
                                                     {{-- transfer_token_by --}}
                                                     <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">Transfer
@@ -144,11 +149,12 @@
                                                         </label>
                                                         <select name="transfer_token_by" id="transfer_token_by"
                                                             class="form-control select2" required>
-                                                            <option value="" disabled>Select Transfer Token By
+                                                            <option value="">Select Transfer Token By
                                                             </option>
                                                             @foreach ($users as $user)
                                                                 <option value="{{ $user->id }}">{{ $user->name }}
-                                                                    ({{ $user->email }}) </option>
+                                                                    ({{ $user->email }})
+                                                                </option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -162,32 +168,42 @@
                                                     </div>
                                                     {{-- followup_time --}}
                                                     <div class="col-md-4 mb-3">
-                                                        <label for="inputEnterYourName" class="col-form-label">Followup Time</label>
+                                                        <label for="inputEnterYourName" class="col-form-label">Followup
+                                                            Time</label>
                                                         <input type="time" name="followup_time" id="followup_time"
-                                                            class="form-control"
-                                                            placeholder="Enter Followup Time">
+                                                            class="form-control" placeholder="Enter Followup Time">
                                                     </div>
-                                                    {{-- next_followup_date --}}
+                                                    {{-- status --}}
                                                     <div class="col-md-4 mb-3">
-                                                        <label for="inputEnterYourName" class="col-form-label">Next Followup Date</label>
-                                                        <input type="date" name="next_followup_date" id="next_followup_date"
-                                                            class="form-control"
-                                                            placeholder="Enter Next Followup Date">
-                                                    </div>
-                                                    {{-- comments --}}
-                                                    <div class="col-md-12 mb-3">
-                                                        <label for="inputEnterYourName" class="col-form-label">Comments</label>
-                                                        <textarea name="comments" id="comments" cols="30" rows="5"
-                                                            class="form-control"
-                                                            placeholder="Enter Comments ...">{{ old('comments') }}</textarea>
-                                                    </div>
-                                                    <div class="row" style="margin-top: 20px; float: left;">
-                                                        <div class="col-sm-9">
-                                                            <button type="submit"
-                                                                class="btn px-5 submit-btn">Create</button>
-                                                        </div>
+                                                        <label for="inputEnterYourName" class="col-form-label">Status
+                                                            <span style="color: red;">*</span></label>
+                                                        <select name="status" id="status" class="form-control"
+                                                            required data-parsley-trigger="keyup">
+                                                            <option value="">Select Status</option>
+                                                            <option value="Win">On board</option>
+                                                            <option value="Follow Up">Follow Up</option>
+                                                            <option value="Sent Proposal">Sent Proposal</option>
+                                                            <option value="Close">Cancel</option>
+                                                        </select>
                                                     </div>
                                                 </div>
+                                                {{-- upfront_value --}}
+                                                <div class="row" id="upfront_value_show">
+                                                </div>
+
+                                                {{-- comments --}}
+                                                <div class="col-md-12 mb-3">
+                                                    <label for="inputEnterYourName"
+                                                        class="col-form-label">Comments</label>
+                                                    <textarea name="comments" id="comments" cols="30" rows="5" class="form-control"
+                                                        placeholder="Enter Comments ...">{{ old('comments') }}</textarea>
+                                                </div>
+                                                <div class="row" style="margin-top: 20px; float: left;">
+                                                    <div class="col-sm-9">
+                                                        <button type="submit" class="btn px-5 submit-btn">Create</button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </form>
                                     </div>
                                 </div>
@@ -203,38 +219,53 @@
 @endsection
 
 @push('scripts')
-<script src="http://parsleyjs.org/dist/parsley.js"></script>
- <!-- PARSLEY -->
- <script>
-    window.ParsleyConfig = {
-        errorsWrapper: '<div></div>',
-        errorTemplate: '<div class="alert alert-danger parsley" role="alert"></div>',
-        errorClass: 'has-error',
-        successClass: 'has-success'
-    };
-</script>
+    <script src="http://parsleyjs.org/dist/parsley.js"></script>
+    <!-- PARSLEY -->
+    <script>
+        window.ParsleyConfig = {
+            errorsWrapper: '<div></div>',
+            errorTemplate: '<div class="alert alert-danger parsley" role="alert"></div>',
+            errorClass: 'has-error',
+            successClass: 'has-success'
+        };
+    </script>
     <script>
         $(document).ready(function() {
             $('.select2').select2();
         });
     </script>
-<script>
-    $(document).ready(function() {
+    <script>
+        $(document).ready(function() {
 
-        $('#project_type').on('change', function() {
-            //    select 2 value get and seo,other value check
-            var project_type = $(this).val();
-            if (project_type.includes('Other')) {
-                var html = '';
-                html +=
-                    '<label for="inputEnterYourName" class="col-form-label">Others Service <span style="color: red;">*</span></label>';
-                html +=
-                    '<input type="text" name="other_value" id="other_value" class="form-control" value="{{ old('other_value') }}" placeholder="Enter Other Value" required data-parsley-trigger="keyup">';
-                $('#other-value').html(html);
-            } else {
-                $('#other-value').html('');
-            }
+            $('#project_type').on('change', function() {
+                //    select 2 value get and seo,other value check
+                var project_type = $(this).val();
+                if (project_type.includes('Other')) {
+                    var html = '';
+                    html +=
+                        '<label for="inputEnterYourName" class="col-form-label">Others Service <span style="color: red;">*</span></label>';
+                    html +=
+                        '<input type="text" name="other_value" id="other_value" class="form-control" value="{{ old('other_value') }}" placeholder="Enter Other Value" required data-parsley-trigger="keyup">';
+                    $('#other-value').html(html);
+                } else {
+                    $('#other-value').html('');
+                }
+            });
         });
-    });
-</script>
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#status').on('change', function() {
+                // get value win show the upfront value
+                var status = $(this).val();
+                if (status.includes('Win')) {
+                    $('#upfront_value_show').html(
+                        ' <div class="col-md-4 mb-3" ><label for="inputEnterYourName" data-parsley-type="number" class="col-form-label">Upfront Value <span style="color: red;">*</span></label><input type="text" name="upfront_value" id="upfront_value"  required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number." class="form-control" value="{{ old('upfront_value') }}" placeholder="Enter Upfront Value"></div><div class="col-md-4 mb-3"> <label for = "inputEnterYourName" class="col-form-label"> Sale Date <span style="color: red;">*</span></label></label> <input type="date" name ="sale_date" id ="sale_date" class ="form-control"></div>'
+                    );
+                } else {
+                    $('#upfront_value_show').html('');
+                }
+            });
+        });
+    </script>
 @endpush

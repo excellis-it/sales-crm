@@ -96,7 +96,7 @@
                                                             Type <span style="color: red;">*</span></label>
                                                         <select name="project_type" id="project_type" required
                                                             data-parsley-trigger="keyup" class="form-control">
-                                                            <option value="" disabled>Select Project Type</option>
+                                                            <option value="" >Select Project Type</option>
                                                             <option value="Website Design & Development"
                                                                 @if ($project['projectTypes']['type'] == 'Website Design & Development') {{ 'selected' }} @endif>
                                                                 Website Design & Development</option>
@@ -195,7 +195,7 @@
                                                             Opener <span style="color: red;">*</span></label>
                                                         <select name="project_opener" id="project_opener" required
                                                             class="form-control select2">
-                                                            <option value="" disabled>Select Project
+                                                            <option value="" >Select Project
                                                                 Opener
                                                             </option>
                                                             @foreach ($users as $user)
@@ -211,7 +211,7 @@
                                                             Closer <span style="color: red;">*</span></label>
                                                         <select name="project_closer" id="project_closer" required
                                                             class="form-control select2">
-                                                            <option value="" disabled>Select Project
+                                                            <option value="" >Select Project
                                                                 Closer
                                                             </option>
                                                             @foreach ($users as $user)
@@ -268,7 +268,7 @@
                                                     </div>
                                                     <div class="col-md-4" style="margin-top:40px;">
                                                         <button type="button"
-                                                            class="btn btn-success milestone-print">Process</button>
+                                                            class="btn px-5 submit-btn milestone-print">Process</button>
                                                     </div>
 
                                                     <input type="hidden" value="{{ $project->payment_type }}"
@@ -377,7 +377,7 @@
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <button type="button"
-                                                                    class="btn btn-success add-pdf-button good-button"><i
+                                                                    class="btn px-5 submit-btn add-pdf-button good-button"><i
                                                                         class="fas fa-plus"></i> Add PDF</button>
                                                             </div>
                                                         </div>

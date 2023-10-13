@@ -94,7 +94,7 @@
                                         <li>
                                             <div class="title">Project Type:-</div>
                                             <div class="text">
-                                                <span class="">{{ $project->projectTypes->name }}</span>
+                                                <span class="">{{ $project->projectTypes->name ?? '' }}</span>
                                             </div>
                                         </li>
                                         <li>

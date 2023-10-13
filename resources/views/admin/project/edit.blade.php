@@ -114,32 +114,32 @@
                                                             Type <span style="color: red;">*</span></label>
                                                         <select name="project_type" id="project_type" required
                                                             data-parsley-trigger="keyup" class="form-control">
-                                                            <option value="" disabled>Select Project Type</option>
+                                                            <option value="" >Select Project Type</option>
                                                             <option value="Website Design & Development"
-                                                                @if ($project['projectTypes']['type'] == 'Website Design & Development') {{ 'selected' }} @endif>
+                                                                @if ((isset($project['projectTypes']['type'])) && $project['projectTypes']['type'] == 'Website Design & Development') {{ 'selected' }} @endif>
                                                                 Website Design & Development</option>
                                                             <option value="Mobile Application Development"
-                                                                @if ($project['projectTypes']['type'] == 'Mobile Application Development') {{ 'selected' }} @endif>
+                                                                @if ((isset($project['projectTypes']['type'])) && $project['projectTypes']['type'] == 'Mobile Application Development') {{ 'selected' }} @endif>
                                                                 Mobile Application Development</option>
                                                             <option value="Digital Marketing"
-                                                                @if ($project['projectTypes']['type'] == 'Digital Marketing') {{ 'selected' }} @endif>
+                                                                @if ((isset($project['projectTypes']['type'])) && $project['projectTypes']['type'] == 'Digital Marketing') {{ 'selected' }} @endif>
                                                                 Digital Marketing</option>
                                                             <option value="Logo Design"
-                                                                @if ($project['projectTypes']['type'] == 'Logo Design') {{ 'selected' }} @endif>
+                                                                @if ((isset($project['projectTypes']['type'])) && $project['projectTypes']['type'] == 'Logo Design') {{ 'selected' }} @endif>
                                                                 Logo Design</option>
                                                             <option value="SEO"
-                                                                @if ($project['projectTypes']['type'] == 'SEO') {{ 'selected' }} @endif>
+                                                                @if ((isset($project['projectTypes']['type'])) && $project['projectTypes']['type'] == 'SEO') {{ 'selected' }} @endif>
                                                                 SEO</option>
                                                             <option value="SMO"
-                                                                @if ($project['projectTypes']['type'] == 'SMO') {{ 'selected' }} @endif>
+                                                                @if ((isset($project['projectTypes']['type'])) && $project['projectTypes']['type'] == 'SMO') {{ 'selected' }} @endif>
                                                                 SMO</option>
                                                             <option value="Other"
-                                                                @if ($project['projectTypes']['type'] == 'Other') {{ 'selected' }} @endif>
+                                                                @if ((isset($project['projectTypes']['type'])) && $project['projectTypes']['type'] == 'Other') {{ 'selected' }} @endif>
                                                                 Other</option>
                                                         </select>
                                                     </div>
                                                     <div id="other-value" class="col-md-4 mb-3">
-                                                        @if ($project['projectTypes']['type'] == 'Other')
+                                                        @if ((isset($project['projectTypes']['type'])) && $project['projectTypes']['type'] == 'Other')
                                                             <label for="inputEnterYourName" class="col-form-label">Other
                                                                 Value <span style="color: red;">*</span></label>
                                                             <input type="text" name="other_value" id="other_value"
@@ -176,7 +176,7 @@
                                                             <span style="color: red;">*</span></label>
                                                         <select name="currency" id="currency" class="form-control"
                                                             required data-parsley-trigger="keyup">
-                                                            <option value="" disabled>Select Currency</option>
+                                                            <option value="" >Select Currency</option>
                                                             <option value="INR"
                                                                 {{ $project->currency == 'INR' ? 'selected' : '' }}>
                                                                 INR</option>
@@ -213,7 +213,7 @@
                                                             Opener <span style="color: red;">*</span></label>
                                                         <select name="project_opener" id="project_opener" required
                                                             class="form-control select2">
-                                                            <option value="" disabled>Select Project
+                                                            <option value="" >Select Project
                                                                 Opener
                                                             </option>
                                                             @foreach ($users as $user)
@@ -229,7 +229,7 @@
                                                             Closer <span style="color: red;">*</span></label>
                                                         <select name="project_closer" id="project_closer" required
                                                             class="form-control select2">
-                                                            <option value="" disabled>Select Project
+                                                            <option value="" >Select Project
                                                                 Closer
                                                             </option>
                                                             @foreach ($users as $user)
@@ -286,7 +286,7 @@
                                                     </div>
                                                     <div class="col-md-4" style="margin-top:40px;">
                                                         <button type="button"
-                                                            class="btn btn-success milestone-print">Process</button>
+                                                            class="btn px-5 submit-btn milestone-print">Process</button>
                                                     </div>
 
                                                     <input type="hidden" value="{{ $project->payment_type }}"
@@ -384,7 +384,7 @@
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <button type="button"
-                                                                    class="btn btn-success add-pdf-button good-button"><i
+                                                                    class="btn px-5 submit-btn add-pdf-button good-button"><i
                                                                         class="fas fa-plus"></i> Add PDF</button>
                                                             </div>
                                                         </div>

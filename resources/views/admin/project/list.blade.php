@@ -73,29 +73,29 @@
                                             {{ date('d-m-Y', strtotime($project->sale_date)) }}
                                         </td>
                                         <td>
-                                            {{ $project->salesManager->name }}
+                                            {{ $project->salesManager->name ?? '' }}
                                         </td>
                                         <td>
-                                            {{ $project->salesManager->email }}
+                                            {{ $project->salesManager->email ?? '' }}
                                         </td>
                                         <td>
-                                            {{ $project->client_name }}
+                                            {{ $project->client_name ?? '' }}
                                         </td>
                                         <td>
-                                            {{ $project->client_phone }}
+                                            {{ $project->client_phone ?? '' }}
                                         </td>
                                         <td>
-                                            {{ $project->project_value }}
+                                            {{ $project->project_value ?? '' }}
                                         </td>
 
                                         <td>
-                                            {{ $project->project_upfront }}
+                                            {{ $project->project_upfront ?? '' }}
                                         </td>
                                         <td>
-                                            {{ $project->currency }}
+                                            {{ $project->currency ?? '' }}
                                         </td>
                                         <td>
-                                            {{ $project->payment_mode }}
+                                            {{ $project->payment_mode ?? '' }}
                                         </td>
                                         <td>
                                             {{ $project->project_value - $project->project_upfront }}

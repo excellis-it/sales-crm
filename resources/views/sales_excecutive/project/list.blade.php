@@ -1,4 +1,4 @@
-@extends('sales_manager.layouts.master')
+@extends('sales_excecutive.layouts.master')
 @section('title')
     All Project Details - {{ env('APP_NAME') }}
 @endsection
@@ -23,7 +23,8 @@
                     <div class="col">
                         <h3 class="page-title">Projects Information</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('projects.index') }}">Projects</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('sales-excecutive.projects.index') }}">Projects</a>
+                            </li>
                             <li class="breadcrumb-item active">List</li>
                         </ul>
                     </div>
@@ -39,8 +40,6 @@
                                 <h4 class="mb-0">Projects Details</h4>
                             </div>
                             <div class="col-md-6 text-end">
-                                <a href="{{ route('projects.create') }}" class="btn px-5 submit-btn"><i class="fa fa-plus"></i> Add a
-                                    Project</a>
                             </div>
                         </div>
                     </div>
@@ -81,7 +80,7 @@
                                             {{ $project->client_phone }}
                                         </td>
                                         <td>
-                                               <span>{{$project->projectTypes->type ?? '' }}</span>
+                                            <span>{{ $project->projectTypes->type ?? '' }}</span>
                                         </td>
                                         <td>
                                             {{ $project->project_value }}
@@ -101,18 +100,9 @@
                                         </td>
 
                                         <td>
-                                            <a title="Edit Project" data-route=""
-                                                href="{{ route('projects.edit', $project->id) }}"><i
-                                                    class="fas fa-edit"></i></a> &nbsp;&nbsp;
-
                                             <a title="View Project" data-route=""
-                                                href="{{ route('projects.show', $project->id) }}"><i
-                                                    class="fas fa-eye"></i></a> &nbsp;&nbsp;
-
-
-                                            <a title="Delete Project"
-                                                data-route="{{ route('projects.delete', $project->id) }}"
-                                                href="javascipt:void(0);" id="delete"><i class="fas fa-trash"></i></a>
+                                                href="{{ route('sales-excecutive.projects.show', $project->id) }}"><i
+                                                    class="fas fa-eye"></i></a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -147,52 +137,9 @@
         });
     </script>
     <script>
-        $(document).on('click', '#delete', function(e) {
-            swal({
-                    title: "Are you sure?",
-                    text: "To delete this project.",
-                    type: "warning",
-                    confirmButtonText: "Yes",
-                    showCancelButton: true
-                })
-                .then((result) => {
-                    if (result.value) {
-                        window.location = $(this).data('route');
-                    } else if (result.dismiss === 'cancel') {
-                        swal(
-                            'Cancelled',
-                            'Your stay here :)',
-                            'error'
-                        )
-                    }
-                })
-        });
-    </script>
-    {{-- <script>
-        $('.toggle-class').change(function() {
-            var status = $(this).prop('checked') == true ? 1 : 0;
-            var user_id = $(this).data('id');
-
-            $.ajax({
-                type: "GET",
-                dataType: "json",
-                url: '{{ route('projects.change-status') }}',
-                data: {
-                    'status': status,
-                    'user_id': user_id
-                },
-                success: function(resp) {
-                    console.log(resp.success)
-                }
-            });
-        });
-    </script> --}}
-    <script>
         $(document).ready(function() {
-           //how to place holder in "jquery datatable" search box
+            //how to place holder in "jquery datatable" search box
             $('#myTable_filter input').attr("placeholder", "Search");
         });
-
-
     </script>
 @endpush

@@ -53,4 +53,12 @@
     <span>Comments:-</span>
     {{ $prospect->comments }}
 </p>
+<p>
+    <span>Sale Date</span>
+    {{ date('d M, Y', strtotime($prospect->sale_date)) }}
+</p>
+<p>
+    <span>Upfront Value:-</span>
+    {{ ($prospect->upfront_value) ? '$'.$prospect->upfront_value : 'N/A' }}
+</p>
 @endif

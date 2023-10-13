@@ -28,36 +28,10 @@
                 </li>
 
 
-
-                {{-- <li class="{{ Request::is('sales-excecutive/members*') ? 'active' : ' ' }}">
-                    <a href="{{ route('user.index') }}"><i class="la la-users"></i> <span>Members</span></a>
+                <li class="{{ Request::is('sales-excecutive/projects*') ? 'active' : ' ' }}">
+                    <a href="{{ route('sales-excecutive.projects.index') }}"><i class="la la-book-open"></i> <span>
+                             Projects </span></a>
                 </li>
-                <li class="{{ Request::is('sales-excecutive/group*') ? 'active' : ' ' }}">
-                    <a href="{{ route('group.index') }}"><i class="la la-list"></i> <span>Groups</span></a>
-                </li> --}}
-
-                {{-- <li class="menu-title">
-                    <span>Content Management System</span>
-                </li>
-                <li class="submenu">
-                    <a href="#" class="{{ Request::is('sales-excecutive/cms/sub-sales-excecutive*') ? 'active' : ' ' }}"><i class="la la-address-card"></i> <span>Admin Panel </span> <span
-                            class="menu-arrow"></span></a>
-                    <ul style="display: none;">
-                        <li class="{{ Request::is('sales-excecutive/cms/sub-sales-excecutive*') ? 'active' : ' ' }}">
-                            <a href="{{ route('cms.sub-sales-excecutive.get-started') }}">Get Started Page</a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="submenu">
-                    <a href="#" class="{{ Request::is('sales-excecutive/cms/user*') ? 'active' : ' '}}"><i class="la la-newspaper"></i> <span>Member Panel </span> <span
-                            class="menu-arrow"></span></a>
-                    <ul style="display: none;">
-                        <li class="{{ Request::is('sales-excecutive/cms/user*') ? 'active' : ' ' }}">
-                            <a href="{{ route('cms.user.get-started') }}">Get Started Page</a>
-                        </li>
-                    </ul>
-                </li> --}}
 
             </ul>
         </div>
