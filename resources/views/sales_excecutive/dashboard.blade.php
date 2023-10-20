@@ -12,12 +12,12 @@
 
 @section('content')
     @php
-        $totalProspects = $count['prospects'];
-        $winProspects = $count['win'];
-        $percentage['win'] = round(($winProspects / $totalProspects) * 100, 0);
-        $percentage['follow_up'] = round(($count['follow_up'] / $totalProspects) * 100, 0);
-        $percentage['sent_proposal'] = round(($count['sent_proposal'] / $totalProspects) * 100, 0);
-        $percentage['close'] = round(($count['close'] / $totalProspects) * 100, 0);
+        $totalProspects = ($count['prospects'] == 0) ? 1 : $count['prospects'];
+        $winProspects = ($count['win'] == 0) ? 1 : $count['win'];
+        $percentage['win'] = round(($winProspects / $totalProspects) * 100);
+        $percentage['follow_up'] = round(($count['follow_up'] / $totalProspects) * 100);
+        $percentage['sent_proposal'] = round(($count['sent_proposal'] / $totalProspects) * 100);
+        $percentage['close'] = round(($count['close'] / $totalProspects) * 100);
     @endphp
     <div class="page-wrapper">
 
@@ -36,78 +36,84 @@
 
             <div class="row">
                 @if ($goal['gross_goals'])
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="stats-card-one mb-30">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <p class="mb-10 line-height-1">Gross Sales</p>
-                                    <h3 class="mb-0 fs-25">${{ $goal['gross_goals']['goals_achieve'] }}</h3>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="stats-card-one mb-30">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="mb-10 line-height-1">Gross Sales</p>
+                                <h3 class="mb-0 fs-25">
+                                    {{ $goal['gross_goals']['goals_amount'] ? '$' . $goal['gross_goals']['goals_amount'] : 'N/A' }}
+                                    / ${{ $goal['gross_goals']['goals_achieve'] ?? 0 }} </h3>
+                            </div>
+                            <?php
+                            $target = $goal['gross_goals']['goals_amount'] ?? 0;
+                            $achieve = $goal['gross_goals']['goals_achieve'] ?? 0;
+                            // round percentage
+                            $percentage['gross_goals'] = round(($achieve / $target) * 100, 0);
+                            ?>
+                            <span class="badge badge-cyan fs-12">
+                                <i class="icofont-swoosh-up"></i>
+                                <span class="fw-600 m-l-5">{{ $percentage['gross_goals'] ?? 0 }}%</span>
+                            </span>
+                        </div>
+
+                        <div class="mt-15">
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex align-items-center">
+                                    <span>Monthly Goal</span>
                                 </div>
-                                <?php
-                                $target = $goal['gross_goals']['goals_amount'];
-                                $achieve = $goal['gross_goals']['goals_achieve'];
-                                // round percentage
-                                $percentage['gross_goals'] = round(($achieve / $target) * 100, 0);
-                                ?>
-                                <span class="badge badge-cyan fs-12">
-                                    <i class="icofont-swoosh-up"></i>
-                                    <span class="fw-600 m-l-5">{{ $percentage['gross_goals'] }}%</span>
-                                </span>
+                                <span class="fw-600">{{ $percentage['gross_goals'] ?? 0 }}%</span>
                             </div>
 
-                            <div class="mt-15">
-                                <div class="d-flex justify-content-between">
-                                    <div class="d-flex align-items-center">
-                                        <span>Monthly Goal</span>
-                                    </div>
-                                    <span class="fw-600">{{ $percentage['gross_goals'] }}%</span>
-                                </div>
-
-                                <div class="progress progress-sm mt-1">
-                                    <div class="progress-bar bg-primary" style="width: {{ $percentage['gross_goals'] }}%">
-                                    </div>
+                            <div class="progress progress-sm mt-1">
+                                <div class="progress-bar bg-primary"
+                                    style="width: {{ $percentage['gross_goals'] ?? 0 }}%">
                                 </div>
                             </div>
                         </div>
                     </div>
-                @endif
+                </div>
+            @endif
 
-                @if ($goal['net_goals'])
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="stats-card-one mb-30">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <p class="mb-10 line-height-1">Revenue</p>
-                                    <h3 class="mb-0 fs-25">${{ $goal['net_goals']['goals_achieve'] }}</h3>
+            @if ($goal['net_goals'])
+                <div class="col-lg-3 col-sm-6">
+                    <div class="stats-card-one mb-30">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="mb-10 line-height-1">Revenue</p>
+                                <h3 class="mb-0 fs-25">
+                                    {{ $goal['net_goals']['goals_amount'] ? '$' . $goal['net_goals']['goals_amount'] : 'N/A' }}
+                                    / ${{ $goal['net_goals']['goals_achieve'] ?? 0 }} </h3>
+                            </div>
+                            <?php
+                            $target = $goal['net_goals']['goals_amount'] ?? 0;
+                            $achieve = $goal['net_goals']['goals_achieve'] ?? 0;
+                            // round percentage
+                            $percentage['net_goals'] = round(($achieve / $target) * 100, 0);
+                            ?>
+                            <span class="badge badge-cyan font-size-12">
+                                <i class="icofont-swoosh-up"></i>
+                                <span class="fw-600 m-l-5">{{ $percentage['net_goals'] ?? 0 }}%</span>
+                            </span>
+                        </div>
+
+                        <div class="mt-15">
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex align-items-center">
+                                    <span>Monthly Goal</span>
                                 </div>
-                                <?php
-                                $target = $goal['net_goals']['goals_amount'];
-                                $achieve = $goal['net_goals']['goals_achieve'];
-                                // round percentage
-                                $percentage['net_goals'] = round(($achieve / $target) * 100, 0);
-                                ?>
-                                <span class="badge badge-cyan font-size-12">
-                                    <i class="icofont-swoosh-up"></i>
-                                    <span class="fw-600 m-l-5">{{ $percentage['net_goals'] }}%</span>
-                                </span>
+                                <span class="fw-600">{{ $percentage['net_goals'] ?? 0 }}%</span>
                             </div>
 
-                            <div class="mt-15">
-                                <div class="d-flex justify-content-between">
-                                    <div class="d-flex align-items-center">
-                                        <span>Monthly Goal</span>
-                                    </div>
-                                    <span class="fw-600">{{ $percentage['net_goals'] }}%</span>
-                                </div>
-
-                                <div class="progress progress-sm mt-1">
-                                    <div class="progress-bar bg-danger" style="width: {{ $percentage['net_goals'] }}%">
-                                    </div>
+                            <div class="progress progress-sm mt-1">
+                                <div class="progress-bar bg-danger"
+                                    style="width: {{ $percentage['net_goals'] ?? 0 }}%">
                                 </div>
                             </div>
                         </div>
                     </div>
-                @endif
+                </div>
+            @endif
 
                 <div class="col-lg-3 col-sm-6">
                     <div class="stats-card-one mb-30">
@@ -463,4 +469,4 @@ var pieChart = new Chart(oilCanvas, {
   data: oilData
 });
     </script>
-@endpush
+s')

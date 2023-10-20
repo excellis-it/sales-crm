@@ -98,7 +98,7 @@
                                             {{ $project->payment_mode }}
                                         </td>
                                         <td>
-                                            {{ $project->project_value - $project->project_upfront }}
+                                            {{ (int)$project->project_value - (int)$project->project_upfront }}
                                         </td>
                                         <td>
                                             <a title="View Project" data-route=""

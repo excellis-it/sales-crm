@@ -64,10 +64,10 @@
                         <a title="Edit Prospect" data-route="" href="{{ route('prospects.edit', $prospect->id) }}"><i
                                 class="fas fa-edit"></i></a> &nbsp;&nbsp;
                     @endif
-                    @if ($prospect->status == 'Win' && $prospect->is_project == false)
+                    {{-- @if ($prospect->status == 'Win' && $prospect->is_project == false)
                     <a title="Assign to project" data-route="" href="{{ route('prospects.assign-project', $prospect->id) }}"><i
                         class="fa fa-shield"></i></a> &nbsp;&nbsp;
-                    @endif
+                    @endif --}}
 
                     <a title="View Prospect" class="view-details-btn"
                         data-route="{{ route('prospects.show', $prospect->id) }}" data-bs-toggle="modal"

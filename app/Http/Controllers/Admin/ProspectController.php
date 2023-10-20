@@ -85,6 +85,73 @@ class ProspectController extends Controller
         $prospect->transfer_token_by = $data['transfer_token_by'];
         $prospect->save();
 
+        if ($request->status == 'Win') {
+            $prospect = Prospect::findOrFail($prospect->id);
+            $prospect->is_project = true;
+            $prospect->save();
+            $user = User::where(['id' => $prospect->user_id])->first();
+            //sales executive goal
+            $net_goal = Goal::where(['user_id' => $user->sales_manager_id, 'goals_type' => 1])->whereMonth('goals_date', date('m', strtotime($prospect->sale_date)))->whereYear('goals_date', date('Y', strtotime($prospect->sale_date)))->first();
+            if ($net_goal) {
+                $net_goal->goals_achieve = $net_goal->goals_achieve + $prospect->upfront_value;
+                $net_goal->save();
+            }
+            $gross_goal = Goal::where(['user_id' => $user->sales_manager_id, 'goals_type' => 2])->whereMonth('goals_date', date('m', strtotime($prospect->sale_date)))->whereYear('goals_date', date('Y', strtotime($prospect->sale_date)))->first();
+            if ($gross_goal) {
+                $gross_goal->goals_achieve = $gross_goal->goals_achieve + $prospect->price_quote;
+                $gross_goal->save();
+            }
+
+            //sales manager goal
+            $net_goal = Goal::where(['user_id' => $user->report_to, 'goals_type' => 1])->whereMonth('goals_date', date('m', strtotime($prospect->sale_date)))->whereYear('goals_date', date('Y', strtotime($prospect->sale_date)))->first();
+            if ($net_goal) {
+                $net_goal->goals_achieve = $net_goal->goals_achieve + $prospect->upfront_value;
+                $net_goal->save();
+            }
+
+            $gross_goal = Goal::where(['user_id' => $user->report_to, 'goals_type' => 2])->whereMonth('goals_date', date('m', strtotime($prospect->sale_date)))->whereYear('goals_date', date('Y', strtotime($prospect->sale_date)))->first();
+            if ($gross_goal) {
+                $gross_goal->goals_achieve = $gross_goal->goals_achieve + $prospect->price_quote;
+                $gross_goal->save();
+            }
+
+            $project = new Project();
+            $project->user_id = $user->sales_manager_id;
+            $project->client_name = $prospect->client_name;
+            $project->business_name = $prospect->business_name;
+            $project->client_email = $prospect->client_email;
+            $project->client_phone = $prospect->client_phone;
+            $project->client_address = $prospect->business_address;
+            $project->project_value = $prospect->price_quote;
+            $project->currency = 'USD'; // default currency 'USD
+            $project->payment_mode = '';
+            $project->project_opener = $user->id;
+            $project->project_closer = '';
+            $project->project_upfront = $prospect->upfront_value;
+            $project->website = $prospect->website;
+            $project->sale_date = $prospect->sale_date;
+            $project->comment = $prospect->comments;
+            $project->save();
+
+            $project_type = new ProjectType();
+            $project_type->project_id = $project->id;
+            $project_type->type = $prospect->offered_for;
+            if (
+                $prospect->offered_for != 'SMO' &&
+                $prospect->offered_for != 'SEO' &&
+                $prospect->offered_for != 'Logo Design' &&
+                $prospect->offered_for != 'Digital Marketing & SEO' &&
+                $prospect->offered_for != 'Mobile Application Development' &&
+                $prospect->offered_for != 'Website Design & Development'
+            ) {
+                $project_type->name = 'Other';
+            } else {
+                $project_type->name = $prospect->offered_for;
+            }
+
+            $project_type->save();
+        }
+        
         return redirect()->route('admin.prospects.index')->with('message', 'Prospect created successfully.');
     }
 
@@ -156,6 +223,73 @@ class ProspectController extends Controller
         }
         $prospect->transfer_token_by = $data['transfer_token_by'];
         $prospect->save();
+
+        if ($request->status == 'Win') {
+            $prospect = Prospect::findOrFail($prospect->id);
+            $prospect->is_project = true;
+            $prospect->save();
+            $user = User::where(['id' => $prospect->user_id])->first();
+            //sales executive goal
+            $net_goal = Goal::where(['user_id' => $user->sales_manager_id, 'goals_type' => 1])->whereMonth('goals_date', date('m', strtotime($prospect->sale_date)))->whereYear('goals_date', date('Y', strtotime($prospect->sale_date)))->first();
+            if ($net_goal) {
+                $net_goal->goals_achieve = $net_goal->goals_achieve + $prospect->upfront_value;
+                $net_goal->save();
+            }
+            $gross_goal = Goal::where(['user_id' => $user->sales_manager_id, 'goals_type' => 2])->whereMonth('goals_date', date('m', strtotime($prospect->sale_date)))->whereYear('goals_date', date('Y', strtotime($prospect->sale_date)))->first();
+            if ($gross_goal) {
+                $gross_goal->goals_achieve = $gross_goal->goals_achieve + $prospect->price_quote;
+                $gross_goal->save();
+            }
+
+            //sales manager goal
+            $net_goal = Goal::where(['user_id' => $user->report_to, 'goals_type' => 1])->whereMonth('goals_date', date('m', strtotime($prospect->sale_date)))->whereYear('goals_date', date('Y', strtotime($prospect->sale_date)))->first();
+            if ($net_goal) {
+                $net_goal->goals_achieve = $net_goal->goals_achieve + $prospect->upfront_value;
+                $net_goal->save();
+            }
+
+            $gross_goal = Goal::where(['user_id' => $user->report_to, 'goals_type' => 2])->whereMonth('goals_date', date('m', strtotime($prospect->sale_date)))->whereYear('goals_date', date('Y', strtotime($prospect->sale_date)))->first();
+            if ($gross_goal) {
+                $gross_goal->goals_achieve = $gross_goal->goals_achieve + $prospect->price_quote;
+                $gross_goal->save();
+            }
+
+            $project = new Project();
+            $project->user_id = $user->sales_manager_id;
+            $project->client_name = $prospect->client_name;
+            $project->business_name = $prospect->business_name;
+            $project->client_email = $prospect->client_email;
+            $project->client_phone = $prospect->client_phone;
+            $project->client_address = $prospect->business_address;
+            $project->project_value = $prospect->price_quote;
+            $project->currency = 'USD'; // default currency 'USD
+            $project->payment_mode = '';
+            $project->project_opener = $user->id;
+            $project->project_closer = '';
+            $project->project_upfront = $prospect->upfront_value;
+            $project->website = $prospect->website;
+            $project->sale_date = $prospect->sale_date;
+            $project->comment = $prospect->comments;
+            $project->save();
+
+            $project_type = new ProjectType();
+            $project_type->project_id = $project->id;
+            $project_type->type = $prospect->offered_for;
+            if (
+                $prospect->offered_for != 'SMO' &&
+                $prospect->offered_for != 'SEO' &&
+                $prospect->offered_for != 'Logo Design' &&
+                $prospect->offered_for != 'Digital Marketing & SEO' &&
+                $prospect->offered_for != 'Mobile Application Development' &&
+                $prospect->offered_for != 'Website Design & Development'
+            ) {
+                $project_type->name = 'Other';
+            } else {
+                $project_type->name = $prospect->offered_for;
+            }
+
+            $project_type->save();
+        }
         return redirect()->route('admin.prospects.index')->with('message', 'Prospect updated successfully.');
     }
 

@@ -101,7 +101,7 @@
                                         <li class="">
                                             <div class="title  ">Due Amount:-</div>
                                             <div class="text">
-                                                {{ $project->project_value - $project->project_upfront }}
+                                                {{ (int)$project->project_value - (int)$project->project_upfront }}
                                             </div>
                                         </li>
                                         <li>

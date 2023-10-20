@@ -9,6 +9,8 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\ForgetPasswordController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\BusinessDevelopmentExcecutiveController;
+use App\Http\Controllers\Admin\BusinessDevelopmentManagerController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\GoalsController;
@@ -16,6 +18,9 @@ use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
 use App\Http\Controllers\Admin\ProspectController as AdminProspectController;
 use App\Http\Controllers\Admin\SalesExcecutiveController;
 use App\Http\Controllers\Admin\SellerController;
+use App\Http\Controllers\BDM\DashboardController as BDMDashboardController;
+use App\Http\Controllers\BDM\ProfileController as BDMProfileController;
+use App\Http\Controllers\BDM\ProjectController as BDMProjectController;
 use App\Http\Controllers\SalesExcecutive\DashboardController as SalesExcecutiveDashboardController;
 use App\Http\Controllers\SalesExcecutive\ProfileController as SalesExcecutiveProfileController;
 use App\Http\Controllers\SalesExcecutive\ProjectController as SalesExcecutiveProjectController;
@@ -69,6 +74,8 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
         'sales-projects' => AdminProjectController::class,
         'sales-excecutive' => SalesExcecutiveController::class,
         'goals' => GoalsController::class,
+        'business-development-managers' => BusinessDevelopmentManagerController::class,
+        'business-development-excecutive' => BusinessDevelopmentExcecutiveController::class,
     ]);
 
     Route::name('admin.')->group(function () {
@@ -91,6 +98,17 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     });
     Route::get('/changeCustomerStatus', [CustomerController::class, 'changeCustomersStatus'])->name('sales_managers.change-status');
 
+    //  Business Development manager Routes
+    Route::prefix('business-development-managers')->group(function () {
+        Route::get('/business-development-manager-delete/{id}', [BusinessDevelopmentManagerController::class, 'delete'])->name('business-development-managers.delete');
+    });
+
+    Route::get('/changeBusinessDevelopmentManagerStatus', [BusinessDevelopmentManagerController::class, 'changeBusinessDevelopmentManagerStatus'])->name('business-development-managers.change-status');
+    // Business Development Excecutive Routes
+    Route::prefix('business-development-excecutive')->group(function () {
+        Route::get('/business-development-excecutive-delete/{id}', [BusinessDevelopmentExcecutiveController::class, 'delete'])->name('business-development-excecutive.delete');
+    });
+    Route::get('/changeBusinessDevelopmentExcecutiveStatus', [BusinessDevelopmentExcecutiveController::class, 'changeBusinessDevelopmentExcecutiveStatus'])->name('business-development-excecutive.change-status');
     //  Sales manager Routes
     Route::prefix('account_managers')->group(function () {
         Route::get('/account_manager-delete/{id}', [AccountManagerController::class, 'delete'])->name('account_managers.delete');
@@ -132,6 +150,7 @@ Route::group(['middleware' => ['SalesManager'], 'prefix' => 'sales-manager'], fu
         Route::resources([
             'prospects' => SalesManagerProspectController::class,
             'sales-excecutive' => SalesManagerSalesExcecutiveController::class,
+
         ]);
     });
 
@@ -195,4 +214,26 @@ Route::group(['middleware' => ['SalesExcecutive'], 'prefix' => 'sales-excecutive
     Route::get('/filter', [ProspectController::class, 'filter'])->name('prospects.filter'); // filter
     Route::get('/assign-to-project/{id}', [ProspectController::class, 'assignToProject'])->name('prospects.assign-project'); // assign project
 
+});
+
+/**---------------------------------------------------------------Business Development Manager ---------------------------------------------------------------------------------- */
+
+Route::group(['middleware' => ['BDM'], 'prefix' => 'bdm'], function () {
+    Route::get('dashboard', [BDMDashboardController::class, 'index'])->name('bdm.dashboard');
+    Route::get('profile', [BDMProfileController::class, 'index'])->name('bdm.profile');
+    Route::post('profile/update', [BDMProfileController::class, 'profileUpdate'])->name('bdm.profile.update');
+    Route::get('logout', [AuthController::class, 'BusinessDevelopmentManagerlogout'])->name('bdm.logout');
+
+    Route::prefix('password')->group(function () {
+        Route::get('/', [BDMProfileController::class, 'password'])->name('bdm.password'); // password change
+        Route::post('/update', [BDMProfileController::class, 'passwordUpdate'])->name('bdm.password.update'); // password update
+    });
+    Route::name('bdm.')->group(function () {
+        Route::resources([
+            'projects' => BDMProjectController::class,
+        ]);
+    });
+    Route::get('/project-document_download/{id}', [BDMProjectController::class, 'projectDocumentDownload'])->name('bdm.projects.document.download');
+    // delete project
+    Route::get('/project-delete/{id}', [BDMProjectController::class, 'delete'])->name('bdm.projects.delete');
 });

@@ -67,5 +67,6 @@ class Kernel extends HttpKernel
         'SalesManager' => \App\Http\Middleware\SalesManager::class,
         'AccountManager' => \App\Http\Middleware\AccountManager::class,
         'SalesExcecutive' => \App\Http\Middleware\SalesExcecutive::class,
+        'BDM' => \App\Http\Middleware\BDM::class,
     ];
 }

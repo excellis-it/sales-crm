@@ -12,12 +12,12 @@
 
 @section('content')
     @php
-        $totalProspects = $count['prospects'];
-        $winProspects = $count['win'];
-        $percentage['win'] = round(($winProspects / $totalProspects) * 100, 0);
-        $percentage['follow_up'] = round(($count['follow_up'] / $totalProspects) * 100, 0);
-        $percentage['sent_proposal'] = round(($count['sent_proposal'] / $totalProspects) * 100, 0);
-        $percentage['close'] = round(($count['close'] / $totalProspects) * 100, 0);
+       $totalProspects = ($count['prospects'] == 0) ? 1 : $count['prospects'];
+        $winProspects = ($count['win'] == 0) ? 1 : $count['win'];
+        $percentage['win'] = round(($winProspects / $totalProspects) * 100);
+        $percentage['follow_up'] = round(($count['follow_up'] / $totalProspects) * 100);
+        $percentage['sent_proposal'] = round(($count['sent_proposal'] / $totalProspects) * 100);
+        $percentage['close'] = round(($count['close'] / $totalProspects) * 100);
     @endphp
     <section id="loading">
         <div id="loading-content"></div>
@@ -29,7 +29,7 @@
             <div class="page-header">
                 <div class="row">
                     <div class="col-sm-12">
-                        <h3 class="page-title">Welcome Sales Executive Panel!</h3>
+                        <h3 class="page-title">Welcome Admin Panel!</h3>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item active">Dashboard</li>
                         </ul>
@@ -38,7 +38,7 @@
             </div>
 
             <div class="row">
-                {{-- @if ($goal['gross_goals']) --}}
+              @if ($goal['gross_goals'])
                 <div class="col-lg-3 col-sm-6">
                     <div class="stats-card-one mb-30">
                         <div class="d-flex justify-content-between align-items-center">
@@ -75,9 +75,9 @@
                         </div>
                     </div>
                 </div>
-                {{-- @endif --}}
+                 @endif
 
-                {{-- @if ($goal['net_goals']) --}}
+               @if ($goal['net_goals'])
                 <div class="col-lg-3 col-sm-6">
                     <div class="stats-card-one mb-30">
                         <div class="d-flex justify-content-between align-items-center">
@@ -114,7 +114,7 @@
                         </div>
                     </div>
                 </div>
-                {{-- @endif --}}
+              @endif
 
                 <div class="col-lg-3 col-sm-6">
                     <div class="stats-card-one mb-30">

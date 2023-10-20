@@ -42,7 +42,14 @@
                     <a href="{{ route('sales-excecutive.index') }}"><i class="la la-user-friends"></i> <span>
                         Sales Excecutive</span></a>
                 </li>
-
+                <li class="{{ Request::is('admin/business-development-managers*') ? 'active' : ' ' }}">
+                    <a href="{{ route('business-development-managers.index') }}"><i class="la la-briefcase"></i> <span>
+                            BDM  </span></a>
+                </li>
+                <li class="{{ Request::is('admin/business-development-excecutive*') ? 'active' : ' ' }}">
+                    <a href="{{ route('business-development-excecutive.index') }}"><i class="la la-user-graduate"></i> <span>
+                            BDE  </span></a>
+                </li>
                     <li class="menu-title">
                     <span>Project Management</span>
                 </li>

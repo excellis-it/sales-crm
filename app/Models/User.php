@@ -64,4 +64,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Project::class, 'assigned_to');
     }
+
+    public function underBDM()
+    {
+        return $this->belongsTo(User::class, 'bdm_id');
+    }
 }
