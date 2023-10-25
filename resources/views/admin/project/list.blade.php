@@ -67,7 +67,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($projects as $key => $project)
+                                {{-- @foreach ($projects as $key => $project)
                                     <tr>
                                         <td>
                                             {{ date('d-m-Y', strtotime($project->sale_date)) }}
@@ -122,7 +122,7 @@
                                                 href="javascipt:void(0);" id="delete"><i class="fas fa-trash"></i></a>
                                         </td>
                                     </tr>
-                                @endforeach
+                                @endforeach --}}
                             </tbody>
                         </table>
                     </div>
@@ -138,15 +138,72 @@
     <script>
         $(document).ready(function() {
             //Default data table
-            $('#myTable').DataTable({
-                "aaSorting": [],
-                "columnDefs": [{
+            var table = $('#myTable').DataTable({
+                "columnDefs": [
+                    {
                         "orderable": false,
-                        "targets": [11]
+                        "targets": [10]
                     },
                     {
                         "orderable": true,
-                        "targets": [0, 1, 2, 5, 6, 7, 8, 9, 10]
+                        "targets": [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                    }
+                ],
+
+                processing: true,
+                serverSide: true,
+                ajax: "{{ route('sales-projects.ajax-list') }}",
+                columns: [{
+                        data: 'created_at',
+                        name: 'created_at'
+                    },
+                    {
+                        data: 'sale_by',
+                        name: 'sale_by',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'sales_manager_email',
+                        name: 'sales_manager_email',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'client_name',
+                        name: 'client_name'
+                    },
+                    {
+                        data: 'client_phone',
+                        name: 'client_phone'
+                    },
+                    {
+                        data: 'project_value',
+                        name: 'project_value'
+                    },
+                    {
+                        data: 'project_upfront',
+                        name: 'project_upfront'
+                    },
+                    {
+                        data: 'currency',
+                        name: 'currency'
+                    },
+                    {
+                        data: 'payment_mode',
+                        name: 'payment_mode'
+                    },
+                    {
+                        data: 'due_amount',
+                        name: 'due_amount'
+                    },
+                    {
+                        data: 'assigned_to',
+                        name: 'assigned_to'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action'
                     }
                 ]
             });
