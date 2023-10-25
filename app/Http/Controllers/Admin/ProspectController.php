@@ -21,21 +21,100 @@ class ProspectController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->user_id) {
-            $count['win'] = Prospect::where('report_to', $request->user_id)->where('status', 'Win')->count();
-            $count['follow_up'] = Prospect::where('report_to', $request->user_id)->where('status', 'Follow Up')->count();
-            $count['close'] = Prospect::where('report_to', $request->user_id)->where('status', 'Close')->count();
-            $count['sent_proposal'] = Prospect::where('report_to', $request->user_id)->where('status', 'Sent Proposal')->count();
-            $prospects = Prospect::orderBy('id', 'desc')->where('user_id', $request->user_id)->get();
-        } else {
-            $count['win'] = Prospect::where('status', 'Win')->count();
-            $count['follow_up'] = Prospect::where('status', 'Follow Up')->count();
-            $count['close'] = Prospect::where('status', 'Close')->count();
-            $count['sent_proposal'] = Prospect::where('status', 'Sent Proposal')->count();
-            $prospects = Prospect::orderBy('id', 'desc')->get();
-        }
+        // if ($request->user_id) {
+        //     $count['win'] = Prospect::where('report_to', $request->user_id)->where('status', 'Win')->count();
+        //     $count['follow_up'] = Prospect::where('report_to', $request->user_id)->where('status', 'Follow Up')->count();
+        //     $count['close'] = Prospect::where('report_to', $request->user_id)->where('status', 'Close')->count();
+        //     $count['sent_proposal'] = Prospect::where('report_to', $request->user_id)->where('status', 'Sent Proposal')->count();
+        //     $prospects = Prospect::orderBy('id', 'desc')->where('user_id', $request->user_id)->get();
+        // } else {
+        //     $count['win'] = Prospect::where('status', 'Win')->count();
+        //     $count['follow_up'] = Prospect::where('status', 'Follow Up')->count();
+        //     $count['close'] = Prospect::where('status', 'Close')->count();
+        //     $count['sent_proposal'] = Prospect::where('status', 'Sent Proposal')->count();
+        //     $prospects = Prospect::orderBy('id', 'desc')->get();
+        // }
 
-        return view('admin.prospect.list')->with(compact('prospects', 'count'));
+        return view('admin.prospect.list');
+    }
+
+    public function prospectAjaxList(Request $request)
+    {
+        $draw = $request->get('draw');
+        $start = $request->get("start");
+        $rowperpage = $request->get("length"); // Rows display per page
+
+        $columnIndex_arr = $request->get('order');
+        $columnName_arr = $request->get('columns');
+        $order_arr = $request->get('order');
+        $search_arr = $request->get('search');
+
+        $columnIndex = $columnIndex_arr[0]['column']; // Column index
+        $columnName = $columnName_arr[$columnIndex]['data']; // Column name
+        $columnSortOrder = $order_arr[0]['dir']; // asc or desc
+        $searchValue = $search_arr['value']; // Search value
+
+        // Total records
+        $totalRecords = Prospect::orderBy('id', 'desc')->count();
+        $totalRecordswithFilter = Prospect::orderBy('id', 'desc')->count();
+
+        // Fetch records
+        $records = Prospect::query();
+        $columns = ['user_id','report_to','client_name','business_name','transfer_token_by','client_email','client_phone','price_quote','followup_date','offered_for'];
+        foreach($columns as $column){
+            $records->where($column, 'like', '%' . $searchValue . '%');
+        }
+        $records->orderBy($columnName,$columnSortOrder);
+        $records->skip($start);
+        $records->take($rowperpage);
+        $records = $records->orderBy('id', 'desc');
+        $records = $records->get();
+
+        $data_arr = array();
+
+        foreach($records as $record){
+            $client_name = $record->client_name;
+            $business_name = $record->business_name;
+            $client_email = $record->client_email;
+            $client_phone = $record->client_phone;
+            $price_quote = $record->price_quote;
+            $followup_date = $record->followup_date;
+            $offered_for = $record->offered_for;
+            $id = $record->id;
+
+            if($record->status == 'Win')
+            {
+                $status = '<span>On Board</span>';
+            }elseif($record->status =='Follow Up'){
+                $status = '<span>Follow Up</span>';
+            }elseif($record->status =='Sent Proposal'){
+                $status = '<span>Sent Proposal</span>';
+            }else{
+                $status = '<span>Cancel</span>';
+            }
+            
+           $data_arr[] = array(
+               "client_name" => $client_name,
+               "business_name" => $business_name,
+               "client_email" => $client_email,
+               "client_phone" => $client_phone,
+               "price_quote" => $price_quote,
+               "followup_date" => $followup_date, 
+               "status" => $status,
+               "action" => '<a href="javascript:void(0);" data-route="'.route('goals.edit', $id).'" data-role="ACCOUNT_MANAGER" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i> </a> &nbsp;<a title="Delete Project"
+                data-route="'.route('goals.delete', $id).'"
+                href="javascipt:void(0);" id="delete"><i class="fas fa-trash btn btn-sm btn-danger"></i></a>'
+           );
+        }    
+                                                                                                                                       
+        $response = array(
+           "draw" => intval($draw),
+           "iTotalRecords" => $totalRecords,
+           "iTotalDisplayRecords" => $totalRecordswithFilter,
+           "aaData" => $data_arr
+        );
+
+        return response()->json($response);
     }
 
     /**

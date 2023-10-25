@@ -18,9 +18,78 @@ class GoalsController extends Controller
      */
     public function index()
     {
-        $salesManagerGoals = Goal::orderBy('goals_date', 'asc')->get();
-        $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER'])->orderBy('name', 'asc')->get();
-        return view('admin.goals.list')->with(compact('salesManagerGoals', 'users'));
+        // $salesManagerGoals = Goal::orderBy('goals_date', 'asc')->get();
+        // $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER'])->orderBy('name', 'asc')->get();
+        // return view('admin.goals.list')->with(compact('salesManagerGoals', 'users'));
+        return view('admin.goals.list');
+    }
+
+    public function goalsList(Request $request)
+    {
+        $draw = $request->get('draw');
+        $start = $request->get("start");
+        $rowperpage = $request->get("length"); // Rows display per page
+
+        $columnIndex_arr = $request->get('order');
+        $columnName_arr = $request->get('columns');
+        $order_arr = $request->get('order');
+        $search_arr = $request->get('search');
+
+        $columnIndex = $columnIndex_arr[0]['column']; // Column index
+        $columnName = $columnName_arr[$columnIndex]['data']; // Column name
+        $columnSortOrder = $order_arr[0]['dir']; // asc or desc
+        $searchValue = $search_arr['value']; // Search value
+
+        // Total records
+        $totalRecords = Goal::orderBy('goals_date', 'asc')->count();
+        $totalRecordswithFilter = Goal::orderBy('goals_date', 'asc')->count();
+
+        // Fetch records
+        $records = Goal::query();
+        $columns = ['goals_date','goals_type','user_id','goals_amount','goals_achieve'];
+        foreach($columns as $column){
+            $records->where($column, 'like', '%' . $searchValue . '%');
+        }
+        $records->orderBy($columnName,$columnSortOrder);
+        $records->skip($start);
+        $records->take($rowperpage);
+        $records = $records->orderBy('goals_date', 'asc');
+        $records = $records->get();
+
+        $data_arr = array();
+
+        foreach($records as $record){
+            $goals_date = date('M ,Y', strtotime($record->goals_date));
+            $goals_type = $record->goals_type == 1 ? 'Gross' : 'Net';
+            $user_id = User::find($record->user_id)->name;
+            $goals_amount = $record->goals_amount;
+            $goals_achieve = $record->goals_achieve ?? 0;
+            $id = $record->id;
+            
+           $data_arr[] = array(
+               "goals_date" => $goals_date,
+               "goals_type" => $goals_type,
+               "user_id" => $user_id,
+               "goals_amount" => $goals_amount,
+               "goals_achieve" => $goals_achieve,
+               "action" => '<a href="javascript:void(0);" data-route="'.route('goals.edit', $id).'" data-role="ACCOUNT_MANAGER" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i> </a> &nbsp;<a title="Delete Project"
+               data-route="'.route('goals.delete', $id).'"
+               href="javascipt:void(0);" id="delete"><i
+                   class="fas fa-trash btn btn-sm btn-danger"></i></a>'
+           );
+        }    
+
+        
+        
+                                                                                                                                                    
+        $response = array(
+           "draw" => intval($draw),
+           "iTotalRecords" => $totalRecords,
+           "iTotalDisplayRecords" => $totalRecordswithFilter,
+           "aaData" => $data_arr
+        );
+
+        return response()->json($response);
     }
 
     /**

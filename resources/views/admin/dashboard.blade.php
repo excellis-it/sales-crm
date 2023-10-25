@@ -182,7 +182,7 @@
                                 <h3 class="mb-0 fs-25"> {{ $count['sales_managers'] }} </h3>
                             </div>
                             <?php
-                            $totalUsers = $count['users'];
+                            $totalUsers = ($count['users'] == 0) ? 1 : $count['users'];
                             $percentage['sales_manager'] = round(($totalUsers / $totalUsers) * 100, 0);
                             $percentage['account_manager'] = round(($totalUsers / $totalUsers) * 100, 0);
                             $percentage['sales_excecutive'] = round(($totalUsers / $totalUsers) * 100, 0);

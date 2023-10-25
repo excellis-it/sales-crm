@@ -116,7 +116,7 @@
 
                             <hr />
                             <div class="table-responsive">
-                                <table id="myTable" class="dd table table-striped table-bordered" style="width:100%">
+                                <table id="myTable" class="dd table table-striped table-bordered " style="width:100%">
                                     <thead>
                                         <tr>
                                             <th>Goals Date</th>
@@ -124,44 +124,11 @@
                                             <th> Goal Assign For</th>
                                             <th> Target Amount </th>
                                             <th>Target Achieve</th>
-                                            <th>
-                                                Action
-                                            </th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($salesManagerGoals as $key => $goal)
-                                            <tr>
-                                                <td>
-                                                    {{ date('M ,Y', strtotime($goal->goals_date)) }}
-                                                </td>
-                                                <td>
-                                                    {{ $goal->goals_type == 1 ? 'Gross' : 'Net' }}
-                                                </td>
-                                                <td>
-                                                    {{ $goal->user->name }}
-                                                </td>
-                                                <td>
-                                                    {{ $goal->goals_amount }}
-                                                </td>
-                                                <td>
-                                                    {{ $goal->goals_achieve ?? 0 }}
-                                                </td>
-                                                <td>
-                                                    @if ($goal->goals_type == 1)
-                                                        <a href="javascript:void(0);"
-                                                            data-route="{{ route('goals.edit', $goal->id) }}"
-                                                            data-role="SALES_MANAGER" class="edit-data"><i
-                                                                class="fas fa-edit"></i> </a> &nbsp;
-                                                    @endif
 
-                                                    <a title="Delete Project"
-                                                        data-route="{{ route('goals.delete', $goal->id) }}"
-                                                        href="javascipt:void(0);" id="delete"><i
-                                                            class="fas fa-trash"></i></a>
-                                                </td>
-                                            </tr>
-                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -240,24 +207,7 @@
 @endsection
 
 @push('scripts')
-    <script>
-        $(document).ready(function() {
-            //Default data table
-            $('#myTable').DataTable({
-                "aaSorting": [],
-                "columnDefs": [{
-                        "orderable": false,
-                        "targets": [2, 5]
-                    },
-                    {
-                        "orderable": true,
-                        "targets": [0, 1, 3, 4]
-                    }
-                ]
-            });
-
-        });
-    </script>
+   
     <script>
         $(document).ready(function() {
             //Default data table
@@ -327,18 +277,7 @@
     <script>
         $(document).ready(function() {
             //Default data table
-            $('#myTable1').DataTable({
-                "aaSorting": [],
-                "columnDefs": [{
-                        "orderable": false,
-                        "targets": [2, 5]
-                    },
-                    {
-                        "orderable": true,
-                        "targets": [0, 1, 3, 4]
-                    }
-                ]
-            });
+        
 
             $('#createGoals').validate({ // initialize the plugin
                 rules: {
@@ -458,6 +397,46 @@
                     }
                 });
             });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+
+            var table = $('#myTable').DataTable({
+                
+                processing: true,
+                serverSide: true,
+                ajax: "{{ route('goals.ajax-list') }}",
+                columns: [{
+                        data: 'goals_date',
+                        name: 'goals_date'
+                    },
+                    {
+                        data: 'goals_type',
+                        name: 'goals_type'
+                    },
+                    {
+                        data: 'user_id',
+                        name: 'user_id'
+                    },
+                    {
+                        data: 'goals_amount',
+                        name: 'goals_amount'
+                    },
+                    {
+                        data: 'goals_achieve',
+                        name: 'goals_achieve'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
+                ]
+            });
+
         });
     </script>
 @endpush

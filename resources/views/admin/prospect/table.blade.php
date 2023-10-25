@@ -1,9 +1,7 @@
 <table id="myTable" class="dd table table-striped table-bordered" style="width:100%">
     <thead>
         <tr>
-            <th>
-                Prospect By
-            </th>
+            <th>Prospect By</th>
             <th>Date</th>
             <th>Business Name</th>
             <th>Client Name</th>
@@ -18,7 +16,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach ($prospects as $key => $prospect)
+        {{-- @foreach ($prospects as $key => $prospect)
             <tr>
                 <td>
                     <a
@@ -70,11 +68,7 @@
                         <a title="Edit Prospect" data-route="" href="{{ route('admin.prospects.edit', $prospect->id) }}"><i
                                 class="fas fa-edit"></i></a> &nbsp;&nbsp;
                     @endif
-                    {{-- @if ($prospect->status == 'Win' && $prospect->is_project == false)
-                        <a title="Assign to project" data-route=""
-                            href="{{ route('admin.prospects.assign-project', $prospect->id) }}"><i
-                                class="fa fa-shield"></i></a> &nbsp;&nbsp;
-                    @endif --}}
+                  
                     <a title="View Prospect" class="view-details-btn"
                         data-route="{{ route('admin.prospects.show', $prospect->id) }}" data-bs-toggle="modal"
                         data-bs-target="#exampleModal" href="javascript:void(0);"><i class="fas fa-eye"></i></a>
@@ -83,10 +77,10 @@
                         href="javascipt:void(0);" id="delete"><i class="fas fa-trash"></i></a>
                 </td>
             </tr>
-        @endforeach
+        @endforeach --}}
     </tbody>
 </table>
-<script>
+{{-- <script>
     $(document).ready(function() {
         //Default data table
         $('#myTable').DataTable({
@@ -103,4 +97,72 @@
         });
 
     });
+</script> --}}
+
+<script>
+    $(document).ready(function() {
+
+        var table = $('#myTable').DataTable({
+            
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('prospect.ajax-list') }}",
+            columns: [{
+                    data: 'prospect_by',
+                    name: 'prospect_by'
+                },
+                {
+                    data: 'date',
+                    name: 'date'
+                },
+                {
+                    data: 'business_name',
+                    name: 'business_name'
+                },
+                {
+                    data: 'client_name',
+                    name: 'client_name'
+                },
+                {
+                    data: 'email',
+                    name: 'email'
+                },
+                {
+                    data: 'phone',
+                    name: 'phone'
+                },
+                {
+                    data: 'transfer_by',
+                    name: 'transfer_by'
+                },
+                {
+                    data: 'status',
+                    name: 'status',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'service_offered',
+                    name: 'service_offered'
+                },
+                {
+                    data: 'follow_up_date',
+                    name: 'follow_up_date'
+                },
+                {
+                    data: 'price_quoted',
+                    name: 'price_quoted'
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false
+                },
+            ]
+        });
+
+    });
 </script>
+
+

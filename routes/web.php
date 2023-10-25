@@ -86,6 +86,11 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
         Route::get('/filter', [AdminProspectController::class, 'filter'])->name('prospects.filter'); // filter
         Route::get('/assign-to-project/{id}', [AdminProspectController::class, 'assignToProject'])->name('prospects.assign-project'); // assign project
     });
+    //list goals
+    Route::get('/goals-list', [GoalsController::class, 'goalsList'])->name('goals.ajax-list');
+    //prospect list
+    Route::get('/prospect-ajax-list', [AdminProspectController::class, 'prospectAjaxList'])->name('prospect.ajax-list');
+
     // delete project
     Route::get('/project-ajax-list', [AdminProjectController::class, 'ajaxList'])->name('sales-projects.ajax-list');
     Route::get('/project-delete/{id}', [AdminProjectController::class, 'delete'])->name('sales-projects.delete');
