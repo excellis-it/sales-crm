@@ -64,7 +64,7 @@ class ProspectController extends Controller
         $prospect->status = $data['status'];
         $prospect->followup_date = $data['followup_date'];
         $prospect->followup_time = $data['followup_time'];
-        $prospect->sale_date = $data['sale_date'];
+        $prospect->sale_date = $data['sale_date'] ?? '';
         $prospect->upfront_value = $data['upfront_value'] ?? '';
         $prospect->comments = $data['comments'];
         $prospect->price_quote = $data['price_quote'];
@@ -203,7 +203,7 @@ class ProspectController extends Controller
         $prospect->status = $data['status'];
         $prospect->followup_date = $data['followup_date'];
         $prospect->followup_time = $data['followup_time'];
-        $prospect->sale_date = $data['sale_date'];
+        $prospect->sale_date = $data['sale_date'] ?? '';
         $prospect->upfront_value = $data['upfront_value'] ?? '';
         $prospect->comments = $data['comments'];
         $prospect->price_quote = $data['price_quote'];

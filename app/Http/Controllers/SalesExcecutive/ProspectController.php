@@ -133,7 +133,7 @@ class ProspectController extends Controller
             $project->project_closer = '';
             $project->project_upfront = $prospect->upfront_value;
             $project->website = $prospect->website;
-            $project->sale_date = $prospect->sale_date;
+            $project->sale_date = $prospect->sale_date ?? '';
             $project->comment = $prospect->comments;
             $project->save();
 

@@ -21,7 +21,7 @@ class ProspectController extends Controller
      */
     public function index(Request $request)
     {
-        
+
         if ($request->user_id) {
             $count['win'] = Prospect::where('report_to', $request->user_id)->where('status', 'Win')->count();
             $count['follow_up'] = Prospect::where('report_to', $request->user_id)->where('status', 'Follow Up')->count();
@@ -43,7 +43,7 @@ class ProspectController extends Controller
 
     public function prospectAjaxList(Request $request)
     {
-        
+
         $draw = $request->get('draw');
         $start = $request->get("start");
         $rowperpage = $request->get("length"); // Rows display per page
@@ -103,7 +103,7 @@ class ProspectController extends Controller
             }else{
                 $action = '';
             }
-            
+
            $data_arr[] = array(
                 "user_id" => User::where(['id' => $record->user_id])->first()->name,
                 "date" => date('d-m-Y', strtotime($record->created_at)),
@@ -114,7 +114,7 @@ class ProspectController extends Controller
                 "transfer_by" => User::where(['id' => $record->transfer_token_by])->first()->name,
                 "status" => $status,
                 "service_offered" => $offered_for,
-                "followup_date" => $followup_date, 
+                "followup_date" => $followup_date,
                 "price_quoted" => $price_quote,
                 "action" => $action.
                 '<a title="View Prospect" class="view-details-btn btn btn-sm btn-warning"
@@ -124,8 +124,8 @@ class ProspectController extends Controller
             <a title="Delete Account manager" class="btn btn-sm btn-danger" data-route="'.route('admin.prospects.delete', $id).'"
                 href="javascipt:void(0);" id="delete"><i class="fas fa-trash"></i></a>'
             );
-        }    
-                                                                                                                                       
+        }
+
         $response = array(
            "draw" => intval($draw),
            "iTotalRecords" => $totalRecords,
@@ -249,7 +249,7 @@ class ProspectController extends Controller
 
             $project_type->save();
         }
-        
+
         return redirect()->route('admin.prospects.index')->with('message', 'Prospect created successfully.');
     }
 
@@ -415,11 +415,12 @@ class ProspectController extends Controller
             $status = $request->status;
             if ($status == 'All') {
                 $prospects = Prospect::orderBy('id', 'desc')->get();
+
             } else {
                 $prospects = Prospect::where(['status' => $status])->orderBy('id', 'desc')->get();
             }
-
-            return response()->json(['view'=>(String)View::make('admin.prospect.table')->with(compact('prospects'))]);
+            $filter = true;
+            return response()->json(['view'=>(String)View::make('admin.prospect.table')->with(compact('prospects','filter'))]);
         }
     }
 

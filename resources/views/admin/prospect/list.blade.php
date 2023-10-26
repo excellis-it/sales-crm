@@ -105,7 +105,7 @@
 @endsection
 
 @push('scripts')
-   
+
     <script>
         $(document).on('click', '#delete', function(e) {
             swal({
