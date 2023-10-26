@@ -217,6 +217,9 @@ Route::group(['middleware' => ['SalesExcecutive'], 'prefix' => 'sales-excecutive
         ]);
     });
 
+    //project list
+    Route::get('/project-ajax-list', [SalesExcecutiveProjectController::class, 'projectAjaxList'])->name('sales-excecutive.projects.ajax-list');
+
     Route::get('/filter', [ProspectController::class, 'filter'])->name('prospects.filter'); // filter
     Route::get('/assign-to-project/{id}', [ProspectController::class, 'assignToProject'])->name('prospects.assign-project'); // assign project
 

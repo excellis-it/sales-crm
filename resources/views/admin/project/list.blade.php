@@ -54,16 +54,14 @@
                                     <th> Sale By</th>
                                     <th> Sales Manager Email</th>
                                     <th> Customer Name </th>
-                                    <th>Phone Number</th>
-                                    <th>Project Value</th>
-                                    <th>Project Upfront</th>
-                                    <th>Currency</th>
-                                    <th>Payment Mode</th>
-                                    <th>Due Amount</th>
-                                    <th>Status</th>
-                                    <th>
-                                        Action
-                                    </th>
+                                    <th> Phone Number</th>
+                                    <th> Project Value</th>
+                                    <th> Project Upfront</th>
+                                    <th> Currency</th>
+                                    <th> Payment Mode</th>
+                                    <th> Due Amount</th>
+                                    <th> Status</th>
+                                    <th> Action </th>
                                 </tr>
                             </thead>
                             <tbody>

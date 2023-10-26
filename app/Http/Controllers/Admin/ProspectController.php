@@ -21,25 +21,29 @@ class ProspectController extends Controller
      */
     public function index(Request $request)
     {
-        // if ($request->user_id) {
-        //     $count['win'] = Prospect::where('report_to', $request->user_id)->where('status', 'Win')->count();
-        //     $count['follow_up'] = Prospect::where('report_to', $request->user_id)->where('status', 'Follow Up')->count();
-        //     $count['close'] = Prospect::where('report_to', $request->user_id)->where('status', 'Close')->count();
-        //     $count['sent_proposal'] = Prospect::where('report_to', $request->user_id)->where('status', 'Sent Proposal')->count();
-        //     $prospects = Prospect::orderBy('id', 'desc')->where('user_id', $request->user_id)->get();
-        // } else {
-        //     $count['win'] = Prospect::where('status', 'Win')->count();
-        //     $count['follow_up'] = Prospect::where('status', 'Follow Up')->count();
-        //     $count['close'] = Prospect::where('status', 'Close')->count();
-        //     $count['sent_proposal'] = Prospect::where('status', 'Sent Proposal')->count();
-        //     $prospects = Prospect::orderBy('id', 'desc')->get();
-        // }
+        
+        if ($request->user_id) {
+            $count['win'] = Prospect::where('report_to', $request->user_id)->where('status', 'Win')->count();
+            $count['follow_up'] = Prospect::where('report_to', $request->user_id)->where('status', 'Follow Up')->count();
+            $count['close'] = Prospect::where('report_to', $request->user_id)->where('status', 'Close')->count();
+            $count['sent_proposal'] = Prospect::where('report_to', $request->user_id)->where('status', 'Sent Proposal')->count();
+            $count['prospect'] = Prospect::where('report_to', $request->user_id)->count();
+            // $prospects = Prospect::orderBy('id', 'desc')->where('user_id', $request->user_id)->get();
+        } else {
+            $count['win'] = Prospect::where('status', 'Win')->count();
+            $count['follow_up'] = Prospect::where('status', 'Follow Up')->count();
+            $count['close'] = Prospect::where('status', 'Close')->count();
+            $count['sent_proposal'] = Prospect::where('status', 'Sent Proposal')->count();
+            $count['prospect'] = Prospect::count();
+            // $prospects = Prospect::orderBy('id', 'desc')->get();
+        }
 
-        return view('admin.prospect.list');
+        return view('admin.prospect.list',compact('count'));
     }
 
     public function prospectAjaxList(Request $request)
     {
+        
         $draw = $request->get('draw');
         $start = $request->get("start");
         $rowperpage = $request->get("length"); // Rows display per page
@@ -78,7 +82,7 @@ class ProspectController extends Controller
             $client_email = $record->client_email;
             $client_phone = $record->client_phone;
             $price_quote = $record->price_quote;
-            $followup_date = $record->followup_date;
+            $followup_date = date('d-m-Y', strtotime($record->followup_date));
             $offered_for = $record->offered_for;
             $id = $record->id;
 
@@ -92,19 +96,34 @@ class ProspectController extends Controller
             }else{
                 $status = '<span>Cancel</span>';
             }
+
+            if ($record->status != 'Win')
+            {
+                $action = '<a title="Edit Prospect" data-route="" href="'.route('admin.prospects.edit', $id).'" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></a> &nbsp;&nbsp;';
+            }else{
+                $action = '';
+            }
             
            $data_arr[] = array(
-               "client_name" => $client_name,
-               "business_name" => $business_name,
-               "client_email" => $client_email,
-               "client_phone" => $client_phone,
-               "price_quote" => $price_quote,
-               "followup_date" => $followup_date, 
-               "status" => $status,
-               "action" => '<a href="javascript:void(0);" data-route="'.route('goals.edit', $id).'" data-role="ACCOUNT_MANAGER" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i> </a> &nbsp;<a title="Delete Project"
-                data-route="'.route('goals.delete', $id).'"
-                href="javascipt:void(0);" id="delete"><i class="fas fa-trash btn btn-sm btn-danger"></i></a>'
-           );
+                "user_id" => User::where(['id' => $record->user_id])->first()->name,
+                "date" => date('d-m-Y', strtotime($record->created_at)),
+                "client_name" => $client_name,
+                "business_name" => $business_name,
+                "email" => $client_email,
+                "phone" => $client_phone,
+                "transfer_by" => User::where(['id' => $record->transfer_token_by])->first()->name,
+                "status" => $status,
+                "service_offered" => $offered_for,
+                "followup_date" => $followup_date, 
+                "price_quoted" => $price_quote,
+                "action" => $action.
+                '<a title="View Prospect" class="view-details-btn btn btn-sm btn-warning"
+                data-route="'.route('admin.prospects.show', $id).'" data-bs-toggle="modal"
+                data-bs-target="#exampleModal" href="javascript:void(0);"><i class="fas fa-eye"></i></a>
+            &nbsp;&nbsp;
+            <a title="Delete Account manager" class="btn btn-sm btn-danger" data-route="'.route('admin.prospects.delete', $id).'"
+                href="javascipt:void(0);" id="delete"><i class="fas fa-trash"></i></a>'
+            );
         }    
                                                                                                                                        
         $response = array(
@@ -152,7 +171,7 @@ class ProspectController extends Controller
         $prospect->status = $data['status'];
         $prospect->followup_date = $data['followup_date'];
         $prospect->followup_time = $data['followup_time'];
-        $prospect->sale_date = $data['sale_date'];
+        $prospect->sale_date = $data['sale_date'] ?? '';
         $prospect->upfront_value = $data['upfront_value'] ?? '';
         $prospect->comments = $data['comments'];
         $prospect->price_quote = $data['price_quote'];
@@ -208,7 +227,7 @@ class ProspectController extends Controller
             $project->project_closer = '';
             $project->project_upfront = $prospect->upfront_value;
             $project->website = $prospect->website;
-            $project->sale_date = $prospect->sale_date;
+            $project->sale_date = $prospect->sale_date ?? '';
             $project->comment = $prospect->comments;
             $project->save();
 
@@ -291,7 +310,7 @@ class ProspectController extends Controller
         $prospect->status = $data['status'];
         $prospect->followup_date = $data['followup_date'];
         $prospect->followup_time = $data['followup_time'];
-        $prospect->sale_date = $data['sale_date'];
+        $prospect->sale_date = $data['sale_date'] ?? '';
         $prospect->upfront_value = $data['upfront_value'] ?? '';
         $prospect->comments = $data['comments'];
         $prospect->price_quote = $data['price_quote'];
@@ -347,7 +366,7 @@ class ProspectController extends Controller
             $project->project_closer = '';
             $project->project_upfront = $prospect->upfront_value;
             $project->website = $prospect->website;
-            $project->sale_date = $prospect->sale_date;
+            $project->sale_date = $prospect->sale_date ?? '';
             $project->comment = $prospect->comments;
             $project->save();
 
@@ -451,7 +470,7 @@ class ProspectController extends Controller
             $project->project_closer = '';
             $project->project_upfront = $prospect->upfront_value;
             $project->website = $prospect->website;
-            $project->sale_date = $prospect->sale_date;
+            $project->sale_date = $prospect->sale_date ?? '';
             $project->comment = $prospect->comments;
             $project->save();
 

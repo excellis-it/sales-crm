@@ -130,7 +130,7 @@ class ProjectController extends Controller
         $project->project_closer = $data['project_closer'];
         $project->project_upfront = $data['project_upfront'];
         $project->website = $data['website'];
-        $project->sale_date = $data['sale_date'];
+        $project->sale_date = $data['sale_date'] ?? '';
         $project->assigned_date = '';
         $project->delivery_tat = $data['delivery_tat'];
         $project->comment = $data['comment'];
@@ -243,7 +243,7 @@ class ProjectController extends Controller
         $project->project_closer = $data['project_closer'];
         $project->project_upfront = $data['project_upfront'];
         $project->website = $data['website'];
-        $project->sale_date = $data['sale_date'];
+        $project->sale_date = $data['sale_date'] ?? '';
         $project->assigned_date = '';
         $project->delivery_tat = $data['delivery_tat'];
         $project->comment = $data['comment'];

@@ -64,7 +64,7 @@
                             <div class="col">
                                 <a href="javascript:void(0);" data-value="All" class="desin-filter active-filter">
                                     <p>All</p>
-                                    <h5>{{ count($prospects) }}</h5>
+                                    <h5>{{  $count['prospect'] }}</h5>
                                 </a>
                             </div>
                             <div class="col">
@@ -105,24 +105,7 @@
 @endsection
 
 @push('scripts')
-    <script>
-        $(document).ready(function() {
-            //Default data table
-            $('#myTable').DataTable({
-                "aaSorting": [],
-                "columnDefs": [{
-                        "orderable": false,
-                        "targets": [11]
-                    },
-                    {
-                        "orderable": true,
-                        "targets": [0, 1, 2, 5, 6, 7, 8, 9, 10]
-                    }
-                ]
-            });
-
-        });
-    </script>
+   
     <script>
         $(document).on('click', '#delete', function(e) {
             swal({

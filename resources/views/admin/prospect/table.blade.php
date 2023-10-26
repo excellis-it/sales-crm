@@ -3,8 +3,9 @@
         <tr>
             <th>Prospect By</th>
             <th>Date</th>
-            <th>Business Name</th>
+            
             <th>Client Name</th>
+            <th>Business Name</th>
             <th>Email</th>
             <th>Phone</th>
             <th>Transfer Taken By</th>
@@ -80,49 +81,35 @@
         @endforeach --}}
     </tbody>
 </table>
-{{-- <script>
-    $(document).ready(function() {
-        //Default data table
-        $('#myTable').DataTable({
-            "aaSorting": [],
-            "columnDefs": [{
-                    "orderable": false,
-                    "targets": [11]
-                },
-                {
-                    "orderable": true,
-                    "targets": [0, 1, 2, 5, 6, 7, 8, 9, 10]
-                }
-            ]
-        });
 
-    });
-</script> --}}
 
+
+@push('scripts')
+    
 <script>
     $(document).ready(function() {
-
-        var table = $('#myTable').DataTable({
-            
+        var table = $('#myTable').DataTable({          
             processing: true,
             serverSide: true,
+            destroy: true,
             ajax: "{{ route('prospect.ajax-list') }}",
             columns: [{
-                    data: 'prospect_by',
-                    name: 'prospect_by'
+                    data: 'user_id',
+                    name: 'user_id'
                 },
                 {
                     data: 'date',
                     name: 'date'
                 },
                 {
-                    data: 'business_name',
-                    name: 'business_name'
-                },
-                {
                     data: 'client_name',
                     name: 'client_name'
                 },
+                {
+                    data: 'business_name',
+                    name: 'business_name'
+                },
+                
                 {
                     data: 'email',
                     name: 'email'
@@ -146,8 +133,8 @@
                     name: 'service_offered'
                 },
                 {
-                    data: 'follow_up_date',
-                    name: 'follow_up_date'
+                    data: 'followup_date',
+                    name: 'followup_date'
                 },
                 {
                     data: 'price_quoted',
@@ -164,5 +151,7 @@
 
     });
 </script>
+
+@endpush
 
 

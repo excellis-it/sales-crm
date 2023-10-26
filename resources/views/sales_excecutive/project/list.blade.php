@@ -52,20 +52,20 @@
                                     <th> Date</th>
                                     <th> Business Name</th>
                                     <th> Customer Name </th>
-                                    <th>Phone Number</th>
-                                    <th>Project Type</th>
-                                    <th>Project Value</th>
-                                    <th>Project Upfront</th>
-                                    <th>Currency</th>
-                                    <th>Payment Mode</th>
-                                    <th>Due Amount</th>
+                                    <th> Phone Number</th>
+                                    <th> Project Type</th>
+                                    <th> Project Value</th>
+                                    <th> Project Upfront</th>
+                                    <th> Currency</th>
+                                    <th> Payment Mode</th>
+                                    <th> Due Amount</th>
                                     <th>
                                         Action
                                     </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($projects as $key => $project)
+                                {{-- @foreach ($projects as $key => $project)
                                     <tr>
                                         <td>
                                             {{ date('d-m-Y', strtotime($project->sale_date)) }}
@@ -105,7 +105,7 @@
                                                     class="fas fa-eye"></i></a>
                                         </td>
                                     </tr>
-                                @endforeach
+                                @endforeach --}}
                             </tbody>
                         </table>
                     </div>
@@ -119,6 +119,70 @@
 
 @push('scripts')
     <script>
+        $(document).ready(function() {
+            var table = $('#myTable').DataTable({
+                processing: true,
+                serverSide: true,
+                destroy: true,
+                ajax: "{{ route('prospect.ajax-list') }}",
+                columns: [{
+                        data: 'user_id',
+                        name: 'user_id'
+                    },
+                    {
+                        data: 'date',
+                        name: 'date'
+                    },
+                    {
+                        data: 'client_name',
+                        name: 'client_name'
+                    },
+                    {
+                        data: 'business_name',
+                        name: 'business_name'
+                    },
+                    {
+                        data: 'email',
+                        name: 'email'
+                    },
+                    {
+                        data: 'phone',
+                        name: 'phone'
+                    },
+                    {
+                        data: 'transfer_by',
+                        name: 'transfer_by'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'service_offered',
+                        name: 'service_offered'
+                    },
+                    {
+                        data: 'followup_date',
+                        name: 'followup_date'
+                    },
+                    {
+                        data: 'price_quoted',
+                        name: 'price_quoted'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
+                ]
+            });
+
+        });
+    </script>
+    {{-- <script>
         $(document).ready(function() {
             //Default data table
             $('#myTable').DataTable({
@@ -135,7 +199,7 @@
             });
 
         });
-    </script>
+    </script> --}}
     <script>
         $(document).ready(function() {
             //how to place holder in "jquery datatable" search box
