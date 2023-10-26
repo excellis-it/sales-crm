@@ -65,7 +65,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {{-- @foreach ($projects as $key => $project)
+                                @foreach ($projects as $key => $project)
                                     <tr>
                                         <td>
                                             {{ date('d-m-Y', strtotime($project->sale_date)) }}
@@ -105,7 +105,7 @@
                                                     class="fas fa-eye"></i></a>
                                         </td>
                                     </tr>
-                                @endforeach --}}
+                                @endforeach
                             </tbody>
                         </table>
                     </div>

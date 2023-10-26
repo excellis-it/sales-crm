@@ -15,8 +15,8 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        // $projects = Project::where('project_opener', auth()->user()->id)->orderBy('created_at', 'desc')->get();
-        return view('sales_excecutive.project.list');
+        $projects = Project::where('project_opener', auth()->user()->id)->orderBy('created_at', 'desc')->get();
+        return view('sales_excecutive.project.list',compact('projects'));
     }
 
     public function projectAjaxList()
@@ -42,14 +42,14 @@ class ProjectController extends Controller
         $data_arr = array();
         foreach ($records as $key => $record) {
             $data_arr[] = array(
-                'created_at' => date('d-m-Y', strtotime($record->created_at)),
-                'sale_by' => $record->salesManager->name,
-                'sales_manager_email' => $record->salesManager->email,
+                'created_at' => date('d-m-Y', strtotime($record->sale_date)),
+                'business_name' => $record->business_name,
                 'client_name' => $record->client_name,
                 'client_phone' => $record->client_phone,
                 'project_value' => $record->project_value,
                 'project_upfront' => $record->project_upfront,
                 'currency' => $record->currency,
+                'sale_by' => $record->salesManager->name,
                 'payment_mode' => $record->payment_mode,
                 'due_amount' => $record->project_value - $record->project_upfront,
                 'assigned_to' => $record->assigned_to ? '<span class="badge bg-success">Assigned</span>' : '<span class="badge bg-danger">Not Assigned</span>',
