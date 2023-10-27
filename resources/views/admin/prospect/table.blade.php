@@ -1,8 +1,8 @@
 <table id="myTable" class="dd table table-striped table-bordered" style="width:100%">
     <thead>
         <tr>
-            <th>Prospect By</th>
             <th>Date</th>
+            <th>Prospect By</th>
             <th>Client Name</th>
             <th>Business Name</th>
             <th>Email</th>

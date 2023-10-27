@@ -116,7 +116,7 @@ class ProspectController extends Controller
                 "business_name" => $business_name,
                 "client_email" => $client_email,
                 "client_phone" => $client_phone,
-                "transfer_by" => User::where(['id' => $record->transfer_token_by])->first()->name,
+                "transfer_by" => User::where(['id' => $record->transfer_token_by])->first()->name ?? '',
                 "status" => $status,
                 "service_offered" => $offered_for,
                 "followup_date" => $followup_date,

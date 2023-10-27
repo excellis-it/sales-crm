@@ -77,11 +77,11 @@ class ProjectController extends Controller
                 'sales_manager_email' => $record->salesManager->email ?? '',
                 'client_name' => $record->client_name,
                 'client_phone' => $record->client_phone,
-                'project_value' => $record->project_value,
-                'project_upfront' => $record->project_upfront,
+                'project_value' => (int)$record->project_value,
+                'project_upfront' => (int)$record->project_upfront,
                 'currency' => $record->currency,
                 'payment_mode' => $record->payment_mode,
-                'due_amount' => $record->project_value - $record->project_upfront,
+                'due_amount' => (int)$record->project_value - (int)$record->project_upfront,
                 'assigned_to' => $record->assigned_to ? '<span class="badge bg-success">Assigned</span>' : '<span class="badge bg-danger">Not Assigned</span>',
                 'action' => '<a href="' . route('sales-projects.show', $record->id) . '" class="btn btn-sm btn-primary"><i class="fa fa-eye"></i></a> <a href="' . route('sales-projects.edit', $record->id) . '" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a> <a href="javascipt:void(0);" data-route="' . route('sales-projects.delete', $record->id) . '" class="btn btn-sm btn-danger" id="delete"><i class="fa fa-trash"></i></a>'
             );
