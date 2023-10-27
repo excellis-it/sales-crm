@@ -50,6 +50,7 @@
                                                 <option value="SALES_MANAGER">Sales Manager</option>
                                                 <option value="ACCOUNT_MANAGER">Account Manager</option>
                                                 <option value="SALES_EXCUETIVE">Sales Exceutive</option>
+                                                <option value="BUSINESS_DEVELOPMENT_MANAGER">BDM</option>
                                             </select>
                                         </div>
                                         <div class="col-md-6">
@@ -207,7 +208,57 @@
 @endsection
 
 @push('scripts')
-   
+    <script>
+        $(document).on("click", ".edit-data", function() {
+            var route = $(this).data('route');
+            // add loader
+            $('#loading').addClass('loading');
+            $('#loading-content').addClass('loading-content');
+            var role = $(this).data('role');
+            if (role == 'SALES_MANAGER') {
+                $('#goals_type').html(
+                    '<option value="">Select a goal type</option><option value="1">Gross</option><option value="2">Net</option>'
+                );
+            } else {
+                $('#goals_type').html(
+                    '<option value="">Select a goal type</option><option value="2">Net</option>'
+                );
+            }
+            $.ajax({
+                url: route,
+                type: "GET",
+                data: {
+                    role: role
+                },
+                success: function(resp) {
+                    if (role == 'SALES_MANAGER') {
+                        // select user type
+                        $('#user_type').val('SALES_MANAGER');
+                    } else {
+                        $('#user_type').val('ACCOUNT_MANAGER');
+                    }
+                    console.log(resp.users);
+                    var html = '<option value="">Select a user</option>';
+                    $.each(resp.users, function(key, value) {
+                        html += '<option value="' + value.id + '">' + value
+                            .name +
+                            '</option>';
+                    });
+
+                    $('#user_id').html(html);
+                    $('#goal-create').show();
+                    $('#id').val(resp.data.id);
+                    $('#user_id').val(resp.data.user_id);
+                    $('#goals_type').val(resp.data.goals_type);
+                    $('#goals_amount').val(resp.data.goals_amount);
+                    $('#goals_date').val(resp.data.goals_date);
+                    $('.form-button').html('Update');
+                    $('#loading').removeClass('loading');
+                    $('#loading-content').removeClass('loading-content');
+                }
+            });
+        });
+    </script>
     <script>
         $(document).ready(function() {
             //Default data table
@@ -222,62 +273,12 @@
                 $('.form-button').html('Create');
                 $('#goal-create').toggle();
             });
-
-            $('.edit-data').on('click', function() {
-                var route = $(this).data('route');
-                // add loader
-                $('#loading').addClass('loading');
-                $('#loading-content').addClass('loading-content');
-                var role = $(this).data('role');
-                if (role == 'SALES_MANAGER') {
-                    $('#goals_type').html(
-                        '<option value="">Select a goal type</option><option value="1">Gross</option><option value="2">Net</option>'
-                    );
-                } else {
-                    $('#goals_type').html(
-                        '<option value="">Select a goal type</option><option value="2">Net</option>'
-                    );
-                }
-                $.ajax({
-                    url: route,
-                    type: "GET",
-                    data: {
-                        role: role
-                    },
-                    success: function(resp) {
-                        if (role == 'SALES_MANAGER') {
-                            // select user type
-                            $('#user_type').val('SALES_MANAGER');
-                        } else {
-                            $('#user_type').val('ACCOUNT_MANAGER');
-                        }
-                        console.log(resp.users);
-                        var html = '<option value="">Select a user</option>';
-                        $.each(resp.users, function(key, value) {
-                            html += '<option value="' + value.id + '">' + value
-                                .name +
-                                '</option>';
-                        });
-
-                        $('#user_id').html(html);
-                        $('#goal-create').show();
-                        $('#id').val(resp.data.id);
-                        $('#user_id').val(resp.data.user_id);
-                        $('#goals_type').val(resp.data.goals_type);
-                        $('#goals_amount').val(resp.data.goals_amount);
-                        $('#goals_date').val(resp.data.goals_date);
-                        $('.form-button').html('Update');
-                        $('#loading').removeClass('loading');
-                        $('#loading-content').removeClass('loading-content');
-                    }
-                });
-            });
         });
     </script>
     <script>
         $(document).ready(function() {
             //Default data table
-        
+
 
             $('#createGoals').validate({ // initialize the plugin
                 rules: {
@@ -404,7 +405,9 @@
         $(document).ready(function() {
 
             var table = $('#myTable').DataTable({
-                
+                "order": [
+                    [0, "desc"]
+                ],
                 processing: true,
                 serverSide: true,
                 ajax: "{{ route('goals.ajax-list') }}",

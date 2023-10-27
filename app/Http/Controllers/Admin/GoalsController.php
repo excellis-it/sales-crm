@@ -65,23 +65,37 @@ class GoalsController extends Controller
             $goals_amount = $record->goals_amount;
             $goals_achieve = $record->goals_achieve ?? 0;
             $id = $record->id;
-            
+
+
+            if ($record->goals_type == 1) {
+                $action = '<a href="javascript:void(0);"
+                data-route="'.route('goals.edit', $record->id).'"
+                data-role="SALES_MANAGER" class="edit-data"><i
+                    class="fas fa-edit btn btn-sm btn-primary"></i> </a> &nbsp;  <a title="Delete Project"
+                    data-route="'.route('goals.delete', $record->id).'"
+                    href="javascipt:void(0);" id="delete"><i
+                        class="fas fa-trash btn btn-sm btn-danger"></i></a>';
+            } else {
+                // only delete
+                $action = '<a title="Delete Project"
+                data-route="'.route('goals.delete', $record->id).'"
+                href="javascipt:void(0);" id="delete"><i
+                    class="fas fa-trash btn btn-sm btn-danger"></i></a>';
+            }
+
            $data_arr[] = array(
                "goals_date" => $goals_date,
                "goals_type" => $goals_type,
                "user_id" => $user_id,
                "goals_amount" => $goals_amount,
                "goals_achieve" => $goals_achieve,
-               "action" => '<a href="javascript:void(0);" data-route="'.route('goals.edit', $id).'" data-role="ACCOUNT_MANAGER" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i> </a> &nbsp;<a title="Delete Project"
-               data-route="'.route('goals.delete', $id).'"
-               href="javascipt:void(0);" id="delete"><i
-                   class="fas fa-trash btn btn-sm btn-danger"></i></a>'
+               "action" => $action,
            );
-        }    
+        }
 
-        
-        
-                                                                                                                                                    
+
+
+
         $response = array(
            "draw" => intval($draw),
            "iTotalRecords" => $totalRecords,
@@ -117,7 +131,7 @@ class GoalsController extends Controller
         }
         //  check role by user id
         $user = User::find($request->user_id);
-        if ($user->hasRole('SALES_MANAGER')) {
+        if ($user->hasRole('SALES_MANAGER') || $user->hasRole('BUSINESS_DEVELOPMENT_MANAGER')) {
             $projects = Project::where('user_id', $request->user_id)->whereMonth('sale_date', date('m', strtotime($request->goals_date)))->whereYear('sale_date', date('Y', strtotime($request->goals_date)))->get();
             if (count($projects) > 0) {
                 $goals_achieve  = $projects->sum('project_value');
@@ -143,7 +157,7 @@ class GoalsController extends Controller
             } else {
                 $goals_achieve_net = 0;
             }
-            
+
         } else {
             $projects = Project::where('assigned_to', $request->user_id)->get();
             if (count($projects) > 0) {
@@ -161,7 +175,7 @@ class GoalsController extends Controller
             $goal = Goal::find($request->id);
             $message = 'Goal updated successfully.';
 
-            if ($user->hasRole('SALES_MANAGER') || $user->hasRole('SALES_EXCUETIVE')) {
+            if ($user->hasRole('SALES_MANAGER') || $user->hasRole('SALES_EXCUETIVE') || $user->hasRole('BUSINESS_DEVELOPMENT_MANAGER')) {
                 $goal->user_id = $request->user_id;
                 $goal->goals_date = $request->goals_date;
                 $goal->goals_amount = $request->goals_amount;
@@ -188,7 +202,7 @@ class GoalsController extends Controller
             $goal = new Goal();
             $message = 'Goal added successfully.';
 
-            if ($user->hasRole('SALES_MANAGER') || $user->hasRole('SALES_EXCUETIVE')) {
+            if ($user->hasRole('SALES_MANAGER') || $user->hasRole('SALES_EXCUETIVE') || $user->hasRole('BUSINESS_DEVELOPMENT_MANAGER')) {
                 $goal->user_id = $request->user_id;
                 $goal->goals_date = $request->goals_date;
                 $goal->goals_amount = $request->goals_amount;

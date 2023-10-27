@@ -52,7 +52,8 @@
                                 <h4 class="mb-0">Prospects Details</h4>
                             </div>
                             <div class="col-md-6 text-end">
-                                <a href="{{ route('admin.prospects.create') }}" class="btn px-5 submit-btn"><i class="fa fa-plus"></i> Add a
+                                <a href="{{ route('admin.prospects.create') }}" class="btn px-5 submit-btn"><i
+                                        class="fa fa-plus"></i> Add a
                                     Prospect</a>
                             </div>
                         </div>
@@ -64,7 +65,7 @@
                             <div class="col">
                                 <a href="javascript:void(0);" data-value="All" class="desin-filter active-filter">
                                     <p>All</p>
-                                    <h5>{{  $count['prospect'] }}</h5>
+                                    <h5>{{ $count['prospect'] }}</h5>
                                 </a>
                             </div>
                             <div class="col">
@@ -105,7 +106,6 @@
 @endsection
 
 @push('scripts')
-
     <script>
         $(document).on('click', '#delete', function(e) {
             swal({
@@ -165,31 +165,86 @@
     <script>
         $(document).on('click', '.desin-filter', function(e) {
             var status = $(this).data('value');
+            var user_id = '{{$_GET["user_id"] ?? ""}}'
             //remove active class from all
             $('.desin-filter').removeClass('active-filter');
             //add active class to clicked
             $(this).addClass('active-filter');
-            var url = "{{ route('admin.prospects.filter') }}";
-            $.ajax({
-                type: "GET",
-                dataType: "json",
-                url: url,
-                data: {
-                    'status': status,
-                },
-                success: function(resp) {
-                    $('#show-prospect').html(resp.view);
+            var table = $('#myTable').DataTable();
+            table.destroy();
+            $('#myTable').DataTable({
+                processing: true,
+                serverSide: true,
+                destroy: true,
+                ajax: "{{ route('prospect.ajax-list') }}?status=" + status + "&user_id=" + user_id,
+                columns: [
+                    {
+                        data: 'created_at',
+                        name: 'created_at'
+                    },
+                    {
+                        data: 'prospect_by',
+                        name: 'prospect_by',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'client_name',
+                        name: 'client_name'
+                    },
+                    {
+                        data: 'business_name',
+                        name: 'business_name'
+                    },
 
-                }
+                    {
+                        data: 'client_email',
+                        name: 'client_email'
+                    },
+                    {
+                        data: 'client_phone',
+                        name: 'client_phone'
+                    },
+                    {
+                        data: 'transfer_by',
+                        name: 'transfer_by',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'status',
+                        name: 'status',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'service_offered',
+                        name: 'service_offered',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'followup_date',
+                        name: 'followup_date'
+                    },
+                    {
+                        data: 'price_quote',
+                        name: 'price_quote'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    }
+                ]
             });
         });
     </script>
     <script>
         $(document).ready(function() {
-           //how to place holder in "jquery datatable" search box
+            //how to place holder in "jquery datatable" search box
             $('#myTable_filter input').attr("placeholder", "Search");
         });
-
-
     </script>
 @endpush

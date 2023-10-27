@@ -11,14 +11,14 @@
 @endpush
 
 @section('content')
-    {{-- @php
+    @php
         $totalProspects = $count['prospects'] == 0 ? 1 : $count['prospects'];
         $winProspects = $count['win'] == 0 ? 1 : $count['win'];
         $percentage['win'] = round(($winProspects / $totalProspects) * 100);
         $percentage['follow_up'] = round(($count['follow_up'] / $totalProspects) * 100);
         $percentage['sent_proposal'] = round(($count['sent_proposal'] / $totalProspects) * 100);
         $percentage['close'] = round(($count['close'] / $totalProspects) * 100);
-    @endphp --}}
+    @endphp
     <div class="page-wrapper">
 
         <div class="content container-fluid">
@@ -34,7 +34,7 @@
                 </div>
             </div>
 
-            {{-- <div class="row">
+            <div class="row">
                 @if ($goal['gross_goals'])
                     <div class="col-lg-3 col-sm-6">
                         <div class="stats-card-one mb-30">
@@ -333,9 +333,6 @@
                                     <td>
                                         {{ $prospect->offered_for }}
                                     </td>
-
-
-
                                     <td>
                                         {{ date('d M, Y', strtotime($prospect->followup_date)) }}
                                     </td>
@@ -349,7 +346,7 @@
                         </tbody>
                     </table>
                 </div>
-            </div> --}}
+            </div>
 
         </div>
     </div>
@@ -357,7 +354,7 @@
 @endsection
 
 @push('scripts')
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.min.js"></script>
     <script>
         var barChartData = {
             labels: [
@@ -497,5 +494,5 @@
             type: 'pie',
             data: oilData
         });
-    </script> --}}
+    </script>
 @endpush

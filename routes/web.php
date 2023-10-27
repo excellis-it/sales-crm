@@ -18,9 +18,11 @@ use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
 use App\Http\Controllers\Admin\ProspectController as AdminProspectController;
 use App\Http\Controllers\Admin\SalesExcecutiveController;
 use App\Http\Controllers\Admin\SellerController;
+use App\Http\Controllers\BDM\BusinessDevelopmentExcecutiveController as BDMBusinessDevelopmentExcecutiveController;
 use App\Http\Controllers\BDM\DashboardController as BDMDashboardController;
 use App\Http\Controllers\BDM\ProfileController as BDMProfileController;
 use App\Http\Controllers\BDM\ProjectController as BDMProjectController;
+use App\Http\Controllers\BDM\ProspectController as BDMProspectController;
 use App\Http\Controllers\SalesExcecutive\DashboardController as SalesExcecutiveDashboardController;
 use App\Http\Controllers\SalesExcecutive\ProfileController as SalesExcecutiveProfileController;
 use App\Http\Controllers\SalesExcecutive\ProjectController as SalesExcecutiveProjectController;
@@ -240,9 +242,24 @@ Route::group(['middleware' => ['BDM'], 'prefix' => 'bdm'], function () {
     Route::name('bdm.')->group(function () {
         Route::resources([
             'projects' => BDMProjectController::class,
+            'prospects' => BDMProspectController::class,
         ]);
+        Route::get('/bdm-prospect-ajax-list', [BDMProspectController::class, 'prospectAjaxList'])->name('prospect.ajax-list');
+        // delete prospect
+        Route::get('/prospect-delete/{id}', [BDMProspectController::class, 'delete'])->name('prospects.delete');
     });
+
+    Route::resources([
+        'bde' => BDMBusinessDevelopmentExcecutiveController::class,
+    ]);
     Route::get('/project-document_download/{id}', [BDMProjectController::class, 'projectDocumentDownload'])->name('bdm.projects.document.download');
     // delete project
     Route::get('/project-delete/{id}', [BDMProjectController::class, 'delete'])->name('bdm.projects.delete');
+    //project list
+    Route::get('/bdm-project-ajax-list', [BDMProjectController::class, 'ajaxList'])->name('bdm.projects.ajax-list');
+
+    Route::prefix('bde')->group(function () {
+        Route::get('/bde-delete/{id}', [BDMBusinessDevelopmentExcecutiveController::class, 'delete'])->name('bde.delete');
+    });
+    Route::get('/changeBDEStatus', [BDMBusinessDevelopmentExcecutiveController::class, 'changeBDEStatus'])->name('bde.change-status');
 });

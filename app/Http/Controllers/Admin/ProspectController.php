@@ -21,13 +21,13 @@ class ProspectController extends Controller
      */
     public function index(Request $request)
     {
-
+        // dd($request->user_id);
         if ($request->user_id) {
-            $count['win'] = Prospect::where('report_to', $request->user_id)->where('status', 'Win')->count();
-            $count['follow_up'] = Prospect::where('report_to', $request->user_id)->where('status', 'Follow Up')->count();
-            $count['close'] = Prospect::where('report_to', $request->user_id)->where('status', 'Close')->count();
-            $count['sent_proposal'] = Prospect::where('report_to', $request->user_id)->where('status', 'Sent Proposal')->count();
-            $count['prospect'] = Prospect::where('report_to', $request->user_id)->count();
+            $count['win'] = Prospect::where('user_id', $request->user_id)->where('status', 'Win')->count();
+            $count['follow_up'] = Prospect::where('user_id', $request->user_id)->where('status', 'Follow Up')->count();
+            $count['close'] = Prospect::where('user_id', $request->user_id)->where('status', 'Close')->count();
+            $count['sent_proposal'] = Prospect::where('user_id', $request->user_id)->where('status', 'Sent Proposal')->count();
+            $count['prospect'] = Prospect::where('user_id', $request->user_id)->count();
             // $prospects = Prospect::orderBy('id', 'desc')->where('user_id', $request->user_id)->get();
         } else {
             $count['win'] = Prospect::where('status', 'Win')->count();
@@ -38,7 +38,7 @@ class ProspectController extends Controller
             // $prospects = Prospect::orderBy('id', 'desc')->get();
         }
 
-        return view('admin.prospect.list',compact('count'));
+        return view('admin.prospect.list', compact('count'));
     }
 
     public function prospectAjaxList(Request $request)
@@ -64,11 +64,18 @@ class ProspectController extends Controller
 
         // Fetch records
         $records = Prospect::query();
-        $columns = ['user_id','report_to','client_name','business_name','transfer_token_by','client_email','client_phone','price_quote','followup_date','offered_for'];
-        foreach($columns as $column){
+        if ($request->status && $request->status != 'All') {
+            $records->where(['status' => $request->status]);
+        }
+        if ($request->user_id) {
+            $records->where(['user_id' => $request->user_id]);
+        }
+        $columns = ['user_id', 'report_to', 'client_name', 'business_name', 'transfer_token_by', 'client_email', 'client_phone', 'price_quote', 'followup_date', 'offered_for'];
+        foreach ($columns as $column) {
             $records->where($column, 'like', '%' . $searchValue . '%');
         }
-        $records->orderBy($columnName,$columnSortOrder);
+
+        $records->orderBy($columnName, $columnSortOrder);
         $records->skip($start);
         $records->take($rowperpage);
         $records = $records->orderBy('id', 'desc');
@@ -76,7 +83,7 @@ class ProspectController extends Controller
 
         $data_arr = array();
 
-        foreach($records as $record){
+        foreach ($records as $record) {
             $client_name = $record->client_name;
             $business_name = $record->business_name;
             $client_email = $record->client_email;
@@ -86,51 +93,49 @@ class ProspectController extends Controller
             $offered_for = $record->offered_for;
             $id = $record->id;
 
-            if($record->status == 'Win')
-            {
+            if ($record->status == 'Win') {
                 $status = '<span>On Board</span>';
-            }elseif($record->status =='Follow Up'){
+            } elseif ($record->status == 'Follow Up') {
                 $status = '<span>Follow Up</span>';
-            }elseif($record->status =='Sent Proposal'){
+            } elseif ($record->status == 'Sent Proposal') {
                 $status = '<span>Sent Proposal</span>';
-            }else{
+            } else {
                 $status = '<span>Cancel</span>';
             }
 
-            if ($record->status != 'Win')
-            {
-                $action = '<a title="Edit Prospect" data-route="" href="'.route('admin.prospects.edit', $id).'" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></a> &nbsp;&nbsp;';
-            }else{
+            if ($record->status != 'Win') {
+                $action = '<a title="Edit Prospect" data-route="" href="' . route('admin.prospects.edit', $id) . '" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></a> &nbsp;&nbsp;';
+            } else {
                 $action = '';
             }
 
-           $data_arr[] = array(
-                "user_id" => User::where(['id' => $record->user_id])->first()->name,
-                "date" => date('d-m-Y', strtotime($record->created_at)),
+            $data_arr[] = array(
+                "created_at" => date('d-m-Y', strtotime($record->created_at)),
+                "prospect_by" => User::where(['id' => $record->user_id])->first()->name,
                 "client_name" => $client_name,
                 "business_name" => $business_name,
-                "email" => $client_email,
-                "phone" => $client_phone,
+                "client_email" => $client_email,
+                "client_phone" => $client_phone,
                 "transfer_by" => User::where(['id' => $record->transfer_token_by])->first()->name,
                 "status" => $status,
                 "service_offered" => $offered_for,
                 "followup_date" => $followup_date,
-                "price_quoted" => $price_quote,
-                "action" => $action.
-                '<a title="View Prospect" class="view-details-btn btn btn-sm btn-warning"
-                data-route="'.route('admin.prospects.show', $id).'" data-bs-toggle="modal"
+                "price_quote" => $price_quote,
+                "action" => $action .
+                    '<a title="View Prospect" class="view-details-btn btn btn-sm btn-warning"
+                data-route="' . route('admin.prospects.show', $id) . '" data-bs-toggle="modal"
                 data-bs-target="#exampleModal" href="javascript:void(0);"><i class="fas fa-eye"></i></a>
             &nbsp;&nbsp;
-            <a title="Delete Account manager" class="btn btn-sm btn-danger" data-route="'.route('admin.prospects.delete', $id).'"
+            <a title="Delete Account manager" class="btn btn-sm btn-danger" data-route="' . route('admin.prospects.delete', $id) . '"
                 href="javascipt:void(0);" id="delete"><i class="fas fa-trash"></i></a>'
             );
         }
 
         $response = array(
-           "draw" => intval($draw),
-           "iTotalRecords" => $totalRecords,
-           "iTotalDisplayRecords" => $totalRecordswithFilter,
-           "aaData" => $data_arr
+            "draw" => intval($draw),
+            "iTotalRecords" => $totalRecords,
+            "iTotalDisplayRecords" => $totalRecordswithFilter,
+            "aaData" => $data_arr
         );
 
         return response()->json($response);
@@ -143,9 +148,9 @@ class ProspectController extends Controller
      */
     public function create()
     {
-        $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->orderBy('id', 'desc')->get();
-        $sales_executives = User::role('SALES_EXCUETIVE')->where(['status' => 1])->orderBy('id', 'desc')->get();
-        return view('admin.prospect.create')->with(compact('sales_executives','users'));
+        $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE', 'BUSINESS_DEVELOPMENT_MANAGER', 'BUSINESS_DEVELOPMENT_EXCECUTIVE'])->orderBy('id', 'desc')->get();
+        $sales_executives = User::role(['SALES_EXCUETIVE','BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where(['status' => 1])->orderBy('id', 'desc')->get();
+        return view('admin.prospect.create')->with(compact('sales_executives', 'users'));
     }
 
     /**
@@ -158,10 +163,14 @@ class ProspectController extends Controller
     {
         // try {
         $data = $request->all();
-
+        $getUser = User::where(['id' => $data['user_id']])->first();
         $prospect = new Prospect();
         $prospect->user_id = $data['user_id'];
-        $prospect->report_to = Auth::user()->id;
+        if ($getUser->hasRole('SALES_EXCUETIVE')) {
+            $prospect->report_to = $getUser['sales_manager_id'];
+        } else {
+            $prospect->report_to = $data['bdm_id'];
+        }
         $prospect->client_name = $data['client_name'];
         $prospect->business_name = $data['business_name'];
         $prospect->client_email = $data['client_email'];
@@ -214,7 +223,7 @@ class ProspectController extends Controller
             }
 
             $project = new Project();
-            $project->user_id = $user->sales_manager_id;
+            $project->user_id = $prospect->report_to;
             $project->client_name = $prospect->client_name;
             $project->business_name = $prospect->business_name;
             $project->client_email = $prospect->client_email;
@@ -264,7 +273,7 @@ class ProspectController extends Controller
         try {
             $prospect = Prospect::find($id);
             $isThat = 'view';
-            return response()->json(['view'=>(String)View::make('admin.prospect.show-details')->with(compact('prospect','isThat'))]);
+            return response()->json(['view' => (string)View::make('admin.prospect.show-details')->with(compact('prospect', 'isThat'))]);
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }
@@ -279,10 +288,10 @@ class ProspectController extends Controller
     public function edit($id)
     {
         try {
-            $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->orderBy('id', 'desc')->get();
+            $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE', 'BUSINESS_DEVELOPMENT_MANAGER', 'BUSINESS_DEVELOPMENT_EXCECUTIVE'])->orderBy('id', 'desc')->get();
             $prospect = Prospect::find($id);
-            $sales_executives = User::role('SALES_EXCUETIVE')->where(['status' => 1])->orderBy('id', 'desc')->get();
-            return view('admin.prospect.edit')->with(compact('prospect','sales_executives','users'));
+            $sales_executives = User::role(['SALES_EXCUETIVE','BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where(['status' => 1])->orderBy('id', 'desc')->get();
+            return view('admin.prospect.edit')->with(compact('prospect', 'sales_executives', 'users'));
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }
@@ -298,9 +307,14 @@ class ProspectController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->all();
+        $getUser = User::where(['id' => $data['user_id']])->first();
         $prospect = Prospect::findOrfail($id);
         $prospect->user_id = $data['user_id'];
-        $prospect->report_to = Auth::user()->id;
+        if ($getUser->hasRole('SALES_EXCUETIVE')) {
+            $prospect->report_to = $getUser['sales_manager_id'];
+        } else {
+            $prospect->report_to = $data['bdm_id'];
+        }
         $prospect->client_name = $data['client_name'];
         $prospect->business_name = $data['business_name'];
         $prospect->client_email = $data['client_email'];
@@ -353,7 +367,7 @@ class ProspectController extends Controller
             }
 
             $project = new Project();
-            $project->user_id = $user->sales_manager_id;
+            $project->user_id = $prospect->report_to;
             $project->client_name = $prospect->client_name;
             $project->business_name = $prospect->business_name;
             $project->client_email = $prospect->client_email;
@@ -409,20 +423,191 @@ class ProspectController extends Controller
         return redirect()->back()->with('message', 'Prospect deleted successfully.');
     }
 
-    public function filter(Request $request)
-    {
-        if ($request->ajax()) {
-            $status = $request->status;
-            if ($status == 'All') {
-                $prospects = Prospect::orderBy('id', 'desc')->get();
+    // public function filter(Request $request)
+    // {
+    //     if ($request->ajax()) {
+    //         $status = $request->status;
+    //         if ($status == 'All') {
+    //             $prospects = Prospect::orderBy('id', 'desc')->get();
+    //             $draw = $request->get('draw');
+    //             $start = $request->get("start");
+    //             $rowperpage = $request->get("length"); // Rows display per page
 
-            } else {
-                $prospects = Prospect::where(['status' => $status])->orderBy('id', 'desc')->get();
-            }
-            $filter = true;
-            return response()->json(['view'=>(String)View::make('admin.prospect.table')->with(compact('prospects','filter'))]);
-        }
-    }
+    //             $columnIndex_arr = $request->get('order');
+    //             $columnName_arr = $request->get('columns');
+    //             $order_arr = $request->get('order');
+    //             $search_arr = $request->get('search');
+
+    //             $columnIndex = $columnIndex_arr[0]['column']; // Column index
+    //             $columnName = $columnName_arr[$columnIndex]['data']; // Column name
+    //             $columnSortOrder = $order_arr[0]['dir']; // asc or desc
+    //             $searchValue = $search_arr['value']; // Search value
+
+    //             // Total records
+    //             $totalRecords = Prospect::orderBy('id', 'desc')->count();
+    //             $totalRecordswithFilter = Prospect::orderBy('id', 'desc')->count();
+
+    //             // Fetch records
+    //             $records = Prospect::query();
+    //             $columns = ['user_id', 'report_to', 'client_name', 'business_name', 'transfer_token_by', 'client_email', 'client_phone', 'price_quote', 'followup_date', 'offered_for'];
+    //             foreach ($columns as $column) {
+    //                 $records->where($column, 'like', '%' . $searchValue . '%');
+    //             }
+    //             $records->orderBy($columnName, $columnSortOrder);
+    //             $records->skip($start);
+    //             $records->take($rowperpage);
+    //             $records = $records->orderBy('id', 'desc');
+    //             $records = $records->get();
+
+    //             $data_arr = array();
+
+    //             foreach ($records as $record) {
+    //                 $client_name = $record->client_name;
+    //                 $business_name = $record->business_name;
+    //                 $client_email = $record->client_email;
+    //                 $client_phone = $record->client_phone;
+    //                 $price_quote = $record->price_quote;
+    //                 $followup_date = date('d-m-Y', strtotime($record->followup_date));
+    //                 $offered_for = $record->offered_for;
+    //                 $id = $record->id;
+
+    //                 if ($record->status == 'Win') {
+    //                     $status = '<span>On Board</span>';
+    //                 } elseif ($record->status == 'Follow Up') {
+    //                     $status = '<span>Follow Up</span>';
+    //                 } elseif ($record->status == 'Sent Proposal') {
+    //                     $status = '<span>Sent Proposal</span>';
+    //                 } else {
+    //                     $status = '<span>Cancel</span>';
+    //                 }
+
+    //                 if ($record->status != 'Win') {
+    //                     $action = '<a title="Edit Prospect" data-route="" href="' . route('admin.prospects.edit', $id) . '" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></a> &nbsp;&nbsp;';
+    //                 } else {
+    //                     $action = '';
+    //                 }
+
+    //                 $data_arr[] = array(
+    //                     "user_id" => User::where(['id' => $record->user_id])->first()->name,
+    //                     "date" => date('d-m-Y', strtotime($record->created_at)),
+    //                     "client_name" => $client_name,
+    //                     "business_name" => $business_name,
+    //                     "email" => $client_email,
+    //                     "phone" => $client_phone,
+    //                     "transfer_by" => User::where(['id' => $record->transfer_token_by])->first()->name,
+    //                     "status" => $status,
+    //                     "service_offered" => $offered_for,
+    //                     "followup_date" => $followup_date,
+    //                     "price_quoted" => $price_quote,
+    //                     "action" => $action .
+    //                         '<a title="View Prospect" class="view-details-btn btn btn-sm btn-warning"
+    //             data-route="' . route('admin.prospects.show', $id) . '" data-bs-toggle="modal"
+    //             data-bs-target="#exampleModal" href="javascript:void(0);"><i class="fas fa-eye"></i></a>
+    //         &nbsp;&nbsp;
+    //         <a title="Delete Account manager" class="btn btn-sm btn-danger" data-route="' . route('admin.prospects.delete', $id) . '"
+    //             href="javascipt:void(0);" id="delete"><i class="fas fa-trash"></i></a>'
+    //                 );
+    //             }
+
+    //             $response = array(
+    //                 "draw" => intval($draw),
+    //                 "iTotalRecords" => $totalRecords,
+    //                 "iTotalDisplayRecords" => $totalRecordswithFilter,
+    //                 "aaData" => $data_arr
+    //             );
+    //         } else {
+    //             $draw = $request->get('draw');
+    //             $start = $request->get("start");
+    //             $rowperpage = $request->get("length"); // Rows display per page
+
+    //             $columnIndex_arr = $request->get('order');
+    //             $columnName_arr = $request->get('columns');
+    //             $order_arr = $request->get('order');
+    //             $search_arr = $request->get('search');
+
+    //             $columnIndex = $columnIndex_arr[0]['column']; // Column index
+    //             $columnName = $columnName_arr[$columnIndex]['data']; // Column name
+    //             $columnSortOrder = $order_arr[0]['dir']; // asc or desc
+    //             $searchValue = $search_arr['value']; // Search value
+
+    //             // Total records
+    //             $totalRecords = Prospect::orderBy('id', 'desc')->count();
+    //             $totalRecordswithFilter = Prospect::orderBy('id', 'desc')->count();
+
+    //             // Fetch records
+    //             $records = Prospect::query();
+    //             $columns = ['user_id', 'report_to', 'client_name', 'business_name', 'transfer_token_by', 'client_email', 'client_phone', 'price_quote', 'followup_date', 'offered_for'];
+    //             foreach ($columns as $column) {
+    //                 $records->where($column, 'like', '%' . $searchValue . '%');
+    //             }
+    //             $records->orderBy($columnName, $columnSortOrder);
+    //             $records->skip($start);
+    //             $records->take($rowperpage);
+    //             $records = $records->orderBy('id', 'desc');
+    //             $records = $records->where(['status' => $status])->get();
+
+    //             $data_arr = array();
+
+    //             foreach ($records as $record) {
+    //                 $client_name = $record->client_name;
+    //                 $business_name = $record->business_name;
+    //                 $client_email = $record->client_email;
+    //                 $client_phone = $record->client_phone;
+    //                 $price_quote = $record->price_quote;
+    //                 $followup_date = date('d-m-Y', strtotime($record->followup_date));
+    //                 $offered_for = $record->offered_for;
+    //                 $id = $record->id;
+
+    //                 if ($record->status == 'Win') {
+    //                     $status = '<span>On Board</span>';
+    //                 } elseif ($record->status == 'Follow Up') {
+    //                     $status = '<span>Follow Up</span>';
+    //                 } elseif ($record->status == 'Sent Proposal') {
+    //                     $status = '<span>Sent Proposal</span>';
+    //                 } else {
+    //                     $status = '<span>Cancel</span>';
+    //                 }
+
+    //                 if ($record->status != 'Win') {
+    //                     $action = '<a title="Edit Prospect" data-route="" href="' . route('admin.prospects.edit', $id) . '" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></a> &nbsp;&nbsp;';
+    //                 } else {
+    //                     $action = '';
+    //                 }
+
+    //                 $data_arr[] = array(
+    //                     "user_id" => User::where(['id' => $record->user_id])->first()->name,
+    //                     "date" => date('d-m-Y', strtotime($record->created_at)),
+    //                     "client_name" => $client_name,
+    //                     "business_name" => $business_name,
+    //                     "email" => $client_email,
+    //                     "phone" => $client_phone,
+    //                     "transfer_by" => User::where(['id' => $record->transfer_token_by])->first()->name,
+    //                     "status" => $status,
+    //                     "service_offered" => $offered_for,
+    //                     "followup_date" => $followup_date,
+    //                     "price_quoted" => $price_quote,
+    //                     "action" => $action .
+    //                         '<a title="View Prospect" class="view-details-btn btn btn-sm btn-warning"
+    //             data-route="' . route('admin.prospects.show', $id) . '" data-bs-toggle="modal"
+    //             data-bs-target="#exampleModal" href="javascript:void(0);"><i class="fas fa-eye"></i></a>
+    //         &nbsp;&nbsp;
+    //         <a title="Delete Account manager" class="btn btn-sm btn-danger" data-route="' . route('admin.prospects.delete', $id) . '"
+    //             href="javascipt:void(0);" id="delete"><i class="fas fa-trash"></i></a>'
+    //                 );
+    //             }
+
+    //             $response = array(
+    //                 "draw" => intval($draw),
+    //                 "iTotalRecords" => $totalRecords,
+    //                 "iTotalDisplayRecords" => $totalRecordswithFilter,
+    //                 "aaData" => $data_arr
+    //             );
+    //             // $prospects = Prospect::where(['status' => $status])->orderBy('id', 'desc')->get();
+    //         }
+    //         $filter = true;
+    //         return response()->json(['view' => (string)View::make('admin.prospect.table')->with(compact('response'))]);
+    //     }
+    // }
 
     public function assignToProject($id)
     {
@@ -498,5 +683,4 @@ class ProspectController extends Controller
             return redirect()->back()->with('error', $th->getMessage());
         }
     }
-
 }

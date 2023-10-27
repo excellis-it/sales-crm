@@ -1,4 +1,4 @@
-@extends('sales_manager.layouts.master')
+@extends('bdm.layouts.master')
 @section('title')
     {{ env('APP_NAME') }} | Create Prospect
 @endsection
@@ -15,8 +15,7 @@
                     <div class="col">
                         <h3 class="page-title">Create</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('sales-manager.prospects.index') }}">Prospects</a>
-                            </li>
+                            <li class="breadcrumb-item"><a href="{{ route('bdm.prospects.index') }}">Prospects</a></li>
                             <li class="breadcrumb-item active">Create Prospect</li>
                         </ul>
                     </div>
@@ -35,19 +34,18 @@
                                 {{-- <h3 class="mb-0 text-uppercase">Create A Prospect</h3>
                                 <hr> --}}
                                 <div class="border-0 border-4">
-                                    <div class="">
-                                        <form action="{{ route('sales-manager.prospects.store') }}" method="post"
+                                    <div class="card-body">
+                                        <form action="{{ route('bdm.prospects.store') }}" method="post"
                                             data-parsley-validate="" enctype="multipart/form-data">
                                             @csrf
                                             <div class="border p-4 rounded">
                                                 <div class="row">
                                                     <div class="col-md-4 mb-3">
-                                                        <label for="inputEnterYourName" class="col-form-label"> Sales
-                                                            Executive
+                                                        <label for="inputEnterYourName" class="col-form-label"> Prospect by
                                                             <span style="color: red;">*</span></label>
-                                                        <select name="user_id" id="user_id" class="form-control" required
-                                                            data-parsley-trigger="keyup">
-                                                            <option value="">Select sales executive</option>
+                                                        <select name="user_id" id="user_id" class="form-control select2"
+                                                            required data-parsley-trigger="keyup">
+                                                            <option value="">Select Prospect By</option>
                                                             @foreach ($sales_executives as $sales_executive)
                                                                 <option value="{{ $sales_executive->id }}">
                                                                     {{ $sales_executive->name }}</option>
@@ -191,12 +189,13 @@
                                                 {{-- upfront_value --}}
                                                 <div class="row" id="upfront_value_show">
                                                 </div>
+
                                                 {{-- comments --}}
                                                 <div class="col-md-12 mb-3">
                                                     <label for="inputEnterYourName"
                                                         class="col-form-label">Comments</label>
-                                                    <textarea name="comments" id="comments" cols="30" rows="10" class="form-control"
-                                                        placeholder="Enter Comments">{{ old('comments') }}</textarea>
+                                                    <textarea name="comments" id="comments" cols="30" rows="5" class="form-control"
+                                                        placeholder="Enter Comments ...">{{ old('comments') }}</textarea>
                                                 </div>
                                                 <div class="row" style="margin-top: 20px; float: left;">
                                                     <div class="col-sm-9">
@@ -236,7 +235,6 @@
     </script>
     <script>
         $(document).ready(function() {
-            $('.select2').select2();
 
             $('#project_type').on('change', function() {
                 //    select 2 value get and seo,other value check
@@ -254,20 +252,19 @@
             });
         });
     </script>
-
-<script>
-    $(document).ready(function() {
-        $('#status').on('change', function() {
-            // get value win show the upfront value
-            var status = $(this).val();
-            if (status.includes('Win')) {
-                $('#upfront_value_show').html(
-                    ' <div class="col-md-4 mb-3" ><label for="inputEnterYourName" data-parsley-type="number" class="col-form-label">Upfront Value <span style="color: red;">*</span></label><input type="text" name="upfront_value" id="upfront_value"  required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number." class="form-control" value="{{ old('upfront_value') }}" placeholder="Enter Upfront Value"></div><div class="col-md-4 mb-3"> <label for = "inputEnterYourName" class="col-form-label"> Sale Date <span style="color: red;">*</span></label></label> <input type="date" name ="sale_date" id ="sale_date" class ="form-control"></div>'
-                );
-            } else {
-                $('#upfront_value_show').html('');
-            }
+    <script>
+        $(document).ready(function() {
+            $('#status').on('change', function() {
+                // get value win show the upfront value
+                var status = $(this).val();
+                if (status.includes('Win')) {
+                    $('#upfront_value_show').html(
+                        ' <div class="col-md-4 mb-3" ><label for="inputEnterYourName" data-parsley-type="number" class="col-form-label">Upfront Value <span style="color: red;">*</span></label><input type="text" name="upfront_value" id="upfront_value"  required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number." class="form-control" value="{{ old('upfront_value') }}" placeholder="Enter Upfront Value"></div><div class="col-md-4 mb-3"> <label for = "inputEnterYourName" class="col-form-label"> Sale Date <span style="color: red;">*</span></label></label> <input type="date" name="sale_date" id="sale_date" class ="form-control"></div>'
+                    );
+                } else {
+                    $('#upfront_value_show').html('');
+                }
+            });
         });
-    });
-</script>
+    </script>
 @endpush

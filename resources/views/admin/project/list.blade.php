@@ -135,8 +135,11 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
-            //Default data table
+            var sales_manager_id = '{{$_GET["sales_manager_id"] ?? ""}}'
+            var account_manager_id = '{{$_GET["account_manager_id"] ?? ""}}';
             var table = $('#myTable').DataTable({
+                // descending order
+                "order": [[ 0, "desc" ]],
                 "columnDefs": [
                     {
                         "orderable": false,
@@ -150,7 +153,7 @@
 
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('sales-projects.ajax-list') }}",
+                ajax: "{{ route('sales-projects.ajax-list') }}?sales_manager_id=" + sales_manager_id + "&account_manager_id=" + account_manager_id,
                 columns: [{
                         data: 'created_at',
                         name: 'created_at'

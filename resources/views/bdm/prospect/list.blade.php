@@ -1,4 +1,4 @@
-@extends('sales_manager.layouts.master')
+@extends('bdm.layouts.master')
 @section('title')
     All Prospect Details - {{ env('APP_NAME') }}
 @endsection
@@ -22,7 +22,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="show-details">
-                    @include('sales_manager.prospect.show-details')
+                    @include('bdm.prospect.show-details')
                 </div>
             </div>
         </div>
@@ -36,7 +36,7 @@
                     <div class="col">
                         <h3 class="page-title">Prospects Information</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('sales-manager.prospects.index') }}">Prospects</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('bdm.prospects.index') }}">Prospects</a></li>
                             <li class="breadcrumb-item active">List</li>
                         </ul>
                     </div>
@@ -52,7 +52,8 @@
                                 <h4 class="mb-0">Prospects Details</h4>
                             </div>
                             <div class="col-md-6 text-end">
-                                <a href="{{ route('sales-manager.prospects.create') }}" class="btn px-5 submit-btn"><i class="fa fa-plus"></i> Add a
+                                <a href="{{ route('bdm.prospects.create') }}" class="btn px-5 submit-btn"><i
+                                        class="fa fa-plus"></i> Add a
                                     Prospect</a>
                             </div>
                         </div>
@@ -64,7 +65,7 @@
                             <div class="col">
                                 <a href="javascript:void(0);" data-value="All" class="desin-filter active-filter">
                                     <p>All</p>
-                                    <h5>{{ count($prospects) }}</h5>
+                                    <h5>{{ $count['prospect'] }}</h5>
                                 </a>
                             </div>
                             <div class="col">
@@ -94,7 +95,7 @@
                         </div>
                     </div>
                     <div class="table-responsive" id="show-prospect">
-                        @include('sales_manager.prospect.table')
+                        @include('bdm.prospect.table')
                     </div>
                 </div>
             </div>
@@ -105,24 +106,6 @@
 @endsection
 
 @push('scripts')
-    <script>
-        $(document).ready(function() {
-            //Default data table
-            $('#myTable').DataTable({
-                "aaSorting": [],
-                "columnDefs": [{
-                        "orderable": false,
-                        "targets": [10]
-                    },
-                    {
-                        "orderable": true,
-                        "targets": [0, 1, 2, 5, 6, 7, 8, 9]
-                    }
-                ]
-            });
-
-        });
-    </script>
     <script>
         $(document).on('click', '#delete', function(e) {
             swal({
@@ -164,7 +147,6 @@
             });
         });
     </script> --}}
-
     <script>
         $(document).on('click', '.view-details-btn', function(e) {
             e.preventDefault();
@@ -187,27 +169,81 @@
             $('.desin-filter').removeClass('active-filter');
             //add active class to clicked
             $(this).addClass('active-filter');
-            var url = "{{ route('sales-manager.prospects.filter') }}";
-            $.ajax({
-                type: "GET",
-                dataType: "json",
-                url: url,
-                data: {
-                    'status': status,
-                },
-                success: function(resp) {
-                    $('#show-prospect').html(resp.view);
+            var table = $('#myTable').DataTable();
+            table.destroy();
+            $('#myTable').DataTable({
+                "order": [
+                    [0, "desc"]
+                ],
+                processing: true,
+                serverSide: true,
+                destroy: true,
+                ajax: "{{ route('bdm.prospect.ajax-list') }}?status=" + status,
+                columns: [{
+                        data: 'created_at',
+                        name: 'created_at'
+                    }, {
+                        data: 'prospect_by',
+                        name: 'prospect_by',
+                        orderable: false,
+                        searchable: false
+                    },
 
-                }
+                    {
+                        data: 'client_name',
+                        name: 'client_name'
+                    },
+                    {
+                        data: 'business_name',
+                        name: 'business_name'
+                    },
+
+                    {
+                        data: 'client_email',
+                        name: 'client_email'
+                    },
+                    {
+                        data: 'client_phone',
+                        name: 'client_phone'
+                    },
+                    {
+                        data: 'transfer_by',
+                        name: 'transfer_by',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'status',
+                        name: 'status',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'service_offered',
+                        name: 'service_offered'
+                    },
+                    {
+                        data: 'followup_date',
+                        name: 'followup_date'
+                    },
+                    {
+                        data: 'price_quote',
+                        name: 'price_quote'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    }
+                ]
             });
         });
     </script>
     <script>
         $(document).ready(function() {
-           //how to place holder in "jquery datatable" search box
+            //how to place holder in "jquery datatable" search box
             $('#myTable_filter input').attr("placeholder", "Search");
         });
-
-
     </script>
 @endpush

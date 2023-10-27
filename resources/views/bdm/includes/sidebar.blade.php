@@ -22,10 +22,10 @@
                     </ul>
                 </li>
                 {{-- My sales excecutive --}}
-                {{-- <li class="{{ Request::is('bdm/sales-excecutive*') ? 'active' : ' ' }}">
-                    <a href="{{ route('bdm.sales-excecutive.index') }}"><i class="la la-user-tie"></i> <span>
-                            Sales Excecutive</span></a>
-                </li> --}}
+                <li class="{{ Request::is('bdm/bde*') ? 'active' : ' ' }}">
+                    <a href="{{ route('bde.index') }}"><i class="la la-user-tie"></i> <span>
+                            BDE</span></a>
+                </li>
                 {{-- My project --}}
                 <li class="{{ Request::is('bdm/projects*') ? 'active' : ' ' }}">
                     <a href="{{ route('bdm.projects.index') }}"><i class="la la-briefcase"></i> <span>My
@@ -33,10 +33,10 @@
                 </li>
 
                 {{-- My prospect --}}
-                {{-- <li class="{{ Request::is('bdm/prospects*') ? 'active' : ' ' }}">
+                <li class="{{ Request::is('bdm/prospects*') ? 'active' : ' ' }}">
                     <a href="{{ route('bdm.prospects.index') }}"><i class="la la-book-reader"></i> <span>My
                             Prospects</span></a>
-                </li> --}}
+                </li>
 
 
 

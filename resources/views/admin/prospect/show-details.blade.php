@@ -1,6 +1,6 @@
 @if (isset($isThat))
 <p>
-    <span>Sales Excecutive:-</span>
+    <span>Prospect By:-</span>
     {{ $prospect->user->name }}
 </p>
 <p>

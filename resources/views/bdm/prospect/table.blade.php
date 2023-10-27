@@ -2,8 +2,9 @@
     <thead>
         <tr>
             <th>Date</th>
-            <th>Business Name</th>
+            <th>Prospect By</th>
             <th>Client Name</th>
+            <th>Business Name</th>
             <th>Email</th>
             <th>Phone</th>
             <th>Transfer Taken By</th>
@@ -15,88 +16,83 @@
         </tr>
     </thead>
     <tbody>
-        @foreach ($prospects as $key => $prospect)
-            <tr>
-                <td>
-                    {{ date('d M, Y', strtotime($prospect->created_at)) }}
-                </td>
-                <td>
-                    {{ $prospect->business_name }}
-                </td>
-                <td>
-                    {{ $prospect->client_name }}
-                </td>
-                <td>
-                    {{ $prospect->client_email }}
-                </td>
-                <td>
-                    {{ $prospect->client_phone }}
-                </td>
-                <td>
-                    {{ $prospect->transferTakenBy->name ?? '' }}
-                </td>
-                <td>
-                    @if ($prospect->status == 'Win')
-                    <span>On Board</span>
-                    @elseif ($prospect->status == 'Follow Up')
-                    <span>Follow Up</span>
-                    @elseif ($prospect->status == 'Sent Proposal')
-                    <span>Sent Proposal</span>
-                    @elseif ($prospect->status == 'Close')
-                    <span>Cancel</span>
-                @endif
-                </td>
-                <td>
-                    {{ $prospect->offered_for }}
-                </td>
 
 
-
-                <td>
-                    {{ date('d M, Y', strtotime($prospect->followup_date)) }}
-                </td>
-                <td>
-                    {{ $prospect->price_quote }}
-                </td>
-
-                <td>
-                    @if ($prospect->status != 'Win')
-                        <a title="Edit Prospect" data-route="" href="{{ route('sales-manager.prospects.edit', $prospect->id) }}"><i
-                                class="fas fa-edit"></i></a> &nbsp;&nbsp;
-                    @endif
-                    {{-- @if ($prospect->status == 'Win' && $prospect->is_project == false)
-                    <a title="Assign to project" data-route="" href="{{ route('sales-manager.prospects.assign-project', $prospect->id) }}"><i
-                        class="fa fa-shield"></i></a> &nbsp;&nbsp;
-                    @endif --}}
-
-                    <a title="View Prospect" class="view-details-btn"
-                        data-route="{{ route('sales-manager.prospects.show', $prospect->id) }}"
-                        data-bs-toggle="modal" data-bs-target="#exampleModal"
-                        href="javascript:void(0);"><i class="fas fa-eye"></i></a> &nbsp;&nbsp;
-                </td>
-            </tr>
-        @endforeach
     </tbody>
 </table>
-<script>
-    $(document).ready(function() {
-        //Default data table
-        $('#myTable').DataTable({
-            "aaSorting": [],
-            "columnDefs": [{
-                    "orderable": false,
-                    "targets": [10]
-                },
-                {
-                    "orderable": true,
-                    "targets": [0, 1, 2, 5, 6, 7, 8, 9]
-                }
-            ]
-        });
 
-    });
-    $(document).ready(function() {
-           //how to place holder in "jquery datatable" search box
-            $('#myTable_filter input').attr("placeholder", "Search");
+
+
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            var table = $('#myTable').DataTable({
+                processing: true,
+                serverSide: true,
+                destroy: true,
+                ajax: "{{ route('bdm.prospect.ajax-list') }}",
+                columns: [{
+                        data: 'created_at',
+                        name: 'created_at'
+                    },
+                    {
+                        data: 'prospect_by',
+                        name: 'prospect_by',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'client_name',
+                        name: 'client_name'
+                    },
+                    {
+                        data: 'business_name',
+                        name: 'business_name'
+                    },
+
+                    {
+                        data: 'client_email',
+                        name: 'client_email'
+                    },
+                    {
+                        data: 'client_phone',
+                        name: 'client_phone'
+                    },
+                    {
+                        data: 'transfer_by',
+                        name: 'transfer_by',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'status',
+                        name: 'status',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'service_offered',
+                        name: 'service_offered',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'followup_date',
+                        name: 'followup_date'
+                    },
+                    {
+                        data: 'price_quote',
+                        name: 'price_quote'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
+                ]
+            });
+
         });
-</script>
+    </script>
+@endpush

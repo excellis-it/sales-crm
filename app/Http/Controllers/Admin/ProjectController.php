@@ -54,21 +54,27 @@ class ProjectController extends Controller
         $columnSortOrder = $order_arr[0]['dir']; // asc or desc
         $searchValue = $search_arr['value']; // Search value
 
-        $totalRecords = Project::count();
-        $totalRecordswithFilter = Project::where('client_name', 'like', '%' . $searchValue . '%')->count();
+        // return $columnName.' '.$columnSortOrder;
+
         if ($request->sales_manager_id) {
+            $totalRecordswithFilter = Project::where('client_name', 'like', '%' . $searchValue . '%')->where('user_id', $request->sales_manager_id)->count();
+            $totalRecords = Project::where('user_id', $request->sales_manager_id)->count();
             $records = Project::orderBy($columnName, $columnSortOrder)->where('user_id', $request->sales_manager_id)->where('client_name', 'like', '%' . $searchValue . '%')->skip($start)->take($rowperpage)->get();
         } elseif ($request->account_manager_id) {
+            $totalRecordswithFilter = Project::where('client_name', 'like', '%' . $searchValue . '%')->where('assigned_to', $request->account_manager_id)->count();
+            $totalRecords = Project::where('assigned_to', $request->account_manager_id)->count();
             $records = Project::orderBy($columnName, $columnSortOrder)->where('assigned_to', $request->account_manager_id)->where('client_name', 'like', '%' . $searchValue . '%')->skip($start)->take($rowperpage)->get();
         } else {
+            $totalRecordswithFilter = Project::where('client_name', 'like', '%' . $searchValue . '%')->count();
+            $totalRecords = Project::count();
             $records = Project::orderBy($columnName, $columnSortOrder)->where('client_name', 'like', '%' . $searchValue . '%')->skip($start)->take($rowperpage)->get();
         }
         $data_arr = array();
         foreach ($records as $key => $record) {
             $data_arr[] = array(
                 'created_at' => date('d-m-Y', strtotime($record->created_at)),
-                'sale_by' => $record->salesManager->name,
-                'sales_manager_email' => $record->salesManager->email,
+                'sale_by' => $record->salesManager->name ?? '',
+                'sales_manager_email' => $record->salesManager->email ?? '',
                 'client_name' => $record->client_name,
                 'client_phone' => $record->client_phone,
                 'project_value' => $record->project_value,
@@ -99,7 +105,7 @@ class ProjectController extends Controller
     public function create()
     {
         $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->orderBy('id', 'desc')->get();
-        $sales_managers = User::Role('SALES_MANAGER')->orderBy('name', 'DESC')->where('status', 1)->get();
+        $sales_managers = User::Role(['SALES_MANAGER','ACCOUNT_MANAGER','BUSINESS_DEVELOPMENT_MANAGER'])->orderBy('name', 'DESC')->where('status', 1)->get();
         return view('admin.project.create')->with(compact('sales_managers', 'users'));
     }
 
@@ -210,7 +216,7 @@ class ProjectController extends Controller
     {
         try {
             $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->orderBy('id', 'desc')->get();
-            $sales_managers = User::Role('SALES_MANAGER')->get();
+            $sales_managers = User::Role(['SALES_MANAGER','ACCOUNT_MANAGER','BUSINESS_DEVELOPMENT_MANAGER'])->get();
             $project = Project::find($id);
             return view('admin.project.edit')->with(compact('project', 'sales_managers', 'users'));
         } catch (\Throwable $th) {

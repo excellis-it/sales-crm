@@ -42,12 +42,11 @@
                                             <div class="border p-4 rounded">
                                                 <div class="row">
                                                     <div class="col-md-4 mb-3">
-                                                        <label for="inputEnterYourName" class="col-form-label"> Sales
-                                                            Executive
+                                                        <label for="inputEnterYourName" class="col-form-label"> Prospect By
                                                             <span style="color: red;">*</span></label>
                                                         <select name="user_id" id="user_id" class="form-control select2"
                                                             required data-parsley-trigger="keyup">
-                                                            <option value="">Select sales executive</option>
+                                                            <option value="">Select Prospect By</option>
                                                             @foreach ($sales_executives as $sales_executive)
                                                                 <option value="{{ $sales_executive->id }}"
                                                                     {{ $sales_executive->id == $prospect->user_id ? 'selected' : '' }}>

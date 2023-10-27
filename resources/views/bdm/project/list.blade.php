@@ -66,56 +66,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($projects as $key => $project)
-                                    <tr>
-                                        <td>
-                                            {{ date('d-m-Y', strtotime($project->sale_date)) }}
-                                        </td>
-                                        <td>
-                                            {{ $project->business_name }}
-                                        </td>
-                                        <td>
-                                            {{ $project->client_name }}
-                                        </td>
-                                        <td>
-                                            {{ $project->client_phone }}
-                                        </td>
-                                        <td>
-                                               <span>{{$project->projectTypes->type ?? '' }}</span>
-                                        </td>
-                                        <td>
-                                            {{ $project->project_value }}
-                                        </td>
 
-                                        <td>
-                                            {{ $project->project_upfront }}
-                                        </td>
-                                        <td>
-                                            {{ $project->currency }}
-                                        </td>
-                                        <td>
-                                            {{ $project->payment_mode }}
-                                        </td>
-                                        <td>
-                                            {{ (int)$project->project_value - (int)$project->project_upfront }}
-                                        </td>
-
-                                        <td>
-                                            <a title="Edit Project" data-route=""
-                                                href="{{ route('bdm.projects.edit', $project->id) }}"><i
-                                                    class="fas fa-edit"></i></a> &nbsp;&nbsp;
-
-                                            <a title="View Project" data-route=""
-                                                href="{{ route('bdm.projects.show', $project->id) }}"><i
-                                                    class="fas fa-eye"></i></a> &nbsp;&nbsp;
-
-
-                                            <a title="Delete Project"
-                                                data-route="{{ route('bdm.projects.delete', $project->id) }}"
-                                                href="javascipt:void(0);" id="delete"><i class="fas fa-trash"></i></a>
-                                        </td>
-                                    </tr>
-                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -128,24 +79,81 @@
 @endsection
 
 @push('scripts')
-    <script>
-        $(document).ready(function() {
-            //Default data table
-            $('#myTable').DataTable({
-                "aaSorting": [],
-                "columnDefs": [{
-                        "orderable": false,
-                        "targets": [10]
-                    },
-                    {
-                        "orderable": true,
-                        "targets": [0, 1, 2, 5, 6, 7, 8, 9]
-                    }
-                ]
-            });
+<script>
+    $(document).ready(function() {
+        //Default data table
+        var table = $('#myTable').DataTable({
+            "order": [
+                [0, "desc"]
+            ],
+            "columnDefs": [
+                {
+                    "orderable": false,
+                    "targets": [10]
+                },
+                {
+                    "orderable": true,
+                    "targets": [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                }
+            ],
 
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('bdm.projects.ajax-list') }}",
+            columns: [
+                {
+                    data: 'sale_date',
+                    name: 'sale_date'
+                },
+                {
+                    data: 'business_name',
+                    name: 'business_name'
+                },
+                {
+                    data: 'client_name',
+                    name: 'client_name'
+                },
+                {
+                    data: 'client_phone',
+                    name: 'client_phone'
+                },
+                {
+                    data: 'project_type',
+                    name: 'project_type'
+                },
+                {
+                    data: 'project_value',
+                    name: 'project_value'
+                },
+                {
+                    data: 'project_upfront',
+                    name: 'project_upfront'
+                },
+                {
+                    data: 'currency',
+                    name: 'currency'
+                },
+                {
+                    data: 'payment_mode',
+                    name: 'payment_mode'
+                },
+                {
+                    data: 'due_amount',
+                    name: 'due_amount',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false
+                },
+            ]
         });
-    </script>
+
+    });
+</script>
     <script>
         $(document).on('click', '#delete', function(e) {
             swal({

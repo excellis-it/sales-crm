@@ -1,6 +1,6 @@
 @if (isset($isThat))
 <p>
-    <span>Sales Excecutive:-</span>
+    <span>Prospect By:-</span>
     {{ $prospect->user->name }}
 </p>
 <p>
@@ -26,7 +26,10 @@
     <span>Phone:-</span>
     {{ $prospect->client_phone }}
 </p>
-
+<p>
+    <span>Website:-</span>
+    {{ $prospect->website }}
+</p>
 <p>
     <span>Transfer Taken By:-</span>
     {{ $prospect->transfer_token_by }}
@@ -65,7 +68,7 @@
     {{ $prospect->comments }}
 </p>
 <p>
-    <span>Upfront Value:- </span>
+    <span>Upfront Value:-</span>
     {{ ($prospect->upfront_value) ? '$'.$prospect->upfront_value : 'N/A' }}
 </p>
 @endif

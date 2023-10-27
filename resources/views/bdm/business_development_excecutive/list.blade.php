@@ -1,6 +1,6 @@
-@extends('sales_manager.layouts.master')
+@extends('bdm.layouts.master')
 @section('title')
-    All Sales excecutive Details - {{ env('APP_NAME') }}
+    All BDE Details - {{ env('APP_NAME') }}
 @endsection
 @push('styles')
     <style>
@@ -21,9 +21,9 @@
             <div class="page-header">
                 <div class="row align-items-center">
                     <div class="col">
-                        <h3 class="page-title">Sales Excecutives Information</h3>
+                        <h3 class="page-title">BDE Information</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('sales-manager.sales-excecutive.index') }}">Sales Excecutives</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('bde.index') }}">BDE</a></li>
                             <li class="breadcrumb-item active">List</li>
                         </ul>
                     </div>
@@ -36,11 +36,11 @@
                     <div class="card-title">
                         <div class="row">
                             <div class="col-md-6">
-                                <h4 class="mb-0">Sales Excecutives Details</h4>
+                                <h4 class="mb-0">BDE Details</h4>
                             </div>
                             <div class="col-md-6 text-end">
-                                <a href="{{ route('sales-manager.sales-excecutive.create') }}" class="btn px-5 submit-btn"><i class="fa fa-plus"></i> Add a
-                                    sales excecutive</a>
+                                <a href="{{ route('bde.create') }}" class="btn px-5 submit-btn"><i class="fa fa-plus"></i> Add a
+                                    BDE</a>
                             </div>
                         </div>
                     </div>
@@ -55,36 +55,36 @@
                                     <th> Phone</th>
                                     <th>Employee Id</th>
                                     <th>Date Of Joining</th>
-                                    <th>No. of prospect</th>
+                                    {{-- <th>No. of prospect</th> --}}
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($sales_excecutives as $key => $sales_excecutive)
+                                @foreach ($business_development_excecutives as $key => $business_development_excecutive)
                                     <tr>
-                                        <td>{{ $sales_excecutive->name }}</td>
-                                        <td>{{ $sales_excecutive->email }}</td>
-                                        <td>{{ $sales_excecutive->phone }}</td>
-                                        <td>{{ $sales_excecutive->employee_id }}</td>
-                                        <td>{{ $sales_excecutive->date_of_joining }}</td>
-                                        <td>{{ $sales_excecutive->prospects->count() }}</td>
+                                        <td>{{ $business_development_excecutive->name }}</td>
+                                        <td>{{ $business_development_excecutive->email }}</td>
+                                        <td>{{ $business_development_excecutive->phone }}</td>
+                                        <td>{{ $business_development_excecutive->employee_id }}</td>
+                                        <td>{{ $business_development_excecutive->date_of_joining }}</td>
+                                        {{-- <td><a href="{{ route('bdm.prospects.index',['user_id'=>$business_development_excecutive->id]) }}">{{ $business_development_excecutive->prospects->count() }}</a></td> --}}
                                         <td>
                                             <div class="button-switch">
                                                 <input type="checkbox" id="switch-orange" class="switch toggle-class"
-                                                    data-id="{{ $sales_excecutive['id'] }}"
-                                                    {{ $sales_excecutive['status'] ? 'checked' : '' }} />
+                                                    data-id="{{ $business_development_excecutive['id'] }}"
+                                                    {{ $business_development_excecutive['status'] ? 'checked' : '' }} />
                                                 <label for="switch-orange" class="lbl-off"></label>
                                                 <label for="switch-orange" class="lbl-on"></label>
                                             </div>
                                         </td>
                                         <td>
-                                            <a title="Edit Sales excecutive" data-route=""
-                                                href="{{ route('sales-manager.sales-excecutive.edit', $sales_excecutive->id) }}"><i
+                                            <a title="Edit BDE" data-route=""
+                                                href="{{ route('bde.edit', $business_development_excecutive->id) }}"><i
                                                     class="fas fa-edit"></i></a> &nbsp;&nbsp;
 
-                                            <a title="Delete Sales excecutive"
-                                                data-route="{{ route('sales-manager.sales-excecutive.delete', $sales_excecutive->id) }}"
+                                            <a title="Delete BDE"
+                                                data-route="{{ route('bde.delete', $business_development_excecutive->id) }}"
                                                 href="javascipt:void(0);" id="delete"><i class="fas fa-trash"></i></a>
                                         </td>
                                     </tr>
@@ -123,7 +123,7 @@
         $(document).on('click', '#delete', function(e) {
             swal({
                     title: "Are you sure?",
-                    text: "To delete this sales_excecutive.",
+                    text: "To delete this business_development_excecutive.",
                     type: "warning",
                     confirmButtonText: "Yes",
                     showCancelButton: true
@@ -149,7 +149,7 @@
             $.ajax({
                 type: "GET",
                 dataType: "json",
-                url: '{{ route("sales-manager.sales-excecutive.change-status") }}',
+                url: '{{ route("bde.change-status") }}',
                 data: {
                     'status': status,
                     'user_id': user_id
