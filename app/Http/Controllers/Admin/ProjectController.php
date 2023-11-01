@@ -72,7 +72,7 @@ class ProjectController extends Controller
         $data_arr = array();
         foreach ($records as $key => $record) {
             $data_arr[] = array(
-                'created_at' => date('d-m-Y', strtotime($record->created_at)),
+                'sale_date' => ($record->sale_date) ? date('d-m-Y', strtotime($record->sale_date)) : '',
                 'sale_by' => $record->salesManager->name ?? '',
                 'sales_manager_email' => $record->salesManager->email ?? '',
                 'client_name' => $record->client_name,

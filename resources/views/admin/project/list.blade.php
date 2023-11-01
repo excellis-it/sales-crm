@@ -155,8 +155,8 @@
                 serverSide: true,
                 ajax: "{{ route('sales-projects.ajax-list') }}?sales_manager_id=" + sales_manager_id + "&account_manager_id=" + account_manager_id,
                 columns: [{
-                        data: 'created_at',
-                        name: 'created_at'
+                        data: 'sale_date',
+                        name: 'sale_date'
                     },
                     {
                         data: 'sale_by',
