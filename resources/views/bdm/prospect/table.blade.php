@@ -27,13 +27,16 @@
     <script>
         $(document).ready(function() {
             var table = $('#myTable').DataTable({
+                "order": [
+                    [0, "desc"]
+                ],
                 processing: true,
                 serverSide: true,
                 destroy: true,
                 ajax: "{{ route('bdm.prospect.ajax-list') }}",
                 columns: [{
-                        data: 'created_at',
-                        name: 'created_at'
+                        data: 'sale_date',
+                        name: 'sale_date'
                     },
                     {
                         data: 'prospect_by',

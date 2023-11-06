@@ -42,7 +42,7 @@
 
 <p>
     <span>Followup Date:-</span>
-    {{ date('d M, Y', strtotime($prospect->followup_date)) }}
+    {{($prospect->followup_date) ?  date('d M, Y', strtotime($prospect->followup_date)) : '' }}
 </p>
 
 <p>
@@ -54,8 +54,8 @@
     {{ $prospect->comments }}
 </p>
 <p>
-    <span>Sale Date</span>
-    {{ date('d M, Y', strtotime($prospect->sale_date)) }}
+    <span>Sale Date : -</span>
+    {{ ($prospect->sale_date) ?  date('d M, Y', strtotime($prospect->sale_date)) : '' }}
 </p>
 <p>
     <span>Upfront Value:-</span>

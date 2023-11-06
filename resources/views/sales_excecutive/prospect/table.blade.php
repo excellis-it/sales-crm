@@ -18,7 +18,7 @@
         @foreach ($prospects as $key => $prospect)
             <tr>
                 <td>
-                    {{ date('d M, Y', strtotime($prospect->created_at)) }}
+                    {{ ($prospect->sale_date) ?  date('d-m-Y', strtotime($prospect->sale_date) ) : '' }}
                 </td>
                 <td>
                     {{ $prospect->business_name }}

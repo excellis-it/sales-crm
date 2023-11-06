@@ -180,8 +180,8 @@
                 destroy: true,
                 ajax: "{{ route('bdm.prospect.ajax-list') }}?status=" + status,
                 columns: [{
-                        data: 'created_at',
-                        name: 'created_at'
+                        data: 'sale_date',
+                        name: 'sale_date'
                     }, {
                         data: 'prospect_by',
                         name: 'prospect_by',

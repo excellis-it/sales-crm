@@ -69,7 +69,7 @@
                                 @foreach ($projects as $key => $project)
                                     <tr>
                                         <td>
-                                            {{ date('d-m-Y', strtotime($project->sale_date)) }}
+                                            {{ ($project->sale_date) ?  date('d-m-Y', strtotime($project->sale_date) ) : '' }}
                                         </td>
                                         <td>
                                             {{ $project->business_name }}
@@ -132,6 +132,7 @@
         $(document).ready(function() {
             //Default data table
             $('#myTable').DataTable({
+                "order": [[ 0, "desc" ]],
                 "aaSorting": [],
                 "columnDefs": [{
                         "orderable": false,

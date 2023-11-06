@@ -114,7 +114,7 @@
                                         <li class="">
                                             <div class="title  ">Sale Date:-</div>
                                             <div class="text">
-                                                {{ date('d-m-Y', strtotime($project->sale_date)) }}
+                                                {{($project->sale_date) ?  date('d-m-Y', strtotime($project->sale_date)) : '' }}
                                             </div>
                                         </li>
                                         <li class="">

@@ -68,7 +68,7 @@
                                 @foreach ($projects as $key => $project)
                                     <tr>
                                         <td>
-                                            {{ date('d-m-Y', strtotime($project->sale_date)) }}
+                                            {{ ($project->sale_date) ?  date('d-m-Y', strtotime($project->sale_date) ) : '' }}
                                         </td>
                                         <td>
                                             {{ $project->business_name }}
@@ -118,9 +118,10 @@
 @endsection
 
 @push('scripts')
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             var table = $('#myTable').DataTable({
+                "order": [[ 0, "desc" ]],
                 processing: true,
                 serverSide: true,
                 destroy: true,
@@ -181,11 +182,12 @@
             });
 
         });
-    </script>
-    {{-- <script>
+    </script> --}}
+    <script>
         $(document).ready(function() {
             //Default data table
             $('#myTable').DataTable({
+                "order": [[ 0, "desc" ]],
                 "aaSorting": [],
                 "columnDefs": [{
                         "orderable": false,
@@ -199,7 +201,7 @@
             });
 
         });
-    </script> --}}
+    </script>
     <script>
         $(document).ready(function() {
             //how to place holder in "jquery datatable" search box
