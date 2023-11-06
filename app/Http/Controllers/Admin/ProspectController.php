@@ -59,22 +59,29 @@ class ProspectController extends Controller
         $searchValue = $search_arr['value']; // Search value
 
         // Total records
-        $totalRecords = Prospect::orderBy('id', 'desc')->count();
-        $totalRecordswithFilter = Prospect::orderBy('id', 'desc')->count();
+
 
         // Fetch records
         $records = Prospect::query();
         if ($request->status && $request->status != 'All') {
+            $totalRecords = Prospect::orderBy('id', 'desc')->where(['status' => $request->status])->count();
+            $totalRecordswithFilter = Prospect::orderBy('id', 'desc')->where(['status' => $request->status])->count();
             $records->where(['status' => $request->status]);
         }
         if ($request->user_id) {
+            $totalRecords = Prospect::orderBy('id', 'desc')->where(['user_id' => $request->user_id])->count();
+            $totalRecordswithFilter = Prospect::orderBy('id', 'desc')->where(['user_id' => $request->user_id])->count();
             $records->where(['user_id' => $request->user_id]);
+        } else {
+            $totalRecords = Prospect::orderBy('id', 'desc')->count();
+            $totalRecordswithFilter = Prospect::orderBy('id', 'desc')->count();
         }
+
         $columns = ['user_id', 'report_to', 'client_name', 'business_name', 'transfer_token_by', 'client_email', 'client_phone', 'price_quote', 'followup_date', 'offered_for'];
         foreach ($columns as $column) {
             $records->where($column, 'like', '%' . $searchValue . '%');
         }
-
+            
         $records->orderBy($columnName, $columnSortOrder);
         $records->skip($start);
         $records->take($rowperpage);
