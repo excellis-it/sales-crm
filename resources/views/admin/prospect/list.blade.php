@@ -173,14 +173,15 @@
             var table = $('#myTable').DataTable();
             table.destroy();
             $('#myTable').DataTable({
+                "order": [[ 0, "desc" ]],
                 processing: true,
                 serverSide: true,
                 destroy: true,
                 ajax: "{{ route('prospect.ajax-list') }}?status=" + status + "&user_id=" + user_id,
                 columns: [
                     {
-                        data: 'created_at',
-                        name: 'created_at'
+                        data: 'sale_date',
+                        name: 'sale_date'
                     },
                     {
                         data: 'prospect_by',

@@ -110,7 +110,7 @@ class ProspectController extends Controller
             }
 
             $data_arr[] = array(
-                "created_at" => date('d-m-Y', strtotime($record->created_at)),
+                "sale_date" => ($record->sale_date) ? date('d-m-Y', strtotime($record->sale_date)) : '',
                 "prospect_by" => User::where(['id' => $record->user_id])->first()->name,
                 "client_name" => $client_name,
                 "business_name" => $business_name,

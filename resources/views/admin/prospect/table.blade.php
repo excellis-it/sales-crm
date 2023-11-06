@@ -30,13 +30,14 @@
             var user_id = '{{ $_GET['user_id'] ?? '' }}'
             console.log(user_id);
             var table = $('#myTable').DataTable({
+                "order": [[ 0, "desc" ]],
                 processing: true,
                 serverSide: true,
                 destroy: true,
                 ajax: "{{ route('prospect.ajax-list') }}?user_id=" + user_id,
                 columns: [{
-                        data: 'created_at',
-                        name: 'created_at'
+                        data: 'sale_date',
+                        name: 'sale_date'
                     },
                     {
                         data: 'prospect_by',
