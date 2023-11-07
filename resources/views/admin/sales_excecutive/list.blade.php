@@ -23,7 +23,8 @@
                     <div class="col">
                         <h3 class="page-title">Sales Excecutives Information</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('sales-excecutive.index') }}">Sales Excecutives</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('sales-excecutive.index') }}">Sales Excecutives</a>
+                            </li>
                             <li class="breadcrumb-item active">List</li>
                         </ul>
                     </div>
@@ -39,60 +40,33 @@
                                 <h4 class="mb-0">Sales Excecutives Details</h4>
                             </div>
                             <div class="col-md-6 text-end">
-                                <a href="{{ route('sales-excecutive.create') }}" class="btn px-5 submit-btn"><i class="fa fa-plus"></i> Add a
+                                <a href="{{ route('sales-excecutive.create') }}" class="btn px-5 submit-btn"><i
+                                        class="fa fa-plus"></i> Add a
                                     sales excecutive</a>
                             </div>
                         </div>
                     </div>
 
                     <hr />
-                    <div class="table-responsive">
-                        <table id="myTable" class="dd table table-striped table-bordered" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>Report To</th>
-                                    <th> Name</th>
-                                    <th> Email</th>
-                                    <th> Phone</th>
-                                    <th>Employee Id</th>
-                                    <th>Date Of Joining</th>
-                                    <th>No. of prospect</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($sales_excecutives as $key => $sales_excecutive)
-                                    <tr>
-                                        <td> <a href="{{ route('sales_managers.index',['id'=> $sales_excecutive->report_to->id]) }}">{{ $sales_excecutive->report_to->name }}</a>   </td>
-                                        <td>{{ $sales_excecutive->name }}</td>
-                                        <td>{{ $sales_excecutive->email }}</td>
-                                        <td>{{ $sales_excecutive->phone }}</td>
-                                        <td>{{ $sales_excecutive->employee_id }}</td>
-                                        <td>{{ $sales_excecutive->date_of_joining }}</td>
-                                        <td><a href="{{ route('admin.prospects.index',['user_id'=>$sales_excecutive->id]) }}">{{ $sales_excecutive->prospects->count() }}</a></td>
-                                        <td>
-                                            <div class="button-switch">
-                                                <input type="checkbox" id="switch-orange" class="switch toggle-class"
-                                                    data-id="{{ $sales_excecutive['id'] }}"
-                                                    {{ $sales_excecutive['status'] ? 'checked' : '' }} />
-                                                <label for="switch-orange" class="lbl-off"></label>
-                                                <label for="switch-orange" class="lbl-on"></label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <a title="Edit Sales excecutive" data-route=""
-                                                href="{{ route('sales-excecutive.edit', $sales_excecutive->id) }}"><i
-                                                    class="fas fa-edit"></i></a> &nbsp;&nbsp;
+                    <div class="row justify-content-end">
+                        <div class="col-md-6">
+                            <div class="row g-1 justify-content-end">
+                                <div class="col-md-8 pr-0">
+                                    <div class="search-field">
+                                        <input type="text" name="search" id="search" placeholder="search..." required
+                                            class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-3 pl-0 ml-2">
+                                    <button class="btn px-5 submit-btn" id="search-button"> <span class=""><i
+                                                class="fa fa-search"></i></span> Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive" id="sales_excecutive_data">
+                        @include('admin.sales_excecutive.table')
 
-                                            <a title="Delete Sales excecutive"
-                                                data-route="{{ route('sales-excecutive.delete', $sales_excecutive->id) }}"
-                                                href="javascipt:void(0);" id="delete"><i class="fas fa-trash"></i></a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             </div>
@@ -105,20 +79,29 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
-            //Default data table
-            $('#myTable').DataTable({
-                "aaSorting": [],
-                "columnDefs": [{
-                        "orderable": false,
-                        "targets": [5, 6]
+            $('#search-button').on('click', function() {
+                var text = $('#search').val();
+                if (text == '') {
+                    alert('Please type something for search!');
+                    return false;
+                }
+                url = "{{ route('sales-excecutive.search') }}"
+                $('#loading').addClass('loading');
+                $('#loading-content').addClass('loading-content');
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    data: {
+                        text: text,
                     },
-                    {
-                        "orderable": true,
-                        "targets": [0, 1, 2, 3, 4 ]
+                    success: function(response) {
+                        $('#sales_excecutive_data').html(response.view);
+                        $('#search').val('');
+                        $('#loading').removeClass('loading');
+                        $('#loading-content').removeClass('loading-content');
                     }
-                ]
+                });
             });
-
         });
     </script>
     <script>
@@ -151,7 +134,7 @@
             $.ajax({
                 type: "GET",
                 dataType: "json",
-                url: '{{ route("sales-excecutive.change-status") }}',
+                url: '{{ route('sales-excecutive.change-status') }}',
                 data: {
                     'status': status,
                     'user_id': user_id
@@ -164,10 +147,8 @@
     </script>
     <script>
         $(document).ready(function() {
-           //how to place holder in "jquery datatable" search box
+            //how to place holder in "jquery datatable" search box
             $('#myTable_filter input').attr("placeholder", "Search");
         });
-
-
     </script>
 @endpush

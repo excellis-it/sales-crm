@@ -25,13 +25,13 @@ class ProspectController extends Controller
 
         if ($type) {
             // return $type;
-            $prospects = Prospect::where(['user_id' => Auth::user()->id, 'status' => $type])->orderBy('id', 'desc')->get();
+            $prospects = Prospect::where(['user_id' => Auth::user()->id, 'status' => $type])->orderBy('sale_date', 'desc')->get();
             $count['win'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Win')->count();
             $count['follow_up'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Follow Up')->count();
             $count['close'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Close')->count();
             $count['sent_proposal'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Sent Proposal')->count();
         } else {
-            $prospects = Prospect::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->get();
+            $prospects = Prospect::where('user_id', Auth::user()->id)->orderBy('sale_date', 'desc')->get();
             $count['win'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Win')->count();
             $count['follow_up'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Follow Up')->count();
             $count['close'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Close')->count();

@@ -82,6 +82,7 @@
     $(document).ready(function() {
         //Default data table
         $('#myTable').DataTable({
+            "order": [[ 0, "desc" ]],
             "aaSorting": [],
             "columnDefs": [{
                     "orderable": false,

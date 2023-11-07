@@ -10,6 +10,7 @@ use App\Mail\RegistrationMail;
 use App\Traits\ImageTrait;
 use Illuminate\Support\Facades\Storage;
 use File;
+use Illuminate\Support\Facades\View;
 
 class SalesExcecutiveController extends Controller
 {
@@ -23,10 +24,10 @@ class SalesExcecutiveController extends Controller
     public function index(Request $request)
     {
         if ($request->id) {
-            $sales_excecutives = User::where('id', $request->id)->Role('SALES_EXCUETIVE')->get();
+            $sales_excecutives = User::where('id', $request->id)->Role('SALES_EXCUETIVE')->orderBy('name', 'desc')->paginate(15);
             return view('admin.sales_excecutive.list')->with(compact('sales_excecutives'));
         }
-        $sales_excecutives = User::Role('SALES_EXCUETIVE')->get();
+        $sales_excecutives = User::Role('SALES_EXCUETIVE')->orderBy('name', 'desc')->paginate(15);
         return view('admin.sales_excecutive.list')->with(compact('sales_excecutives'));
     }
 
@@ -180,5 +181,23 @@ class SalesExcecutiveController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
         return redirect()->route('sales-excecutive.index')->with('error', 'Sales excecutive has been deleted successfully.');
+    }
+
+    public function search(Request $request)
+    {
+        if ($request->ajax()) {
+            $sales_excecutives = User::query();
+                $columns = ['name','email','phone', 'employee_id', 'date_of_joining'];
+                foreach ($columns as $column) {
+                    $sales_excecutives->orWhere($column, 'LIKE', '%' . $request->text . '%');
+                }
+                // serch by sales manager
+                $sales_excecutives->orWhereHas('report_to', function ($query) use ($request) {
+                    $query->where('name', 'LIKE', '%' . $request->text . '%');
+                });
+
+            $sales_excecutives = $sales_excecutives->Role('SALES_EXCUETIVE')->orderBy('name', 'desc')->paginate(15);
+            return response()->json(['view' => (string)View::make('admin.sales_excecutive.table')->with(compact('sales_excecutives'))]);
+        }
     }
 }

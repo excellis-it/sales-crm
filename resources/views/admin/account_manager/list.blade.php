@@ -50,63 +50,32 @@
                                 <h4 class="mb-0">Account managers Details</h4>
                             </div>
                             <div class="col-md-6 text-end">
-                                <a href="{{ route('account_managers.create') }}" class="btn px-5 submit-btn"><i class="fas fa-plus"></i> Add New
+                                <a href="{{ route('account_managers.create') }}" class="btn px-5 submit-btn"><i
+                                        class="fas fa-plus"></i> Add New
                                     account manager</a>
                             </div>
                         </div>
                     </div>
 
                     <hr />
-                    <div class="table-responsive">
-                        <table id="myTable" class="dd table table-striped" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th> Name</th>
-                                    <th> Email</th>
-                                    <th> Phone</th>
-                                    <th>Employee Id</th>
-                                    <th>Date Of Joining</th>
-                                    <th>No. of Project</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($account_managers as $key => $account_manager)
-                                    <tr>
-                                        <td>{{ $account_manager->name }}</td>
-                                        <td>{{ $account_manager->email }}</td>
-                                        <td>{{ $account_manager->phone }}</td>
-                                        <td>{{ $account_manager->employee_id }}</td>
-                                        <td>{{ $account_manager->date_of_joining }}</td>
-                                        <td><a
-                                                href="{{ route('sales-projects.index', ['account_manager_id' => $account_manager->id]) }}">{{ $account_manager->accountManagerProjects->count() }}</a>
-                                        </td>
-                                        <td>
-                                            <!--<div class="button-switch">-->
-                                            <!--    <input type="checkbox" id="switch-orange" class="switch toggle-class"-->
-                                            <!--        data-id="{{ $account_manager['id'] }}"-->
-                                            <!--        {{ $account_manager['status'] ? 'checked' : '' }} />-->
-                                            <!--    <label for="switch-orange" class="lbl-off"></label>-->
-                                            <!--    <label for="switch-orange" class="lbl-on"></label>-->
-                                            <!--</div>-->
-                                            <span class="edit_active">
-                                                <i class="fas fa-edit"></i> Active
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <a title="Edit Account manager" data-route=""
-                                                href="{{ route('account_managers.edit', $account_manager->id) }}"
-                                                class="edit_acma"><i class="fas fa-edit"></i></a> &nbsp;&nbsp;
-
-                                            <a title="Delete Account manager"
-                                                data-route="{{ route('account_managers.delete', $account_manager->id) }}  class="delete_acma""
-                                                href="javascipt:void(0);" id="delete"><i class="fas fa-trash"></i></a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                    <div class="row justify-content-end">
+                        <div class="col-md-6">
+                            <div class="row g-1 justify-content-end">
+                                <div class="col-md-8 pr-0">
+                                    <div class="search-field">
+                                        <input type="text" name="search" id="search" placeholder="search..." required
+                                            class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-3 pl-0 ml-2">
+                                    <button class="btn px-5 submit-btn" id="search-button"> <span class=""><i
+                                                class="fa fa-search"></i></span> Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive" id="account_managers_data">
+                        @include('admin.account_manager.table')
                     </div>
                 </div>
             </div>
@@ -117,24 +86,33 @@
 @endsection
 
 @push('scripts')
-    <script>
-        $(document).ready(function() {
-            //Default data table
-            $('#myTable').DataTable({
-                "aaSorting": [],
-                "columnDefs": [{
-                        "orderable": false,
-                        "targets": [5, 6]
-                    },
-                    {
-                        "orderable": true,
-                        "targets": [0, 1, 2, 3, 4]
-                    }
-                ]
+<script>
+    $(document).ready(function() {
+        $('#search-button').on('click', function() {
+            var text = $('#search').val();
+            if (text == '') {
+                alert('Please type something for search!');
+                return false;
+            }
+            url = "{{ route('account_managers.search') }}"
+            $('#loading').addClass('loading');
+            $('#loading-content').addClass('loading-content');
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: {
+                    text: text,
+                },
+                success: function(response) {
+                    $('#account_managers_data').html(response.view);
+                    $('#search').val('');
+                    $('#loading').removeClass('loading');
+                    $('#loading-content').removeClass('loading-content');
+                }
             });
-
         });
-    </script>
+    });
+</script>
     <script>
         $(document).on('click', '#delete', function(e) {
             swal({
@@ -178,10 +156,8 @@
     </script>
     <script>
         $(document).ready(function() {
-           //how to place holder in "jquery datatable" search box
+            //how to place holder in "jquery datatable" search box
             $('#myTable_filter input').attr("placeholder", "Search");
         });
-
-
     </script>
 @endpush

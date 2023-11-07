@@ -25,7 +25,7 @@ class ProspectController extends Controller
         $count['follow_up'] = Prospect::where('report_to', auth()->user()->id)->where('status', 'Follow Up')->count();
         $count['close'] = Prospect::where('report_to', auth()->user()->id)->where('status', 'Close')->count();
         $count['sent_proposal'] = Prospect::where('report_to', auth()->user()->id)->where('status', 'Sent Proposal')->count();
-        $prospects = Prospect::where('report_to', Auth::user()->id)->orderBy('id', 'desc')->get();
+        $prospects = Prospect::where('report_to', Auth::user()->id)->orderBy('sale_date', 'desc')->get();
         return view('sales_manager.prospect.list')->with(compact('prospects', 'count'));
     }
 

@@ -23,7 +23,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects = Project::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->get();
+        $projects = Project::where('user_id', Auth::user()->id)->orderBy('sale_date', 'desc')->get();
         return view('sales_manager.project.list')->with(compact('projects'));
     }
 

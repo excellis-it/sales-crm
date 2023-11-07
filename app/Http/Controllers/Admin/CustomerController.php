@@ -10,6 +10,7 @@ use App\Mail\RegistrationMail;
 use App\Traits\ImageTrait;
 use Illuminate\Support\Facades\Storage;
 use File;
+use Illuminate\Support\Facades\View;
 
 use function PHPUnit\Framework\fileExists;
 
@@ -25,10 +26,10 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         if ($request->id) {
-            $sales_managers = User::where('id', $request->id)->Role('SALES_MANAGER')->get();
+            $sales_managers = User::where('id', $request->id)->Role('SALES_MANAGER')->orderBy('name', 'desc')->paginate(15);
             return view('admin.sales_manager.list')->with(compact('sales_managers'));
         }
-        $sales_managers = User::Role('SALES_MANAGER')->get();
+        $sales_managers = User::Role('SALES_MANAGER')->orderBy('name', 'desc')->paginate(15);
         return view('admin.sales_manager.list')->with(compact('sales_managers'));
     }
 
@@ -176,5 +177,18 @@ class CustomerController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
         return redirect()->route('sales_managers.index')->with('error', 'Sales manager has been deleted successfully.');
+    }
+
+    public function search(Request $request)
+    {
+        if ($request->ajax()) {
+            $sales_managers = User::query();
+                $columns = ['name','email','phone', 'employee_id', 'date_of_joining'];
+                foreach ($columns as $column) {
+                    $sales_managers->orWhere($column, 'LIKE', '%' . $request->text . '%');
+                }
+            $sales_managers = $sales_managers->Role('SALES_MANAGER')->orderBy('name', 'desc')->paginate(15);
+            return response()->json(['view' => (string)View::make('admin.sales_manager.table')->with(compact('sales_managers'))]);
+        }
     }
 }

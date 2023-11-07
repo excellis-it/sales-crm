@@ -80,6 +80,15 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
         'business-development-excecutive' => BusinessDevelopmentExcecutiveController::class,
     ]);
 
+    // search
+    Route::get('/sales-managers-search', [CustomerController::class, 'search'])->name('sales_managers.search');
+    Route::get('/account-managers-search', [AccountManagerController::class, 'search'])->name('account_managers.search');
+    Route::get('/sales-excecutive-search', [SalesExcecutiveController::class, 'search'])->name('sales-excecutive.search');
+    Route::get('/business-development-managers-search', [BusinessDevelopmentManagerController::class, 'search'])->name('business-development-managers.search');
+    Route::get('/business-development-excecutive-search', [BusinessDevelopmentExcecutiveController::class, 'search'])->name('business-development-excecutive.search');
+
+    // fetch data
+    Route::get('/fetch-data', [AdminProjectController::class, 'fetchData'])->name('sales-projects.fetch-data');
     Route::name('admin.')->group(function () {
         Route::resources([
             'prospects' => AdminProspectController::class,

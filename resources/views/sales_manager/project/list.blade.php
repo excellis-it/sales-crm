@@ -132,7 +132,10 @@
         $(document).ready(function() {
             //Default data table
             $('#myTable').DataTable({
-                "order": [[ 0, "desc" ]],
+                // descending order by default
+                "order": [
+                    [0, "desc"]
+                ],
                 "aaSorting": [],
                 "columnDefs": [{
                         "orderable": false,

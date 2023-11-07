@@ -23,79 +23,79 @@ class ProjectController extends Controller
      */
     public function index(Request $request)
     {
-        // if ($request->sales_manager_id) {
-        //     $projects = Project::orderBy('id', 'desc')->where('user_id', $request->sales_manager_id)->get();
-        //     return view('admin.project.list')->with(compact('projects'));
-        // }
-
-        // if ($request->account_manager_id) {
-        //     $projects = Project::orderBy('id', 'desc')->where('assigned_to', $request->account_manager_id)->get();
-        //     return view('admin.project.list')->with(compact('projects'));
-        // }
-
-
-        // $projects = Project::orderBy('id', 'desc')->get();
-        return view('admin.project.list');
-    }
-
-    public function ajaxList(Request $request)
-    {
-        $draw = $request->get('draw');
-        $start = $request->get("start");
-        $rowperpage = $request->get("length"); // Rows display per page
-
-        $columnIndex_arr = $request->get('order');
-        $columnName_arr = $request->get('columns');
-        $order_arr = $request->get('order');
-        $search_arr = $request->get('search');
-
-        $columnIndex = $columnIndex_arr[0]['column']; // Column index
-        $columnName = $columnName_arr[$columnIndex]['data']; // Column name
-        $columnSortOrder = $order_arr[0]['dir']; // asc or desc
-        $searchValue = $search_arr['value']; // Search value
-
-        // return $columnName.' '.$columnSortOrder;
-
         if ($request->sales_manager_id) {
-            $totalRecordswithFilter = Project::where('client_name', 'like', '%' . $searchValue . '%')->where('user_id', $request->sales_manager_id)->count();
-            $totalRecords = Project::where('user_id', $request->sales_manager_id)->count();
-            $records = Project::orderBy($columnName, $columnSortOrder)->where('user_id', $request->sales_manager_id)->where('client_name', 'like', '%' . $searchValue . '%')->skip($start)->take($rowperpage)->get();
-        } elseif ($request->account_manager_id) {
-            $totalRecordswithFilter = Project::where('client_name', 'like', '%' . $searchValue . '%')->where('assigned_to', $request->account_manager_id)->count();
-            $totalRecords = Project::where('assigned_to', $request->account_manager_id)->count();
-            $records = Project::orderBy($columnName, $columnSortOrder)->where('assigned_to', $request->account_manager_id)->where('client_name', 'like', '%' . $searchValue . '%')->skip($start)->take($rowperpage)->get();
-        } else {
-            $totalRecordswithFilter = Project::where('client_name', 'like', '%' . $searchValue . '%')->count();
-            $totalRecords = Project::count();
-            $records = Project::orderBy($columnName, $columnSortOrder)->where('client_name', 'like', '%' . $searchValue . '%')->skip($start)->take($rowperpage)->get();
-        }
-        $data_arr = array();
-        foreach ($records as $key => $record) {
-            $data_arr[] = array(
-                'sale_date' => ($record->sale_date) ? date('d-m-Y', strtotime($record->sale_date)) : '',
-                'sale_by' => $record->salesManager->name ?? '',
-                'sales_manager_email' => $record->salesManager->email ?? '',
-                'client_name' => $record->client_name,
-                'client_phone' => $record->client_phone,
-                'project_value' => (int)$record->project_value,
-                'project_upfront' => (int)$record->project_upfront,
-                'currency' => $record->currency,
-                'payment_mode' => $record->payment_mode,
-                'due_amount' => (int)$record->project_value - (int)$record->project_upfront,
-                'assigned_to' => $record->assigned_to ? '<span class="badge bg-success">Assigned</span>' : '<span class="badge bg-danger">Not Assigned</span>',
-                'action' => '<a href="' . route('sales-projects.show', $record->id) . '" class="btn btn-sm btn-primary"><i class="fa fa-eye"></i></a> <a href="' . route('sales-projects.edit', $record->id) . '" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a> <a href="javascipt:void(0);" data-route="' . route('sales-projects.delete', $record->id) . '" class="btn btn-sm btn-danger" id="delete"><i class="fa fa-trash"></i></a>'
-            );
+            $projects = Project::orderBy('sale_date', 'desc')->where('user_id', $request->sales_manager_id)->paginate(15);
+            return view('admin.project.list')->with(compact('projects'));
         }
 
-        $response = array(
-            "draw" => intval($draw),
-            "iTotalRecords" => $totalRecords,
-            "iTotalDisplayRecords" => $totalRecordswithFilter,
-            "aaData" => $data_arr
-         );
+        if ($request->account_manager_id) {
+            $projects = Project::orderBy('sale_date', 'desc')->where('assigned_to', $request->account_manager_id)->paginate(15);
+            return view('admin.project.list')->with(compact('projects'));
+        }
 
-         return response()->json($response);
+
+        $projects = Project::orderBy('sale_date', 'desc')->paginate(15);
+        return view('admin.project.list')->with(compact('projects'));
     }
+
+    // public function ajaxList(Request $request)
+    // {
+    //     $draw = $request->get('draw');
+    //     $start = $request->get("start");
+    //     $rowperpage = $request->get("length"); // Rows display per page
+
+    //     $columnIndex_arr = $request->get('order');
+    //     $columnName_arr = $request->get('columns');
+    //     $order_arr = $request->get('order');
+    //     $search_arr = $request->get('search');
+
+    //     $columnIndex = $columnIndex_arr[0]['column']; // Column index
+    //     $columnName = $columnName_arr[$columnIndex]['data']; // Column name
+    //     $columnSortOrder = $order_arr[0]['dir']; // asc or desc
+    //     $searchValue = $search_arr['value']; // Search value
+
+    //     // return $columnName.' '.$columnSortOrder;
+
+    //     if ($request->sales_manager_id) {
+    //         $totalRecordswithFilter = Project::where('client_name', 'like', '%' . $searchValue . '%')->where('user_id', $request->sales_manager_id)->count();
+    //         $totalRecords = Project::where('user_id', $request->sales_manager_id)->count();
+    //         $records = Project::orderBy($columnName, $columnSortOrder)->where('user_id', $request->sales_manager_id)->where('client_name', 'like', '%' . $searchValue . '%')->skip($start)->take($rowperpage)->get();
+    //     } elseif ($request->account_manager_id) {
+    //         $totalRecordswithFilter = Project::where('client_name', 'like', '%' . $searchValue . '%')->where('assigned_to', $request->account_manager_id)->count();
+    //         $totalRecords = Project::where('assigned_to', $request->account_manager_id)->count();
+    //         $records = Project::orderBy($columnName, $columnSortOrder)->where('assigned_to', $request->account_manager_id)->where('client_name', 'like', '%' . $searchValue . '%')->skip($start)->take($rowperpage)->get();
+    //     } else {
+    //         $totalRecordswithFilter = Project::where('client_name', 'like', '%' . $searchValue . '%')->count();
+    //         $totalRecords = Project::count();
+    //         $records = Project::orderBy($columnName, $columnSortOrder)->where('client_name', 'like', '%' . $searchValue . '%')->skip($start)->take($rowperpage)->get();
+    //     }
+    //     $data_arr = array();
+    //     foreach ($records as $key => $record) {
+    //         $data_arr[] = array(
+    //             'sale_date' => ($record->sale_date) ? date('d-m-Y', strtotime($record->sale_date)) : '',
+    //             'sale_by' => $record->salesManager->name ?? '',
+    //             'sales_manager_email' => $record->salesManager->email ?? '',
+    //             'client_name' => $record->client_name,
+    //             'client_phone' => $record->client_phone,
+    //             'project_value' => (int)$record->project_value,
+    //             'project_upfront' => (int)$record->project_upfront,
+    //             'currency' => $record->currency,
+    //             'payment_mode' => $record->payment_mode,
+    //             'due_amount' => (int)$record->project_value - (int)$record->project_upfront,
+    //             'assigned_to' => $record->assigned_to ? '<span class="badge bg-success">Assigned</span>' : '<span class="badge bg-danger">Not Assigned</span>',
+    //             'action' => '<a href="' . route('sales-projects.show', $record->id) . '" class="btn btn-sm btn-primary"><i class="fa fa-eye"></i></a> <a href="' . route('sales-projects.edit', $record->id) . '" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a> <a href="javascipt:void(0);" data-route="' . route('sales-projects.delete', $record->id) . '" class="btn btn-sm btn-danger" id="delete"><i class="fa fa-trash"></i></a>'
+    //         );
+    //     }
+
+    //     $response = array(
+    //         "draw" => intval($draw),
+    //         "iTotalRecords" => $totalRecords,
+    //         "iTotalDisplayRecords" => $totalRecordswithFilter,
+    //         "aaData" => $data_arr
+    //      );
+
+    //      return response()->json($response);
+    // }
 
     /**
      * Show the form for creating a new resource.
@@ -349,6 +349,28 @@ class ProjectController extends Controller
                 $goal->save();
             }
             return response()->json(['status' => 'success', 'message' => 'Project assigned successfully.']);
+        }
+    }
+
+    public function fetchData(Request $request)
+    {
+        if ($request->ajax()) {
+            $sort_by = $request->get('sortby');
+            $sort_type = $request->get('sorttype');
+            $query = $request->get('query');
+            $query = str_replace(" ", "%", $query);
+            $projects = Project::where('id', 'like', '%' . $query . '%')
+                ->orWhere('sale_date', 'like', '%' . $query . '%')
+                ->orWhere('client_name', 'like', '%' . $query . '%')
+                ->orWhere('client_phone', 'like', '%' . $query . '%')
+                ->orWhere('project_value', 'like', '%' . $query . '%')
+                ->orWhere('project_upfront', 'like', '%' . $query . '%')
+                ->orWhere('currency', 'like', '%' . $query . '%')
+                ->orWhere('payment_mode', 'like', '%' . $query . '%')
+                ->orderBy($sort_by, $sort_type)
+                ->paginate(15);
+
+            return response()->json(['data' => view('admin.project.table', compact('projects'))->render()]);
         }
     }
 }

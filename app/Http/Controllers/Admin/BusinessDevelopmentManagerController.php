@@ -10,6 +10,7 @@ use App\Mail\RegistrationMail;
 use App\Traits\ImageTrait;
 use Illuminate\Support\Facades\Storage;
 use File;
+use Illuminate\Support\Facades\View;
 
 class BusinessDevelopmentManagerController extends Controller
 {
@@ -22,7 +23,7 @@ class BusinessDevelopmentManagerController extends Controller
      */
     public function index(Request $request)
     {
-        $business_development_managers = User::Role('BUSINESS_DEVELOPMENT_MANAGER')->get();
+        $business_development_managers = User::Role('BUSINESS_DEVELOPMENT_MANAGER')->orderBy('name', 'desc')->paginate(15);
         return view('admin.business_development_manager.list')->with(compact('business_development_managers'));
     }
 
@@ -170,5 +171,23 @@ class BusinessDevelopmentManagerController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
         return redirect()->route('business-development-managers.index')->with('error', 'Business Development Manager has been deleted successfully.');
+    }
+
+    public function search(Request $request)
+    {
+        if ($request->ajax()) {
+            $business_development_managers = User::query();
+                $columns = ['name','email','phone', 'employee_id', 'date_of_joining'];
+                foreach ($columns as $column) {
+                    $business_development_managers->orWhere($column, 'LIKE', '%' . $request->text . '%');
+                }
+                // serch by sales manager
+                $business_development_managers->orWhereHas('report_to', function ($query) use ($request) {
+                    $query->where('name', 'LIKE', '%' . $request->text . '%');
+                });
+
+            $business_development_managers = $business_development_managers->Role('BUSINESS_DEVELOPMENT_MANAGER')->orderBy('name', 'desc')->paginate(15);
+            return response()->json(['view' => (string)View::make('admin.business_development_manager.table')->with(compact('business_development_managers'))]);
+        }
     }
 }

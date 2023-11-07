@@ -22,7 +22,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects = Project::where('assigned_to', Auth::user()->id)->orderBy('id', 'desc')->get();
+        $projects = Project::where('assigned_to', Auth::user()->id)->orderBy('sale_date', 'desc')->get();
         return view('account_manager.project.list', compact('projects'));
     }
 

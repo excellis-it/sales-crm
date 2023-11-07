@@ -10,6 +10,7 @@ use App\Mail\RegistrationMail;
 use App\Traits\ImageTrait;
 use Illuminate\Support\Facades\Storage;
 use File;
+use Illuminate\Support\Facades\View;
 
 class AccountManagerController extends Controller
 {
@@ -22,7 +23,7 @@ class AccountManagerController extends Controller
      */
     public function index()
     {
-        $account_managers = User::Role('ACCOUNT_MANAGER')->get();
+        $account_managers = User::Role('ACCOUNT_MANAGER')->orderBy('name', 'desc')->paginate(15);
         return view('admin.account_manager.list')->with(compact('account_managers'));
     }
 
@@ -169,5 +170,18 @@ class AccountManagerController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
         return redirect()->route('account_managers.index')->with('error', 'Account manager has been deleted successfully.');
+    }
+
+    public function search(Request $request)
+    {
+        if ($request->ajax()) {
+            $account_managers = User::query();
+                $columns = ['name','email','phone', 'employee_id', 'date_of_joining'];
+                foreach ($columns as $column) {
+                    $account_managers->orWhere($column, 'LIKE', '%' . $request->text . '%');
+                }
+            $account_managers = $account_managers->Role('ACCOUNT_MANAGER')->orderBy('name', 'desc')->paginate(15);
+            return response()->json(['view' => (string)View::make('admin.account_manager.table')->with(compact('account_managers'))]);
+        }
     }
 }

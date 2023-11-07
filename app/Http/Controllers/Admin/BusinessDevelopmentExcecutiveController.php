@@ -10,6 +10,7 @@ use App\Mail\RegistrationMail;
 use App\Traits\ImageTrait;
 use Illuminate\Support\Facades\Storage;
 use File;
+use Illuminate\Support\Facades\View;
 
 class BusinessDevelopmentExcecutiveController extends Controller
 {
@@ -22,7 +23,7 @@ class BusinessDevelopmentExcecutiveController extends Controller
      */
     public function index(Request $request)
     {
-        $business_development_excecutives  = User::Role('BUSINESS_DEVELOPMENT_EXCECUTIVE')->get();
+        $business_development_excecutives  = User::Role('BUSINESS_DEVELOPMENT_EXCECUTIVE')->orderBy('name', 'DESC')->paginate(15);
         return view('admin.business_development_excecutive.list')->with(compact('business_development_excecutives'));
     }
 
@@ -176,5 +177,23 @@ class BusinessDevelopmentExcecutiveController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
         return redirect()->route('business-development-excecutive.index')->with('error', 'BDE has been deleted successfully.');
+    }
+
+    public function search(Request $request)
+    {
+        if ($request->ajax()) {
+            $business_development_excecutives = User::query();
+                $columns = ['name','email','phone', 'employee_id', 'date_of_joining'];
+                foreach ($columns as $column) {
+                    $business_development_excecutives->orWhere($column, 'LIKE', '%' . $request->text . '%');
+                }
+                // serch by sales manager
+                $business_development_excecutives->orWhereHas('underBDM', function ($query) use ($request) {
+                    $query->where('name', 'LIKE', '%' . $request->text . '%');
+                });
+
+            $business_development_excecutives = $business_development_excecutives->Role('BUSINESS_DEVELOPMENT_EXCECUTIVE')->orderBy('name', 'DESC')->paginate(15);
+            return response()->json(['view' => (string)View::make('admin.business_development_excecutive.table')->with(compact('business_development_excecutives'))]);
+        }
     }
 }
