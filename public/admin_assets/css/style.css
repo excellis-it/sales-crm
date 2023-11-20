@@ -9725,3 +9725,6 @@ textarea.parsley-error {
 }
 
 /* end loader */
+.view-route {
+    cursor: pointer;
+}

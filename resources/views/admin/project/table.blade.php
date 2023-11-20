@@ -4,7 +4,7 @@
     </tr>
 @else
     @foreach ($projects as $key => $project)
-        <tr>
+        <tr class="view-route" data-route="{{ route('sales-projects.show', $project->id) }}">
             <td>
                 {{ $project->sale_date ? date('d-m-Y', strtotime($project->sale_date)) : '' }}
             </td>
@@ -47,9 +47,6 @@
                 <a title="Edit Project" data-route="" href="{{ route('sales-projects.edit', $project->id) }}"><i
                         class="fas fa-edit"></i></a> &nbsp;&nbsp;
 
-                <a title="View Project" data-route="" href="{{ route('sales-projects.show', $project->id) }}"><i
-                        class="fas fa-eye"></i></a> &nbsp;&nbsp;
-
 
                 <a title="Delete Project" data-route="{{ route('sales-projects.delete', $project->id) }}"
                     href="javascipt:void(0);" id="delete"><i class="fas fa-trash"></i></a>
@@ -65,3 +62,4 @@
         </div>
     </td>
 </tr>
+

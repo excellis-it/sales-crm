@@ -109,6 +109,11 @@
 @endsection
 
 @push('scripts')
+<script>
+    $(document).on('click', '.view-route', function() {
+        window.location.href = $(this).data('route');
+    });
+</script>
  {{-- trippy cdn link --}}
  <script src="https://unpkg.com/popper.js@1"></script>
  <script src="https://unpkg.com/tippy.js@5"></script>
