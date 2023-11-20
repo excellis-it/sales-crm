@@ -46,13 +46,34 @@
                     </div>
 
                     <hr />
-                    <div class="table-responsive">
+                    <div class="row justify-content-end">
+                        <div class="col-md-6">
+                            <div class="row g-1 justify-content-end">
+                                <div class="col-md-8 pr-0">
+                                    <div class="search-field prod-search">
+                                        <input type="text" name="search" id="search" placeholder="search..." required
+                                            class="form-control">
+                                        <a href="javascript:void(0)" class="prod-search-icon"><i
+                                                class="ph ph-magnifying-glass"></i></a>
+                                    </div>
+                                </div>
+                                {{-- <div class="col-md-3 pl-0 ml-2">
+                                    <button class="btn btn-primary button-search" id="search-button"> <span class=""><i
+                                                class="ph ph-magnifying-glass"></i></span> Search</button>
+                                </div> --}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive" id="project-data">
                         <table id="myTable" class="dd table table-striped table-bordered" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th> Date</th>
-                                    <th> Business Name</th>
-                                    <th> Customer Name </th>
+                                    <th class="sorting" data-tippy-content="Sort by Sale Date" data-sorting_type="desc"
+                                    data-column_name="sale_date" style="cursor: pointer"> Date </th>
+                                    <th class="sorting" data-tippy-content="Sort by Project Name" data-sorting_type="asc"
+                                    data-column_name="project_name" style="cursor: pointer"> Business Name <span id="project_name_icon"></span></th>
+                                    <th class="sorting" data-tippy-content="Sort by Client Name" data-sorting_type="asc"
+                                    data-column_name="client_name" style="cursor: pointer"> Customer Name </th>
                                     <th>Phone Number</th>
                                     <th>Project Type</th>
                                     <th>Project Value</th>
@@ -65,60 +86,16 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @foreach ($projects as $key => $project)
-                                    <tr>
-                                        <td>
-                                            {{ ($project->sale_date) ?  date('d-m-Y', strtotime($project->sale_date) ) : '' }}
-                                        </td>
-                                        <td>
-                                            {{ $project->business_name }}
-                                        </td>
-                                        <td>
-                                            {{ $project->client_name }}
-                                        </td>
-                                        <td>
-                                            {{ $project->client_phone }}
-                                        </td>
-                                        <td>
-                                               <span>{{$project->projectTypes->type ?? '' }}</span>
-                                        </td>
-                                        <td>
-                                            {{ $project->project_value }}
-                                        </td>
-
-                                        <td>
-                                            {{ $project->project_upfront }}
-                                        </td>
-                                        <td>
-                                            {{ $project->currency }}
-                                        </td>
-                                        <td>
-                                            {{ $project->payment_mode }}
-                                        </td>
-                                        <td>
-                                            {{ (int)$project->project_value - (int)$project->project_upfront }}
-                                        </td>
-
-                                        <td>
-                                            <a title="Edit Project" data-route=""
-                                                href="{{ route('projects.edit', $project->id) }}"><i
-                                                    class="fas fa-edit"></i></a> &nbsp;&nbsp;
-
-                                            <a title="View Project" data-route=""
-                                                href="{{ route('projects.show', $project->id) }}"><i
-                                                    class="fas fa-eye"></i></a> &nbsp;&nbsp;
-
-
-                                            <a title="Delete Project"
-                                                data-route="{{ route('projects.delete', $project->id) }}"
-                                                href="javascipt:void(0);" id="delete"><i class="fas fa-trash"></i></a>
-                                        </td>
-                                    </tr>
-                                @endforeach
+                            <tbody> 
+                                @include('sales_manager.project.table')
                             </tbody>
                         </table>
-                    </div>
+                        <input type="hidden" name="hidden_page" id="hidden_page" value="1" />
+                        <input type="hidden" name="hidden_column_name" id="hidden_column_name" value="id" />
+                        <input type="hidden" name="hidden_sort_type" id="hidden_sort_type" value="desc" />
+                    </div> 
+
+                    
                 </div>
             </div>
 
@@ -128,28 +105,85 @@
 @endsection
 
 @push('scripts')
-    <script>
-        $(document).ready(function() {
-            //Default data table
-            $('#myTable').DataTable({
-                // descending order by default
-                "order": [
-                    [0, "desc"]
-                ],
-                "aaSorting": [],
-                "columnDefs": [{
-                        "orderable": false,
-                        "targets": [10]
-                    },
-                    {
-                        "orderable": true,
-                        "targets": [0, 1, 2, 5, 6, 7, 8, 9]
-                    }
-                ]
-            });
 
+<script>
+    $(document).ready(function() {
+        function clear_icon() {
+            $('#date_icon').html('');
+            $('#project_name_icon').html('');
+            $('#client_name_icon').html('');
+            $('#phone_icon').html('');
+            $('#project_value_icon').html('');
+            $('#project_upfront_icon').html('');
+            $('#currency_icon').html('');
+        }
+
+        function fetch_data(page, sort_type, sort_by, query) {
+           
+            $.ajax({
+                url: "{{ route('sales-manager.project.filter') }}",
+                data: {
+                    page: page,
+                    sortby: sort_by,
+                    sorttype: sort_type,
+                    query: query
+                },
+                success: function(data) {
+                    $('tbody').html(data.data);
+                }
+            });
+        }
+
+        $(document).on('keyup', '#search', function() {
+            var query = $('#search').val();
+            var column_name = $('#hidden_column_name').val();
+            var sort_type = $('#hidden_sort_type').val();
+            var page = $('#hidden_page').val();
+            fetch_data(page, sort_type, column_name, query);
         });
+
+        $(document).on('click', '.sorting', function() {
+            var column_name = $(this).data('column_name');
+            var order_type = $(this).data('sorting_type');
+            var reverse_order = '';
+            if (order_type == 'asc') {
+                $(this).data('sorting_type', 'desc');
+                reverse_order = 'desc';
+                clear_icon();
+                $('#' + column_name + '_icon').html(
+                    '<span class="fa fa-sort-down"></span>');
+            }
+            if (order_type == 'desc') {
+                $(this).data('sorting_type', 'asc');
+                reverse_order = 'asc';
+                clear_icon();
+                $('#' + column_name + '_icon').html(
+                    '<span class="fa fa-sort-up"></span>');
+            }
+            $('#hidden_column_name').val(column_name);
+            $('#hidden_sort_type').val(reverse_order);
+            var page = $('#hidden_page').val();
+            var query = $('#search').val();
+            fetch_data(page, reverse_order, column_name, query);
+        });
+
+        $(document).on('click', '.pagination a', function(event) {
+            event.preventDefault();
+            var page = $(this).attr('href').split('page=')[1];
+            $('#hidden_page').val(page);
+            var column_name = $('#hidden_column_name').val();
+            var sort_type = $('#hidden_sort_type').val();
+
+            var query = $('#search').val();
+
+            $('li').removeClass('active');
+            $(this).parent().addClass('active');
+            fetch_data(page, sort_type, column_name, query);
+        });
+
+    });
     </script>
+  
     <script>
         $(document).on('click', '#delete', function(e) {
             swal({

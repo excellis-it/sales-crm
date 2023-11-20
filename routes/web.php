@@ -80,7 +80,8 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
         'business-development-excecutive' => BusinessDevelopmentExcecutiveController::class,
     ]);
 
-    // search
+    // search 
+    Route::get('/goals-search', [GoalsController::class, 'search'])->name('project-goals.search');
     Route::get('/sales-managers-search', [CustomerController::class, 'search'])->name('sales_managers.search');
     Route::get('/account-managers-search', [AccountManagerController::class, 'search'])->name('account_managers.search');
     Route::get('/sales-excecutive-search', [SalesExcecutiveController::class, 'search'])->name('sales-excecutive.search');
@@ -171,6 +172,7 @@ Route::group(['middleware' => ['SalesManager'], 'prefix' => 'sales-manager'], fu
         ]);
     });
 
+    Route::get('/projects-filter', [ProjectController::class, 'filterProject'])->name('sales-manager.project.filter');
     Route::get('/filter', [SalesManagerProspectController::class, 'filter'])->name('sales-manager.prospects.filter'); // filter
     Route::get('/assign-to-project/{id}', [SalesManagerProspectController::class, 'assignToProject'])->name('sales-manager.prospects.assign-project'); // assign project
     // change status sales excecutive

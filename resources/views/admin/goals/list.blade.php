@@ -116,28 +116,31 @@
                             </div>
 
                             <hr />
-                            <div class="table-responsive">
-                                <table id="myTable" class="dd table table-striped table-bordered " style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th>Goals Date</th>
-                                            <th> Goals Type</th>
-                                            <th> Goal Assign For</th>
-                                            <th> Target Amount </th>
-                                            <th>Target Achieve</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+                            <div class="row justify-content-end">
+                                <div class="col-md-6">
+                                    <div class="row g-1 justify-content-end">
+                                        <div class="col-md-8 pr-0">
+                                            <div class="search-field">
+                                                <input type="text" name="search"  id="search" placeholder="search..." required
+                                                    class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 pl-0 ml-2">
+                                            <button class="btn px-5 submit-btn" id="search-button"> <span class=""><i
+                                                        class="fa fa-search"></i></span> Search</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-                                    </tbody>
-                                </table>
+                            <div class="table-responsive" id="project_goals_data">
+                                @include('admin.goals.table')
                             </div>
                         </div>
                     </div>
                 </div>
-                {{-- <div class="col-md-6">
-                    <div class="card">
+               <div class="col-md-12">
+                    {{-- <div class="card">
                         <div class="card-body">
                             <div class="card-title">
                                 <div class="row">
@@ -164,7 +167,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($accountManagerGoals as $key => $goal)
+                                        @foreach ($goals as $key => $goal)
                                             <tr>
                                                 <td>
                                                     {{ date('M ,Y', strtotime($goal->goals_date)) }}
@@ -197,9 +200,9 @@
                                 </table>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
-                </div> --}}
+                </div> 
             </div>
 
         </div>
@@ -403,6 +406,35 @@
 
     <script>
         $(document).ready(function() {
+            $('#search-button').on('click', function() {
+                var text = $('#search').val();
+                if (text == '') {
+                    alert('Please type something for search!');
+                    return false;
+                }
+                url = "{{ route('project-goals.search') }}"
+                $('#loading').addClass('loading');
+                $('#loading-content').addClass('loading-content');
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    data: {
+                        text: text,
+                    },
+                    success: function(response) {
+                       
+                        $('#project_goals_data').html(response.view);
+                        $('#search').val('');
+                        $('#loading').removeClass('loading');
+                        $('#loading-content').removeClass('loading-content');
+                    }
+                });
+            });
+        });
+    </script>
+
+    {{-- <script>
+        $(document).ready(function() {
 
             var table = $('#myTable').DataTable({
                 "order": [
@@ -441,5 +473,5 @@
             });
 
         });
-    </script>
+    </script> --}}
 @endpush
