@@ -106,14 +106,25 @@ class GoalsController extends Controller
     // }
 
     public function search(Request $request)
-    {
-        
+    { 
         if ($request->ajax()) {
             $goals = Goal::query();
-                $columns = ['goals_date','goals_type','goals_amount', 'goals_achieve'];
+                $columns = ['goals_date','goals_type','user_id','goals_amount', 'goals_achieve'];
                 foreach ($columns as $column) {
                     $goals->orWhere($column, 'LIKE', '%' . $request->text . '%');
                 }
+
+            $goals->orwhereHas('user', function ($query) use ($request) {
+                $query->where('name', 'LIKE', '%' . $request->text . '%');
+            });
+
+            
+            if ($request->text == 'Gross') {
+                $goals->orWhere('goals_type', 1);
+            } else if ($request->text == 'Net') {
+                $goals->orWhere('goals_type', 2);
+            }
+
 
             $goals = $goals->orderBy('goals_date', 'desc')->paginate(15);
             return response()->json(['view' => (string)View::make('admin.goals.table')->with(compact('goals'))]);

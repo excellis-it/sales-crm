@@ -176,7 +176,7 @@ class ProspectController extends Controller
         if ($getUser->hasRole('SALES_EXCUETIVE')) {
             $prospect->report_to = $getUser['sales_manager_id'];
         } else {
-            $prospect->report_to = $data['bdm_id'];
+            $prospect->report_to = $getUser['bdm_id'];
         }
         $prospect->client_name = $data['client_name'];
         $prospect->business_name = $data['business_name'];
@@ -320,7 +320,7 @@ class ProspectController extends Controller
         if ($getUser->hasRole('SALES_EXCUETIVE')) {
             $prospect->report_to = $getUser['sales_manager_id'];
         } else {
-            $prospect->report_to = $data['bdm_id'];
+            $prospect->report_to = $getUser['bdm_id'];
         }
         $prospect->client_name = $data['client_name'];
         $prospect->business_name = $data['business_name'];
@@ -437,8 +437,25 @@ class ProspectController extends Controller
             $query = $request->get('query');
             $query = str_replace(" ", "%", $query);
             $prospects = Prospect::query();
+            if ($query != '') {
+                $prospects = $prospects->where(function ($q) use ($query) {
+                    $q->orWhere('client_name', 'like', '%' . $query . '%')
+                        ->orWhere('business_name', 'like', '%' . $query . '%')
+                        ->orWhere('client_email', 'like', '%' . $query . '%')
+                        ->orWhere('client_phone', 'like', '%' . $query . '%')
+                        ->orWhere('price_quote', 'like', '%' . $query . '%')
+                        ->orWhere('followup_date', 'like', '%' . $query . '%')
+                        ->orWhere('offered_for', 'like', '%' . $query . '%')
+                        ->orWhere('status', 'like', '%' . $query . '%')
+                        ->whereHas('user', function ($q) use ($query) {
+                            $q->where('name', 'like', '%' . $query . '%');
+                        })->whereHas('transferTakenBy', function ($q) use ($query) {
+                            $q->where('name', 'like', '%' . $query . '%');
+                        });
+                });
+            }
             if ($status == 'All') {
-                $prospects = $prospects->orderBy('sale_date', 'desc')->paginate('10');
+              return  $prospects = $prospects->orderBy('sale_date', 'desc')->paginate('10');
             } else {
                 $prospects = $prospects->orderBy('sale_date', 'desc')->where(['status' => $status])->paginate('10');
             }

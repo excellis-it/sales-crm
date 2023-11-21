@@ -15,8 +15,46 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects = Project::where('project_opener', auth()->user()->id)->orderBy('created_at', 'desc')->get();
+        $projects = Project::where('project_opener', auth()->user()->id)->orderBy('created_at', 'desc')->paginate(15);
         return view('sales_excecutive.project.list',compact('projects'));
+    }
+
+
+    public function salesExecutiveProjectFilter(Request $request)
+    {
+        
+        if ($request->ajax()) {
+            $sort_by = $request->get('sortby');
+            $sort_type = $request->get('sorttype');
+            $query = $request->get('query');
+            $query = str_replace(" ", "%", $query);
+
+            $projects = Project::where('project_opener', auth()->user()->id)->orderBy($sort_by, $sort_type)->where(function ($q) use ($query) {
+                $q->orWhere('sale_date', 'like', '%' . $query . '%')
+                    ->orWhere('business_name', 'like', '%' . $query . '%')
+                    ->orWhere('business_name', 'like', '%' . $query . '%')
+                    ->orWhere('client_name', 'like', '%' . $query . '%')
+                    ->orWhere('client_phone', 'like', '%' . $query . '%')
+                    ->orWhere('project_value', 'like', '%' . $query . '%')
+                    ->orWhere('project_upfront', 'like', '%' . $query . '%')
+                    ->orWhere('currency', 'like', '%' . $query . '%')
+                    ->orWhere('payment_mode', 'like', '%' . $query . '%')
+                    ->orWhereHas('projectTypes', function ($q) use ($query) {
+                        $q->Where('type', 'like', '%' . $query . '%');
+                    })
+                    ->orWhereRaw('project_value - project_upfront like ?', ["%{$query}%"]);
+                    
+            })->paginate(15);
+            
+            // ->orWhereHas('projectTypes', function ($q) use ($query) {
+            //     $q->orWhere('type', 'like', '%' . $query . '%');
+            // })
+            // ->orWhereRaw('project_value - project_upfront like ?', ["%{$query}%"])
+            // ->orderBy($sort_by, $sort_type)
+            // ->paginate(15);            
+
+            return response()->json(['data' => view('account_manager.project.table', compact('projects'))->render()]);
+        }
     }
 
     public function projectAjaxList()

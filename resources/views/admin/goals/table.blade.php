@@ -18,7 +18,7 @@
         @foreach ($goals as $key => $goal)
             <tr>
                 <td>
-                    {{ date('M ,Y', strtotime($goal->goals_date)) }}
+                    {{ $goal->goals_date}}
                 </td>
                 <td>
                     {{ $goal->goals_type == 1 ? 'Gross' : 'Net' }}

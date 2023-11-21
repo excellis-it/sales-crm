@@ -47,27 +47,58 @@
                     </div>
 
                     <hr />
+
+                    <div class="row justify-content-end">
+                        <div class="col-md-6">
+                            <div class="row g-1 justify-content-end">
+                                <div class="col-md-8 pr-0">
+                                    <div class="search-field prod-search">
+                                        <input type="text" name="search" id="search" placeholder="search..." required
+                                            class="form-control">
+                                        <a href="javascript:void(0)" class="prod-search-icon"><i
+                                                class="ph ph-magnifying-glass"></i></a>
+                                    </div>
+                                </div>
+                                {{-- <div class="col-md-3 pl-0 ml-2">
+                                    <button class="btn btn-primary button-search" id="search-button"> <span class=""><i
+                                                class="ph ph-magnifying-glass"></i></span> Search</button>
+                                </div> --}}
+                            </div>
+                        </div>
+                    </div>
+
+
                     <div class="table-responsive">
                         <table id="myTable" class="dd table table-striped table-bordered" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th> Date</th>
-                                    <th> Business Name</th>
-                                    <th> Customer Name </th>
-                                    <th>Phone Number</th>
-                                    <th>Project Type</th>
-                                    <th>Project Value</th>
-                                    <th>Project Upfront</th>
-                                    <th>Currency</th>
-                                    <th>Payment Mode</th>
-                                    <th>Due Amount</th>
-                                    <th>
-                                        Action
-                                    </th>
+                                    <th class="sorting" data-tippy-content="Sort by Sale Date" data-sorting_type="desc"
+                                    data-column_name="sale_date" style="cursor: pointer"> Date <span id="date_icon"></span></th>
+                                    <th class="sorting" data-tippy-content="Sort by Business Name" data-sorting_type="desc"
+                                    data-column_name="business_name" style="cursor: pointer"> Business Name <span id="business_name_icon"></span></th>
+                                    <th class="sorting" data-tippy-content="Sort by Customer Name" data-sorting_type="desc"
+                                    data-column_name="customer_name" style="cursor: pointer"> Customer Name <span id="customer_name_icon"></span></th>
+                                    <th class="sorting" data-tippy-content="Sort by Phone Number" data-sorting_type="desc"
+                                    data-column_name="phone_number" style="cursor: pointer"> Phone Number <span id="phone_number_icon"></span></th>
+                                    <th class="sorting" data-tippy-content="Sort by Project Type" data-sorting_type="desc"
+                                    data-column_name="project_type" style="cursor: pointer"> Project Type <span id="project_type_icon"></span></th>
+                                    <th class="sorting" data-tippy-content="Sort by Project value" data-sorting_type="desc"
+                                    data-column_name="project_value" style="cursor: pointer"> Project Value <span id="project_value_icon"></span></th>
+                                    <th class="sorting" data-tippy-content="Sort by Project Upfront" data-sorting_type="desc"
+                                    data-column_name="project_upfront" style="cursor: pointer"> Project Upfront <span id="project_upfront_icon"></span></th>
+                                    <th class="sorting" data-tippy-content="Sort by Currency" data-sorting_type="desc"
+                                    data-column_name="currency" style="cursor: pointer"> Currency <span id="currency_icon"></span></th>
+                                    <th class="sorting" data-tippy-content="Sort by Payment Mode" data-sorting_type="desc"
+                                    data-column_name="payment_mode" style="cursor: pointer"> Payment Mode <span id="payment_mode_icon"></span></th>
+                                    <th class="sorting" data-tippy-content="Sort by Due Amount" data-sorting_type="desc"
+                                    data-column_name="due_amount" style="cursor: pointer"> Due Amount <span id="due_amount_icon"></span></th>
+                                    <th> Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($projects as $key => $project)
+
+                                @include('account_manager.project.table')
+                                {{-- @foreach ($projects as $key => $project)
                                     <tr>
                                         <td>
                                             {{ ($project->sale_date) ? date('d-m-Y', strtotime($project->sale_date)) : '' }}
@@ -109,9 +140,12 @@
                                                     class="fas fa-edit"></i></a> &nbsp;&nbsp;
                                         </td>
                                     </tr>
-                                @endforeach
+                                @endforeach --}}
                             </tbody>
                         </table>
+                        <input type="hidden" name="hidden_page" id="hidden_page" value="1" />
+                        <input type="hidden" name="hidden_column_name" id="hidden_column_name" value="id" />
+                        <input type="hidden" name="hidden_sort_type" id="hidden_sort_type" value="desc" />
                     </div>
                 </div>
             </div>
@@ -122,25 +156,90 @@
 @endsection
 
 @push('scripts')
-    <script>
-        $(document).ready(function() {
-            //Default data table
-            $('#myTable').DataTable({
-                "order": [[ 0, "desc" ]],
-                "aaSorting": [],
-                "columnDefs": [{
-                        "orderable": false,
-                        "targets": [10]
-                    },
-                    {
-                        "orderable": true,
-                        "targets": [0, 1, 2, 5, 6, 7, 8, 9]
-                    }
-                ]
-            });
 
+<script>
+    $(document).ready(function() {
+        function clear_icon() {
+            $('#date_icon').html('');
+            $('#project_name_icon').html('');
+            $('#customer_name_icon').html('');
+            $('#phone_number_icon').html('');
+            $('#project_type_icon').html('');
+            $('#project_value_icon').html('');
+            $('#project_upfront_icon').html('');
+            $('#currency_icon').html('');
+            $('#payment_mode_icon').html('');
+            $('#due_amount_icon').html('');
+        }
+
+        function fetch_data(page, sort_type, sort_by, query) {
+            
+            $.ajax({
+                url: "{{ route('account-manager.project.filter') }}",
+                data: {
+                    page: page,
+                    sortby: sort_by,
+                    sorttype: sort_type,
+                    query: query
+                },
+                success: function(data) {
+                    $('tbody').html(data.data);
+                }
+            });
+        }
+
+        $(document).on('keyup', '#search', function() {
+            var query = $('#search').val();
+            var column_name = $('#hidden_column_name').val();
+            var sort_type = $('#hidden_sort_type').val();
+            var page = $('#hidden_page').val();
+            fetch_data(page, sort_type, column_name, query);
         });
+
+        $(document).on('click', '.sorting', function() {
+            var column_name = $(this).data('column_name');
+            var order_type = $(this).data('sorting_type');
+            var reverse_order = '';
+            if (order_type == 'asc') {
+                $(this).data('sorting_type', 'desc');
+                reverse_order = 'desc';
+                clear_icon();
+                $('#' + column_name + '_icon').html(
+                    '<span class="fa fa-sort-down"></span>');
+            }
+            if (order_type == 'desc') {
+                $(this).data('sorting_type', 'asc');
+                reverse_order = 'asc';
+                clear_icon();
+                $('#' + column_name + '_icon').html(
+                    '<span class="fa fa-sort-up"></span>');
+            }
+            $('#hidden_column_name').val(column_name);
+            $('#hidden_sort_type').val(reverse_order);
+            var page = $('#hidden_page').val();
+            var query = $('#search').val();
+            fetch_data(page, reverse_order, column_name, query);
+        });
+
+        $(document).on('click', '.pagination a', function(event) {
+            event.preventDefault();
+            var page = $(this).attr('href').split('page=')[1];
+            $('#hidden_page').val(page);
+            var column_name = $('#hidden_column_name').val();
+            var sort_type = $('#hidden_sort_type').val();
+
+            var query = $('#search').val();
+
+            $('li').removeClass('active');
+            $(this).parent().addClass('active');
+            fetch_data(page, sort_type, column_name, query);
+        });
+
+    });
     </script>
+  
+   
+   
     <script>
         $(document).on('click', '#delete', function(e) {
             swal({
@@ -163,29 +262,5 @@
                 })
         });
     </script>
-    {{-- <script>
-        $('.toggle-class').change(function() {
-            var status = $(this).prop('checked') == true ? 1 : 0;
-            var user_id = $(this).data('id');
-
-            $.ajax({
-                type: "GET",
-                dataType: "json",
-                url: '{{ route('account-manager.projects.change-status') }}',
-                data: {
-                    'status': status,
-                    'user_id': user_id
-                },
-                success: function(resp) {
-                    console.log(resp.success)
-                }
-            });
-        });
-    </script> --}}
-    <script>
-        $(document).ready(function() {
-           //how to place holder in "jquery datatable" search box
-            $('#myTable_filter input').attr("placeholder", "Search");
-        });
-    </script>
+   
 @endpush

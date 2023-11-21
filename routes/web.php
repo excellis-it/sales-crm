@@ -174,6 +174,7 @@ Route::group(['middleware' => ['SalesManager'], 'prefix' => 'sales-manager'], fu
 
     Route::get('/projects-filter', [ProjectController::class, 'filterProject'])->name('sales-manager.project.filter');
     Route::get('/filter', [SalesManagerProspectController::class, 'filter'])->name('sales-manager.prospects.filter'); // filter
+    Route::get('/prospect-status-filter',[SalesManagerProspectController::class, 'prospectStatusFilter'])->name('sales-manager.prospects.status-filter'); // filter
     Route::get('/assign-to-project/{id}', [SalesManagerProspectController::class, 'assignToProject'])->name('sales-manager.prospects.assign-project'); // assign project
     // change status sales excecutive
     Route::get('/changeSalesExcecutiveStatus', [SalesManagerSalesExcecutiveController::class, 'changeSalesExcecutiveStatus'])->name('sales-manager.sales-excecutive.change-status');
@@ -205,6 +206,7 @@ Route::group(['middleware' => ['AccountManager'], 'prefix' => 'account-manager']
         ]);
     });
 
+    Route::get('/account-manager-projects-filter', [AccountManagerProjectController::class, 'accountManagerFilterProject'])->name('account-manager.project.filter');
     Route::get('/projects-document_download/{id}', [AccountManagerProjectController::class, 'accountManagerdocumentDownload'])->name('account-manager.projects.document.download');
 });
 
@@ -231,6 +233,8 @@ Route::group(['middleware' => ['SalesExcecutive'], 'prefix' => 'sales-excecutive
     });
 
     //project list
+    
+    Route::get('/sales-executive-projects-filter', [SalesExcecutiveProjectController::class, 'salesExecutiveProjectFilter'])->name('sales-excecutive.project.filter');
     Route::get('/project-ajax-list', [SalesExcecutiveProjectController::class, 'projectAjaxList'])->name('sales-excecutive.projects.ajax-list');
 
     Route::get('/filter', [ProspectController::class, 'filter'])->name('prospects.filter'); // filter

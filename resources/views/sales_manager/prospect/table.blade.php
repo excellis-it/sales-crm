@@ -1,3 +1,4 @@
+
 <table id="myTable" class="dd table table-striped table-bordered" style="width:100%">
     <thead>
         <tr>
@@ -18,7 +19,7 @@
         @foreach ($prospects as $key => $prospect)
             <tr>
                 <td>
-                    {{ ($prospect->sale_date) ?  date('d-m-Y', strtotime($prospect->sale_date) ) : '' }}
+                    {{ ($prospect->sale_date) ?  $prospect->sale_date: '' }}
                 </td>
                 <td>
                     {{ $prospect->business_name }}
@@ -49,9 +50,6 @@
                 <td>
                     {{ $prospect->offered_for }}
                 </td>
-
-
-
                 <td>
                     {{ date('d M, Y', strtotime($prospect->followup_date)) }}
                 </td>
@@ -78,24 +76,25 @@
         @endforeach
     </tbody>
 </table>
-<script>
-    $(document).ready(function() {
-        //Default data table
-        $('#myTable').DataTable({
-            "order": [[ 0, "desc" ]],
-            "aaSorting": [],
-            "columnDefs": [{
-                    "orderable": false,
-                    "targets": [10]
-                },
-                {
-                    "orderable": true,
-                    "targets": [0, 1, 2, 5, 6, 7, 8, 9]
-                }
-            ]
-        });
 
-    });
+<script>
+    // $(document).ready(function() {
+    //     //Default data table
+    //     $('#myTable').DataTable({
+    //         "order": [[ 0, "desc" ]],
+    //         "aaSorting": [],
+    //         "columnDefs": [{
+    //                 "orderable": false,
+    //                 "targets": [10]
+    //             },
+    //             {
+    //                 "orderable": true,
+    //                 "targets": [0, 1, 2, 5, 6, 7, 8, 9]
+    //             }
+    //         ]
+    //     });
+
+    // });
     $(document).ready(function() {
            //how to place holder in "jquery datatable" search box
             $('#myTable_filter input').attr("placeholder", "Search");

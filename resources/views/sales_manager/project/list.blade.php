@@ -70,20 +70,25 @@
                                 <tr>
                                     <th class="sorting" data-tippy-content="Sort by Sale Date" data-sorting_type="desc"
                                     data-column_name="sale_date" style="cursor: pointer"> Date </th>
-                                    <th class="sorting" data-tippy-content="Sort by Project Name" data-sorting_type="asc"
-                                    data-column_name="project_name" style="cursor: pointer"> Business Name <span id="project_name_icon"></span></th>
-                                    <th class="sorting" data-tippy-content="Sort by Client Name" data-sorting_type="asc"
-                                    data-column_name="client_name" style="cursor: pointer"> Customer Name </th>
-                                    <th>Phone Number</th>
-                                    <th>Project Type</th>
-                                    <th>Project Value</th>
-                                    <th>Project Upfront</th>
-                                    <th>Currency</th>
-                                    <th>Payment Mode</th>
-                                    <th>Due Amount</th>
-                                    <th>
-                                        Action
-                                    </th>
+                                    <th class="sorting" data-tippy-content="Sort by Business Name" data-sorting_type="desc"
+                                    data-column_name="business_name" style="cursor: pointer"> Business Name <span id="business_name_icon"></span></th>
+                                    <th class="sorting" data-tippy-content="Sort by Customer Name" data-sorting_type="desc"
+                                    data-column_name="customer_name" style="cursor: pointer"> Customer Name <span id="customer_name_icon"></span></th>
+                                    <th class="sorting" data-tippy-content="Sort by Phone Number" data-sorting_type="desc"
+                                    data-column_name="phone_number" style="cursor: pointer">Phone Number <span id="phone_number_icon"></span></th>
+                                    <th class="sorting" data-tippy-content="Sort by Project Type" data-sorting_type="desc"
+                                    data-column_name="project_type" style="cursor: pointer">Project Type <span id="project_type_icon"></span></th>
+                                    <th class="sorting" data-tippy-content="Sort by Project value" data-sorting_type="desc"
+                                    data-column_name="project_value" style="cursor: pointer">Project Value <span id="project_value_icon"></span></th>
+                                    <th class="sorting" data-tippy-content="Sort by Project Upfront" data-sorting_type="desc"
+                                    data-column_name="project_upfront" style="cursor: pointer">Project Upfront <span id="project_upfront_icon"></span></th>
+                                    <th class="sorting" data-tippy-content="Sort by Currency" data-sorting_type="desc"
+                                    data-column_name="currency" style="cursor: pointer">Currency <span id="currency_icon"></span></th>
+                                    <th class="sorting" data-tippy-content="Sort by Payment Mode" data-sorting_type="desc"
+                                    data-column_name="payment_mode" style="cursor: pointer">Payment Mode <span id="payment_mode_icon"></span></th>
+                                    <th class="sorting" data-tippy-content="Sort by Due Amount" data-sorting_type="desc"
+                                    data-column_name="due_amount" style="cursor: pointer">Due Amount <span id="due_amount_icon"></span></th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody> 
@@ -111,15 +116,18 @@
         function clear_icon() {
             $('#date_icon').html('');
             $('#project_name_icon').html('');
-            $('#client_name_icon').html('');
-            $('#phone_icon').html('');
+            $('#customer_name_icon').html('');
+            $('#phone_number_icon').html('');
+            $('#project_type_icon').html('');
             $('#project_value_icon').html('');
             $('#project_upfront_icon').html('');
             $('#currency_icon').html('');
+            $('#payment_mode_icon').html('');
+            $('#due_amount_icon').html('');
         }
 
         function fetch_data(page, sort_type, sort_by, query) {
-           
+            
             $.ajax({
                 url: "{{ route('sales-manager.project.filter') }}",
                 data: {
@@ -139,6 +147,7 @@
             var column_name = $('#hidden_column_name').val();
             var sort_type = $('#hidden_sort_type').val();
             var page = $('#hidden_page').val();
+            
             fetch_data(page, sort_type, column_name, query);
         });
 
