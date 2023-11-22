@@ -25,13 +25,13 @@ class ProspectController extends Controller
 
         if ($type) {
             // return $type;
-            $prospects = Prospect::where(['user_id' => Auth::user()->id, 'status' => $type])->orderBy('sale_date', 'desc')->get();
+            $prospects = Prospect::where(['user_id' => Auth::user()->id, 'status' => $type])->orderBy('sale_date', 'desc')->paginate(10);
             $count['win'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Win')->count();
             $count['follow_up'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Follow Up')->count();
             $count['close'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Close')->count();
             $count['sent_proposal'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Sent Proposal')->count();
         } else {
-            $prospects = Prospect::where('user_id', Auth::user()->id)->orderBy('sale_date', 'desc')->get();
+            $prospects = Prospect::where('user_id', Auth::user()->id)->orderBy('sale_date', 'desc')->paginate(10);
             $count['win'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Win')->count();
             $count['follow_up'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Follow Up')->count();
             $count['close'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Close')->count();
@@ -322,13 +322,33 @@ class ProspectController extends Controller
     {
         if ($request->ajax()) {
             $status = $request->status;
+            $query = $request->get('query');
+            $query = str_replace(" ", "%", $query);
+            $prospects = Prospect::query();
+            if ($query != '') {
+                $prospects = $prospects->where(function ($q) use ($query) {
+                    $q->orWhere('client_name', 'like', '%' . $query . '%')
+                        ->orWhere('business_name', 'like', '%' . $query . '%')
+                        ->orWhere('client_email', 'like', '%' . $query . '%')
+                        ->orWhere('client_phone', 'like', '%' . $query . '%')
+                        ->orWhere('price_quote', 'like', '%' . $query . '%')
+                        ->orWhere('followup_date', 'like', '%' . $query . '%')
+                        ->orWhere('offered_for', 'like', '%' . $query . '%')
+                        ->whereHas('user', function ($q) use ($query) {
+                            $q->where('name', 'like', '%' . $query . '%');
+                        })->whereHas('transferTakenBy', function ($q) use ($query) {
+                            $q->where('name', 'like', '%' . $query . '%');
+                        });
+                });
+            }
             if ($status == 'All') {
-                $prospects = Prospect::where(['user_id' => Auth::user()->id])->orderBy('id', 'desc')->get();
+                $prospects = $prospects->orderBy('sale_date', 'desc')->where('user_id', Auth::user()->id)->paginate('10');
             } else {
-                $prospects = Prospect::where(['user_id' => Auth::user()->id, 'status' => $status])->orderBy('id', 'desc')->get();
+                $prospects = $prospects->orderBy('sale_date', 'desc')->where(['status' => $status])->where('user_id', Auth::user()->id)->paginate('10');
             }
 
-            return response()->json(['view' => (string)View::make('sales_excecutive.prospect.table')->with(compact('prospects'))]);
+            return response()->json(['data' => view('sales_excecutive.prospect.table', compact('prospects'))->render()]);
+        
         }
     }
 

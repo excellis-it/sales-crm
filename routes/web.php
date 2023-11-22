@@ -173,7 +173,7 @@ Route::group(['middleware' => ['SalesManager'], 'prefix' => 'sales-manager'], fu
     });
 
     Route::get('/projects-filter', [ProjectController::class, 'filterProject'])->name('sales-manager.project.filter');
-    Route::get('/filter', [SalesManagerProspectController::class, 'filter'])->name('sales-manager.prospects.filter'); // filter
+    Route::get('/prospect-filter', [SalesManagerProspectController::class, 'prospectFilter'])->name('sales-manager.prospects.filter'); 
     Route::get('/prospect-status-filter',[SalesManagerProspectController::class, 'prospectStatusFilter'])->name('sales-manager.prospects.status-filter'); // filter
     Route::get('/assign-to-project/{id}', [SalesManagerProspectController::class, 'assignToProject'])->name('sales-manager.prospects.assign-project'); // assign project
     // change status sales excecutive

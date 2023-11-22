@@ -94,8 +94,48 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="row justify-content-end">
+                        <div class="col-md-6">
+                            <div class="row g-1 justify-content-end">
+                                <div class="col-md-8 pr-0">
+                                    <div class="search-field prod-search">
+                                        <input type="text" name="search" id="search" placeholder="search..." required
+                                            class="form-control">
+                                        <a href="javascript:void(0)" class="prod-search-icon"><i
+                                                class="ph ph-magnifying-glass"></i></a>
+                                    </div>
+                                </div>
+                                {{-- <div class="col-md-3 pl-0 ml-2">
+                                    <button class="btn btn-primary button-search" id="search-button"> <span class=""><i
+                                                class="ph ph-magnifying-glass"></i></span> Search</button>
+                                </div> --}}
+                            </div>
+                        </div>
+                    </div>
+
+                    
                     <div class="table-responsive" id="show-prospect">
-                        @include('sales_excecutive.prospect.table')
+                        <table id="myTable" class="dd table table-striped table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Business Name</th>
+                                    <th>Client Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Transfer Taken By</th>
+                                    <th>Status</th>
+                                    <th>Service Offered</th>
+                                    <th>Followup Date</th>
+                                    <th>Price Quoted</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @include('sales_excecutive.prospect.table')
+                            </tbody>
+                        </table>        
                     </div>
                 </div>
             </div>
@@ -106,108 +146,93 @@
 @endsection
 
 @push('scripts')
-    <script>
-        $(document).ready(function() {
-            //Default data table
-            $('#myTable').DataTable({
-                // "order": [[ 0, "desc" ]],
-                "aaSorting": [],
-                "columnDefs": [{
-                        "orderable": false,
-                        "targets": [10]
-                    },
-                    {
-                        "orderable": true,
-                        "targets": [0, 1, 2, 5, 6, 7, 8, 9]
-                    }
-                ]
-            });
+<script>
+    $(document).on('click', '#delete', function(e) {
+        swal({
+                title: "Are you sure?",
+                text: "To delete this prospect.",
+                type: "warning",
+                confirmButtonText: "Yes",
+                showCancelButton: true
+            })
+            .then((result) => {
+                if (result.value) {
+                    window.location = $(this).data('route');
+                } else if (result.dismiss === 'cancel') {
+                    swal(
+                        'Cancelled',
+                        'Your stay here :)',
+                        'error'
+                    )
+                }
+            })
+    });
+</script>
 
+<script>
+    $(document).on('click', '.view-details-btn', function(e) {
+        e.preventDefault();
+        var route = $(this).data('route');
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: route,
+            success: function(resp) {
+                $('#show-details').html(resp.view);
+            }
         });
-    </script>
-    <script>
-        $(document).on('click', '#delete', function(e) {
-            swal({
-                    title: "Are you sure?",
-                    text: "To delete this prospect.",
-                    type: "warning",
-                    confirmButtonText: "Yes",
-                    showCancelButton: true
-                })
-                .then((result) => {
-                    if (result.value) {
-                        window.location = $(this).data('route');
-                    } else if (result.dismiss === 'cancel') {
-                        swal(
-                            'Cancelled',
-                            'Your stay here :)',
-                            'error'
-                        )
-                    }
-                })
-        });
-    </script>
-    <script></script>
-    {{-- <script>
-        $('.toggle-class').change(function() {
-            var status = $(this).prop('checked') == true ? 1 : 0;
-            var user_id = $(this).data('id');
+    });
+</script>
 
+<script>
+    $(document).ready(function() {
+        function fetch_data(page, status, query) {
+            console.log(status + ' ' + page);
             $.ajax({
-                type: "GET",
-                dataType: "json",
-                url: '{{ route('prospects.change-status') }}',
+                url: "{{ route('prospects.filter') }}",
                 data: {
-                    'status': status,
-                    'user_id': user_id
+                    status: status,
+                    page: page,
+                    query: query
                 },
                 success: function(resp) {
-                    console.log(resp.success)
+                    $('tbody').html(resp.data);
                 }
             });
-        });
-    </script> --}}
-    <script>
-        $(document).on('click', '.view-details-btn', function(e) {
-            e.preventDefault();
-            var route = $(this).data('route');
-            $.ajax({
-                type: "GET",
-                dataType: "json",
-                url: route,
-                success: function(resp) {
-                    $('#show-details').html(resp.view);
-                }
-            });
-        });
-    </script>
-    <script>
+        }
+
         $(document).on('click', '.desin-filter', function(e) {
+            e.preventDefault();
             var status = $(this).data('value');
             //remove active class from all
             $('.desin-filter').removeClass('active-filter');
             //add active class to clicked
             $(this).addClass('active-filter');
-            var url = "{{ route('prospects.filter') }}";
-            $.ajax({
-                type: "GET",
-                dataType: "json",
-                url: url,
-                data: {
-                    'status': status,
-                },
-                success: function(resp) {
-                    $('#show-prospect').html(resp.view);
-
-                }
+            var query = $('#search').val();
+            fetch_data(1, status, query);
             });
+
+        $(document).on('click', '.pagination a', function(e) {
+            e.preventDefault();
+            var page = $(this).attr('href').split('page=')[1];
+            var status = $('.active-filter').data('value');
+            var query = $('#search').val();
+            fetch_data(page, status, query);
         });
-    </script>
-  <script>
-    $(document).ready(function() {
-       //how to place holder in "jquery datatable" search box
-        $('#myTable_filter input').attr("placeholder", "Search");
+
+        $(document).on('keyup', '#search', function(e) {
+            e.preventDefault();
+            var query = $(this).val();
+            var status = $('.active-filter').data('value');
+            fetch_data(1, status, query);
+        });
     });
+</script>
+<script>
+$(document).ready(function() {
+   //how to place holder in "jquery datatable" search box
+    $('#myTable_filter input').attr("placeholder", "Search");
+});
 
 
 </script>

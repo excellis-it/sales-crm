@@ -302,48 +302,68 @@ class ProspectController extends Controller
         return redirect()->back()->with('message', 'Prospect deleted successfully.');
     }
 
-    public function filter(Request $request)
-    {
-        if ($request->ajax()) {
-            $sort_by = $request->get('sortby');
-            $sort_type = $request->get('sorttype');
-            $query = $request->get('query');
-            $query = str_replace(" ", "%", $query);
+    // public function filter(Request $request)
+    // {
+    //     if ($request->ajax()) {
+    //         $sort_by = $request->get('sortby');
+    //         $sort_type = $request->get('sorttype');
+    //         $query = $request->get('query');
+    //         $query = str_replace(" ", "%", $query);
 
-            $prospects = Prospect::where('report_to', Auth::user()->id)->orderBy($sort_by, $sort_type)->where(function ($q) use ($query) {
-                $q->orWhere('sale_date', 'like', '%' . $query . '%')
-                    ->orWhere('client_name', 'like', '%' . $query . '%')
-                    ->orWhere('business_name', 'like', '%' . $query . '%')
-                    ->orWhere('client_email', 'like', '%' . $query . '%')
-                    ->orWhere('client_phone', 'like', '%' . $query . '%')
-                    ->orWhere('status', 'like', '%' . $query . '%')
-                    ->orWhere('offered_for', 'like', '%' . $query . '%')
-                    ->orWhere('followup_date', 'like', '%' . $query . '%')
-                    ->orWhere('price_quote', 'like', '%' . $query . '%')
-                    ->orWhereHas('user', function ($q) use ($query) {
-                        $q->Where('name', 'like', '%' . $query . '%');
-                    })
+    //         $prospects = Prospect::where('report_to', Auth::user()->id)->orderBy($sort_by, $sort_type)->where(function ($q) use ($query) {
+    //             $q->orWhere('sale_date', 'like', '%' . $query . '%')
+    //                 ->orWhere('client_name', 'like', '%' . $query . '%')
+    //                 ->orWhere('business_name', 'like', '%' . $query . '%')
+    //                 ->orWhere('client_email', 'like', '%' . $query . '%')
+    //                 ->orWhere('client_phone', 'like', '%' . $query . '%')
+    //                 ->orWhere('status', 'like', '%' . $query . '%')
+    //                 ->orWhere('offered_for', 'like', '%' . $query . '%')
+    //                 ->orWhere('followup_date', 'like', '%' . $query . '%')
+    //                 ->orWhere('price_quote', 'like', '%' . $query . '%')
+    //                 ->orWhereHas('user', function ($q) use ($query) {
+    //                     $q->Where('name', 'like', '%' . $query . '%');
+    //                 })
 
-                    ->orWhereHas('transferTakenBy', function ($q) use ($query) {
-                        $q->Where('name', 'like', '%' . $query . '%');
-                    });
+    //                 ->orWhereHas('transferTakenBy', function ($q) use ($query) {
+    //                     $q->Where('name', 'like', '%' . $query . '%');
+    //                 });
                     
-            })->paginate(15);
-            return response()->json(['data' => view('sales_manager.prospect.table', compact('prospects'))->render()]);
-        }
-    }
+    //         })->paginate(15);
+    //         return response()->json(['data' => view('sales_manager.prospect.table', compact('prospects'))->render()]);
+    //     }
+    // }
 
     public function prospectStatusFilter(Request $request)
     {
+        
         if ($request->ajax()) {
             $status = $request->status;
-            if ($status == 'All') {
-                $prospects = Prospect::where(['report_to' => Auth::user()->id])->orderBy('id', 'desc')->paginate(15);
-            } else {
-                $prospects = Prospect::where(['report_to' => Auth::user()->id, 'status' => $status])->orderBy('id', 'desc')->paginate(15);
+            $query = $request->get('query');
+            $query = str_replace(" ", "%", $query);
+            $prospects = Prospect::query();
+            if ($query != '') {
+                $prospects = $prospects->where(function ($q) use ($query) {
+                    $q->orWhere('client_name', 'like', '%' . $query . '%')
+                        ->orWhere('business_name', 'like', '%' . $query . '%')
+                        ->orWhere('client_email', 'like', '%' . $query . '%')
+                        ->orWhere('client_phone', 'like', '%' . $query . '%')
+                        ->orWhere('price_quote', 'like', '%' . $query . '%')
+                        ->orWhere('followup_date', 'like', '%' . $query . '%')
+                        ->orWhere('offered_for', 'like', '%' . $query . '%')
+                        ->whereHas('user', function ($q) use ($query) {
+                            $q->where('name', 'like', '%' . $query . '%');
+                        })->whereHas('transferTakenBy', function ($q) use ($query) {
+                            $q->where('name', 'like', '%' . $query . '%');
+                        });
+                });
             }
-
-            return response()->json(['view' => (string)View::make('sales_manager.prospect.table')->with(compact('prospects'))]);
+            if ($status == 'All') {
+                $prospects = $prospects->orderBy('sale_date', 'desc')->where('report_to', Auth::user()->id)->paginate('10');
+            } else {
+                $prospects = $prospects->orderBy('sale_date', 'desc')->where(['status' => $status])->where('report_to', Auth::user()->id)->paginate('10');
+            }
+ 
+            return response()->json(['data' => view('sales_manager.prospect.table', compact('prospects'))->render()]);
         }
     }
 

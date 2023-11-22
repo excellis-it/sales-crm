@@ -12,7 +12,7 @@
                 {{ $project->salesManager->name ?? '' }}
             </td>
             <td>
-                {{ $project->salesManager->email ?? '' }}
+                {{ $project->business_name ?? '' }}
             </td>
             <td>
                 {{ $project->client_name ?? '' }}

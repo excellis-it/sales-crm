@@ -116,11 +116,27 @@
 
                 
                 <div class="table-responsive" id="show-prospect">
-                   
-                    @include('sales_manager.prospect.table')
-                    <input type="hidden" name="hidden_page" id="hidden_page" value="1" />
-                    <input type="hidden" name="hidden_column_name" id="hidden_column_name" value="id" />
-                    <input type="hidden" name="hidden_sort_type" id="hidden_sort_type" value="desc" />
+                    <table id="myTable" class="dd table table-striped table-bordered" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Business Name</th>
+                                <th>Client Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Transfer Taken By</th>
+                                <th>Status</th>
+                                <th>Service Offered</th>
+                                <th>Followup Date</th>
+                                <th>Price Quoted</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @include('sales_manager.prospect.table')
+                        </tbody>
+                    </table>
+                    
                 </div>
             </div>
         </div>
@@ -131,7 +147,6 @@
 @endsection
 
 @push('scripts')
-      
 <script>
     $(document).on('click', '#delete', function(e) {
         swal({
@@ -154,115 +169,25 @@
             })
     });
 </script>
+{{-- <script>
+    $('.toggle-class').change(function() {
+        var status = $(this).prop('checked') == true ? 1 : 0;
+        var user_id = $(this).data('id');
 
-
-<script>
-     $(document).ready(function() {
-    function clear_icon() {
-        $('#date_icon').html('');
-        $('#project_name_icon').html('');
-        $('#customer_name_icon').html('');
-        $('#phone_number_icon').html('');
-        $('#project_type_icon').html('');
-        $('#project_value_icon').html('');
-        $('#project_upfront_icon').html('');
-        $('#currency_icon').html('');
-        $('#payment_mode_icon').html('');
-        $('#due_amount_icon').html('');
-    }
-
-    function fetch_data(page, sort_type, sort_by, query) {
-        
         $.ajax({
-            url: "{{ route('sales-manager.prospects.filter') }}",
+            type: "GET",
+            dataType: "json",
+            url: '{{ route('prospects.change-status') }}',
             data: {
-                page: page,
-                sortby: sort_by,
-                sorttype: sort_type,
-                query: query
+                'status': status,
+                'user_id': user_id
             },
-            success: function(data) {
-                $('tbody').html(data.data);
+            success: function(resp) {
+                console.log(resp.success)
             }
         });
-    }
-
-    $(document).on('keyup', '#search', function() {
-        var query = $('#search').val();
-        var column_name = $('#hidden_column_name').val();
-        var sort_type = $('#hidden_sort_type').val();
-        var page = $('#hidden_page').val();
-        
-        fetch_data(page, sort_type, column_name, query);
     });
-
-    $(document).on('click', '.sorting', function() {
-        var column_name = $(this).data('column_name');
-        var order_type = $(this).data('sorting_type');
-        var reverse_order = '';
-        if (order_type == 'asc') {
-            $(this).data('sorting_type', 'desc');
-            reverse_order = 'desc';
-            clear_icon();
-            $('#' + column_name + '_icon').html(
-                '<span class="fa fa-sort-down"></span>');
-        }
-        if (order_type == 'desc') {
-            $(this).data('sorting_type', 'asc');
-            reverse_order = 'asc';
-            clear_icon();
-            $('#' + column_name + '_icon').html(
-                '<span class="fa fa-sort-up"></span>');
-        }
-        $('#hidden_column_name').val(column_name);
-        $('#hidden_sort_type').val(reverse_order);
-        var page = $('#hidden_page').val();
-        var query = $('#search').val();
-        fetch_data(page, reverse_order, column_name, query);
-    });
-
-    $(document).on('click', '.pagination a', function(event) {
-        event.preventDefault();
-        var page = $(this).attr('href').split('page=')[1];
-        $('#hidden_page').val(page);
-        var column_name = $('#hidden_column_name').val();
-        var sort_type = $('#hidden_sort_type').val();
-
-        var query = $('#search').val();
-
-        $('li').removeClass('active');
-        $(this).parent().addClass('active');
-        fetch_data(page, sort_type, column_name, query);
-    });
-
-});
-
-</script>
-
-<script>
-    $(document).on('click', '#delete', function(e) {
-        swal({
-                title: "Are you sure?",
-                text: "To delete this prospect.",
-                type: "warning",
-                confirmButtonText: "Yes",
-                showCancelButton: true
-            })
-            .then((result) => {
-                if (result.value) {
-                    window.location = $(this).data('route');
-                } else if (result.dismiss === 'cancel') {
-                    swal(
-                        'Cancelled',
-                        'Your stay here :)',
-                        'error'
-                    )
-                }
-            })
-    });
-</script>
-
-
+</script> --}}
 <script>
     $(document).on('click', '.view-details-btn', function(e) {
         e.preventDefault();
@@ -279,33 +204,53 @@
     });
 </script>
 <script>
-    $(document).on('click', '.desin-filter', function(e) {
-        var status = $(this).data('value');
-        //remove active class from all
-        $('.desin-filter').removeClass('active-filter');
-        //add active class to clicked
-        $(this).addClass('active-filter');
-        var url = "{{ route('sales-manager.prospects.status-filter') }}";
-        $.ajax({
-            type: "GET",
-            dataType: "json",
-            url: url,
-            data: {
-                'status': status,
-            },
-            success: function(resp) {
-                $('#show-prospect').html(resp.view);
+    $(document).ready(function() {
+        function fetch_data(page, status, query) {
+            console.log(status + ' ' + page);
+            $.ajax({
+                url: "{{ route('sales-manager.prospects.status-filter') }}",
+                data: {
+                    status: status,
+                    page: page,
+                    query: query
+                },
+                success: function(resp) {
+                    $('tbody').html(resp.data);
+                }
+            });
+        }
 
-            }
+        $(document).on('click', '.desin-filter', function(e) {
+            e.preventDefault();
+            var status = $(this).data('value');
+            //remove active class from all
+            $('.desin-filter').removeClass('active-filter');
+            //add active class to clicked
+            $(this).addClass('active-filter');
+            var query = $('#search').val();
+            fetch_data(1, status, query);
+            });
+
+        $(document).on('click', '.pagination a', function(e) {
+            e.preventDefault();
+            var page = $(this).attr('href').split('page=')[1];
+            var status = $('.active-filter').data('value');
+            var query = $('#search').val();
+            fetch_data(page, status, query);
+        });
+
+        $(document).on('keyup', '#search', function(e) {
+            e.preventDefault();
+            var query = $(this).val();
+            var status = $('.active-filter').data('value');
+            fetch_data(1, status, query);
         });
     });
 </script>
-{{-- <script>
+<script>
     $(document).ready(function() {
-       //how to place holder in "jquery datatable" search box
+        //how to place holder in "jquery datatable" search box
         $('#myTable_filter input').attr("placeholder", "Search");
     });
-
-
-</script> --}}
+</script>
 @endpush

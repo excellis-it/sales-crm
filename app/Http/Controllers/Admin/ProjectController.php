@@ -362,6 +362,7 @@ class ProjectController extends Controller
             $projects = Project::where('id', 'like', '%' . $query . '%')
                 ->orWhere('sale_date', 'like', '%' . $query . '%')
                 ->orWhere('client_name', 'like', '%' . $query . '%')
+                ->orWhere('business_name', 'like', '%' . $query . '%')
                 ->orWhere('client_phone', 'like', '%' . $query . '%')
                 ->orWhere('project_value', 'like', '%' . $query . '%')
                 ->orWhere('project_upfront', 'like', '%' . $query . '%')

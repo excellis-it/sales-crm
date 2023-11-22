@@ -1,21 +1,10 @@
 
-<table id="myTable" class="dd table table-striped table-bordered" style="width:100%">
-    <thead>
-        <tr>
-            <th>Date</th>
-            <th>Business Name</th>
-            <th>Client Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Transfer Taken By</th>
-            <th>Status</th>
-            <th>Service Offered</th>
-            <th>Followup Date</th>
-            <th>Price Quoted</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
+
+    @if (count($prospects) == 0)
+    <tr>
+        <td colspan="12" class="text-center">No Prospect Found</td>
+    </tr>
+    @else
         @foreach ($prospects as $key => $prospect)
             <tr>
                 <td>
@@ -74,29 +63,14 @@
                 </td>
             </tr>
         @endforeach
-    </tbody>
-</table>
+    @endif    
 
-<script>
-    // $(document).ready(function() {
-    //     //Default data table
-    //     $('#myTable').DataTable({
-    //         "order": [[ 0, "desc" ]],
-    //         "aaSorting": [],
-    //         "columnDefs": [{
-    //                 "orderable": false,
-    //                 "targets": [10]
-    //             },
-    //             {
-    //                 "orderable": true,
-    //                 "targets": [0, 1, 2, 5, 6, 7, 8, 9]
-    //             }
-    //         ]
-    //     });
 
-    // });
-    $(document).ready(function() {
-           //how to place holder in "jquery datatable" search box
-            $('#myTable_filter input').attr("placeholder", "Search");
-        });
-</script>
+
+<tr>
+    <td colspan="12">
+        <div class="d-flex justify-content-center">
+            {!! $prospects->links() !!}
+        </div>
+    </td>
+</tr>

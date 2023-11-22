@@ -446,7 +446,6 @@ class ProspectController extends Controller
                         ->orWhere('price_quote', 'like', '%' . $query . '%')
                         ->orWhere('followup_date', 'like', '%' . $query . '%')
                         ->orWhere('offered_for', 'like', '%' . $query . '%')
-                        ->orWhere('status', 'like', '%' . $query . '%')
                         ->whereHas('user', function ($q) use ($query) {
                             $q->where('name', 'like', '%' . $query . '%');
                         })->whereHas('transferTakenBy', function ($q) use ($query) {
@@ -455,10 +454,11 @@ class ProspectController extends Controller
                 });
             }
             if ($status == 'All') {
-              return  $prospects = $prospects->orderBy('sale_date', 'desc')->paginate('10');
+                $prospects = $prospects->orderBy('sale_date', 'desc')->paginate('10');
             } else {
                 $prospects = $prospects->orderBy('sale_date', 'desc')->where(['status' => $status])->paginate('10');
             }
+
             return response()->json(['data' => view('admin.prospect.table', compact('prospects'))->render()]);
         }
     }

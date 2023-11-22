@@ -53,7 +53,7 @@ class ProjectController extends Controller
             // ->orderBy($sort_by, $sort_type)
             // ->paginate(15);            
 
-            return response()->json(['data' => view('account_manager.project.table', compact('projects'))->render()]);
+            return response()->json(['data' => view('sales_excecutive.project.table', compact('projects'))->render()]);
         }
     }
 
