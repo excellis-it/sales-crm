@@ -1,7 +1,7 @@
 
 @if (count($projects) == 0)
 <tr>
-    <td colspan="8" class="text-center">No Goals found</td>
+    <td colspan="11" class="text-center">No Goals found</td>
 </tr>
 @else
 
