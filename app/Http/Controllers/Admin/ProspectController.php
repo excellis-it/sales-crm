@@ -28,14 +28,14 @@ class ProspectController extends Controller
             $count['close'] = Prospect::where('user_id', $request->user_id)->where('status', 'Close')->count();
             $count['sent_proposal'] = Prospect::where('user_id', $request->user_id)->where('status', 'Sent Proposal')->count();
             $count['prospect'] = Prospect::where('user_id', $request->user_id)->count();
-            $prospects = Prospect::orderBy('sale_date', 'desc')->where('user_id', $request->user_id)->paginate('15');
+            $prospects = Prospect::orderBy('sale_date', 'desc')->where('user_id', $request->user_id)->paginate('10');
         } else {
             $count['win'] = Prospect::where('status', 'Win')->count();
             $count['follow_up'] = Prospect::where('status', 'Follow Up')->count();
             $count['close'] = Prospect::where('status', 'Close')->count();
             $count['sent_proposal'] = Prospect::where('status', 'Sent Proposal')->count();
             $count['prospect'] = Prospect::count();
-            $prospects = Prospect::orderBy('sale_date', 'desc')->paginate('15');
+            $prospects = Prospect::orderBy('sale_date', 'desc')->paginate('10');
         }
 
         return view('admin.prospect.list', compact('count', 'prospects'));
@@ -446,11 +446,12 @@ class ProspectController extends Controller
                         ->orWhere('price_quote', 'like', '%' . $query . '%')
                         ->orWhere('followup_date', 'like', '%' . $query . '%')
                         ->orWhere('offered_for', 'like', '%' . $query . '%')
-                        ->whereHas('user', function ($q) use ($query) {
+                        ->orWhereHas('user', function ($q) use ($query) {
                             $q->where('name', 'like', '%' . $query . '%');
-                        })->whereHas('transferTakenBy', function ($q) use ($query) {
+                        })
+                        ->orWhereHas('transferTakenBy', function ($q) use ($query) {
                             $q->where('name', 'like', '%' . $query . '%');
-                        });
+                        });        
                 });
             }
             if ($status == 'All') {

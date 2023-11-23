@@ -369,6 +369,10 @@ class ProjectController extends Controller
                 ->orWhere('currency', 'like', '%' . $query . '%')
                 ->orWhere('payment_mode', 'like', '%' . $query . '%')
                 ->orderBy($sort_by, $sort_type)
+                //sales manager
+                ->orWhereHas('salesManager', function ($q) use ($query) {
+                    $q->where('name', 'like', '%' . $query . '%');
+                })
                 ->paginate(15);
 
             return response()->json(['data' => view('admin.project.table', compact('projects'))->render()]);

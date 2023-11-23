@@ -244,7 +244,6 @@ class ProjectController extends Controller
             $projects = Project::where('assigned_to', Auth::user()->id)->orderBy($sort_by, $sort_type)->where(function ($q) use ($query) {
                 $q->orWhere('sale_date', 'like', '%' . $query . '%')
                     ->orWhere('business_name', 'like', '%' . $query . '%')
-                    ->orWhere('business_name', 'like', '%' . $query . '%')
                     ->orWhere('client_name', 'like', '%' . $query . '%')
                     ->orWhere('client_phone', 'like', '%' . $query . '%')
                     ->orWhere('project_value', 'like', '%' . $query . '%')

@@ -336,7 +336,8 @@ class ProspectController extends Controller
                         ->orWhere('offered_for', 'like', '%' . $query . '%')
                         ->whereHas('user', function ($q) use ($query) {
                             $q->where('name', 'like', '%' . $query . '%');
-                        })->whereHas('transferTakenBy', function ($q) use ($query) {
+                        })
+                        ->orWhereHas('transferTakenBy', function ($q) use ($query) {
                             $q->where('name', 'like', '%' . $query . '%');
                         });
                 });

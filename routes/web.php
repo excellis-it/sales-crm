@@ -261,17 +261,19 @@ Route::group(['middleware' => ['BDM'], 'prefix' => 'bdm'], function () {
         ]);
         Route::get('/bdm-prospect-ajax-list', [BDMProspectController::class, 'prospectAjaxList'])->name('prospect.ajax-list');
         // delete prospect
+        // filter prospects
         Route::get('/prospect-delete/{id}', [BDMProspectController::class, 'delete'])->name('prospects.delete');
     });
 
     Route::resources([
         'bde' => BDMBusinessDevelopmentExcecutiveController::class,
     ]);
+    Route::get('/bdm-projects-filter', [BDMProjectController::class, 'bdmProjectFilter'])->name('bdm.project.filter');
+    Route::get('/bdm-prospect-filter', [BDMProspectController::class, 'bdmProspectFilter'])->name('bdm.prospects.filter');
     Route::get('/project-document_download/{id}', [BDMProjectController::class, 'projectDocumentDownload'])->name('bdm.projects.document.download');
     // delete project
     Route::get('/project-delete/{id}', [BDMProjectController::class, 'delete'])->name('bdm.projects.delete');
     //project list
-    Route::get('/bdm-project-ajax-list', [BDMProjectController::class, 'ajaxList'])->name('bdm.projects.ajax-list');
 
     Route::prefix('bde')->group(function () {
         Route::get('/bde-delete/{id}', [BDMBusinessDevelopmentExcecutiveController::class, 'delete'])->name('bde.delete');

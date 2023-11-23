@@ -24,57 +24,36 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        // $projects = Project::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->get();
-        return view('bdm.project.list');
+        $projects = Project::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->paginate(10);
+        return view('bdm.project.list',compact('projects'));
     }
 
-    public function ajaxList(Request $request)
+    public function bdmProjectFilter(Request $request)
     {
-        $draw = $request->get('draw');
-        $start = $request->get("start");
-        $rowperpage = $request->get("length"); // Rows display per page
+        
+        if ($request->ajax()) {
+            $sort_by = $request->get('sortby');
+            $sort_type = $request->get('sorttype');
+            $query = $request->get('query');
+            $query = str_replace(" ", "%", $query);
+            $projects = Project::where('user_id', Auth::user()->id)->orderBy($sort_by, $sort_type)->where(function ($q) use ($query) {
+                $q->orWhere('sale_date', 'like', '%' . $query . '%')
+                    ->orWhere('business_name', 'like', '%' . $query . '%')
+                    ->orWhere('client_name', 'like', '%' . $query . '%')
+                    ->orWhere('client_phone', 'like', '%' . $query . '%')
+                    ->orWhere('project_value', 'like', '%' . $query . '%')
+                    ->orWhere('project_upfront', 'like', '%' . $query . '%')
+                    ->orWhere('currency', 'like', '%' . $query . '%')
+                    ->orWhere('payment_mode', 'like', '%' . $query . '%')
+                    ->orWhereHas('projectTypes', function ($q) use ($query) {
+                        $q->Where('type', 'like', '%' . $query . '%');
+                    });     
+            })->paginate(10);
+            
+            
 
-        $columnIndex_arr = $request->get('order');
-        $columnName_arr = $request->get('columns');
-        $order_arr = $request->get('order');
-        $search_arr = $request->get('search');
-
-        $columnIndex = $columnIndex_arr[0]['column']; // Column index
-        $columnName = $columnName_arr[$columnIndex]['data']; // Column name
-        $columnSortOrder = $order_arr[0]['dir']; // asc or desc
-        $searchValue = $search_arr['value']; // Search value
-
-        $totalRecords = Project::where('user_id', Auth::user()->id)->count();
-        $totalRecordswithFilter = Project::where('client_name', 'like', '%' . $searchValue . '%')->where('user_id', Auth::user()->id)->count();
-
-        $records = Project::orderBy($columnName, $columnSortOrder)->where('user_id', Auth::user()->id)->where('client_name', 'like', '%' . $searchValue . '%')->skip($start)->take($rowperpage)->get();
-
-        $data_arr = array();
-        foreach ($records as $key => $record) {
-            $data_arr[] = array(
-                'sale_date' => date('d-m-Y', strtotime($record->created_at)),
-                'business_name' => $record->business_name,
-                'client_name' => $record->client_name,
-                'client_phone' => $record->client_phone,
-                'project_type' => $record->projectTypes->type ?? '',
-                'project_value' => $record->project_value,
-                'project_upfront' => $record->project_upfront,
-                'currency' => $record->currency,
-                'payment_mode' => $record->payment_mode,
-                'due_amount' => (int)$record->project_value - (int)$record->project_upfront,
-                'assigned_to' => $record->assigned_to ? '<span class="badge bg-success">Assigned</span>' : '<span class="badge bg-danger">Not Assigned</span>',
-                'action' => '<a href="' . route('bdm.projects.show', $record->id) . '" class="btn btn-sm btn-primary"><i class="fa fa-eye"></i></a> <a href="' . route('bdm.projects.edit', $record->id) . '" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a> <a href="javascipt:void(0);" data-route="' . route('bdm.projects.delete', $record->id) . '" class="btn btn-sm btn-danger" id="delete"><i class="fa fa-trash"></i></a>'
-            );
+            return response()->json(['data' => view('bdm.project.table', compact('projects'))->render()]);
         }
-
-        $response = array(
-            "draw" => intval($draw),
-            "iTotalRecords" => $totalRecords,
-            "iTotalDisplayRecords" => $totalRecordswithFilter,
-            "aaData" => $data_arr
-        );
-
-        return response()->json($response);
     }
 
     /**

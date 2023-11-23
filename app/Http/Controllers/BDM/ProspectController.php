@@ -16,115 +16,49 @@ class ProspectController extends Controller
 {
     public function index(Request $request)
     {
-
-
         $count['win'] = Prospect::where('report_to', Auth::user()->id)->where('status', 'Win')->count();
         $count['follow_up'] = Prospect::where('report_to', Auth::user()->id)->where('status', 'Follow Up')->count();
         $count['close'] = Prospect::where('report_to', Auth::user()->id)->where('status', 'Close')->count();
         $count['sent_proposal'] = Prospect::where('report_to', Auth::user()->id)->where('status', 'Sent Proposal')->count();
         $count['prospect'] = Prospect::where('report_to', Auth::user()->id)->count();
-
-
-        return view('bdm.prospect.list', compact('count'));
+        $prospects = Prospect::orderBy('sale_date', 'desc')->where('report_to', Auth::user()->id)->paginate('10');
+        return view('bdm.prospect.list', compact('count','prospects'));
     }
 
-    public function prospectAjaxList(Request $request)
+    public function bdmProspectFilter(Request $request)
     {
-
-        $draw = $request->get('draw');
-        $start = $request->get("start");
-        $rowperpage = $request->get("length"); // Rows display per page
-
-        $columnIndex_arr = $request->get('order');
-        $columnName_arr = $request->get('columns');
-        $order_arr = $request->get('order');
-        $search_arr = $request->get('search');
-
-        $columnIndex = $columnIndex_arr[0]['column']; // Column index
-        $columnName = $columnName_arr[$columnIndex]['data']; // Column name
-        $columnSortOrder = $order_arr[0]['dir']; // asc or desc
-        $searchValue = $search_arr['value']; // Search value
-
-        // Total records
-        $totalRecords = Prospect::orderBy('id', 'desc')->where('report_to', Auth::user()->id)->count();
-        $totalRecordswithFilter = Prospect::orderBy('id', 'desc')->where('report_to', Auth::user()->id)->count();
-
-        // Fetch records
-        $records = Prospect::query();
-        if ($request->status && $request->status != 'All') {
-            $records->where(['status' => $request->status]);
-        }
-        $columns = ['user_id', 'report_to', 'client_name', 'business_name', 'transfer_token_by', 'client_email', 'client_phone', 'price_quote', 'followup_date', 'offered_for'];
-        foreach ($columns as $column) {
-            $records->where($column, 'like', '%' . $searchValue . '%');
-        }
-
-        $records->orderBy($columnName, $columnSortOrder);
-        $records->where('report_to', Auth::user()->id);
-        $records->skip($start);
-        $records->take($rowperpage);
-        $records = $records->orderBy('id', 'desc');
-        $records = $records->get();
-
-        $data_arr = array();
-
-        foreach ($records as $record) {
-            $client_name = $record->client_name;
-            $business_name = $record->business_name;
-            $client_email = $record->client_email;
-            $client_phone = $record->client_phone;
-            $price_quote = $record->price_quote;
-            $followup_date = date('d-m-Y', strtotime($record->followup_date));
-            $offered_for = $record->offered_for;
-            $id = $record->id;
-
-            if ($record->status == 'Win') {
-                $status = '<span>On Board</span>';
-            } elseif ($record->status == 'Follow Up') {
-                $status = '<span>Follow Up</span>';
-            } elseif ($record->status == 'Sent Proposal') {
-                $status = '<span>Sent Proposal</span>';
+        if ($request->ajax()) {
+            $status = $request->status;
+            $query = $request->get('query');
+            $query = str_replace(" ", "%", $query);
+            $prospects = Prospect::query();
+            if ($query != '') {
+                $prospects = $prospects->where(function ($q) use ($query) {
+                    $q->orWhere('client_name', 'like', '%' . $query . '%')
+                        ->orWhere('business_name', 'like', '%' . $query . '%')
+                        ->orWhere('client_email', 'like', '%' . $query . '%')
+                        ->orWhere('client_phone', 'like', '%' . $query . '%')
+                        ->orWhere('price_quote', 'like', '%' . $query . '%')
+                        ->orWhere('followup_date', 'like', '%' . $query . '%')
+                        ->orWhere('offered_for', 'like', '%' . $query . '%')
+                        ->orWhereHas('user', function ($q) use ($query) {
+                            $q->where('name', 'like', '%' . $query . '%');
+                        })
+                        ->orWhereHas('transferTakenBy', function ($q) use ($query) {
+                            $q->where('name', 'like', '%' . $query . '%');
+                        });        
+                });
+            }
+            if ($status == 'All') {
+                $prospects = $prospects->orderBy('sale_date', 'desc')->where('report_to', Auth::user()->id)->paginate('10');
             } else {
-                $status = '<span>Cancel</span>';
+                $prospects = $prospects->orderBy('sale_date', 'desc')->where(['status' => $status])->where('report_to', Auth::user()->id)->paginate('10');
             }
 
-            if ($record->status != 'Win') {
-                $action = '<a title="Edit Prospect" data-route="" href="' . route('bdm.prospects.edit', $id) . '" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></a> &nbsp;&nbsp;';
-            } else {
-                $action = '';
-            }
-
-            $data_arr[] = array(
-                "sale_date" => ($record->sale_date) ? date('d-m-Y', strtotime($record->sale_date)) : '',
-                "prospect_by" => User::where(['id' => $record->user_id])->first()->name,
-                "client_name" => $client_name,
-                "business_name" => $business_name,
-                "client_email" => $client_email,
-                "client_phone" => $client_phone,
-                "transfer_by" => User::where(['id' => $record->transfer_token_by])->first()->name ?? '',
-                "status" => $status,
-                "service_offered" => $offered_for,
-                "followup_date" => $followup_date,
-                "price_quote" => $price_quote,
-                "action" => $action .
-                    '<a title="View Prospect" class="view-details-btn btn btn-sm btn-warning"
-                data-route="' . route('bdm.prospects.show', $id) . '" data-bs-toggle="modal"
-                data-bs-target="#exampleModal" href="javascript:void(0);"><i class="fas fa-eye"></i></a>
-            &nbsp;&nbsp;
-            <a title="Delete Account manager" class="btn btn-sm btn-danger" data-route="' . route('bdm.prospects.delete', $id) . '"
-                href="javascipt:void(0);" id="delete"><i class="fas fa-trash"></i></a>'
-            );
+            return response()->json(['data' => view('bdm.prospect.table', compact('prospects'))->render()]);
         }
-
-        $response = array(
-            "draw" => intval($draw),
-            "iTotalRecords" => $totalRecords,
-            "iTotalDisplayRecords" => $totalRecordswithFilter,
-            "aaData" => $data_arr
-        );
-
-        return response()->json($response);
     }
+
 
     /**
      * Show the form for creating a new resource.

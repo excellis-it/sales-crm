@@ -94,8 +94,49 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="row justify-content-end">
+                        <div class="col-md-6">
+                            <div class="row g-1 justify-content-end">
+                                <div class="col-md-8 pr-0">
+                                    <div class="search-field prod-search">
+                                        <input type="text" name="search" id="search" placeholder="search..." required
+                                            class="form-control">
+                                        <a href="javascript:void(0)" class="prod-search-icon"><i
+                                                class="ph ph-magnifying-glass"></i></a>
+                                    </div>
+                                </div>
+                                {{-- <div class="col-md-3 pl-0 ml-2">
+                                    <button class="btn btn-primary button-search" id="search-button"> <span class=""><i
+                                                class="ph ph-magnifying-glass"></i></span> Search</button>
+                                </div> --}}
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="table-responsive" id="show-prospect">
-                        @include('bdm.prospect.table')
+                        <table id="myTable" class="dd table table-striped table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Prospect By</th>
+                                    <th>Client Name</th>
+                                    <th>Business Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Transfer Taken By</th>
+                                    <th>Status</th>
+                                    <th>Service Offered</th>
+                                    <th>Followup Date</th>
+                                    <th>Price Quoted</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @include('bdm.prospect.table')
+                            </tbody>
+                        </table>
+
                     </div>
                 </div>
             </div>
@@ -163,80 +204,46 @@
         });
     </script>
     <script>
-        $(document).on('click', '.desin-filter', function(e) {
-            var status = $(this).data('value');
-            //remove active class from all
-            $('.desin-filter').removeClass('active-filter');
-            //add active class to clicked
-            $(this).addClass('active-filter');
-            var table = $('#myTable').DataTable();
-            table.destroy();
-            $('#myTable').DataTable({
-                "order": [
-                    [0, "desc"]
-                ],
-                processing: true,
-                serverSide: true,
-                destroy: true,
-                ajax: "{{ route('bdm.prospect.ajax-list') }}?status=" + status,
-                columns: [{
-                        data: 'sale_date',
-                        name: 'sale_date'
-                    }, {
-                        data: 'prospect_by',
-                        name: 'prospect_by',
-                        orderable: false,
-                        searchable: false
+        $(document).ready(function() {
+            function fetch_data(page, status, query) {
+                console.log(status + ' ' + page);
+                $.ajax({
+                    url: "{{ route('bdm.prospects.filter') }}",
+                    data: {
+                        status: status,
+                        page: page,
+                        query: query
                     },
-
-                    {
-                        data: 'client_name',
-                        name: 'client_name'
-                    },
-                    {
-                        data: 'business_name',
-                        name: 'business_name'
-                    },
-
-                    {
-                        data: 'client_email',
-                        name: 'client_email'
-                    },
-                    {
-                        data: 'client_phone',
-                        name: 'client_phone'
-                    },
-                    {
-                        data: 'transfer_by',
-                        name: 'transfer_by',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'status',
-                        name: 'status',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'service_offered',
-                        name: 'service_offered'
-                    },
-                    {
-                        data: 'followup_date',
-                        name: 'followup_date'
-                    },
-                    {
-                        data: 'price_quote',
-                        name: 'price_quote'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false
+                    success: function(resp) {
+                        $('tbody').html(resp.data);
                     }
-                ]
+                });
+            }
+
+            $(document).on('click', '.desin-filter', function(e) {
+                e.preventDefault();
+                var status = $(this).data('value');
+                //remove active class from all
+                $('.desin-filter').removeClass('active-filter');
+                //add active class to clicked
+                $(this).addClass('active-filter');
+                var query = $('#search').val();
+                fetch_data(1, status, query);
+                });
+
+            $(document).on('click', '.pagination a', function(e) {
+                e.preventDefault();
+                var page = $(this).attr('href').split('page=')[1];
+                var status = $('.active-filter').data('value');
+                var query = $('#search').val();
+                fetch_data(page, status, query);
+            });
+
+            $(document).on('keyup', '#search', function(e) {
+                e.preventDefault();
+                var query = $(this).val();
+                var status = $('.active-filter').data('value');
+                fetch_data(1, status, query);
             });
         });
     </script>

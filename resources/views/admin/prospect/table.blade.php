@@ -4,9 +4,7 @@
     </tr>
 @else
     @foreach ($prospects as $prospect)
-        <tr class="view-details-btn view-route"
-        data-route="{{ route('admin.prospects.show', $prospect->id) }}" data-bs-toggle="modal"
-        data-bs-target="#exampleModal">
+        <tr >
             <td>
                 {{ $prospect->sale_date ? date('d-m-Y', strtotime($prospect->sale_date)) : '' }}
             </td>
@@ -50,18 +48,18 @@
             </td>
             <td>
                 @if ($prospect->status != 'Win')
-                    <a title="Edit Prospect" data-route="" href="{{ route('admin.prospects.edit', $prospect->id) }}"><i
+                    <a title="Edit Prospect"  href="{{ route('admin.prospects.edit', $prospect->id) }}"><i
                             class="fas fa-edit"></i></a> &nbsp;&nbsp;
                 @endif
-                {{-- @if ($prospect->status == 'Win' && $prospect->is_project == false)
-                                        <a title="Assign to project" data-route="" href="{{ route('sales-manager.prospects.assign-project', $prospect->id) }}"><i
-                                            class="fa fa-shield"></i></a> &nbsp;&nbsp;
-                                        @endif --}}
+                @if ($prospect->status == 'Win' && $prospect->is_project == false)
+                <a title="Assign to project" data-route="" href="{{ route('sales-manager.prospects.assign-project', $prospect->id) }}"><i
+                    class="fa fa-shield"></i></a> &nbsp;&nbsp;
+                @endif 
 
-                {{-- <a title="View Prospect" class="view-details-btn"
+                <a title="View Prospect" class="view-details-btn"
                     data-route="{{ route('admin.prospects.show', $prospect->id) }}" data-bs-toggle="modal"
                     data-bs-target="#exampleModal" href="javascript:void(0);"><i class="fas fa-eye"></i></a>
-                &nbsp;&nbsp; --}}
+                &nbsp;&nbsp;
 
             </td>
         </tr>
