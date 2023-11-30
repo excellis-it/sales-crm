@@ -127,7 +127,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
                                         <p class="mb-10 line-height-1">Revenue</p>
-                                        <h3 class="fs-25"> {{ $goal['net_goals'] ? '$' . $goal['net_goals'] : 'N/A' }} /
+                                        <h3 class="fs-25"> {{ $goal['net_goals'] ? '$' . $goal['net_goals'] : 'N/A' }} 
                                             ${{ $goal['net_goals_achieve'] ?? 0 }} </h3>
                                     </div>
                                     <?php
@@ -768,24 +768,46 @@
                             <div class="">
                                 <h5 class="card-title">Prospects Statistics</h5>
                             </div>
+                            <div class="row justify-content-end">
+                                <div class="col-md-6">
+                                    <div class="row g-1 justify-content-end">
+                                        <div class="col-md-8 pr-0">
+                                            <div class="search-field prod-search">
+                                                <input type="text" name="search" id="search" placeholder="search..." required
+                                                    class="form-control">
+                                                <a href="javascript:void(0)" class="prod-search-icon"><i
+                                                        class="ph ph-magnifying-glass"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="table-responsive">
-                                <table id="myTable" class="dd table table-striped table-bordered" style="width:100%">
+                                <table id="myTable" class="dd table table-striped table-bordered table-hover" style="width:100%">
                         <thead>
                             <tr>
-                                <th>Date</th>
-                                <th>Business Name</th>
-                                <th>Client Name</th>
-                                <th>Email</th>
-                                <th>Phone</th>
-                                <th>Transfer Taken By</th>
+                                <th class="sorting" data-tippy-content="Sort by Sale Date" data-sorting_type="desc"
+                                data-column_name="sale_date" style="cursor: pointer">Date <span id="date_icon"></span></th>
+                                <th class="sorting" data-tippy-content="Sort by Business Name" data-sorting_type="asc"
+                                data-column_name="business_name" style="cursor: pointer">Business Name <span id="business_name_icon"></span></th>
+                                <th class="sorting" data-tippy-content="Sort by Client Name" data-sorting_type="asc"
+                                data-column_name="client_name" style="cursor: pointer">Client Name <span id="client_name_icon"></span></th>
+                                <th class="sorting" data-tippy-content="Sort by Phone" data-sorting_type="asc"
+                                data-column_name="phone" style="cursor: pointer">Email <span id="email_icon"></span></th>
+                                <th class="sorting" data-tippy-content="Sort by Phone" data-sorting_type="asc"
+                                data-column_name="phone" style="cursor: pointer">Phone <span id="phone_icon"></span></th>
+                                <th data-tippy-content="Cant't sort by Transfer taken by" style="cursor: pointer">Transfer Taken By</th>
                                 <th>Status</th>
-                                <th>Service Offered</th>
-                                <th>Followup Date</th>
-                                <th>Price Quoted</th>
+                                <th data-tippy-content="Cant't sort by Service offer" style="cursor: pointer">Service Offered</th>
+                                <th class="sorting" data-tippy-content="Sort by Follow" data-sorting_type="asc"
+                                data-column_name="follow" style="cursor: pointer">Followup Date <span id="follow_icon"></span></th>
+                                <th class="sorting" data-tippy-content="Sort by Price quoted" data-sorting_type="asc"
+                                data-column_name="price" style="cursor: pointer">Price Quoted <span id="price_quoted_icon"></span></th>
                             </tr>
                         </thead>
-                        <tbody>
-                            @foreach ($prospects as $key => $prospect)
+                        <tbody class="prospect-filter">
+                            @include('admin.dashboard_prospect_table')
+                            {{-- @foreach ($prospects as $key => $prospect)
                                 <tr>
                                     <td>
                                         {{ date('d M, Y', strtotime($prospect->created_at)) }}
@@ -831,7 +853,7 @@
 
 
                                 </tr>
-                            @endforeach
+                            @endforeach --}}
                         </tbody>
                     </table>
                             </div>
@@ -840,13 +862,6 @@
                 </div>
 
             </div>
-
-
-
-
-
-
-
         </div>
     </div>
     </div>
@@ -941,7 +956,7 @@
 
         };
     </script>
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             //Default data table
             $('#myTable').DataTable({
@@ -958,7 +973,7 @@
             });
 
         });
-    </script>
+    </script> --}}
     <script>
         $(document).ready(function() {
             //how to place holder in "jquery datatable" search box
@@ -996,4 +1011,82 @@
             data: oilData
         });
     </script>
+
+    <script>
+        $(document).ready(function() {
+            function clear_icon() {
+                $('#date_icon').html('');
+                $('#business_name_icon').html('');
+                $('#client_name_icon').html('');
+                $('#email_icon').html('');
+                $('#phone_icon').html('');
+                $('#follow_icon').html('');
+                $('#price_quoted_icon').html('');
+                // $('#currency_icon').html('');
+            }
+
+            function fetch_data(page, sort_type, sort_by, query) {
+                $.ajax({
+                    url: "{{ route('admin.dashboard.prospect-fetch-data') }}",
+                    data: {
+                        page: page,
+                        sortby: sort_by,
+                        sorttype: sort_type,
+                        query: query
+                    },
+                    success: function(data) {
+                        $('.prospect-filter').html(data.data);
+                    }
+                });
+            }
+
+            $(document).on('keyup', '#search', function() {
+                var query = $('#search').val();
+                var column_name = $('#hidden_column_name').val();
+                var sort_type = $('#hidden_sort_type').val();
+                var page = $('#hidden_page').val();
+                fetch_data(page, sort_type, column_name, query);
+            });
+
+            $(document).on('click', '.sorting', function() {
+                var column_name = $(this).data('column_name');
+                var order_type = $(this).data('sorting_type');
+                var reverse_order = '';
+                if (order_type == 'asc') {
+                    $(this).data('sorting_type', 'desc');
+                    reverse_order = 'desc';
+                    clear_icon();
+                    $('#' + column_name + '_icon').html(
+                        '<span class="fa fa-sort-down"></span>');
+                }
+                if (order_type == 'desc') {
+                    $(this).data('sorting_type', 'asc');
+                    reverse_order = 'asc';
+                    clear_icon();
+                    $('#' + column_name + '_icon').html(
+                        '<span class="fa fa-sort-up"></span>');
+                }
+                $('#hidden_column_name').val(column_name);
+                $('#hidden_sort_type').val(reverse_order);
+                var page = $('#hidden_page').val();
+                var query = $('#search').val();
+                fetch_data(page, reverse_order, column_name, query);
+            });
+
+            $(document).on('click', '.pagination a', function(event) {
+                event.preventDefault();
+                var page = $(this).attr('href').split('page=')[1];
+                $('#hidden_page').val(page);
+                var column_name = $('#hidden_column_name').val();
+                var sort_type = $('#hidden_sort_type').val();
+
+                var query = $('#search').val();
+
+                $('li').removeClass('active');
+                $(this).parent().addClass('active');
+                fetch_data(page, sort_type, column_name, query);
+            });
+
+            });
+        </script>
 @endpush

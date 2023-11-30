@@ -116,7 +116,7 @@
 
                     
                     <div class="table-responsive" id="show-prospect">
-                        <table id="myTable" class="dd table table-striped table-bordered" style="width:100%">
+                        <table id="myTable" class="dd table table-striped table-bordered table-hover" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>Date</th>
