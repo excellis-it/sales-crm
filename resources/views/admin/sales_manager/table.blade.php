@@ -15,12 +15,12 @@
         @if (count($sales_managers) > 0)
             @foreach ($sales_managers as $key => $sales_manager)
                 <tr>
-                    <td>{{ $sales_manager->name }}</td>
-                    <td>{{ $sales_manager->email }}</td>
-                    <td>{{ $sales_manager->phone }}</td>
-                    <td>{{ $sales_manager->employee_id }}</td>
-                    <td>{{ $sales_manager->date_of_joining }}</td>
-                    <td><a
+                    <td class="edit-route" data-route="{{ route('sales_managers.edit', $sales_manager['id']) }}">{{ $sales_manager->name }}</td>
+                    <td class="edit-route" data-route="{{ route('sales_managers.edit', $sales_manager['id']) }}">{{ $sales_manager->email }}</td>
+                    <td class="edit-route" data-route="{{ route('sales_managers.edit', $sales_manager['id']) }}">{{ $sales_manager->phone }}</td>
+                    <td class="edit-route" data-route="{{ route('sales_managers.edit', $sales_manager['id']) }}">{{ $sales_manager->employee_id }}</td>
+                    <td class="edit-route" data-route="{{ route('sales_managers.edit', $sales_manager['id']) }}">{{ $sales_manager->date_of_joining }}</td>
+                    <td ><a
                             href="{{ route('sales-projects.index', ['sales_manager_id' => $sales_manager->id]) }}">{{ $sales_manager->projects->count() }}</a>
                     </td>
                     <td>
@@ -33,10 +33,6 @@
                         </div>
                     </td>
                     <td>
-                        <a title="Edit Sales manager" data-route=""
-                            href="{{ route('sales_managers.edit', $sales_manager->id) }}"><i
-                                class="fas fa-edit"></i></a> &nbsp;&nbsp;
-
                         <a title="Delete Sales manager"
                             data-route="{{ route('sales_managers.delete', $sales_manager->id) }}"
                             href="javascipt:void(0);" id="delete"><i

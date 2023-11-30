@@ -35,4 +35,14 @@ class Project extends Model
     {
         return $this->belongsTo(User::class, 'project_closer');
     }
+
+    public function lastFollowUpType()
+    {
+        return $this->hasOne(Followup::class)->latest();
+    }
+
+    public function accountManager()
+    {
+        return $this->belongsTo(User::class, 'assigned_to');
+    }
 }

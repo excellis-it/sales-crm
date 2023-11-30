@@ -1,6 +1,6 @@
 @if (count($projects) == 0)
 <tr>
-    <td colspan="8" class="text-center">No Goals found</td>
+    <td colspan="11" class="text-center">No Project found</td>
 </tr>
 @else
     @foreach ($projects as $key => $project)
@@ -46,13 +46,13 @@
             </td>
         </tr>
     @endforeach
-@endif
-
 
     <tr>
-        <td colspan="12">
+        <td colspan="11">
             <div class="d-flex justify-content-center">
                 {!! $projects->links() !!}
             </div>
         </td>
     </tr>
+@endif
+

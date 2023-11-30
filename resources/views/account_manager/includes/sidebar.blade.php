@@ -20,10 +20,14 @@
 
                     </ul>
                 </li>
-              
+                <li class="{{ Request::is('account-manager/followups*') ? 'active' : ' ' }}">
+                    <a href="{{ route('account-manager.followups.index') }}"><i class="la la-arrow-up"></i> <span>Follow-Up</span></a>
+                </li>
                 <li class="{{ Request::is('account-manager/projects*') ? 'active' : ' ' }}">
                     <a href="{{ route('account-manager.projects.index') }}"><i class="la la-credit-card"></i> <span>Projects</span></a>
                 </li>
+
+
 
 
 
@@ -43,7 +47,7 @@
                     <ul style="display: none;">
                         <li class="{{ Request::is('account-manager/cms/sub-account-manager*') ? 'active' : ' ' }}">
                             <a href="{{ route('cms.sub-account-manager.get-started') }}">Get Started Page</a>
-                        </li>                   
+                        </li>
                     </ul>
                 </li>
 
@@ -53,7 +57,7 @@
                     <ul style="display: none;">
                         <li class="{{ Request::is('account-manager/cms/user*') ? 'active' : ' ' }}">
                             <a href="{{ route('cms.user.get-started') }}">Get Started Page</a>
-                        </li>                  
+                        </li>
                     </ul>
                 </li> --}}
 

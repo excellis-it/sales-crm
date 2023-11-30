@@ -85,7 +85,7 @@ class CustomerController extends Controller
         ];
 
         Mail::to($request->email)->send(new RegistrationMail($maildata));
-        return redirect()->route('sales_managers.index')->with('message', 'Sales manager created successfully.');
+        return response()->json(['success' => 'Sales manager added successfully.']);
     }
 
     /**
@@ -107,7 +107,7 @@ class CustomerController extends Controller
     public function edit($id)
     {
         $sales_manager = User::findOrFail($id);
-        return view('admin.sales_manager.edit')->with(compact('sales_manager'));
+        return response()->json(['sales_manager' => $sales_manager]);
     }
 
     /**
@@ -150,7 +150,7 @@ class CustomerController extends Controller
             $data->profile_picture = $this->imageUpload($request->file('profile_picture'), 'sales_manager');
         }
         $data->save();
-        return redirect()->route('sales_managers.index')->with('message', 'Sales manager updated successfully.');
+        return response()->json(['success' => 'Sales manager updated successfully.']);
     }
 
     /**

@@ -54,7 +54,9 @@
                     <span>Project Management</span>
                 </li>
 
-
+                <li class="{{ Request::is('admin/followups*') ? 'active' : ' ' }}">
+                    <a href="{{ route('admin.followups.index') }}"><i class="la la-arrow-up"></i> <span>Follow-Up</span></a>
+                </li>
 
                 <li class="{{ Request::is('admin/sales-projects*') ? 'active' : ' ' }}">
                     <a href="{{ route('sales-projects.index') }}"><i class="la la-book-open"></i> <span>

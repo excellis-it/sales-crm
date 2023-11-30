@@ -75,7 +75,7 @@
                                     <th class="sorting" data-tippy-content="Sort by Sale Date" data-sorting_type="desc"
                                     data-column_name="sale_date" style="cursor: pointer"> Date <span id="date_icon"></span></th>
                                     <th class="sorting" data-tippy-content="Sort by Business Name" data-sorting_type="desc"
-                                    data-column_name="business_name" style="cursor: pointer"> Business Name <span id="business_name_icon"></span></th>
+                                    data-column_name="business_name" style="cursor: pointer"> Business Name <span id="business_name_icon"><span class="fa fa-sort-down"></span></span></th>
                                     <th class="sorting" data-tippy-content="Sort by Customer Name" data-sorting_type="desc"
                                     data-column_name="customer_name" style="cursor: pointer"> Customer Name <span id="customer_name_icon"></span></th>
                                     <th class="sorting" data-tippy-content="Sort by Phone Number" data-sorting_type="desc"
@@ -173,7 +173,7 @@
         }
 
         function fetch_data(page, sort_type, sort_by, query) {
-            
+
             $.ajax({
                 url: "{{ route('account-manager.project.filter') }}",
                 data: {
@@ -237,9 +237,9 @@
 
     });
     </script>
-  
-   
-   
+
+
+
     <script>
         $(document).on('click', '#delete', function(e) {
             swal({
@@ -262,5 +262,5 @@
                 })
         });
     </script>
-   
+
 @endpush

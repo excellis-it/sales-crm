@@ -86,7 +86,6 @@ class ProspectController extends Controller
         }
         $prospect->transfer_token_by = $data['transfer_token_by'];
         // date add in created_at and updated_at
-        $prospect->created_at = date('Y-m-d H:i:s', strtotime($data['date']));
         $prospect->save();
 
         if ($data['status'] == 'Win') {
@@ -226,7 +225,6 @@ class ProspectController extends Controller
         }
 
         $prospect->transfer_token_by = $data['transfer_token_by'];
-        $prospect->created_at = date('Y-m-d H:i:s', strtotime($data['date']));
         $prospect->save();
 
         if ($data['status'] == 'Win') {
@@ -349,7 +347,7 @@ class ProspectController extends Controller
             }
 
             return response()->json(['data' => view('sales_excecutive.prospect.table', compact('prospects'))->render()]);
-        
+
         }
     }
 

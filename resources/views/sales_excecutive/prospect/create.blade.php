@@ -37,13 +37,7 @@
                                 @csrf
                                 <div class="border p-2 rounded">
                                     <div class="row">
-                                        <div class="col-md-4 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label"> Date
-                                                <span style="color: red;">*</span></label>
-                                            <input type="date" name="date" id="date" required
-                                                data-parsley-trigger="keyup" class="form-control"
-                                                value="{{ old('date') }}" placeholder="Enter Client Name">
-                                        </div>
+                                       
                                         <div class="col-md-4 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label"> Client Name
                                                 <span style="color: red;">*</span></label>

@@ -551,7 +551,7 @@
                     '<span class="error" style="color:red;">Number of milestone is required</span>');
                 return false;
             }
-
+            $('.add-milestone').html('');
             // show milestone field as per number of milestone
             for (let index = 1; index <= number_of_milestone; index++) {
                 console.log(number_of_milestone);

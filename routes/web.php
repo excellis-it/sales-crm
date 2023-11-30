@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountManager\DashboardController as AccountManagerDashboardController;
+use App\Http\Controllers\AccountManager\FollowupController;
 use App\Http\Controllers\AccountManager\ProfileController as AccountManagerProfileController;
 use App\Http\Controllers\AccountManager\ProjectController as AccountManagerProjectController;
 use App\Http\Controllers\Admin\AccountManagerController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\Admin\BusinessDevelopmentExcecutiveController;
 use App\Http\Controllers\Admin\BusinessDevelopmentManagerController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\FollowupController as AdminFollowupController;
 use App\Http\Controllers\Admin\GoalsController;
 use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
 use App\Http\Controllers\Admin\ProspectController as AdminProspectController;
@@ -80,7 +82,13 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
         'business-development-excecutive' => BusinessDevelopmentExcecutiveController::class,
     ]);
 
-    // search 
+    Route::name('admin.')->group(function () {
+        Route::resources([
+            'followups' => AdminFollowupController::class,
+        ]);
+    });
+    Route::get('/admin-followups-filter', [AdminFollowupController::class, 'adminFollowupProject'])->name('admin.followups.filter');
+    // search
     Route::get('/goals-search', [GoalsController::class, 'search'])->name('project-goals.search');
     Route::get('/sales-managers-search', [CustomerController::class, 'search'])->name('sales_managers.search');
     Route::get('/account-managers-search', [AccountManagerController::class, 'search'])->name('account_managers.search');
@@ -173,7 +181,7 @@ Route::group(['middleware' => ['SalesManager'], 'prefix' => 'sales-manager'], fu
     });
 
     Route::get('/projects-filter', [ProjectController::class, 'filterProject'])->name('sales-manager.project.filter');
-    Route::get('/prospect-filter', [SalesManagerProspectController::class, 'prospectFilter'])->name('sales-manager.prospects.filter'); 
+    Route::get('/prospect-filter', [SalesManagerProspectController::class, 'prospectFilter'])->name('sales-manager.prospects.filter');
     Route::get('/prospect-status-filter',[SalesManagerProspectController::class, 'prospectStatusFilter'])->name('sales-manager.prospects.status-filter'); // filter
     Route::get('/assign-to-project/{id}', [SalesManagerProspectController::class, 'assignToProject'])->name('sales-manager.prospects.assign-project'); // assign project
     // change status sales excecutive
@@ -203,10 +211,12 @@ Route::group(['middleware' => ['AccountManager'], 'prefix' => 'account-manager']
     Route::name('account-manager.')->group(function () {
         Route::resources([
             'projects' => AccountManagerProjectController::class,
+            'followups' => FollowupController::class,
         ]);
     });
 
     Route::get('/account-manager-projects-filter', [AccountManagerProjectController::class, 'accountManagerFilterProject'])->name('account-manager.project.filter');
+    Route::get('/account-manager-followups-filter', [FollowupController::class, 'accountManagerFollowupProject'])->name('account-manager.followups.filter');
     Route::get('/projects-document_download/{id}', [AccountManagerProjectController::class, 'accountManagerdocumentDownload'])->name('account-manager.projects.document.download');
 });
 
@@ -233,7 +243,7 @@ Route::group(['middleware' => ['SalesExcecutive'], 'prefix' => 'sales-excecutive
     });
 
     //project list
-    
+
     Route::get('/sales-executive-projects-filter', [SalesExcecutiveProjectController::class, 'salesExecutiveProjectFilter'])->name('sales-excecutive.project.filter');
     Route::get('/project-ajax-list', [SalesExcecutiveProjectController::class, 'projectAjaxList'])->name('sales-excecutive.projects.ajax-list');
 

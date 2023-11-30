@@ -29,7 +29,7 @@ class ProjectController extends Controller
 
     public function filterProject(Request $request)
     {
-        
+    // return $request->all();
         if ($request->ajax()) {
             $sort_by = $request->get('sortby');
             $sort_type = $request->get('sorttype');
@@ -50,20 +50,13 @@ class ProjectController extends Controller
                             $q->Where('type', 'like', '%' . $query . '%');
                     })
                     ->orWhereRaw('project_value - project_upfront like ?', ["%{$query}%"]);
-                    
+
             })->paginate(15);
-            
-            // ->orWhereHas('projectTypes', function ($q) use ($query) {
-            //     $q->orWhere('type', 'like', '%' . $query . '%');
-            // })
-            // ->orWhereRaw('project_value - project_upfront like ?', ["%{$query}%"])
-            // ->orderBy($sort_by, $sort_type)
-            // ->paginate(15);            
 
             return response()->json(['data' => view('sales_manager.project.table', compact('projects'))->render()]);
         }
     }
-    
+
 
     /**
      * Show the form for creating a new resource.
