@@ -127,7 +127,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
                                         <p class="mb-10 line-height-1">Revenue</p>
-                                        <h3 class="fs-25"> {{ $goal['net_goals'] ? '$' . $goal['net_goals'] : 'N/A' }} 
+                                        <h3 class="fs-25"> {{ $goal['net_goals'] ? '$' . $goal['net_goals'] : 'N/A' }}
                                             ${{ $goal['net_goals_achieve'] ?? 0 }} </h3>
                                     </div>
                                     <?php
@@ -774,9 +774,9 @@
                                         <div class="col-md-8 pr-0">
                                             <div class="search-field prod-search">
                                                 <input type="text" name="search" id="search" placeholder="search..." required
-                                                    class="form-control">
-                                                <a href="javascript:void(0)" class="prod-search-icon"><i
-                                                        class="ph ph-magnifying-glass"></i></a>
+                                                    class="form-control rounded_search">
+                                                <a href="javascript:void(0)" class="prod-search-icon submit_search"><i
+                                                        class="fa fa-search"></i></a>
                                             </div>
                                         </div>
                                     </div>
@@ -952,7 +952,7 @@
                 data: barChartData,
                 options: chartOptions
             });
-           
+
 
         };
     </script>
