@@ -20,12 +20,12 @@
         @else
             @foreach ($business_development_excecutives as $key => $business_development_excecutive)
                 <tr>
-                    <td> {{ $business_development_excecutive->underBDM->name }} </td>
-                    <td>{{ $business_development_excecutive->name }}</td>
-                    <td>{{ $business_development_excecutive->email }}</td>
-                    <td>{{ $business_development_excecutive->phone }}</td>
-                    <td>{{ $business_development_excecutive->employee_id }}</td>
-                    <td>{{ $business_development_excecutive->date_of_joining }}</td>
+                    <td class="edit-route" data-route="{{ route('business-development-excecutive.edit', $business_development_excecutive['id']) }}"> {{ $business_development_excecutive->underBDM->name }} </td>
+                    <td class="edit-route" data-route="{{ route('business-development-excecutive.edit', $business_development_excecutive['id']) }}">{{ $business_development_excecutive->name }}</td>
+                    <td class="edit-route" data-route="{{ route('business-development-excecutive.edit', $business_development_excecutive['id']) }}">{{ $business_development_excecutive->email }}</td>
+                    <td class="edit-route" data-route="{{ route('business-development-excecutive.edit', $business_development_excecutive['id']) }}">{{ $business_development_excecutive->phone }}</td>
+                    <td class="edit-route" data-route="{{ route('business-development-excecutive.edit', $business_development_excecutive['id']) }}">{{ $business_development_excecutive->employee_id }}</td>
+                    <td class="edit-route" data-route="{{ route('business-development-excecutive.edit', $business_development_excecutive['id']) }}">{{ $business_development_excecutive->date_of_joining }}</td>
                     {{-- <td><a href="{{ route('admin.prospects.index',['user_id'=>$business_development_excecutive->id]) }}">{{ $business_development_excecutive->prospects->count() }}</a></td> --}}
                     <td>
                         <div class="button-switch">

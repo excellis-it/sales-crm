@@ -152,7 +152,7 @@
                                             class="far fa-times-circle"></i>
                                         Cancel</button>
                                     <button class="print_btn" type="submit"><i class="far fa-check-circle"></i>
-                                        Update</button>
+                                        Create</button>
                                 </div>
                             </form>
                         </div>

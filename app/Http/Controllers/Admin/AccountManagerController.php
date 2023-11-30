@@ -78,7 +78,7 @@ class AccountManagerController extends Controller
         ];
 
         Mail::to($request->email)->send(new RegistrationMail($maildata));
-        return redirect()->route('account_managers.index')->with('message', 'Account manager created successfully.');
+        return response()->json(['success' => 'Account manager created successfully.']);
     }
 
     /**
@@ -100,7 +100,7 @@ class AccountManagerController extends Controller
     public function edit($id)
     {
         $account_manager = User::findOrFail($id);
-        return view('admin.account_manager.edit')->with(compact('account_manager'));
+        return response()->json(['account_manager' => $account_manager]);
     }
 
     /**
@@ -143,7 +143,7 @@ class AccountManagerController extends Controller
             $data->profile_picture = $this->imageUpload($request->file('profile_picture'), 'account_manager');
         }
         $data->save();
-        return redirect()->route('account_managers.index')->with('message', 'Account manager updated successfully.');
+        return response()->json(['success' => 'Account manager updated successfully.']);
     }
 
     /**

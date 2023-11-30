@@ -23,12 +23,13 @@ class SalesExcecutiveController extends Controller
      */
     public function index(Request $request)
     {
+        $sales_managers = User::Role('SALES_MANAGER')->orderBy('name', 'DESC')->where('status', 1)->get();
         if ($request->id) {
             $sales_excecutives = User::where('id', $request->id)->Role('SALES_EXCUETIVE')->orderBy('name', 'desc')->paginate(15);
-            return view('admin.sales_excecutive.list')->with(compact('sales_excecutives'));
+            return view('admin.sales_excecutive.list')->with(compact('sales_excecutives','sales_managers'));
         }
         $sales_excecutives = User::Role('SALES_EXCUETIVE')->orderBy('name', 'desc')->paginate(15);
-        return view('admin.sales_excecutive.list')->with(compact('sales_excecutives'));
+        return view('admin.sales_excecutive.list')->with(compact('sales_excecutives','sales_managers'));
     }
 
     /**
@@ -86,7 +87,7 @@ class SalesExcecutiveController extends Controller
         ];
 
         Mail::to($request->email)->send(new RegistrationMail($maildata));
-        return redirect()->route('sales-excecutive.index')->with('message', 'Sales excecutive created successfully.');
+        return response()->json(['success' => 'Sales excecutive created successfully.']);
     }
 
     /**
@@ -107,9 +108,8 @@ class SalesExcecutiveController extends Controller
      */
     public function edit($id)
     {
-        $sales_managers = User::Role('SALES_MANAGER')->orderBy('name', 'DESC')->where('status', 1)->get();
         $sales_excecutive = User::findOrFail($id);
-        return view('admin.sales_excecutive.edit')->with(compact('sales_excecutive','sales_managers'));
+        return response()->json(['sales_excecutive' => $sales_excecutive]);
     }
 
     /**
@@ -154,7 +154,7 @@ class SalesExcecutiveController extends Controller
             $data->profile_picture = $this->imageUpload($request->file('profile_picture'), 'sales_excecutive');
         }
         $data->save();
-        return redirect()->route('sales-excecutive.index')->with('message', 'Sales manager updated successfully.');
+        return response()->json(['success' => 'Sales excecutive updated successfully.']);
     }
 
     /**

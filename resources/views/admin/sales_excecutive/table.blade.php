@@ -23,11 +23,11 @@
                     <td> <a
                             href="{{ route('sales_managers.index', ['id' => $sales_excecutive->report_to->id]) }}">{{ $sales_excecutive->report_to->name }}</a>
                     </td>
-                    <td>{{ $sales_excecutive->name }}</td>
-                    <td>{{ $sales_excecutive->email }}</td>
-                    <td>{{ $sales_excecutive->phone }}</td>
-                    <td>{{ $sales_excecutive->employee_id }}</td>
-                    <td>{{ $sales_excecutive->date_of_joining }}</td>
+                    <td class="edit-route" data-route="{{ route('sales-excecutive.edit', $sales_excecutive['id']) }}">{{ $sales_excecutive->name }}</td>
+                    <td class="edit-route" data-route="{{ route('sales-excecutive.edit', $sales_excecutive['id']) }}">{{ $sales_excecutive->email }}</td>
+                    <td class="edit-route" data-route="{{ route('sales-excecutive.edit', $sales_excecutive['id']) }}">{{ $sales_excecutive->phone }}</td>
+                    <td class="edit-route" data-route="{{ route('sales-excecutive.edit', $sales_excecutive['id']) }}">{{ $sales_excecutive->employee_id }}</td>
+                    <td class="edit-route" data-route="{{ route('sales-excecutive.edit', $sales_excecutive['id']) }}">{{ $sales_excecutive->date_of_joining }}</td>
                     <td><a
                             href="{{ route('admin.prospects.index', ['user_id' => $sales_excecutive->id]) }}">{{ $sales_excecutive->prospects->count() }}</a>
                     </td>

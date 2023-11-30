@@ -79,7 +79,7 @@ class BusinessDevelopmentManagerController extends Controller
         ];
 
         Mail::to($request->email)->send(new RegistrationMail($maildata));
-        return redirect()->route('business-development-managers.index')->with('message', 'Business Development Manager created successfully.');
+        return response()->json(['success' => 'Business Development Manager created successfully.']);
     }
 
     /**
@@ -101,7 +101,7 @@ class BusinessDevelopmentManagerController extends Controller
     public function edit($id)
     {
         $business_development_manager = User::findOrFail($id);
-        return view('admin.business_development_manager.edit')->with(compact('business_development_manager'));
+        return response()->json(['business_development_manager' => $business_development_manager]);
     }
 
     /**
@@ -144,7 +144,7 @@ class BusinessDevelopmentManagerController extends Controller
             $data->profile_picture = $this->imageUpload($request->file('profile_picture'), 'business_development_manager');
         }
         $data->save();
-        return redirect()->route('business-development-managers.index')->with('message', 'Business Development Manager updated successfully.');
+        return response()->json(['success' => 'Business Development Manager updated successfully.']);
     }
 
     /**

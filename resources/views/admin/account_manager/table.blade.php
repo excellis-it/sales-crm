@@ -19,11 +19,11 @@
         @else
             @foreach ($account_managers as $key => $account_manager)
                 <tr>
-                    <td>{{ $account_manager->name }}</td>
-                    <td>{{ $account_manager->email }}</td>
-                    <td>{{ $account_manager->phone }}</td>
-                    <td>{{ $account_manager->employee_id }}</td>
-                    <td>{{ $account_manager->date_of_joining }}</td>
+                    <td class="edit-route" data-route="{{ route('account_managers.edit', $account_manager['id']) }}">{{ $account_manager->name }}</td>
+                    <td class="edit-route" data-route="{{ route('account_managers.edit', $account_manager['id']) }}">{{ $account_manager->email }}</td>
+                    <td class="edit-route" data-route="{{ route('account_managers.edit', $account_manager['id']) }}">{{ $account_manager->phone }}</td>
+                    <td class="edit-route" data-route="{{ route('account_managers.edit', $account_manager['id']) }}">{{ $account_manager->employee_id }}</td>
+                    <td class="edit-route" data-route="{{ route('account_managers.edit', $account_manager['id']) }}">{{ $account_manager->date_of_joining }}</td>
                     <td><a
                             href="{{ route('sales-projects.index', ['account_manager_id' => $account_manager->id]) }}">{{ $account_manager->accountManagerProjects->count() }}</a>
                     </td>
@@ -36,7 +36,13 @@
                         <!--    <label for="switch-orange" class="lbl-on"></label>-->
                         <!--</div>-->
                         <span class="edit_active">
+                            @if ($account_manager->status == 0)
+                            <i class="fas fa-edit"></i> Inactive
+                            @else
                             <i class="fas fa-edit"></i> Active
+
+                            @endif
+
                         </span>
                     </td>
                     <td>

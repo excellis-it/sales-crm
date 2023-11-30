@@ -40,7 +40,8 @@
                                 <h4 class="mb-0">BDM Details</h4>
                             </div>
                             <div class="col-md-6 text-end">
-                                <a href="{{ route('business-development-managers.create') }}" class="btn px-5 submit-btn"><i
+                                <a href="javascript:void(0);" class="btn px-5 submit-btn" data-bs-toggle="offcanvas"
+                                data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"><i
                                         class="fa fa-plus"></i> Add a
                                     BDM</a>
                             </div>
@@ -54,16 +55,201 @@
                                 <div class="col-md-8 pr-0">
                                     <div class="search-field">
                                         <input type="text" name="search" id="search" placeholder="search..." required
-                                            class="form-control">
+                                            class="form-control rounded_search">
+                                        <button class="submit_search" id="search-button"> <span class=""><i
+                                                    class="fa fa-search"></i></span></button>
                                     </div>
-                                </div>
-                                <div class="col-md-3 pl-0 ml-2">
-                                    <button class="btn px-5 submit-btn" id="search-button"> <span class=""><i
-                                                class="fa fa-search"></i></span> Search</button>
                                 </div>
                             </div>
                         </div>
-                    </div>  
+                        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
+                        aria-labelledby="offcanvasRightLabel">
+                        <div class="offcanvas-header">
+                            <button type="button" class="text-reset cls_btn_left" data-bs-dismiss="offcanvas"
+                                aria-label="Close">
+                                <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                            </button>
+                            <h4 id="offcanvasEditLabel">Add BDM Details</h4>
+                        </div>
+                        <div class="offcanvas-body">
+                            <form action="{{ route('business-development-managers.store') }}" method="post" enctype="multipart/form-data"
+                                id="business-development-managers-form-create">
+                                @csrf
+                                <div class="row">
+                                    <div class="col-md-12 mb-3">
+                                        <label for="inputEnterYourName" class="col-form-label"> Name <span
+                                                style="color: red;">*</span></label>
+                                        <input type="text" name="name"  class="form-control"
+                                            value="{{ old('name') }}" placeholder="Enter Business Development Manager Name">
+                                        <span class="text-danger name_error"></span>
+
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <label for="inputEnterYourName" class="col-form-label"> Employee Id </label>
+                                        <input type="text" name="employee_id"  class="form-control"
+                                            value="{{ old('employee_id') }}" placeholder="Enter Employee Id">
+                                        <span class="text-danger employee_id_error"></span>
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <label for="inputEnterYourName" class="col-form-label"> Date Of Joining </label>
+                                        <input type="date" name="date_of_joining"
+                                            max="{{ date('Y-m-d') }}" class="form-control"
+                                            value="{{ old('date_of_joining') }}">
+                                        <span class="text-danger date_of_joining_error"></span>
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <label for="inputEnterYourName" class="col-form-label"> Email <span
+                                                style="color: red;">*</span></label>
+                                        <input type="text" name="email"  class="form-control"
+                                            value="{{ old('email') }}" placeholder="Enter Business Development Manager Email">
+                                        <span class="text-danger email_error"></span>
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <label for="inputEnterYourName" class="col-form-label"> Phone <span
+                                                style="color: red;">*</span></label>
+                                        <input type="text" name="phone"  class="form-control"
+                                            value="{{ old('phone') }}" placeholder="Enter Phone Number">
+                                        <span class="text-danger phone_error"></span>
+                                    </div>
+
+
+                                    <div class="col-md-12 mb-3">
+                                        <label for="inputEnterYourName" class="col-form-label"> Password
+                                            <span style="color: red;">*</span></label>
+                                        <input type="password" name="password"  class="form-control"
+                                            value="{{ old('password') }}" placeholder="Enter pasword">
+                                        <span class="text-danger password_error"></span>
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <label for="inputEnterYourName" class="col-form-label"> Confirm
+                                            Password <span style="color: red;">*</span></label>
+                                        <input type="password" name="confirm_password"
+                                            class="form-control" value="{{ old('confirm_password') }}">
+                                        <span class="text-danger confirm_password_error"></span>
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <label for="inputEnterYourName" class="col-form-label"> Status
+                                            <span style="color: red;">*</span></label>
+                                        <select name="status"  class="form-control">
+                                            <option value="">Select a Status</option>
+                                            <option value="1">Active</option>
+                                            <option value="0">Inactive</option>
+                                        </select>
+                                        <span class="text-danger status_error"></span>
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <label for="inputEnterYourName" class="col-form-label"> Profile
+                                            Picture </label>
+                                        <input type="file" name="profile_picture"  class="form-control"
+                                            value="{{ old('profile_picture') }}">
+                                        <span class="text-danger profile_picture_error"></span>
+                                    </div>
+                                </div>
+                                <div class="d-flex alin-items-center w-100 text-end">
+                                    <button class="print_btn cancel_btn me-3" type="reset"><i
+                                            class="far fa-times-circle"></i>
+                                        Cancel</button>
+                                    <button class="print_btn" type="submit"><i class="far fa-check-circle"></i>
+                                        Create</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEdit"
+                        aria-labelledby="offcanvasRightLabel">
+                        <div class="offcanvas-header">
+                            <button type="button" class="text-reset cls_btn_left" data-bs-dismiss="offcanvas"
+                                aria-label="Close">
+                                <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                            </button>
+                            <h4 id="offcanvasEditLabel">Edit BDM Details</h4>
+                        </div>
+                        <div class="offcanvas-body">
+                            <form action="" method="POST" enctype="multipart/form-data" id="business-development-managers-edit-form">
+                                @method('PUT')
+                                @csrf
+                                <div class="row">
+                                    <div class="col-md-12 mb-3">
+                                        <label for="inputEnterYourName" class="col-form-label"> Name <span
+                                                style="color: red;">*</span></label>
+                                        <input type="text" name="name"  class="form-control" id="name"
+                                            value="{{ old('name') }}" placeholder="Enter Business Development Manager Name">
+                                        <span class="text-danger name_msg_error"></span>
+
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <label for="inputEnterYourName" class="col-form-label"> Employee Id </label>
+                                        <input type="text" name="employee_id"  class="form-control" id="employee_id"
+                                            value="{{ old('employee_id') }}" placeholder="Enter Employee Id">
+                                        <span class="text-danger employee_id_msg_error"></span>
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <label for="inputEnterYourName" class="col-form-label"> Date Of Joining </label>
+                                        <input type="date" name="date_of_joining"
+                                            max="{{ date('Y-m-d') }}" class="form-control" id="date_of_joining"
+                                            value="{{ old('date_of_joining') }}">
+                                        <span class="text-danger date_of_joining_msg_error"></span>
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <label for="inputEnterYourName" class="col-form-label"> Email <span
+                                                style="color: red;">*</span></label>
+                                        <input type="text" name="email"  class="form-control" id="email"
+                                            value="{{ old('email') }}" placeholder="Enter Business Development Manager Email">
+                                        <span class="text-danger email_msg_error"></span>
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <label for="inputEnterYourName" class="col-form-label"> Phone <span
+                                                style="color: red;">*</span></label>
+                                        <input type="text" name="phone"  class="form-control" id="phone"
+                                            value="{{ old('phone') }}" placeholder="Enter Phone Number">
+                                        <span class="text-danger phone_msg_error"></span>
+                                    </div>
+
+
+                                    <div class="col-md-12 mb-3">
+                                        <label for="inputEnterYourName" class="col-form-label"> Password
+                                            <span style="color: red;">*</span></label>
+                                        <input type="password" name="password"  class="form-control" id="password"
+                                            value="{{ old('password') }}" placeholder="Enter pasword">
+                                        <span class="text-danger password_msg_error"></span>
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <label for="inputEnterYourName" class="col-form-label"> Confirm
+                                            Password <span style="color: red;">*</span></label>
+                                        <input type="password" name="confirm_password" id="confirm_password"
+                                            class="form-control" value="{{ old('confirm_password') }}">
+                                        <span class="text-danger confirm_password_msg_error"></span>
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <label for="inputEnterYourName" class="col-form-label"> Status
+                                            <span style="color: red;">*</span></label>
+                                        <select name="status"  class="form-control" id="status">
+                                            <option value="">Select a Status</option>
+                                            <option value="1">Active</option>
+                                            <option value="0">Inactive</option>
+                                        </select>
+                                        <span class="text-danger status_msg_error"></span>
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <label for="inputEnterYourName" class="col-form-label"> Profile
+                                            Picture </label>
+                                        <input type="file" name="profile_picture"  class="form-control"
+                                            value="{{ old('profile_picture') }}">
+                                        <span class="text-danger profile_picture_msg_error"></span>
+                                    </div>
+                                </div>
+                                <div class="d-flex alin-items-center w-100 text-end">
+                                    <button class="print_btn cancel_btn me-3" type="reset"><i
+                                            class="far fa-times-circle"></i>
+                                        Cancel</button>
+                                    <button class="print_btn" type="submit"><i class="far fa-check-circle"></i>
+                                        Update</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    </div>
                     <div class="table-responsive" id="business_development_managers_data">
                         @include('admin.business_development_manager.table')
 
@@ -151,4 +337,107 @@
             $('#myTable_filter input').attr("placeholder", "Search");
         });
     </script>
+    <script>
+        $(document).ready(function() {
+            $('#business-development-managers-form-create').submit(function(e) {
+                e.preventDefault();
+
+                var formData = $(this).serialize();
+                $('#loading').addClass('loading');
+                $('#loading-content').addClass('loading-content');
+                $.ajax({
+                    url: $(this).attr('action'),
+                    type: $(this).attr('method'),
+                    data: formData,
+                    success: function(response) {
+                        //windows load with toastr message
+                        $('#loading').removeClass('loading');
+                        $('#loading-content').removeClass('loading-content');
+                        window.location.reload();
+                        toastr.success('Follow-Up details added successfully');
+                    },
+                    error: function(xhr) {
+                        // Handle errors (e.g., display validation errors)
+                        //clear any old errors
+                        $('.text-danger').html('');
+                        // Handle errors (e.g., display validation errors)
+                        var errors = xhr.responseJSON.errors;
+                        $.each(errors, function(key, value) {
+                            // Assuming you have a span with class "text-danger" next to each input
+                            $('.' + key + '_error').html(value[0]);
+                        });
+                        $('#loading').removeClass('loading');
+                        $('#loading-content').removeClass('loading-content');
+                    }
+                });
+            });
+        });
+    </script>
+      @if (count($business_development_managers) > 0)
+    <script>
+        $(document).ready(function() {
+            $(document).on('click', '.edit-route', function() {
+                var route = $(this).data('route');
+                $('#loading').addClass('loading');
+                $('#loading-content').addClass('loading-content');
+                $.ajax({
+                    url: route,
+                    type: 'GET',
+                    success: function(response) {
+                        var business_development_manager = response.business_development_manager;
+
+                        $('#name').val(business_development_manager.name);
+                        $('#employee_id').val(business_development_manager.employee_id);
+                        $('#date_of_joining').val(business_development_manager.date_of_joining);
+                        $('#email').val(business_development_manager.email);
+                        $('#phone').val(business_development_manager.phone);
+                        $('#status').val(business_development_manager.status);
+                        var updateRoute =
+                            "{{ route('business-development-managers.update', ['business_development_manager' => ':id']) }}";
+                        updateRoute = updateRoute.replace(':id', business_development_manager.id);
+                        $('#business-development-managers-edit-form').attr('action', updateRoute);
+                        $('#loading').removeClass('loading');
+                        $('#loading-content').removeClass('loading-content');
+                        $('#offcanvasEdit').offcanvas('show');
+                    },
+                    error: function(xhr) {
+                        // Handle errors
+                        $('#loading').removeClass('loading');
+                        $('#loading-content').removeClass('loading-content');
+                        console.log(xhr);
+                    }
+                });
+            });
+
+            // Handle the form submission
+            $('#business-development-managers-edit-form').submit(function(e) {
+                e.preventDefault();
+
+                var formData = $(this).serialize();
+
+                $.ajax({
+                    url: $(this).attr('action'),
+                    type: $(this).attr('method'),
+                    data: formData,
+                    success: function(response) {
+                        window.location.reload();
+                        toastr.success('Business Development Manager details updated successfully');
+                    },
+                    error: function(xhr) {
+                        // Handle errors (e.g., display validation errors)
+                        var errors = xhr.responseJSON.errors;
+                        $.each(errors, function(key, value) {
+                            // Assuming you have a span with class "text-danger" next to each input
+                            $('.' + key + '_msg_error').html(value[0]);
+                        });
+                        $('#loading').removeClass('loading');
+                        $('#loading-content').removeClass('loading-content');
+                    }
+                });
+            });
+        });
+
+
+    </script>
+      @endif
 @endpush

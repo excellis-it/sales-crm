@@ -19,11 +19,11 @@
         @else
             @foreach ($business_development_managers as $key => $business_development_manager)
                 <tr>
-                    <td>{{ $business_development_manager->name }}</td>
-                    <td>{{ $business_development_manager->email }}</td>
-                    <td>{{ $business_development_manager->phone }}</td>
-                    <td>{{ $business_development_manager->employee_id }}</td>
-                    <td>{{ $business_development_manager->date_of_joining }}</td>
+                    <td class="edit-route" data-route="{{ route('business-development-managers.edit', $business_development_manager['id']) }}">{{ $business_development_manager->name }}</td>
+                    <td class="edit-route" data-route="{{ route('business-development-managers.edit', $business_development_manager['id']) }}">{{ $business_development_manager->email }}</td>
+                    <td class="edit-route" data-route="{{ route('business-development-managers.edit', $business_development_manager['id']) }}">{{ $business_development_manager->phone }}</td>
+                    <td class="edit-route" data-route="{{ route('business-development-managers.edit', $business_development_manager['id']) }}">{{ $business_development_manager->employee_id }}</td>
+                    <td class="edit-route" data-route="{{ route('business-development-managers.edit', $business_development_manager['id']) }}">{{ $business_development_manager->date_of_joining }}</td>
                     <td><a
                             href="{{ route('sales-projects.index', ['sales_manager_id' => $business_development_manager->id]) }}">{{ $business_development_manager->projects->count() }}</a>
                     </td>

@@ -101,9 +101,9 @@
                                 <div class="col-md-8 pr-0">
                                     <div class="search-field prod-search">
                                         <input type="text" name="search" id="search" placeholder="search..." required
-                                            class="form-control">
-                                        <a href="javascript:void(0)" class="prod-search-icon"><i
-                                                class="ph ph-magnifying-glass"></i></a>
+                                            class="form-control rounded_search">
+                                        <a href="javascript:void(0)" class="prod-search-icon submit_search"><i
+                                                class="fa fa-search"></i></a>
                                     </div>
                                 </div>
                                 {{-- <div class="col-md-3 pl-0 ml-2">
