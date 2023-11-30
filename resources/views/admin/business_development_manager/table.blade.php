@@ -1,14 +1,14 @@
-<table class="dd table table-striped table-bordered" style="width:100%">
+<table class="dd table table-striped table-bordered table-hover" style="width:100%">
     <thead>
         <tr>
             <th> Name</th>
             <th> Email</th>
             <th> Phone</th>
-            <th>Employee Id</th>
-            <th>Date Of Joining</th>
-            <th>No. of sales</th>
-            <th>Status</th>
-            <th>Action</th>
+            <th> Employee Id</th>
+            <th> Date Of Joining</th>
+            <th> No. of sales</th>
+            <th> Status</th>
+            <th> Action</th>
         </tr>
     </thead>
     <tbody>

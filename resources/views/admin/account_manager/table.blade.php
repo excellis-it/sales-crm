@@ -1,4 +1,4 @@
-<table id="myTable" class="dd table table-striped" style="width:100%">
+<table id="myTable" class="dd table table-striped table-hover" style="width:100%">
     <thead>
         <tr>
             <th> Name</th>

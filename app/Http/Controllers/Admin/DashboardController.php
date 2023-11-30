@@ -19,7 +19,8 @@ class DashboardController extends Controller
         $count['account_managers'] = User::Role('ACCOUNT_MANAGER')->count();
         $count['sales_excecutive'] = User::Role('SALES_EXCUETIVE')->count();
         $count['projects'] = Project::orderBy('created_at', 'desc')->count();
-        $prospects = Prospect::orderBy('sale_date', 'desc')->get();
+        // $prospects = Prospect::orderBy('sale_date', 'desc')->get();
+        $prospects = Prospect::orderBy('sale_date', 'desc')->paginate('10');
         $count['prospects'] = Prospect::count();
         $count['win'] = Prospect::where('status', 'Win')->count();
         $count['follow_up'] = Prospect::where('status', 'Follow Up')->count();
@@ -73,5 +74,29 @@ class DashboardController extends Controller
         $goal['prospect_december'] = Prospect::whereMonth('sale_date', 12)->whereYear('sale_date', date('Y'))->count();
         // dd($count);
         return view('admin.dashboard')->with(compact('count', 'goal', 'prospects'));
+    }
+
+    public function dashboardProspectFetch(Request $request)
+    {
+        
+        if ($request->ajax()) {
+            $sort_by = $request->get('sortby');
+            $sort_type = $request->get('sorttype');
+            $query = $request->get('query');
+            $query = str_replace(" ", "%", $query);
+            $prospects = Prospect::where('id', 'like', '%' . $query . '%')
+                ->orWhere('sale_date', 'like', '%' . $query . '%')
+                ->orWhere('client_name', 'like', '%' . $query . '%')
+                ->orWhere('client_email', 'like', '%' . $query . '%')
+                ->orWhere('business_name', 'like', '%' . $query . '%')
+                ->orWhere('client_phone', 'like', '%' . $query . '%')
+                ->orWhere('followup_date', 'like', '%' . $query . '%')
+                ->orWhere('status', 'like', '%' . $query . '%')
+                ->orWhere('offered_for', 'like', '%' . $query . '%')
+                ->orWhere('price_quote', 'like', '%' . $query . '%')
+                ->paginate(10);
+                
+            return response()->json(['data' => view('admin.dashboard_prospect_table', compact('prospects'))->render()]);
+        }
     }
 }

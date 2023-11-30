@@ -66,7 +66,7 @@
                         </div>
                     </div>
                     <div class="table-responsive" id="project-data">
-                        <table class="dd table table-striped table-bordered" style="width:100%">
+                        <table class="dd table table-striped table-bordered table-hover" style="width:100%">
                             <thead>
                                 <tr>
                                     <th class="sorting" data-tippy-content="Sort by Sale Date" data-sorting_type="desc"
