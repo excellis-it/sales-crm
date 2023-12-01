@@ -94,12 +94,11 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
                                         <p class="mb-10 line-height-1">Gross Sales</p>
-                                        <h3 class="fs-25"> 100 /
-                                           100</h3>
+                                        <h3 class="fs-25"> No Gross Sales Set</h3>
                                     </div>
                                     <span class="badge badge-cyan fs-12">
                                         <i class="icofont-swoosh-up"></i>
-                                        <span class="fw-600 m-l-5">20%</span>
+                                        <span class="fw-600 m-l-5">0%</span>
                                     </span>
                                 </div>
 
@@ -108,12 +107,12 @@
                                         <div class="d-flex align-items-center">
                                             <span class="monthly_goal">Monthly Goal</span>
                                         </div>
-                                        <span class="fw-600 monthly_goal">20%</span>
+                                        <span class="fw-600 monthly_goal">0%</span>
                                     </div>
 
                                     <div class="progress progress-sm mt-1">
                                         <div class="progress-bar bg-primary"
-                                            style="width: 20%">
+                                            style="width: 0%">
                                         </div>
                                     </div>
                                 </div>
@@ -164,12 +163,11 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
                                         <p class="mb-10 line-height-1">Revenue</p>
-                                        <h3 class="fs-25"> 100 /
-                                           20 </h3>
+                                        <h3 class="fs-25"> No Goals Set </h3>
                                     </div>
                                     <span class="badge badge-cyan font-size-12">
                                         <i class="icofont-swoosh-up"></i>
-                                        <span class="fw-600 m-l-5">20%</span>
+                                        <span class="fw-600 m-l-5">0%</span>
                                     </span>
                                 </div>
 
@@ -178,12 +176,12 @@
                                         <div class="d-flex align-items-center">
                                             <span class="monthly_goal">Monthly Goal</span>
                                         </div>
-                                        <span class="fw-600 monthly_goal">20%</span>
+                                        <span class="fw-600 monthly_goal">0%</span>
                                     </div>
 
                                     <div class="progress progress-sm mt-1">
                                         <div class="progress-bar bg-danger"
-                                            style="width:20%">
+                                            style="width:0%">
                                         </div>
                                     </div>
                                 </div>

@@ -283,7 +283,7 @@
 
             <div class="row">
                 <div class="col-md-12">
-                    <table id="myTable" class="dd table table-striped table-bordered" style="width:100%">
+                    <table id="myTable" class="dd table table-striped table-bordered table-hover" style="width:100%">
                         <thead>
                             <tr>
                                 <th>Date</th>
@@ -339,7 +339,7 @@
                                     <td>
                                         {{ $prospect->price_quote }}
                                     </td>
-                                    
+
 
                                 </tr>
                             @endforeach

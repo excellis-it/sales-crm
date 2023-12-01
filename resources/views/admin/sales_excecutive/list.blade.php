@@ -291,12 +291,8 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
-            $('#search-button').on('click', function() {
+            $('#search').on('keyup', function() {
                 var text = $('#search').val();
-                if (text == '') {
-                    alert('Please type something for search!');
-                    return false;
-                }
                 url = "{{ route('sales-excecutive.search') }}"
                 $('#loading').addClass('loading');
                 $('#loading-content').addClass('loading-content');
@@ -308,7 +304,7 @@
                     },
                     success: function(response) {
                         $('#sales_excecutive_data').html(response.view);
-                        $('#search').val('');
+                       
                         $('#loading').removeClass('loading');
                         $('#loading-content').removeClass('loading-content');
                     }

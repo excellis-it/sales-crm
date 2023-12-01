@@ -23,19 +23,21 @@ class ProjectController extends Controller
      */
     public function index(Request $request)
     {
+        $sales_managers = User::Role(['SALES_MANAGER','ACCOUNT_MANAGER','BUSINESS_DEVELOPMENT_MANAGER'])->orderBy('name', 'DESC')->where('status', 1)->get();
+        $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->orderBy('id', 'desc')->get();
         if ($request->sales_manager_id) {
             $projects = Project::orderBy('sale_date', 'desc')->where('user_id', $request->sales_manager_id)->paginate(15);
-            return view('admin.project.list')->with(compact('projects'));
+            return view('admin.project.list')->with(compact('projects','sales_managers','users'));
         }
 
         if ($request->account_manager_id) {
             $projects = Project::orderBy('sale_date', 'desc')->where('assigned_to', $request->account_manager_id)->paginate(15);
-            return view('admin.project.list')->with(compact('projects'));
+            return view('admin.project.list')->with(compact('projects','sales_managers','users'));
         }
 
 
         $projects = Project::orderBy('sale_date', 'desc')->paginate(15);
-        return view('admin.project.list')->with(compact('projects'));
+        return view('admin.project.list')->with(compact('projects','sales_managers','users'));
     }
 
     // public function ajaxList(Request $request)
@@ -218,7 +220,8 @@ class ProjectController extends Controller
             $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->orderBy('id', 'desc')->get();
             $sales_managers = User::Role(['SALES_MANAGER','ACCOUNT_MANAGER','BUSINESS_DEVELOPMENT_MANAGER'])->get();
             $project = Project::find($id);
-            return view('admin.project.edit')->with(compact('project', 'sales_managers', 'users'));
+            $type = true;
+            return response()->json(['view' => view('admin.project.edit', compact('project', 'sales_managers', 'users', 'type'))->render()]);
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }

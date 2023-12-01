@@ -91,16 +91,16 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody> 
+                            <tbody>
                                 @include('sales_manager.project.table')
                             </tbody>
                         </table>
                         <input type="hidden" name="hidden_page" id="hidden_page" value="1" />
                         <input type="hidden" name="hidden_column_name" id="hidden_column_name" value="id" />
                         <input type="hidden" name="hidden_sort_type" id="hidden_sort_type" value="desc" />
-                    </div> 
+                    </div>
 
-                    
+
                 </div>
             </div>
 
@@ -127,7 +127,7 @@
         }
 
         function fetch_data(page, sort_type, sort_by, query) {
-            
+
             $.ajax({
                 url: "{{ route('sales-manager.project.filter') }}",
                 data: {
@@ -147,7 +147,7 @@
             var column_name = $('#hidden_column_name').val();
             var sort_type = $('#hidden_sort_type').val();
             var page = $('#hidden_page').val();
-            
+
             fetch_data(page, sort_type, column_name, query);
         });
 
@@ -192,7 +192,7 @@
 
     });
     </script>
-  
+
     <script>
         $(document).on('click', '#delete', function(e) {
             swal({

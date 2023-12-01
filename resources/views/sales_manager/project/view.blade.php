@@ -160,7 +160,7 @@
                                             <h3 class="card-title">Monthly Milestone
 
                                             </h3>
-                                            <table id="myTable" class="dd table table-striped table-bordered"
+                                            <table id="myTable" class="dd table table-striped table-bordered table-hover"
                                                 style="width:100%">
                                                 <thead>
                                                     <tr>
@@ -206,7 +206,7 @@
                                             <h3 class="card-title">Milestone Details
 
                                             </h3>
-                                            <table id="myTable" class="dd table table-striped table-bordered"
+                                            <table id="myTable" class="dd table table-striped table-bordered table-hover"
                                                 style="width:100%">
                                                 <thead>
                                                     <tr>

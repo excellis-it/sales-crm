@@ -94,7 +94,7 @@
                     </div>
                 </div>
 
-              
+
                 <div class="row justify-content-end">
                     <div class="col-md-6">
                         <div class="row g-1 justify-content-end">
@@ -114,7 +114,7 @@
                     </div>
                 </div>
 
-                
+
                 <div class="table-responsive" id="show-prospect">
                     <table id="myTable" class="dd table table-striped table-bordered table-hover" style="width:100%">
                         <thead>
@@ -136,7 +136,7 @@
                             @include('sales_manager.prospect.table')
                         </tbody>
                     </table>
-                    
+
                 </div>
             </div>
         </div>

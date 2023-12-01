@@ -23,9 +23,9 @@ class ProjectController extends Controller
     public function index()
     {
         $projects = Project::where('assigned_to', Auth::user()->id)->orderBy('sale_date', 'desc')->paginate(15);
-        return view('account_manager.project.list', compact('projects'));
+        $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->orderBy('id', 'desc')->get();
+        return view('account_manager.project.list', compact('projects', 'users'));
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -133,7 +133,8 @@ class ProjectController extends Controller
         try {
             $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->orderBy('id', 'desc')->get();
             $project = Project::find($id);
-            return view('account_manager.project.edit')->with(compact('project', 'users'));
+            $type = true;
+            return response()->json(['view' => view('account_manager.project.edit', compact('project', 'users', 'type'))->render()]);
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }
@@ -254,19 +255,19 @@ class ProjectController extends Controller
                         $q->Where('type', 'like', '%' . $query . '%');
                     })
                     ->orWhereRaw('project_value - project_upfront like ?', ["%{$query}%"]);
-                    
+
             })->paginate(15);
-            
+
             // ->orWhereHas('projectTypes', function ($q) use ($query) {
             //     $q->orWhere('type', 'like', '%' . $query . '%');
             // })
             // ->orWhereRaw('project_value - project_upfront like ?', ["%{$query}%"])
             // ->orderBy($sort_by, $sort_type)
-            // ->paginate(15);            
+            // ->paginate(15);
 
             return response()->json(['data' => view('account_manager.project.table', compact('projects'))->render()]);
         }
-    } 
+    }
     public function destroy($id)
     {
         //
