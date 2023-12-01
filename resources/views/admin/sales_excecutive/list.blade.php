@@ -21,9 +21,9 @@
             <div class="page-header">
                 <div class="row align-items-center">
                     <div class="col">
-                        <h3 class="page-title">Sales Excecutives Information</h3>
+                        <h3 class="page-title">Sales Executive Information</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('sales-excecutive.index') }}">Sales Excecutives</a>
+                            <li class="breadcrumb-item"><a href="{{ route('sales-excecutive.index') }}">Sales Executive</a>
                             </li>
                             <li class="breadcrumb-item active">List</li>
                         </ul>
@@ -37,7 +37,7 @@
                     <div class="card-title">
                         <div class="row">
                             <div class="col-md-6">
-                                <h4 class="mb-0">Sales Excecutives Details</h4>
+                                <h4 class="mb-0">Sales Executive Details</h4>
                             </div>
                             <div class="col-md-6 text-end">
                                 <a href="javascript:void(0);" class="btn px-5 submit-btn" data-bs-toggle="offcanvas"
@@ -304,7 +304,7 @@
                     },
                     success: function(response) {
                         $('#sales_excecutive_data').html(response.view);
-                       
+
                         $('#loading').removeClass('loading');
                         $('#loading-content').removeClass('loading-content');
                     }

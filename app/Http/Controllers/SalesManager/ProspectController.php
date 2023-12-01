@@ -26,7 +26,9 @@ class ProspectController extends Controller
         $count['close'] = Prospect::where('report_to', auth()->user()->id)->where('status', 'Close')->count();
         $count['sent_proposal'] = Prospect::where('report_to', auth()->user()->id)->where('status', 'Sent Proposal')->count();
         $prospects = Prospect::where('report_to', Auth::user()->id)->orderBy('sale_date', 'desc')->paginate(15);
-        return view('sales_manager.prospect.list')->with(compact('prospects', 'count'));
+        $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->get();
+        $sales_executives = User::role('SALES_EXCUETIVE')->where(['status' => 1, 'sales_manager_id' => Auth::user()->id])->orderBy('id', 'desc')->get();
+        return view('sales_manager.prospect.list')->with(compact('prospects', 'count', 'users', 'sales_executives'));
     }
 
     /**
@@ -175,7 +177,8 @@ class ProspectController extends Controller
             $prospect = Prospect::find($id);
             $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->get();
             $sales_executives = User::role('SALES_EXCUETIVE')->where(['status' => 1, 'sales_manager_id' => Auth::user()->id])->orderBy('id', 'desc')->get();
-            return view('sales_manager.prospect.edit')->with(compact('prospect', 'sales_executives', 'users'));
+            $type = true;
+            return response()->json(['view' => (string)View::make('sales_manager.prospect.edit')->with(compact('prospect', 'sales_executives', 'users','type'))]);
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }
@@ -327,7 +330,7 @@ class ProspectController extends Controller
     //                 ->orWhereHas('transferTakenBy', function ($q) use ($query) {
     //                     $q->Where('name', 'like', '%' . $query . '%');
     //                 });
-                    
+
     //         })->paginate(15);
     //         return response()->json(['data' => view('sales_manager.prospect.table', compact('prospects'))->render()]);
     //     }
@@ -335,7 +338,7 @@ class ProspectController extends Controller
 
     public function prospectStatusFilter(Request $request)
     {
-        
+
         if ($request->ajax()) {
             $status = $request->status;
             $query = $request->get('query');
@@ -362,7 +365,7 @@ class ProspectController extends Controller
             } else {
                 $prospects = $prospects->orderBy('sale_date', 'desc')->where(['status' => $status])->where('report_to', Auth::user()->id)->paginate('10');
             }
- 
+
             return response()->json(['data' => view('sales_manager.prospect.table', compact('prospects'))->render()]);
         }
     }

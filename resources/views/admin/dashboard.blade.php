@@ -193,7 +193,7 @@
                             <div class="stats-card-one mb-30">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
-                                        <p class="mb-10 line-height-1">New Customers</p>
+                                        <p class="mb-10 line-height-1">On Board Prospect</p>
                                         <h3 class="fs-25">{{ $count['win'] }}</h3>
                                     </div>
 

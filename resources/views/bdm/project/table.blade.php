@@ -5,39 +5,38 @@
 @else
     @foreach ($projects as $key => $project)
         <tr class="view-route" data-route="{{ route('sales-projects.show', $project->id) }}">
-            <td>
+            <td class="edit-route" data-route="{{ route('bdm.projects.edit', $project->id) }}">
                 {{ $project->sale_date ? date('d-m-Y', strtotime($project->sale_date)) : '' }}
             </td>
-            <td>
+            <td class="edit-route" data-route="{{ route('bdm.projects.edit', $project->id) }}">
                 {{ $project->business_name ?? '' }}
             </td>
-            <td>
+            <td class="edit-route" data-route="{{ route('bdm.projects.edit', $project->id) }}">
                 {{ $project->client_name ?? '' }}
             </td>
-            <td>
+            <td class="edit-route" data-route="{{ route('bdm.projects.edit', $project->id) }}">
                 {{ $project->client_phone ?? '' }}
             </td>
-            <td>
+            <td class="edit-route" data-route="{{ route('bdm.projects.edit', $project->id) }}">
                 <span class="">{{ $project->projectTypes->type }}</span>
             </td>
-            <td>
+            <td class="edit-route" data-route="{{ route('bdm.projects.edit', $project->id) }}">
                 {{ $project->project_value ?? '' }}
             </td>
 
-            <td>
+            <td class="edit-route" data-route="{{ route('bdm.projects.edit', $project->id) }}">
                 {{ $project->project_upfront ?? '' }}
             </td>
-            <td>
+            <td class="edit-route" data-route="{{ route('bdm.projects.edit', $project->id) }}">
                 {{ $project->currency ?? '' }}
             </td>
-            <td>
+            <td class="edit-route" data-route="{{ route('bdm.projects.edit', $project->id) }}">
                 {{ $project->payment_mode ?? '' }}
             </td>
-            <td>
+            <td class="edit-route" data-route="{{ route('bdm.projects.edit', $project->id) }}">
                 {{ (int) $project->project_value - (int) $project->project_upfront }}
             </td>
             <td>
-                <a title="Edit Project" data-route="" href="{{ route('bdm.projects.edit', $project->id) }}" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></a> &nbsp;&nbsp;
                 <a title="Delete Project" class="btn btn-sm btn-danger" data-route="{{ route('bdm.projects.delete', $project->id) }}"
                     href="javascipt:void(0);" id="delete"><i class="fas fa-trash"></i></a>
             </td>

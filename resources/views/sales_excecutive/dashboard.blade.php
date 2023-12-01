@@ -178,7 +178,7 @@
                     <div class="stats-card-one mb-30">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <p class="mb-10 line-height-1">New Customers</p>
+                                <p class="mb-10 line-height-1">On Board Prospect</p>
                                 <h3 class="mb-0 fs-25">{{ $count['win'] }}</h3>
                             </div>
 
@@ -191,7 +191,7 @@
                         <div class="mt-15">
                             <div class="d-flex justify-content-between">
                                 <div class="d-flex align-items-center">
-                                    <span>Monthly Goal</span>
+                                    <span>Prospect Percentage</span>
                                 </div>
                                 <span class="fw-600">{{ $percentage['win'] }}%</span>
                             </div>
@@ -496,30 +496,6 @@
         };
     </script>
     <script>
-        $(document).ready(function() {
-            //Default data table
-            $('#myTable').DataTable({
-                "aaSorting": [],
-                "columnDefs": [{
-                        "orderable": false,
-                        "targets": []
-                    },
-                    {
-                        "orderable": true,
-                        "targets": [0, 1, 2, 5, 6, 7, 8, 9]
-                    }
-                ]
-            });
-
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
-            //how to place holder in "jquery datatable" search box
-            $('#myTable_filter input').attr("placeholder", "Search");
-        });
-    </script>
-    <script>
         var oilCanvas = document.getElementById("oilChart");
 
         Chart.defaults.global.defaultFontFamily = "Lato";
@@ -551,3 +527,4 @@
         });
     </script>
 
+@endpush

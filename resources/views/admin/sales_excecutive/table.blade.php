@@ -15,7 +15,7 @@
     <tbody>
         @if (count($sales_excecutives) == 0)
             <tr>
-                <td colspan="8" class="text-center">No Sales Excecutives found</td>
+                <td colspan="8" class="text-center">No Sales Executive found</td>
             </tr>
         @else
             @foreach ($sales_excecutives as $key => $sales_excecutive)

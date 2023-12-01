@@ -4,7 +4,7 @@
             <button type="button" class="text-reset cls_btn_left" data-bs-dismiss="offcanvas" aria-label="Close">
                 <i class="fa fa-chevron-right" aria-hidden="true"></i>
             </button>
-            <h4 id="offcanvasEditLabel">Edit Sales managers Details</h4>
+            <h4 id="offcanvasEditLabel">Edit Prospect Details</h4>
         </div>
         <div class="offcanvas-body">
             <form action="{{ route('admin.prospects.update', $prospect->id) }}" method="post"

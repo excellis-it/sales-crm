@@ -1,41 +1,38 @@
 @foreach ($projects as $key => $project)
 <tr>
-    <td>
+    <td class="edit-route" data-route="{{ route('projects.edit', $project->id) }}">
         {{ ($project->sale_date) ?  $project->sale_date : '' }}
     </td>
-    <td>
+    <td class="edit-route" data-route="{{ route('projects.edit', $project->id) }}">
         {{ $project->business_name }}
     </td>
-    <td>
+    <td class="edit-route" data-route="{{ route('projects.edit', $project->id) }}">
         {{ $project->client_name }}
     </td>
-    <td>
+    <td class="edit-route" data-route="{{ route('projects.edit', $project->id) }}">
         {{ $project->client_phone }}
     </td>
-    <td>
+    <td class="edit-route" data-route="{{ route('projects.edit', $project->id) }}">
         <span>{{$project->projectTypes->type ?? '' }}</span>
     </td>
-    <td>
+    <td class="edit-route" data-route="{{ route('projects.edit', $project->id) }}">
         {{ $project->project_value }}
     </td>
 
-    <td>
+    <td class="edit-route" data-route="{{ route('projects.edit', $project->id) }}">
         {{ $project->project_upfront }}
     </td>
-    <td>
+    <td class="edit-route" data-route="{{ route('projects.edit', $project->id) }}">
         {{ $project->currency }}
     </td>
-    <td>
+    <td class="edit-route" data-route="{{ route('projects.edit', $project->id) }}">
         {{ $project->payment_mode }}
     </td>
-    <td>
+    <td class="edit-route" data-route="{{ route('projects.edit', $project->id) }}">
         {{ (int)$project->project_value - (int)$project->project_upfront }}
     </td>
 
     <td>
-        <a title="Edit Project" data-route=""
-            href="{{ route('projects.edit', $project->id) }}"><i
-                class="fas fa-edit"></i></a> &nbsp;&nbsp;
 
         <a title="View Project" data-route=""
             href="{{ route('projects.show', $project->id) }}"><i

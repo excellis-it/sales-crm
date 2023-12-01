@@ -22,7 +22,9 @@ class ProspectController extends Controller
         $count['sent_proposal'] = Prospect::where('report_to', Auth::user()->id)->where('status', 'Sent Proposal')->count();
         $count['prospect'] = Prospect::where('report_to', Auth::user()->id)->count();
         $prospects = Prospect::orderBy('sale_date', 'desc')->where('report_to', Auth::user()->id)->paginate('10');
-        return view('bdm.prospect.list', compact('count','prospects'));
+        $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE', 'BUSINESS_DEVELOPMENT_MANAGER', 'BUSINESS_DEVELOPMENT_EXCECUTIVE'])->orderBy('id', 'desc')->get();
+        $sales_executives = User::role('BUSINESS_DEVELOPMENT_EXCECUTIVE')->where(['status' => 1])->orderBy('id', 'desc')->get();
+        return view('bdm.prospect.list', compact('count','prospects', 'users', 'sales_executives'));
     }
 
     public function bdmProspectFilter(Request $request)
@@ -46,7 +48,7 @@ class ProspectController extends Controller
                         })
                         ->orWhereHas('transferTakenBy', function ($q) use ($query) {
                             $q->where('name', 'like', '%' . $query . '%');
-                        });        
+                        });
                 });
             }
             if ($status == 'All') {
@@ -206,7 +208,8 @@ class ProspectController extends Controller
             $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE', 'BUSINESS_DEVELOPMENT_MANAGER', 'BUSINESS_DEVELOPMENT_EXCECUTIVE'])->orderBy('id', 'desc')->get();
             $sales_executives = User::role('BUSINESS_DEVELOPMENT_EXCECUTIVE')->where(['status' => 1])->orderBy('id', 'desc')->get();
             $prospect = Prospect::find($id);
-            return view('bdm.prospect.edit')->with(compact('prospect', 'sales_executives', 'users'));
+            $type = true;
+            return response()->json(['view' => (string)View::make('bdm.prospect.edit')->with(compact('prospect', 'sales_executives', 'users','type'))]);
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }

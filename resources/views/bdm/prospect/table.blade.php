@@ -1,45 +1,52 @@
-
 @if (count($prospects) == 0)
     <tr>
         <td colspan="12" class="text-center">No Prospect Found</td>
     </tr>
 @else
     @foreach ($prospects as $prospect)
-        <tr >
-            <td>
+        <tr>
+            <td
+                @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bdm.prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->sale_date ? date('d-m-Y', strtotime($prospect->sale_date)) : '' }}
             </td>
-            <td>
+            <td
+                @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bdm.prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->user->name ?? '' }}
             </td>
-            <td>
+            <td
+                @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bdm.prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->client_name ?? '' }}
             </td>
-            <td>
+            <td
+                @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bdm.prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->business_name ?? '' }}
             </td>
-            <td>
+            <td
+                @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bdm.prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->client_email ?? '' }}
             </td>
-            <td>
+            <td
+                @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bdm.prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->client_phone ?? '' }}
             </td>
-            <td>
+            <td
+                @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bdm.prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->transferTakenBy->name ?? '' }}
             </td>
-            <td>
+            <td
+                @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bdm.prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->status ?? '' }}
             </td>
             <td>
                 @if ($prospect->status == 'Win')
-                <span>On Board</span>
+                    <span>On Board</span>
                 @elseif ($prospect->status == 'Follow Up')
-                <span>Follow Up</span>
+                    <span>Follow Up</span>
                 @elseif ($prospect->status == 'Sent Proposal')
-                <span>Sent Proposal</span>
+                    <span>Sent Proposal</span>
                 @elseif ($prospect->status == 'Close')
-                <span>Cancel</span>
-            @endif
+                    <span>Cancel</span>
+                @endif
             </td>
             <td>
                 {{ $prospect->followup_date ? date('d-m-Y', strtotime($prospect->followup_date)) : '' }}
@@ -48,15 +55,13 @@
                 {{ $prospect->price_quote ?? '' }}
             </td>
             <td>
-                @if ($prospect->status != 'Win')
-                <a title="Edit Prospect"  href="{{ route('bdm.prospects.edit', $prospect->id) }}" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></a>
-                @endif
-                <a title="View Prospect" class="view-details-btn btn btn-sm btn-warning"
-                data-route="{{ route('bdm.prospects.show', $prospect->id) }}" data-bs-toggle="modal"
-                data-bs-target="#exampleModal" href="javascript:void(0);"><i class="fas fa-eye"></i></a>
-                <a title="Delete Account manager" class="btn btn-sm btn-danger" data-route="{{ route('bdm.prospects.delete', $prospect->id) }}"
-                href="javascipt:void(0);" id="delete"><i class="fas fa-trash"></i></a>
-                
+                <a title="View Prospect" class="view-details-btn btn btn-sm "
+                    data-route="{{ route('bdm.prospects.show', $prospect->id) }}" data-bs-toggle="modal"
+                    data-bs-target="#exampleModal" href="javascript:void(0);"><i class="fas fa-eye"></i></a>
+                <a title="Delete Account manager" class="btn btn-sm "
+                    data-route="{{ route('bdm.prospects.delete', $prospect->id) }}" href="javascipt:void(0);"
+                    id="delete"><i class="fas fa-trash"></i></a>
+
             </td>
         </tr>
     @endforeach
@@ -70,11 +75,3 @@
         </div>
     </td>
 </tr>
-
-
-
-           
-            
-
-
-
