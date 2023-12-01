@@ -9,6 +9,7 @@ use App\Traits\ImageTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Storage;
 
 class SalesExcecutiveController extends Controller
@@ -22,8 +23,21 @@ class SalesExcecutiveController extends Controller
      */
     public function index()
     {
-        $sales_excecutives = User::role('SALES_EXCUETIVE')->where('sales_manager_id', Auth::user()->id)->get();
+        $sales_excecutives = User::role('SALES_EXCUETIVE')->where('sales_manager_id', Auth::user()->id)->paginate(15);
         return view('sales_manager.sales_excecutive.list')->with(compact('sales_excecutives'));
+    }
+
+    public function salesExecutiveSerach(Request $request)
+    {
+        if ($request->ajax()) {
+            $sales_excecutives = User::query();
+                $columns = ['name','email','phone', 'employee_id', 'date_of_joining'];
+                foreach ($columns as $column) {
+                    $sales_excecutives->orWhere($column, 'LIKE', '%' . $request->text . '%');
+                }
+            $sales_excecutives = $sales_excecutives->Role('SALES_EXCUETIVE')->where('sales_manager_id', Auth::user()->id)->orderBy('name', 'desc')->paginate(15);
+            return response()->json(['view' => (string)View::make('sales_manager.sales_excecutive.table')->with(compact('sales_excecutives'))]);
+        }
     }
 
     /**

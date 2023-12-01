@@ -12,17 +12,15 @@
 
 @section('content')
     @php
-        $totalProspects = ($count['prospects'] == 0) ? 1 : $count['prospects'];
-        $winProspects = ($count['win'] == 0) ? 1 : $count['win'];
+        $totalProspects = $count['prospects'] == 0 ? 1 : $count['prospects'];
+        $winProspects = $count['win'] == 0 ? 1 : $count['win'];
         $percentage['win'] = round(($winProspects / $totalProspects) * 100);
         $percentage['follow_up'] = round(($count['follow_up'] / $totalProspects) * 100);
         $percentage['sent_proposal'] = round(($count['sent_proposal'] / $totalProspects) * 100);
         $percentage['close'] = round(($count['close'] / $totalProspects) * 100);
     @endphp
     <div class="page-wrapper">
-
         <div class="content container-fluid">
-
             <div class="page-header">
                 <div class="row">
                     <div class="col-sm-12">
@@ -33,41 +31,41 @@
                     </div>
                 </div>
             </div>
-
             <div class="row">
                 @if ($goal['gross_goals'])
-                <div class="col-lg-3 col-sm-6">
-                    <div class="stats-card-one mb-30">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <p class="mb-10 line-height-1">Gross Sales</p>
-                                <h3 class="mb-0 fs-25">
-                                    {{ $goal['gross_goals']['goals_amount'] ? '$' . $goal['gross_goals']['goals_amount'] : 'N/A' }}
-                                    / ${{ $goal['gross_goals']['goals_achieve'] ?? 0 }} </h3>
-                            </div>
-                            <?php
-                            $target = $goal['gross_goals']['goals_amount'] ?? 0;
-                            $achieve = $goal['gross_goals']['goals_achieve'] ?? 0;
-                            // round percentage
-                            $percentage['gross_goals'] = round(($achieve / $target) * 100, 0);
-                            ?>
-                            <span class="badge badge-cyan fs-12">
-                                <i class="icofont-swoosh-up"></i>
-                                <span class="fw-600 m-l-5">{{ $percentage['gross_goals'] ?? 0 }}%</span>
-                            </span>
-                        </div>
-
-                        <div class="mt-15">
-                            <div class="d-flex justify-content-between">
-                                <div class="d-flex align-items-center">
-                                    <span>Monthly Goal</span>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="stats-card-one mb-30">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <p class="mb-10 line-height-1">Gross Sales</p>
+                                    <h3 class="mb-0 fs-25">
+                                        {{ $goal['gross_goals']['goals_amount'] ? '$' . $goal['gross_goals']['goals_amount'] : 'N/A' }}
+                                        / ${{ $goal['gross_goals']['goals_achieve'] ?? 0 }} </h3>
                                 </div>
-                                <span class="fw-600">{{ $percentage['gross_goals'] ?? 0 }}%</span>
+                                <?php
+                                $target = $goal['gross_goals']['goals_amount'] ?? 0;
+                                $achieve = $goal['gross_goals']['goals_achieve'] ?? 0;
+                                // round percentage
+                                $percentage['gross_goals'] = round(($achieve / $target) * 100, 0);
+                                ?>
+                                <span class="badge badge-cyan fs-12">
+                                    <i class="icofont-swoosh-up"></i>
+                                    <span class="fw-600 m-l-5">{{ $percentage['gross_goals'] ?? 0 }}%</span>
+                                </span>
                             </div>
 
-                            <div class="progress progress-sm mt-1">
-                                <div class="progress-bar bg-primary"
-                                    style="width: {{ $percentage['gross_goals'] ?? 0 }}%">
+                            <div class="mt-15">
+                                <div class="d-flex justify-content-between">
+                                    <div class="d-flex align-items-center">
+                                        <span>Monthly Goal</span>
+                                    </div>
+                                    <span class="fw-600">{{ $percentage['gross_goals'] ?? 0 }}%</span>
+                                </div>
+
+                                <div class="progress progress-sm mt-1">
+                                    <div class="progress-bar bg-primary"
+                                        style="width: {{ $percentage['gross_goals'] ?? 0 }}%">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -105,39 +103,40 @@
                 </div>
             @endif
 
-            @if ($goal['net_goals'])
-                <div class="col-lg-3 col-sm-6">
-                    <div class="stats-card-one mb-30">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <p class="mb-10 line-height-1">Revenue</p>
-                                <h3 class="mb-0 fs-25">
-                                    {{ $goal['net_goals']['goals_amount'] ? '$' . $goal['net_goals']['goals_amount'] : 'N/A' }}
-                                    / ${{ $goal['net_goals']['goals_achieve'] ?? 0 }} </h3>
-                            </div>
-                            <?php
-                            $target = $goal['net_goals']['goals_amount'] ?? 0;
-                            $achieve = $goal['net_goals']['goals_achieve'] ?? 0;
-                            // round percentage
-                            $percentage['net_goals'] = round(($achieve / $target) * 100, 0);
-                            ?>
-                            <span class="badge badge-cyan font-size-12">
-                                <i class="icofont-swoosh-up"></i>
-                                <span class="fw-600 m-l-5">{{ $percentage['net_goals'] ?? 0 }}%</span>
-                            </span>
-                        </div>
-
-                        <div class="mt-15">
-                            <div class="d-flex justify-content-between">
-                                <div class="d-flex align-items-center">
-                                    <span>Monthly Goal</span>
+                @if ($goal['net_goals'])
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="stats-card-one mb-30">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <p class="mb-10 line-height-1">Revenue</p>
+                                    <h3 class="mb-0 fs-25">
+                                        {{ $goal['net_goals']['goals_amount'] ? '$' . $goal['net_goals']['goals_amount'] : 'N/A' }}
+                                        / ${{ $goal['net_goals']['goals_achieve'] ?? 0 }} </h3>
                                 </div>
-                                <span class="fw-600">{{ $percentage['net_goals'] ?? 0 }}%</span>
+                                <?php
+                                $target = $goal['net_goals']['goals_amount'] ?? 0;
+                                $achieve = $goal['net_goals']['goals_achieve'] ?? 0;
+                                // round percentage
+                                $percentage['net_goals'] = round(($achieve / $target) * 100, 0);
+                                ?>
+                                <span class="badge badge-cyan font-size-12">
+                                    <i class="icofont-swoosh-up"></i>
+                                    <span class="fw-600 m-l-5">{{ $percentage['net_goals'] ?? 0 }}%</span>
+                                </span>
                             </div>
 
-                            <div class="progress progress-sm mt-1">
-                                <div class="progress-bar bg-danger"
-                                    style="width: {{ $percentage['net_goals'] ?? 0 }}%">
+                            <div class="mt-15">
+                                <div class="d-flex justify-content-between">
+                                    <div class="d-flex align-items-center">
+                                        <span>Monthly Goal</span>
+                                    </div>
+                                    <span class="fw-600">{{ $percentage['net_goals'] ?? 0 }}%</span>
+                                </div>
+
+                                <div class="progress progress-sm mt-1">
+                                    <div class="progress-bar bg-danger"
+                                        style="width: {{ $percentage['net_goals'] ?? 0 }}%">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -185,7 +184,7 @@
 
                             <span class="badge badge-red font-size-12">
                                 <i class="icofont-swoosh-down"></i>
-                                <span class="fw-600 m-l-5">{{ $percentage['win']}}%</span>
+                                <span class="fw-600 m-l-5">{{ $percentage['win'] }}%</span>
                             </span>
                         </div>
 
@@ -194,11 +193,11 @@
                                 <div class="d-flex align-items-center">
                                     <span>Monthly Goal</span>
                                 </div>
-                                <span class="fw-600">{{$percentage['win']}}%</span>
+                                <span class="fw-600">{{ $percentage['win'] }}%</span>
                             </div>
 
                             <div class="progress progress-sm mt-1">
-                                <div class="progress-bar bg-purple" style="width: {{$percentage['win']}}%"></div>
+                                <div class="progress-bar bg-purple" style="width: {{ $percentage['win'] }}%"></div>
                             </div>
                         </div>
                     </div>
@@ -232,7 +231,7 @@
 
                             <div class="resize-triggers">
                                 <div class="expand-trigger">
-                                    <canvas id="oilChart" ></canvas>
+                                    <canvas id="oilChart"></canvas>
 
                                 </div>
                                 <div class="contract-trigger"></div>
@@ -312,80 +311,101 @@
                     </div>
                 </div>
             </div>
+            <div class="col-lg-12">
+                <div class="card mb-30">
+                    <div class="card-body" style="position: relative;">
+                        <div class="">
+                            <h5 class="card-title">Prospects Statistics</h5>
+                        </div>
+                        <div class="row justify-content-end">
+                            <div class="col-md-6">
+                                <div class="row g-1 justify-content-end">
+                                    <div class="col-md-8 pr-0">
+                                        <div class="search-field prod-search">
+                                            <input type="text" name="search" id="search" placeholder="search..."
+                                                required class="form-control rounded_search">
+                                            <a href="javascript:void(0)" class="prod-search-icon submit_search"><i
+                                                    class="fa fa-search"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-            <div class="row">
-                <div class="col-md-12">
-                    <table id="myTable" class="dd table table-striped table-bordered table-hover" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Business Name</th>
-                                <th>Client Name</th>
-                                <th>Email</th>
-                                <th>Phone</th>
-                                <th>Transfer Taken By</th>
-                                <th>Status</th>
-                                <th>Service Offered</th>
-                                <th>Followup Date</th>
-                                <th>Price Quoted</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($prospects as $key => $prospect)
-                                <tr>
-                                    <td>
-                                        {{ date('d M, Y', strtotime($prospect->created_at)) }}
-                                    </td>
-                                    <td>
-                                        {{ $prospect->business_name }}
-                                    </td>
-                                    <td>
-                                        {{ $prospect->client_name }}
-                                    </td>
-                                    <td>
-                                        {{ $prospect->client_email }}
-                                    </td>
-                                    <td>
-                                        {{ $prospect->client_phone }}
-                                    </td>
-                                    <td>
-                                        {{ $prospect->transferTakenBy->name ?? '' }}
-                                    </td>
-                                    <td>
-                                        @if ($prospect->status == 'Win')
-                                            <span>On Board</span>
-                                        @elseif ($prospect->status == 'Follow Up')
-                                            <span>Follow Up</span>
-                                        @elseif ($prospect->status == 'Sent Proposal')
-                                            <span>Sent Proposal</span>
-                                        @elseif ($prospect->status == 'Close')
-                                            <span>Cancel</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        {{ $prospect->offered_for }}
-                                    </td>
+                        <div class="table-responsive" id="dashboard-prospect">
+                            <table id="myTable" class="dd table table-striped table-bordered table-hover"
+                                style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Business Name</th>
+                                        <th>Client Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Transfer Taken By</th>
+                                        <th>Status</th>
+                                        <th>Service Offered</th>
+                                        <th>Followup Date</th>
+                                        <th>Price Quoted</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($prospects as $key => $prospect)
+                                        <tr>
+                                            <td>
+                                                {{ date('d M, Y', strtotime($prospect->created_at)) }}
+                                            </td>
+                                            <td>
+                                                {{ $prospect->business_name }}
+                                            </td>
+                                            <td>
+                                                {{ $prospect->client_name }}
+                                            </td>
+                                            <td>
+                                                {{ $prospect->client_email }}
+                                            </td>
+                                            <td>
+                                                {{ $prospect->client_phone }}
+                                            </td>
+                                            <td>
+                                                {{ $prospect->transferTakenBy->name ?? '' }}
+                                            </td>
+                                            <td>
+                                                @if ($prospect->status == 'Win')
+                                                    <span>On Board</span>
+                                                @elseif ($prospect->status == 'Follow Up')
+                                                    <span>Follow Up</span>
+                                                @elseif ($prospect->status == 'Sent Proposal')
+                                                    <span>Sent Proposal</span>
+                                                @elseif ($prospect->status == 'Close')
+                                                    <span>Cancel</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                {{ $prospect->offered_for }}
+                                            </td>
 
 
 
-                                    <td>
-                                        {{ date('d M, Y', strtotime($prospect->followup_date)) }}
-                                    </td>
-                                    <td>
-                                        {{ $prospect->price_quote }}
-                                    </td>
+                                            <td>
+                                                {{ date('d M, Y', strtotime($prospect->followup_date)) }}
+                                            </td>
+                                            <td>
+                                                {{ $prospect->price_quote }}
+                                            </td>
 
 
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </div>
+    </div>
 
-    </div>
-    </div>
-    </div>
 @endsection
 
 @push('scripts')
@@ -502,31 +522,32 @@
     <script>
         var oilCanvas = document.getElementById("oilChart");
 
-Chart.defaults.global.defaultFontFamily = "Lato";
-Chart.defaults.global.defaultFontSize = 18;
+        Chart.defaults.global.defaultFontFamily = "Lato";
+        Chart.defaults.global.defaultFontSize = 18;
 
-var oilData = {
-    labels: [
-        "On Board",
-        "Follow Up",
-        "Sent Proposal",
-        "Close",
-    ],
-    datasets: [
-        {
-            data: [{{$count['win']}}, {{$count['follow_up']}}, {{$count['sent_proposal']}}, {{$count['close']}}],
-            backgroundColor: [
-                "#ad1e23",
-                "#fa8d35",
-                "#297dd7",
-                "#6c757d",
-            ]
-        }]
-};
+        var oilData = {
+            labels: [
+                "On Board",
+                "Follow Up",
+                "Sent Proposal",
+                "Close",
+            ],
+            datasets: [{
+                data: [{{ $count['win'] }}, {{ $count['follow_up'] }}, {{ $count['sent_proposal'] }},
+                    {{ $count['close'] }}
+                ],
+                backgroundColor: [
+                    "#ad1e23",
+                    "#fa8d35",
+                    "#297dd7",
+                    "#6c757d",
+                ]
+            }]
+        };
 
-var pieChart = new Chart(oilCanvas, {
-  type: 'pie',
-  data: oilData
-});
+        var pieChart = new Chart(oilCanvas, {
+            type: 'pie',
+            data: oilData
+        });
     </script>
-s')
+
