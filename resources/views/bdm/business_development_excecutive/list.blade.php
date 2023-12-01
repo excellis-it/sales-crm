@@ -46,51 +46,24 @@
                     </div>
 
                     <hr />
-                    <div class="table-responsive">
-                        <table id="myTable" class="dd table table-striped table-bordered table-hover" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th> Name</th>
-                                    <th> Email</th>
-                                    <th> Phone</th>
-                                    <th>Employee Id</th>
-                                    <th>Date Of Joining</th>
-                                    {{-- <th>No. of prospect</th> --}}
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($business_development_excecutives as $key => $business_development_excecutive)
-                                    <tr>
-                                        <td>{{ $business_development_excecutive->name }}</td>
-                                        <td>{{ $business_development_excecutive->email }}</td>
-                                        <td>{{ $business_development_excecutive->phone }}</td>
-                                        <td>{{ $business_development_excecutive->employee_id }}</td>
-                                        <td>{{ $business_development_excecutive->date_of_joining }}</td>
-                                        {{-- <td><a href="{{ route('bdm.prospects.index',['user_id'=>$business_development_excecutive->id]) }}">{{ $business_development_excecutive->prospects->count() }}</a></td> --}}
-                                        <td>
-                                            <div class="button-switch">
-                                                <input type="checkbox" id="switch-orange" class="switch toggle-class"
-                                                    data-id="{{ $business_development_excecutive['id'] }}"
-                                                    {{ $business_development_excecutive['status'] ? 'checked' : '' }} />
-                                                <label for="switch-orange" class="lbl-off"></label>
-                                                <label for="switch-orange" class="lbl-on"></label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <a title="Edit BDE" data-route=""
-                                                href="{{ route('bde.edit', $business_development_excecutive->id) }}"><i
-                                                    class="fas fa-edit"></i></a> &nbsp;&nbsp;
-
-                                            <a title="Delete BDE"
-                                                data-route="{{ route('bde.delete', $business_development_excecutive->id) }}"
-                                                href="javascipt:void(0);" id="delete"><i class="fas fa-trash"></i></a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                    <div class="row justify-content-end">
+                        <div class="col-md-6">
+                            <div class="row g-1 justify-content-end">
+                                <div class="col-md-8 pr-0">
+                                    <div class="search-field">
+                                        <input type="text" name="search" id="search" placeholder="search..." required
+                                            class="form-control rounded_search">
+                                        <button class="submit_search" id="search-button"> <span class=""><i
+                                                    class="fa fa-search"></i></span></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive" id="business_development_executive_data">
+                        
+                                @include('bdm.business_development_excecutive.table')
+                            
                     </div>
                 </div>
             </div>
@@ -101,24 +74,7 @@
 @endsection
 
 @push('scripts')
-    <script>
-        $(document).ready(function() {
-            //Default data table
-            $('#myTable').DataTable({
-                "aaSorting": [],
-                "columnDefs": [{
-                        "orderable": false,
-                        "targets": [5, 6]
-                    },
-                    {
-                        "orderable": true,
-                        "targets": [0, 1, 2, 3, 4 ]
-                    }
-                ]
-            });
-
-        });
-    </script>
+   
     <script>
         $(document).on('click', '#delete', function(e) {
             swal({
@@ -168,4 +124,34 @@
 
 
     </script>
+
+    
+<script>
+    $(document).ready(function() {
+        $('#search-button').on('click', function() {
+            var text = $('#search').val();
+            if (text == '') {
+                alert('Please type something for search!');
+                return false;
+            }
+            url = "{{ route('bdm.business-development-executive.search') }}"
+            $('#loading').addClass('loading');
+            $('#loading-content').addClass('loading-content');
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: {
+                    text: text,
+                },
+                success: function(response) {
+                   
+                    $('#business_development_executive_data').html(response.view);
+                    $('#search').val('');
+                    $('#loading').removeClass('loading');
+                    $('#loading-content').removeClass('loading-content');
+                }
+            });
+        });
+    });
+</script>
 @endpush
