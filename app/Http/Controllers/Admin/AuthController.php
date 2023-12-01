@@ -38,6 +38,8 @@ class AuthController extends Controller
                 return redirect()->route('sales-excecutive.dashboard');
             }else if($user->hasRole('BUSINESS_DEVELOPMENT_MANAGER') && $user->status == 1){
                 return redirect()->route('bdm.dashboard');
+            }else if($user->hasRole('BUSINESS_DEVELOPMENT_EXCECUTIVE') && $user->status == 1){
+                return redirect()->route('bde.dashboard');
             }else{
                 Auth::logout();
                 return redirect()->back()->with('error', 'Email id & password was invalid!');

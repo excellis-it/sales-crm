@@ -34,6 +34,10 @@ use App\Http\Controllers\SalesManager\ProfileController as SalesManagerProfileCo
 use App\Http\Controllers\SalesManager\ProjectController;
 use App\Http\Controllers\SalesManager\ProspectController as SalesManagerProspectController;
 use App\Http\Controllers\SalesManager\SalesExcecutiveController as SalesManagerSalesExcecutiveController;
+use App\Http\Controllers\BDE\DashboardController as BDEDashboardController;
+use App\Http\Controllers\BDE\ProspectController as BDEProspectController;
+use App\Http\Controllers\BDE\ProjectController as BDEProjectController;
+use App\Http\Controllers\BDE\ProfileController as BDEProfileController;
 use Illuminate\Support\Facades\Artisan;
 
 /*
@@ -247,7 +251,7 @@ Route::group(['middleware' => ['SalesExcecutive'], 'prefix' => 'sales-excecutive
     });
 
     //project list
-
+    Route::get('/sales-executive-prospects-search', [SalesExcecutiveDashboardController::class, 'salesExecutiveDashboardProspectSearch'])->name('sales-executive.dashboard.prospect-search-data');
     Route::get('/sales-executive-projects-filter', [SalesExcecutiveProjectController::class, 'salesExecutiveProjectFilter'])->name('sales-excecutive.project.filter');
     Route::get('/project-ajax-list', [SalesExcecutiveProjectController::class, 'projectAjaxList'])->name('sales-excecutive.projects.ajax-list');
 
@@ -282,6 +286,9 @@ Route::group(['middleware' => ['BDM'], 'prefix' => 'bdm'], function () {
     Route::resources([
         'bde' => BDMBusinessDevelopmentExcecutiveController::class,
     ]);
+    
+    Route::get('/bdm-business-development-executive-search', [BDMBusinessDevelopmentExcecutiveController::class, 'bdmBusinessDevelopmentExecutiveSearch'])->name('bdm.business-development-executive.search');
+    Route::get('/bdm-prospects-search', [BDMDashboardController::class, 'bdmDashboardProspectSearch'])->name('bdm.dashboard.prospect-search-data');
     Route::get('/bdm-projects-filter', [BDMProjectController::class, 'bdmProjectFilter'])->name('bdm.project.filter');
     Route::get('/bdm-prospect-filter', [BDMProspectController::class, 'bdmProspectFilter'])->name('bdm.prospects.filter');
     Route::get('/project-document_download/{id}', [BDMProjectController::class, 'projectDocumentDownload'])->name('bdm.projects.document.download');
@@ -293,4 +300,28 @@ Route::group(['middleware' => ['BDM'], 'prefix' => 'bdm'], function () {
         Route::get('/bde-delete/{id}', [BDMBusinessDevelopmentExcecutiveController::class, 'delete'])->name('bde.delete');
     });
     Route::get('/changeBDEStatus', [BDMBusinessDevelopmentExcecutiveController::class, 'changeBDEStatus'])->name('bde.change-status');
+});
+
+//bde routes
+Route::group(['middleware' => ['BDE'], 'prefix' => 'bde'], function () {
+    Route::get('dashboard', [BDEDashboardController::class, 'index'])->name('bde.dashboard');
+    Route::get('profile', [BDEProfileController::class, 'index'])->name('bde.profile');
+    Route::post('profile/update', [BDEProfileController::class, 'profileUpdate'])->name('bde.profile.update');
+    Route::get('logout', [AuthController::class, 'BusinessDevelopmentManagerlogout'])->name('bde.logout');
+
+    Route::prefix('password')->group(function () {
+        Route::get('/', [BDEProfileController::class, 'password'])->name('bde.password'); // password change
+        Route::post('/update', [BDEProfileController::class, 'passwordUpdate'])->name('bde.password.update'); // password update
+    });
+
+    Route::resources([
+        'prospects' => BDEProspectController::class,
+    ]);
+    Route::get('/filter-prospects', [BDEProspectController::class, 'filterProspectFilter'])->name('bde.prospects.filter'); // filter
+
+    Route::name('bde.')->group(function () {
+        Route::resources([
+            'projects' => BDEProjectController::class,
+        ]);
+    });
 });

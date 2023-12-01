@@ -13,7 +13,7 @@ class DashboardController extends Controller
     public function index()
     {
         $count['projects'] = Project::where('user_id', auth()->user()->id)->orderBy('created_at', 'desc')->count();
-        $prospects = Prospect::where('report_to', auth()->user()->id)->orderBy('sale_date', 'desc')->get();
+        $prospects = Prospect::where('report_to', auth()->user()->id)->orderBy('sale_date', 'desc')->paginate(15);
         $count['prospects'] = Prospect::where('report_to', auth()->user()->id)->count();
         $count['win'] = Prospect::where('report_to', auth()->user()->id)->where('status', 'Win')->count();
         $count['follow_up'] = Prospect::where('report_to', auth()->user()->id)->where('status', 'Follow Up')->count();
@@ -62,5 +62,30 @@ class DashboardController extends Controller
         $goal['prospect_november'] = Prospect::where('report_to', auth()->user()->id)->whereMonth('sale_date', 11)->whereYear('sale_date', date('Y'))->count();
         $goal['prospect_december'] = Prospect::where('report_to', auth()->user()->id)->whereMonth('sale_date', 12)->whereYear('sale_date', date('Y'))->count();
         return view('bdm.dashboard')->with(compact('count', 'prospects', 'goal'));
+    }
+
+    public function bdmDashboardProspectSearch(Request $request)
+    {
+        
+        if ($request->ajax()) {
+            $query = str_replace(" ", "%", $request->get('query'));
+        
+            $prospects = Prospect::where('report_to', auth()->user()->id)
+                ->where(function ($q) use ($query) {
+                    $q->where('id', 'like', '%' . $query . '%')
+                        ->orWhere('sale_date', 'like', '%' . $query . '%')
+                        ->orWhere('client_name', 'like', '%' . $query . '%')
+                        ->orWhere('client_email', 'like', '%' . $query . '%')
+                        ->orWhere('business_name', 'like', '%' . $query . '%')
+                        ->orWhere('client_phone', 'like', '%' . $query . '%')
+                        ->orWhere('followup_date', 'like', '%' . $query . '%')
+                        ->orWhere('status', 'like', '%' . $query . '%')
+                        ->orWhere('offered_for', 'like', '%' . $query . '%')
+                        ->orWhere('price_quote', 'like', '%' . $query . '%');
+                })
+                ->paginate(15);
+        
+            return response()->json(['data' => view('bdm.dashboard_prospect_table', compact('prospects'))->render()]);
+        }
     }
 }

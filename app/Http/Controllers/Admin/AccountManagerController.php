@@ -99,6 +99,7 @@ class AccountManagerController extends Controller
      */
     public function edit($id)
     {
+        
         $account_manager = User::findOrFail($id);
         return response()->json(['account_manager' => $account_manager]);
     }

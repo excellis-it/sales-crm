@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\RegistrationMail;
 use App\Traits\ImageTrait;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Storage;
 use File;
 
@@ -22,8 +23,21 @@ class BusinessDevelopmentExcecutiveController extends Controller
      */
     public function index(Request $request)
     {
-        $business_development_excecutives  = User::Role('BUSINESS_DEVELOPMENT_EXCECUTIVE')->get();
+        $business_development_excecutives  = User::Role('BUSINESS_DEVELOPMENT_EXCECUTIVE')->paginate(15);
         return view('bdm.business_development_excecutive.list')->with(compact('business_development_excecutives'));
+    }
+
+    public function bdmBusinessDevelopmentExecutiveSearch(Request $request)
+    {
+        if ($request->ajax()) {
+            $business_development_excecutives = User::query();
+                $columns = ['name','email','phone', 'employee_id', 'date_of_joining'];
+                foreach ($columns as $column) {
+                    $business_development_excecutives->orWhere($column, 'LIKE', '%' . $request->text . '%');
+                }
+            $business_development_excecutives = $business_development_excecutives->Role('BUSINESS_DEVELOPMENT_EXCECUTIVE')->orderBy('name', 'desc')->paginate(15);
+            return response()->json(['view' => (string)View::make('bdm.business_development_excecutive.table')->with(compact('business_development_excecutives'))]);
+        }
     }
 
     /**

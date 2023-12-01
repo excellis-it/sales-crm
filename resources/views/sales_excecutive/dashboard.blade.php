@@ -20,7 +20,9 @@
         $percentage['close'] = round(($count['close'] / $totalProspects) * 100);
     @endphp
     <div class="page-wrapper">
+
         <div class="content container-fluid">
+
             <div class="page-header">
                 <div class="row">
                     <div class="col-sm-12">
@@ -31,6 +33,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="row">
                 @if ($goal['gross_goals'])
                     <div class="col-lg-3 col-sm-6">
@@ -311,6 +314,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="col-lg-12">
                 <div class="card mb-30">
                     <div class="card-body" style="position: relative;">
@@ -349,62 +353,18 @@
                                         <th>Price Quoted</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    @foreach ($prospects as $key => $prospect)
-                                        <tr>
-                                            <td>
-                                                {{ date('d M, Y', strtotime($prospect->created_at)) }}
-                                            </td>
-                                            <td>
-                                                {{ $prospect->business_name }}
-                                            </td>
-                                            <td>
-                                                {{ $prospect->client_name }}
-                                            </td>
-                                            <td>
-                                                {{ $prospect->client_email }}
-                                            </td>
-                                            <td>
-                                                {{ $prospect->client_phone }}
-                                            </td>
-                                            <td>
-                                                {{ $prospect->transferTakenBy->name ?? '' }}
-                                            </td>
-                                            <td>
-                                                @if ($prospect->status == 'Win')
-                                                    <span>On Board</span>
-                                                @elseif ($prospect->status == 'Follow Up')
-                                                    <span>Follow Up</span>
-                                                @elseif ($prospect->status == 'Sent Proposal')
-                                                    <span>Sent Proposal</span>
-                                                @elseif ($prospect->status == 'Close')
-                                                    <span>Cancel</span>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                {{ $prospect->offered_for }}
-                                            </td>
+                                <tbody class="prospect-filter">
+                                    @include('sales_excecutive.dashboard_prospect_table')
 
-
-
-                                            <td>
-                                                {{ date('d M, Y', strtotime($prospect->followup_date)) }}
-                                            </td>
-                                            <td>
-                                                {{ $prospect->price_quote }}
-                                            </td>
-
-
-                                        </tr>
-                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
-    </div>
+    @endsection
 
 @endsection
 
@@ -498,28 +458,25 @@
     <script>
         var oilCanvas = document.getElementById("oilChart");
 
-        Chart.defaults.global.defaultFontFamily = "Lato";
-        Chart.defaults.global.defaultFontSize = 18;
-
-        var oilData = {
-            labels: [
-                "On Board",
-                "Follow Up",
-                "Sent Proposal",
-                "Close",
-            ],
-            datasets: [{
-                data: [{{ $count['win'] }}, {{ $count['follow_up'] }}, {{ $count['sent_proposal'] }},
-                    {{ $count['close'] }}
+            var oilData = {
+                labels: [
+                    "On Board",
+                    "Follow Up",
+                    "Sent Proposal",
+                    "Close",
                 ],
-                backgroundColor: [
-                    "#ad1e23",
-                    "#fa8d35",
-                    "#297dd7",
-                    "#6c757d",
-                ]
-            }]
-        };
+                datasets: [{
+                    data: [{{ $count['win'] }}, {{ $count['follow_up'] }}, {{ $count['sent_proposal'] }},
+                        {{ $count['close'] }}
+                    ],
+                    backgroundColor: [
+                        "#ad1e23",
+                        "#fa8d35",
+                        "#297dd7",
+                        "#6c757d",
+                    ]
+                }]
+            };
 
         var pieChart = new Chart(oilCanvas, {
             type: 'pie',
