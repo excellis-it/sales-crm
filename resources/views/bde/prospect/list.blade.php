@@ -36,7 +36,7 @@
                     <div class="col">
                         <h3 class="page-title">Prospects Information</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('prospects.index') }}">Prospects</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('bde-prospects.index') }}">Prospects</a></li>
                             <li class="breadcrumb-item active">List</li>
                         </ul>
                     </div>
@@ -52,7 +52,7 @@
                                 <h4 class="mb-0">Prospects Details</h4>
                             </div>
                             <div class="col-md-6 text-end">
-                                <a href="{{ route('prospects.create') }}" class="btn px-5 submit-btn"><i
+                                <a href="{{ route('bde-prospects.create') }}" class="btn px-5 submit-btn"><i
                                         class="fa fa-plus"></i> Add a
                                     Prospect</a>
                             </div>
@@ -100,21 +100,15 @@
                             <div class="row g-1 justify-content-end">
                                 <div class="col-md-8 pr-0">
                                     <div class="search-field prod-search">
-                                        <input type="text" name="search" id="search" placeholder="search..." required
-                                            class="form-control">
-                                        <a href="javascript:void(0)" class="prod-search-icon"><i
-                                                class="ph ph-magnifying-glass"></i></a>
+                                        <input type="text" name="search" id="search" placeholder="search..."
+                                            required class="form-control rounded_search">
+                                        <a href="javascript:void(0)" class="prod-search-icon submit_search"><i
+                                                class="fa fa-search"></i></a>
                                     </div>
                                 </div>
-                                {{-- <div class="col-md-3 pl-0 ml-2">
-                                    <button class="btn btn-primary button-search" id="search-button"> <span class=""><i
-                                                class="ph ph-magnifying-glass"></i></span> Search</button>
-                                </div> --}}
                             </div>
                         </div>
                     </div>
-
-                    
                     <div class="table-responsive" id="show-prospect">
                         <table id="myTable" class="dd table table-striped table-bordered table-hover" style="width:100%">
                             <thead>
