@@ -23,15 +23,15 @@
 
 
                 <li class="{{ Request::is('bde/prospects*') ? 'active' : ' ' }}">
-                    <a href="{{ route('prospects.index') }}"><i class="la la-users"></i> <span>
+                    <a href="{{ route('bde-prospects.index') }}"><i class="la la-users"></i> <span>
                         Prospects</span></a>
                 </li>
 
 
-                <li class="{{ Request::is('bde/projects*') ? 'active' : ' ' }}">
-                    <a href="{{ route('bde.projects.index') }}"><i class="la la-book-open"></i> <span>
+                {{-- <li class="{{ Request::is('bde/projects*') ? 'active' : ' ' }}">
+                    <a href="{{ route('bde-projects.index') }}"><i class="la la-book-open"></i> <span>
                              Projects </span></a>
-                </li>
+                </li> --}}
 
             </ul>
         </div>

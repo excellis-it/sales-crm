@@ -47,7 +47,7 @@
 
             <td>
                 @if ($prospect->status != 'Win')
-                    <a title="Edit Prospect" data-route="" href="{{ route('prospects.edit', $prospect->id) }}"><i
+                    <a title="Edit Prospect" data-route="" href="{{ route('bde-prospects.edit', $prospect->id) }}"><i
                             class="fas fa-edit"></i></a> &nbsp;&nbsp;
                 @endif
                 {{-- @if ($prospect->status == 'Win' && $prospect->is_project == false)
@@ -56,7 +56,7 @@
                 @endif --}}
 
                 <a title="View Prospect" class="view-details-btn"
-                    data-route="{{ route('prospects.show', $prospect->id) }}" data-bs-toggle="modal"
+                    data-route="{{ route('bde-prospects.show', $prospect->id) }}" data-bs-toggle="modal"
                     data-bs-target="#exampleModal" href="javascript:void(0);"><i class="fas fa-eye"></i></a>
                 &nbsp;&nbsp;
             </td>

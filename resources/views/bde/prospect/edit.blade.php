@@ -15,7 +15,7 @@
                     <div class="col">
                         <h3 class="page-title">Edit</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('prospects.index') }}">Prospects</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('bde-prospects.index') }}">Prospects</a></li>
                             <li class="breadcrumb-item active">Edit Prospect</li>
                         </ul>
                     </div>
@@ -35,7 +35,7 @@
                                 <hr> --}}
                                 <div class="border-0 border-4">
                                     <div class="card-body">
-                                        <form action="{{ route('prospects.update', $prospect->id) }}" method="POST"
+                                        <form action="{{ route('bde-prospects.update', $prospect->id) }}" method="POST"
                                             enctype="multipart/form-data">
                                             @method('PUT')
                                             @csrf

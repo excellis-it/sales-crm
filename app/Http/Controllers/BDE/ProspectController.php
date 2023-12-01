@@ -25,7 +25,7 @@ class ProspectController extends Controller
 
         if ($type) {
             // return $type;
-            $prospects = Prospect::where(['user_id' => Auth::user()->id, 'status' => $type])->orderBy('sale_date', 'desc')->paginate(10);
+            $prospects = Prospect::where(['user_id' => Auth::user()->id, 'status' => $type])->orderBy('sale_date', 'desc')->paginate(15);
             $count['win'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Win')->count();
             $count['follow_up'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Follow Up')->count();
             $count['close'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Close')->count();
@@ -43,7 +43,37 @@ class ProspectController extends Controller
 
     public function filterProspectFilter(Request $request)
     {
-        return $request->all();
+        if ($request->ajax()) {
+            $status = $request->status;
+            $query = $request->get('query');
+            $query = str_replace(" ", "%", $query);
+            $prospects = Prospect::query();
+            if ($query != '') {
+                $prospects = $prospects->where(function ($q) use ($query) {
+                    $q->orWhere('client_name', 'like', '%' . $query . '%')
+                        ->orWhere('business_name', 'like', '%' . $query . '%')
+                        ->orWhere('client_email', 'like', '%' . $query . '%')
+                        ->orWhere('client_phone', 'like', '%' . $query . '%')
+                        ->orWhere('price_quote', 'like', '%' . $query . '%')
+                        ->orWhere('followup_date', 'like', '%' . $query . '%')
+                        ->orWhere('offered_for', 'like', '%' . $query . '%')
+                        ->whereHas('user', function ($q) use ($query) {
+                            $q->where('name', 'like', '%' . $query . '%');
+                        })
+                        ->orWhereHas('transferTakenBy', function ($q) use ($query) {
+                            $q->where('name', 'like', '%' . $query . '%');
+                        });
+                });
+            }
+            if ($status == 'All') {
+                $prospects = $prospects->orderBy('sale_date', 'desc')->where('user_id', Auth::user()->id)->paginate('15');
+            } else {
+                $prospects = $prospects->orderBy('sale_date', 'desc')->where(['status' => $status])->where('user_id', Auth::user()->id)->paginate('15');
+            }
+
+            return response()->json(['data' => view('bde.prospect.table', compact('prospects'))->render()]);
+
+        }
     }
 
     /**
@@ -160,7 +190,7 @@ class ProspectController extends Controller
             $project_type->save();
         }
 
-        return redirect()->route('prospects.index')->with('message', 'Prospect created successfully.');
+        return redirect()->route('bde-prospects.index')->with('message', 'Prospect created successfully.');
     }
 
     /**
@@ -300,7 +330,7 @@ class ProspectController extends Controller
         }
 
 
-        return redirect()->route('prospects.index')->with('message', 'Prospect updated successfully.');
+        return redirect()->route('bde-prospects.index')->with('message', 'Prospect updated successfully.');
     }
 
     /**

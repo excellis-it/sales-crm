@@ -15,7 +15,7 @@
                     <div class="col">
                         <h3 class="page-title">Create</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('prospects.index') }}">Prospects</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('bde-prospects.index') }}">Prospects</a></li>
                             <li class="breadcrumb-item active">Create Prospect</li>
                         </ul>
                     </div>
@@ -32,7 +32,7 @@
                         <div class="col-xl-12 mx-auto">
                             {{-- <h3 class="mb-0 text-uppercase">Create A Prospect</h3>
                             <hr> --}}
-                            <form action="{{ route('prospects.store') }}" method="post" data-parsley-validate=""
+                            <form action="{{ route('bde-prospects.store') }}" method="post" data-parsley-validate=""
                                 enctype="multipart/form-data">
                                 @csrf
                                 <div class="border p-2 rounded">

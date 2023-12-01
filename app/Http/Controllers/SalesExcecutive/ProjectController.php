@@ -15,6 +15,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
+        
         $projects = Project::where('project_opener', auth()->user()->id)->orderBy('created_at', 'desc')->paginate(15);
         return view('sales_excecutive.project.list',compact('projects'));
     }
