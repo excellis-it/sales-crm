@@ -182,6 +182,8 @@ Route::group(['middleware' => ['SalesManager'], 'prefix' => 'sales-manager'], fu
         ]);
     });
 
+    Route::get('/prospect-search', [SalesManagerDashboardController::class, 'dashboardProspectSearch'])->name('sales-manger.dashboard.prospect-search-data');
+    Route::get('/sales-executive-search', [SalesManagerSalesExcecutiveController::class, 'salesExecutiveSerach'])->name('sales-manager.sales-excecutive.search');
     Route::get('/projects-filter', [ProjectController::class, 'filterProject'])->name('sales-manager.project.filter');
     Route::get('/prospect-filter', [SalesManagerProspectController::class, 'prospectFilter'])->name('sales-manager.prospects.filter');
     Route::get('/prospect-status-filter',[SalesManagerProspectController::class, 'prospectStatusFilter'])->name('sales-manager.prospects.status-filter'); // filter
