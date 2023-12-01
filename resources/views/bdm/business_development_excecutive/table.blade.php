@@ -20,11 +20,11 @@
             @else
             @foreach ($business_development_excecutives as $key => $business_development_excecutive)
                 <tr>
-                    <td>{{ $business_development_excecutive->name }}</td>
-                    <td>{{ $business_development_excecutive->email }}</td>
-                    <td>{{ $business_development_excecutive->phone }}</td>
-                    <td>{{ $business_development_excecutive->employee_id }}</td>
-                    <td>{{ $business_development_excecutive->date_of_joining }}</td>
+                    <td class="edit-route" data-route="{{ route('bde.edit', $business_development_excecutive->id) }}">{{ $business_development_excecutive->name }}</td>
+                    <td class="edit-route" data-route="{{ route('bde.edit', $business_development_excecutive->id) }}">{{ $business_development_excecutive->email }}</td>
+                    <td class="edit-route" data-route="{{ route('bde.edit', $business_development_excecutive->id) }}">{{ $business_development_excecutive->phone }}</td>
+                    <td class="edit-route" data-route="{{ route('bde.edit', $business_development_excecutive->id) }}">{{ $business_development_excecutive->employee_id }}</td>
+                    <td class="edit-route" data-route="{{ route('bde.edit', $business_development_excecutive->id) }}">{{ $business_development_excecutive->date_of_joining }}</td>
                     {{-- <td><a href="{{ route('bdm.prospects.index',['user_id'=>$business_development_excecutive->id]) }}">{{ $business_development_excecutive->prospects->count() }}</a></td> --}}
                     <td>
                         <div class="button-switch">
@@ -36,9 +36,6 @@
                         </div>
                     </td>
                     <td>
-                        <a title="Edit BDE" data-route=""
-                            href="{{ route('bde.edit', $business_development_excecutive->id) }}"><i
-                                class="fas fa-edit"></i></a> &nbsp;&nbsp;
 
                         <a title="Delete BDE"
                             data-route="{{ route('bde.delete', $business_development_excecutive->id) }}"

@@ -305,12 +305,6 @@
             });
         });
     </script>
-    <script>
-        $(document).ready(function() {
-           //how to place holder in "jquery datatable" search box
-            $('#myTable_filter input').attr("placeholder", "Search");
-        });
-    </script>
 
 <script>
     $(document).ready(function() {
@@ -357,7 +351,7 @@
                     $('#loading').removeClass('loading');
                     $('#loading-content').removeClass('loading-content');
                     window.location.reload();
-                    toastr.success('Follow-Up details added successfully');
+                    toastr.success('Sales Executive details added successfully');
                 },
                 error: function(xhr) {
                     // Handle errors (e.g., display validation errors)

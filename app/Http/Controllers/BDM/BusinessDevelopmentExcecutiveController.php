@@ -11,6 +11,7 @@ use App\Traits\ImageTrait;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Storage;
 use File;
+use Illuminate\Support\Facades\Auth;
 
 class BusinessDevelopmentExcecutiveController extends Controller
 {
@@ -23,7 +24,7 @@ class BusinessDevelopmentExcecutiveController extends Controller
      */
     public function index(Request $request)
     {
-        $business_development_excecutives  = User::Role('BUSINESS_DEVELOPMENT_EXCECUTIVE')->paginate(15);
+        $business_development_excecutives  = User::Role('BUSINESS_DEVELOPMENT_EXCECUTIVE')->where('bdm_id', Auth::user()->id)->paginate(15);
         return view('bdm.business_development_excecutive.list')->with(compact('business_development_excecutives'));
     }
 
@@ -47,7 +48,6 @@ class BusinessDevelopmentExcecutiveController extends Controller
      */
     public function create()
     {
-        $business_development_managers  = User::Role('BUSINESS_DEVELOPMENT_MANAGER')->orderBy('name', 'DESC')->where('status', 1)->get();
         return view('bdm.business_development_excecutive.create')->with(compact('business_development_managers'));
     }
 
@@ -94,7 +94,7 @@ class BusinessDevelopmentExcecutiveController extends Controller
         ];
 
         Mail::to($request->email)->send(new RegistrationMail($maildata));
-        return redirect()->route('bde.index')->with('message', 'BDE created successfully.');
+        return response()->json(['success' => 'BDE created successfully.']);
     }
 
     /**
@@ -115,9 +115,8 @@ class BusinessDevelopmentExcecutiveController extends Controller
      */
     public function edit($id)
     {
-        $business_development_managers  = User::Role('BUSINESS_DEVELOPMENT_MANAGER')->orderBy('name', 'DESC')->where('status', 1)->get();
         $business_development_excecutive = User::findOrFail($id);
-        return view('bdm.business_development_excecutive.edit')->with(compact('business_development_excecutive','business_development_managers'));
+        return response()->json(['bde' => $business_development_excecutive]);
     }
 
     /**
@@ -161,7 +160,7 @@ class BusinessDevelopmentExcecutiveController extends Controller
             $data->profile_picture = $this->imageUpload($request->file('profile_picture'), 'business_development_excecutive');
         }
         $data->save();
-        return redirect()->route('bde.index')->with('message', 'Sales manager updated successfully.');
+        return response()->json(['success' => 'BDE updated successfully.']);
     }
 
     /**
