@@ -49,7 +49,7 @@
                                             <div class="d-flex align-items-center mb-1">
                                                 <h4 class="mb-0">{{ Auth::user()->name }}</h4>
                                             </div>
-                                            <p class="mb-0 text-muted">Sales Excecutives</p>
+                                            <p class="mb-0 text-muted">Sales Executive</p>
                                         </div>
                                     </div>
                                 </div>

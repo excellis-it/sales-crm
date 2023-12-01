@@ -15,7 +15,7 @@
                     <div class="col">
                         <h3 class="page-title">Create</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('sales-excecutive.index') }}">Sales Excecutives</a>
+                            <li class="breadcrumb-item"><a href="{{ route('sales-excecutive.index') }}">Sales Executive</a>
                             </li>
                             <li class="breadcrumb-item active">Create Sales Excecutive</li>
                         </ul>

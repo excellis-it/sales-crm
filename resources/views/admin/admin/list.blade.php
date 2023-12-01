@@ -35,13 +35,13 @@
                             <div class="col-md-6">
                                 <h4 class="mb-0">Admin Details</h4>
                             </div>
-                            
+
                         </div>
                     </div>
 
                     <hr />
                     <div class="table-responsive">
-                        <table id="example" class="dd table table-striped table-bordered" style="width:100%">
+                        <table id="example" class="dd table table-striped table-bordered table-hover" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>Name</th>
@@ -52,7 +52,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($admins as $admin)
-                                
+
                                 <tr>
                                     <td style="display:none;"><a href="{{Storage::url($admin->profile_picture)}}" target="_blank" >
                                         <img src="{{Storage::url($admin->profile_picture)}}" class="rounded-circle shadow" width="130px" height="130px" alt="" id="img-{{ $admin->id }}" data-url="{{ Storage::url($admin->profile_picture) }}"></a></td>
@@ -64,12 +64,12 @@
                                                 data-bs-target="#edit_admin" data-id="{{ $admin->id }}"
                                                 data-route="{{ route('admin.edit', $admin->id) }}"><i
                                                     class="fas fa-edit"></i></a> &nbsp;&nbsp;
-                                                    
+
                                         <a href="{{route('admin.delete', $admin->id)}}" onclick="return confirm('Are you sure to delete this admin?')"><i class="fas fa-trash"></i></a>
-                                        
+
                                     </td>
                                 </tr>
-                               
+
                                 @endforeach
                             </tbody>
 
@@ -188,7 +188,7 @@
                                         </div>
                                     </div>
                                 </div>
-                               
+
                                 <div class="submit-section">
                                     <button class="btn btn-primary submit-btn">Update</button>
                                 </div>
@@ -244,7 +244,7 @@
 
             });
 
-            
+
         });
     </script>
     <script>

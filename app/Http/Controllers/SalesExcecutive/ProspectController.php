@@ -37,8 +37,8 @@ class ProspectController extends Controller
             $count['close'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Close')->count();
             $count['sent_proposal'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Sent Proposal')->count();
         }
-
-        return view('sales_excecutive.prospect.list')->with(compact('prospects', 'count'));
+        $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->get();
+        return view('sales_excecutive.prospect.list')->with(compact('prospects', 'count', 'users'));
     }
 
     /**
@@ -186,7 +186,8 @@ class ProspectController extends Controller
         try {
             $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->get();
             $prospect = Prospect::find($id);
-            return view('sales_excecutive.prospect.edit')->with(compact('prospect', 'users'));
+            $type = true;
+            return response()->json(['view' => (string)View::make('sales_excecutive.prospect.edit')->with(compact('prospect', 'users','type'))]);
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }

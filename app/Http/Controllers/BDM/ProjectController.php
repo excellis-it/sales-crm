@@ -25,12 +25,13 @@ class ProjectController extends Controller
     public function index()
     {
         $projects = Project::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->paginate(10);
-        return view('bdm.project.list',compact('projects'));
+        $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE', 'BUSINESS_DEVELOPMENT_MANAGER', 'BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
+        return view('bdm.project.list',compact('projects','users'));
     }
 
     public function bdmProjectFilter(Request $request)
     {
-        
+
         if ($request->ajax()) {
             $sort_by = $request->get('sortby');
             $sort_type = $request->get('sorttype');
@@ -47,10 +48,10 @@ class ProjectController extends Controller
                     ->orWhere('payment_mode', 'like', '%' . $query . '%')
                     ->orWhereHas('projectTypes', function ($q) use ($query) {
                         $q->Where('type', 'like', '%' . $query . '%');
-                    });     
+                    });
             })->paginate(10);
-            
-            
+
+
 
             return response()->json(['data' => view('bdm.project.table', compact('projects'))->render()]);
         }
@@ -182,7 +183,8 @@ class ProjectController extends Controller
         try {
             $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE', 'BUSINESS_DEVELOPMENT_MANAGER', 'BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
             $project = Project::find($id);
-            return view('bdm.project.edit')->with(compact('project', 'users'));
+            $type = true;
+            return response()->json(['view' => view('bdm.project.edit', compact('project', 'users', 'type'))->render()]);
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }

@@ -93,7 +93,7 @@ class SalesExcecutiveController extends Controller
         ];
 
         Mail::to($request->email)->send(new RegistrationMail($maildata));
-        return redirect()->route('sales-manager.sales-excecutive.index')->with('message', 'Sales excecutive created successfully.');
+        return response()->json(['success' => 'Sales excecutive created successfully.']);
     }
 
     /**
@@ -116,7 +116,7 @@ class SalesExcecutiveController extends Controller
     public function edit($id)
     {
         $sales_excecutive = User::find($id);
-        return view('sales_manager.sales_excecutive.edit')->with(compact('sales_excecutive'));
+        return response()->json(['sales_excecutive' => $sales_excecutive]);
     }
 
     /**
@@ -159,7 +159,7 @@ class SalesExcecutiveController extends Controller
             $data->profile_picture = $this->imageUpload($request->file('profile_picture'), 'sales_excecutive');
         }
         $data->save();
-        return redirect()->route('sales-manager.sales-excecutive.index')->with('message', 'Sales manager updated successfully.');
+        return response()->json(['success' => 'Sales excecutive updated successfully.']);
     }
 
     /**

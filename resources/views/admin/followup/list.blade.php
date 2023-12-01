@@ -135,7 +135,7 @@
 
 
                     <div class="table-responsive">
-                        <table id="myTable" class="dd table table-striped table-bordered" style="width:100%">
+                        <table id="myTable" class="dd table table-striped table-bordered table-hover" style="width:100%">
                             <thead>
                                 <tr>
                                     <th data-tippy-content=" Can't sort by Business Name" style="cursor: pointer">

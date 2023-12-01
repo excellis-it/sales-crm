@@ -73,6 +73,36 @@
                             </div>
                         </div>
                     </div>
+                    @else
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="stats-card-one mb-30">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <p class="mb-10 line-height-1">Gross Sales</p>
+                                    <h3 class="fs-25"> No Gross Sales Set</h3>
+                                </div>
+                                <span class="badge badge-cyan fs-12">
+                                    <i class="icofont-swoosh-up"></i>
+                                    <span class="fw-600 m-l-5">0%</span>
+                                </span>
+                            </div>
+
+                            <div class="mt-15">
+                                <div class="d-flex justify-content-between">
+                                    <div class="d-flex align-items-center">
+                                        <span class="monthly_goal">Monthly Goal</span>
+                                    </div>
+                                    <span class="fw-600 monthly_goal">0%</span>
+                                </div>
+
+                                <div class="progress progress-sm mt-1">
+                                    <div class="progress-bar bg-primary"
+                                        style="width: 0%">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 @endif
 
                 @if ($goal['net_goals'])
@@ -108,6 +138,36 @@
                                 <div class="progress progress-sm mt-1">
                                     <div class="progress-bar bg-danger"
                                         style="width: {{ $percentage['net_goals'] ?? 0 }}%">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @else
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="stats-card-one mb-30">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <p class="mb-10 line-height-1">Revenue</p>
+                                    <h3 class="fs-25"> No Goals Set </h3>
+                                </div>
+                                <span class="badge badge-cyan font-size-12">
+                                    <i class="icofont-swoosh-up"></i>
+                                    <span class="fw-600 m-l-5">0%</span>
+                                </span>
+                            </div>
+
+                            <div class="mt-15">
+                                <div class="d-flex justify-content-between">
+                                    <div class="d-flex align-items-center">
+                                        <span class="monthly_goal">Monthly Goal</span>
+                                    </div>
+                                    <span class="fw-600 monthly_goal">0%</span>
+                                </div>
+
+                                <div class="progress progress-sm mt-1">
+                                    <div class="progress-bar bg-danger"
+                                        style="width:0%">
                                     </div>
                                 </div>
                             </div>
@@ -301,7 +361,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="table-responsive" id="dashboard-prospect">
                             <table id="myTable" class="dd table table-striped table-bordered" style="width:100%">
                                 <thead>
@@ -320,10 +380,10 @@
                                 </thead>
                                 <tbody class="prospect-filter">
                                     @include('sales_manager.dashboard_prospect_table')
-                                   
+
                                 </tbody>
                             </table>
-                        </div>    
+                        </div>
                     </div>
                 </div>
 
@@ -419,7 +479,7 @@
             });
         };
     </script>
-   
+
     <script>
         $(document).ready(function() {
             //how to place holder in "jquery datatable" search box

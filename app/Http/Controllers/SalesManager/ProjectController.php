@@ -24,7 +24,8 @@ class ProjectController extends Controller
     public function index()
     {
         $projects = Project::where('user_id', Auth::user()->id)->orderBy('sale_date', 'desc')->paginate(15);
-        return view('sales_manager.project.list')->with(compact('projects'));
+        $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->orderBy('id', 'desc')->get();
+        return view('sales_manager.project.list')->with(compact('projects', 'users'));
     }
 
     public function filterProject(Request $request)
@@ -184,7 +185,8 @@ class ProjectController extends Controller
         try {
             $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->orderBy('id', 'desc')->get();
             $project = Project::find($id);
-            return view('sales_manager.project.edit')->with(compact('project', 'users'));
+            $type = true;
+            return response()->json(['view' => view('sales_manager.project.edit', compact('project', 'users', 'type'))->render()]);
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }
@@ -280,7 +282,7 @@ class ProjectController extends Controller
                 $project_pdf->save();
             }
         }
-
+        // return "d";
         return redirect()->route('projects.index')->with('message', 'Project updated successfully.');
     }
 

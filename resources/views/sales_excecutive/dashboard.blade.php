@@ -73,7 +73,38 @@
                             </div>
                         </div>
                     </div>
-                @endif
+                </div>
+                @else
+                <div class="col-lg-3 col-sm-6">
+                    <div class="stats-card-one mb-30">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="mb-10 line-height-1">Gross Sales</p>
+                                <h3 class="fs-25"> No Gross Sales Set</h3>
+                            </div>
+                            <span class="badge badge-cyan fs-12">
+                                <i class="icofont-swoosh-up"></i>
+                                <span class="fw-600 m-l-5">0%</span>
+                            </span>
+                        </div>
+
+                        <div class="mt-15">
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex align-items-center">
+                                    <span class="monthly_goal">Monthly Goal</span>
+                                </div>
+                                <span class="fw-600 monthly_goal">0%</span>
+                            </div>
+
+                            <div class="progress progress-sm mt-1">
+                                <div class="progress-bar bg-primary"
+                                    style="width: 0%">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
 
                 @if ($goal['net_goals'])
                     <div class="col-lg-3 col-sm-6">
@@ -113,13 +144,44 @@
                             </div>
                         </div>
                     </div>
-                @endif
+                </div>
+                @else
+                <div class="col-lg-3 col-sm-6">
+                    <div class="stats-card-one mb-30">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="mb-10 line-height-1">Revenue</p>
+                                <h3 class="fs-25"> No Goals Set </h3>
+                            </div>
+                            <span class="badge badge-cyan font-size-12">
+                                <i class="icofont-swoosh-up"></i>
+                                <span class="fw-600 m-l-5">0%</span>
+                            </span>
+                        </div>
+
+                        <div class="mt-15">
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex align-items-center">
+                                    <span class="monthly_goal">Monthly Goal</span>
+                                </div>
+                                <span class="fw-600 monthly_goal">0%</span>
+                            </div>
+
+                            <div class="progress progress-sm mt-1">
+                                <div class="progress-bar bg-danger"
+                                    style="width:0%">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
 
                 <div class="col-lg-3 col-sm-6">
                     <div class="stats-card-one mb-30">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <p class="mb-10 line-height-1">New Customers</p>
+                                <p class="mb-10 line-height-1">On Board Prospect</p>
                                 <h3 class="mb-0 fs-25">{{ $count['win'] }}</h3>
                             </div>
 
@@ -132,7 +194,7 @@
                         <div class="mt-15">
                             <div class="d-flex justify-content-between">
                                 <div class="d-flex align-items-center">
-                                    <span>Monthly Goal</span>
+                                    <span>Prospect Percentage</span>
                                 </div>
                                 <span class="fw-600">{{ $percentage['win'] }}%</span>
                             </div>
@@ -304,122 +366,97 @@
         </div>
     @endsection
 
-    @push('scripts')
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.min.js"></script>
-        <script>
-            var barChartData = {
-                labels: [
-                    "Jan",
-                    "Febr",
-                    "Mar",
-                    "Apr",
-                    "May",
-                    "Jun",
-                    "Jul",
-                    'Aug',
-                    'Sept',
-                    'Oct',
-                    'Nov',
-                    'Dec'
-                ],
-                datasets: [{
-                        label: "Gross Sales",
-                        backgroundColor: "#fa8d35",
-                        borderColor: "#fa8d35",
-                        borderWidth: 1,
-                        data: [{{ $goal['gross_goals_january'] ?? 0 }}, {{ $goal['gross_goals_february'] ?? 0 }},
-                            {{ $goal['gross_goals_march'] ?? 0 }}, {{ $goal['gross_goals_april'] ?? 0 }},
-                            {{ $goal['gross_goals_may'] ?? 0 }}, {{ $goal['gross_goals_june'] ?? 0 }},
-                            {{ $goal['gross_goals_july'] ?? 0 }}, {{ $goal['gross_goals_august'] ?? 0 }},
-                            {{ $goal['gross_goals_september'] ?? 0 }}, {{ $goal['gross_goals_october'] ?? 0 }},
-                            {{ $goal['gross_goals_november'] ?? 0 }}, {{ $goal['gross_goals_december'] ?? 0 }}
-                        ]
-                    },
-                    {
-                        label: "Revenue",
-                        backgroundColor: "#ad1e23",
-                        borderColor: "#ad1e23",
-                        borderWidth: 1,
-                        data: [{{ $goal['net_goals_january'] ?? 0 }}, {{ $goal['net_goals_february'] ?? 0 }},
-                            {{ $goal['net_goals_march'] ?? 0 }}, {{ $goal['net_goals_april'] ?? 0 }},
-                            {{ $goal['net_goals_may'] ?? 0 }}, {{ $goal['net_goals_june'] ?? 0 }},
-                            {{ $goal['net_goals_july'] ?? 0 }}, {{ $goal['net_goals_august'] ?? 0 }},
-                            {{ $goal['net_goals_september'] ?? 0 }}, {{ $goal['net_goals_october'] ?? 0 }},
-                            {{ $goal['net_goals_november'] ?? 0 }}, {{ $goal['net_goals_december'] ?? 0 }}
-                        ]
-                    },
-                    {
-                        label: "Prospect",
-                        backgroundColor: "#6c757d",
-                        borderColor: "#6c757d",
-                        borderWidth: 1,
-                        data: [{{ $goal['prospect_december'] ?? 0 }}, {{ $goal['prospect_january'] ?? 0 }},
-                            {{ $goal['prospect_february'] ?? 0 }}, {{ $goal['prospect_march'] ?? 0 }},
-                            {{ $goal['prospect_april'] ?? 0 }}, {{ $goal['prospect_may'] ?? 0 }},
-                            {{ $goal['prospect_june'] ?? 0 }}, {{ $goal['prospect_july'] ?? 0 }},
-                            {{ $goal['prospect_august'] ?? 0 }}, {{ $goal['prospect_september'] ?? 0 }},
-                            {{ $goal['prospect_october'] ?? 0 }}, {{ $goal['prospect_november'] ?? 0 }}
-                        ]
-                    },
-                ]
-            };
+@endsection
 
-            var chartOptions = {
-                responsive: true,
-                legend: {
-                    position: "top"
-                },
-                title: {
-                    display: true,
-                    text: ""
-                },
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                }
-            }
-
-            window.onload = function() {
-                var ctx = document.getElementById("canvas").getContext("2d");
-                window.myBar = new Chart(ctx, {
-                    type: "bar",
-                    data: barChartData,
-                    options: chartOptions
-                });
-            };
-        </script>
-        {{-- <script>
-            $(document).ready(function() {
-                //Default data table
-                $('#myTable').DataTable({
-                    "aaSorting": [],
-                    "columnDefs": [{
-                            "orderable": false,
-                            "targets": []
-                        },
-                        {
-                            "orderable": true,
-                            "targets": [0, 1, 2, 5, 6, 7, 8, 9]
-                        }
+@push('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.min.js"></script>
+    <script>
+        var barChartData = {
+            labels: [
+                "Jan",
+                "Febr",
+                "Mar",
+                "Apr",
+                "May",
+                "Jun",
+                "Jul",
+                'Aug',
+                'Sept',
+                'Oct',
+                'Nov',
+                'Dec'
+            ],
+            datasets: [{
+                    label: "Gross Sales",
+                    backgroundColor: "#fa8d35",
+                    borderColor: "#fa8d35",
+                    borderWidth: 1,
+                    data: [{{ $goal['gross_goals_january'] ?? 0 }}, {{ $goal['gross_goals_february'] ?? 0 }},
+                        {{ $goal['gross_goals_march'] ?? 0 }}, {{ $goal['gross_goals_april'] ?? 0 }},
+                        {{ $goal['gross_goals_may'] ?? 0 }}, {{ $goal['gross_goals_june'] ?? 0 }},
+                        {{ $goal['gross_goals_july'] ?? 0 }}, {{ $goal['gross_goals_august'] ?? 0 }},
+                        {{ $goal['gross_goals_september'] ?? 0 }}, {{ $goal['gross_goals_october'] ?? 0 }},
+                        {{ $goal['gross_goals_november'] ?? 0 }}, {{ $goal['gross_goals_december'] ?? 0 }}
                     ]
-                });
+                },
+                {
+                    label: "Revenue",
+                    backgroundColor: "#ad1e23",
+                    borderColor: "#ad1e23",
+                    borderWidth: 1,
+                    data: [{{ $goal['net_goals_january'] ?? 0 }}, {{ $goal['net_goals_february'] ?? 0 }},
+                        {{ $goal['net_goals_march'] ?? 0 }}, {{ $goal['net_goals_april'] ?? 0 }},
+                        {{ $goal['net_goals_may'] ?? 0 }}, {{ $goal['net_goals_june'] ?? 0 }},
+                        {{ $goal['net_goals_july'] ?? 0 }}, {{ $goal['net_goals_august'] ?? 0 }},
+                        {{ $goal['net_goals_september'] ?? 0 }}, {{ $goal['net_goals_october'] ?? 0 }},
+                        {{ $goal['net_goals_november'] ?? 0 }}, {{ $goal['net_goals_december'] ?? 0 }}
+                    ]
+                },
+                {
+                    label: "Prospect",
+                    backgroundColor: "#6c757d",
+                    borderColor: "#6c757d",
+                    borderWidth: 1,
+                    data: [{{ $goal['prospect_december'] ?? 0 }}, {{ $goal['prospect_january'] ?? 0 }},
+                        {{ $goal['prospect_february'] ?? 0 }}, {{ $goal['prospect_march'] ?? 0 }},
+                        {{ $goal['prospect_april'] ?? 0 }}, {{ $goal['prospect_may'] ?? 0 }},
+                        {{ $goal['prospect_june'] ?? 0 }}, {{ $goal['prospect_july'] ?? 0 }},
+                        {{ $goal['prospect_august'] ?? 0 }}, {{ $goal['prospect_september'] ?? 0 }},
+                        {{ $goal['prospect_october'] ?? 0 }}, {{ $goal['prospect_november'] ?? 0 }}
+                    ]
+                },
+            ]
+        };
 
-            });
-        </script> --}}
-        <script>
-            $(document).ready(function() {
-                //how to place holder in "jquery datatable" search box
-                $('#myTable_filter input').attr("placeholder", "Search");
-            });
-        </script>
-        <script>
-            var oilCanvas = document.getElementById("oilChart");
+        var chartOptions = {
+            responsive: true,
+            legend: {
+                position: "top"
+            },
+            title: {
+                display: true,
+                text: ""
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
 
-            Chart.defaults.global.defaultFontFamily = "Lato";
-            Chart.defaults.global.defaultFontSize = 18;
+        window.onload = function() {
+            var ctx = document.getElementById("canvas").getContext("2d");
+            window.myBar = new Chart(ctx, {
+                type: "bar",
+                data: barChartData,
+                options: chartOptions
+            });
+        };
+    </script>
+    <script>
+        var oilCanvas = document.getElementById("oilChart");
 
             var oilData = {
                 labels: [
@@ -441,87 +478,10 @@
                 }]
             };
 
-            var pieChart = new Chart(oilCanvas, {
-                type: 'pie',
-                data: oilData
-            });
-        </script>
+        var pieChart = new Chart(oilCanvas, {
+            type: 'pie',
+            data: oilData
+        });
+    </script>
 
-        <script>
-            $(document).ready(function() {
-                function clear_icon() {
-                    $('#date_icon').html('');
-                    $('#business_name_icon').html('');
-                    $('#client_name_icon').html('');
-                    $('#email_icon').html('');
-                    $('#phone_icon').html('');
-                    $('#follow_icon').html('');
-                    $('#price_quoted_icon').html('');
-                    // $('#currency_icon').html('');
-                }
-
-                function fetch_data(page, sort_type, sort_by, query) {
-                    $.ajax({
-                        url: "{{ route('sales-executive.dashboard.prospect-search-data') }}",
-                        data: {
-                            page: page,
-                            sortby: sort_by,
-                            sorttype: sort_type,
-                            query: query
-                        },
-                        success: function(data) {
-                            $('.prospect-filter').html(data.data);
-                        }
-                    });
-                }
-
-                $(document).on('keyup', '#search', function() {
-                    var query = $('#search').val();
-                    var column_name = $('#hidden_column_name').val();
-                    var sort_type = $('#hidden_sort_type').val();
-                    var page = $('#hidden_page').val();
-                    fetch_data(page, sort_type, column_name, query);
-                });
-
-                $(document).on('click', '.sorting', function() {
-                    var column_name = $(this).data('column_name');
-                    var order_type = $(this).data('sorting_type');
-                    var reverse_order = '';
-                    if (order_type == 'asc') {
-                        $(this).data('sorting_type', 'desc');
-                        reverse_order = 'desc';
-                        clear_icon();
-                        $('#' + column_name + '_icon').html(
-                            '<span class="fa fa-sort-down"></span>');
-                    }
-                    if (order_type == 'desc') {
-                        $(this).data('sorting_type', 'asc');
-                        reverse_order = 'asc';
-                        clear_icon();
-                        $('#' + column_name + '_icon').html(
-                            '<span class="fa fa-sort-up"></span>');
-                    }
-                    $('#hidden_column_name').val(column_name);
-                    $('#hidden_sort_type').val(reverse_order);
-                    var page = $('#hidden_page').val();
-                    var query = $('#search').val();
-                    fetch_data(page, reverse_order, column_name, query);
-                });
-
-                $(document).on('click', '.pagination a', function(event) {
-                    event.preventDefault();
-                    var page = $(this).attr('href').split('page=')[1];
-                    $('#hidden_page').val(page);
-                    var column_name = $('#hidden_column_name').val();
-                    var sort_type = $('#hidden_sort_type').val();
-
-                    var query = $('#search').val();
-
-                    $('li').removeClass('active');
-                    $(this).parent().addClass('active');
-                    fetch_data(page, sort_type, column_name, query);
-                });
-
-            });
-        </script>
-    @endpush
+@endpush

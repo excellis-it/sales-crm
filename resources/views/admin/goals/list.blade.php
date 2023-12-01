@@ -121,8 +121,8 @@
                                     <div class="row g-1 justify-content-end">
                                         <div class="col-md-8 pr-0">
                                             <div class="search-field">
-                                                <input type="text" name="search" id="search" placeholder="search..." required
-                                                    class="form-control rounded_search">
+                                                <input type="text" name="search" id="search"
+                                                    placeholder="search..." required class="form-control rounded_search">
                                                 <button class="submit_search" id="search-button"> <span class=""><i
                                                             class="fa fa-search"></i></span></button>
                                             </div>
@@ -137,70 +137,9 @@
                         </div>
                     </div>
                 </div>
-               <div class="col-md-12">
-                    {{-- <div class="card">
-                        <div class="card-body">
-                            <div class="card-title">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <h4 class="mb-0">Project Goals For Account Manager</h4>
-                                    </div>
+                <div class="col-md-12">
 
-                                </div>
-                            </div>
-
-                            <hr />
-                            <div class="table-responsive">
-                                <table id="myTable1" class="dd table table-striped table-bordered" style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th>Goals Date</th>
-                                            <th> Goals Type</th>
-                                            <th> Goal Assign For</th>
-                                            <th> Target Amount </th>
-                                            <th>Target Achieve</th>
-                                            <th>
-                                                Action
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($goals as $key => $goal)
-                                            <tr>
-                                                <td>
-                                                    {{ date('M ,Y', strtotime($goal->goals_date)) }}
-                                                </td>
-                                                <td>
-                                                    {{ $goal->goals_type == 1 ? 'Gross' : 'Net' }}
-                                                </td>
-                                                <td>
-                                                    {{ $goal->user->name }}
-                                                </td>
-                                                <td>
-                                                    {{ $goal->goals_amount }}
-                                                </td>
-                                                <td>
-                                                    {{ $goal->goals_achieve ?? 0 }}
-                                                </td>
-                                                <td>
-                                                    <a href="javascript:void(0);"
-                                                        data-route="{{ route('goals.edit', $goal->id) }}"
-                                                        data-role="ACCOUNT_MANAGER" class="edit-data"><i
-                                                            class="fas fa-edit"></i> </a> &nbsp;
-                                                    <a title="Delete Project"
-                                                        data-route="{{ route('goals.delete', $goal->id) }}"
-                                                        href="javascipt:void(0);" id="delete"><i
-                                                            class="fas fa-trash"></i></a>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div> --}}
-
-                </div> 
+                </div>
             </div>
 
         </div>
@@ -404,12 +343,12 @@
 
     <script>
         $(document).ready(function() {
-            $('#search-button').on('click', function() {
-                var text = $('#search').val();
-                if (text == '') {
-                    alert('Please type something for search!');
-                    return false;
-                }
+            $('#search').on('keyup', function() {
+                var text = $(this).val();
+                // if (text == '') {
+                //     alert('Please type something for search!');
+                //     return false;
+                // }
                 url = "{{ route('project-goals.search') }}"
                 $('#loading').addClass('loading');
                 $('#loading-content').addClass('loading-content');
@@ -420,9 +359,9 @@
                         text: text,
                     },
                     success: function(response) {
-                       
+
                         $('#project_goals_data').html(response.view);
-                        $('#search').val('');
+                        // $('#search').val('');
                         $('#loading').removeClass('loading');
                         $('#loading-content').removeClass('loading-content');
                     }
@@ -430,46 +369,4 @@
             });
         });
     </script>
-
-    {{-- <script>
-        $(document).ready(function() {
-
-            var table = $('#myTable').DataTable({
-                "order": [
-                    [0, "desc"]
-                ],
-                processing: true,
-                serverSide: true,
-                ajax: "{{ route('goals.ajax-list') }}",
-                columns: [{
-                        data: 'goals_date',
-                        name: 'goals_date'
-                    },
-                    {
-                        data: 'goals_type',
-                        name: 'goals_type'
-                    },
-                    {
-                        data: 'user_id',
-                        name: 'user_id'
-                    },
-                    {
-                        data: 'goals_amount',
-                        name: 'goals_amount'
-                    },
-                    {
-                        data: 'goals_achieve',
-                        name: 'goals_achieve'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false
-                    },
-                ]
-            });
-
-        });
-    </script> --}}
 @endpush

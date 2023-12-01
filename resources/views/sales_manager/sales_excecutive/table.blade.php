@@ -19,12 +19,12 @@
     @else
         @foreach ($sales_excecutives as $key => $sales_excecutive)
             <tr>
-                <td>{{ $sales_excecutive->name }}</td>
-                <td>{{ $sales_excecutive->email }}</td>
-                <td>{{ $sales_excecutive->phone }}</td>
-                <td>{{ $sales_excecutive->employee_id }}</td>
-                <td>{{ $sales_excecutive->date_of_joining }}</td>
-                <td>{{ $sales_excecutive->prospects->count() }}</td>
+                <td class="edit-route" data-route="{{ route('sales-manager.sales-excecutive.edit', $sales_excecutive->id) }}">{{ $sales_excecutive->name }}</td>
+                <td class="edit-route" data-route="{{ route('sales-manager.sales-excecutive.edit', $sales_excecutive->id) }}">{{ $sales_excecutive->email }}</td>
+                <td class="edit-route" data-route="{{ route('sales-manager.sales-excecutive.edit', $sales_excecutive->id) }}">{{ $sales_excecutive->phone }}</td>
+                <td class="edit-route" data-route="{{ route('sales-manager.sales-excecutive.edit', $sales_excecutive->id) }}">{{ $sales_excecutive->employee_id }}</td>
+                <td class="edit-route" data-route="{{ route('sales-manager.sales-excecutive.edit', $sales_excecutive->id) }}">{{ $sales_excecutive->date_of_joining }}</td>
+                <td class="edit-route" data-route="{{ route('sales-manager.sales-excecutive.edit', $sales_excecutive->id) }}">{{ $sales_excecutive->prospects->count() }}</td>
                 <td>
                     <div class="button-switch">
                         <input type="checkbox" id="switch-orange" class="switch toggle-class"
