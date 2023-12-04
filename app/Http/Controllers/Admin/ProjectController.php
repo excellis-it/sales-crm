@@ -163,7 +163,7 @@ class ProjectController extends Controller
                     $project_milestone->milestone_name = $milestone;
                     $project_milestone->milestone_value = $data['milestone_value'][$key];
                     $project_milestone->payment_status = $data['payment_status'][$key];
-                    $project_milestone->payment_date = $data['payment_date'][$key] ?? '';
+                    $project_milestone->payment_date =($data['payment_status'][$key] == 'Paid') ? date('Y-m-d') : '';
                     $project_milestone->milestone_comment = $data['milestone_comment'][$key];
                     $project_milestone->save();
                 }
@@ -288,7 +288,7 @@ class ProjectController extends Controller
                     $project_milestone->milestone_name = $milestone;
                     $project_milestone->milestone_value = $data['milestone_value'][$key];
                     $project_milestone->payment_status = $data['payment_status'][$key];
-                    $project_milestone->payment_date = $data['payment_date'][$key] ?? '';
+                    $project_milestone->payment_date = ($data['payment_status'][$key] == 'Paid') ? date('Y-m-d') : '';
                     $project_milestone->milestone_comment = $data['milestone_comment'][$key];
                     $project_milestone->save();
                 }
@@ -344,13 +344,13 @@ class ProjectController extends Controller
             $project->assigned_date = date('Y-m-d');
             $project->save();
 
-            $countGoal = Goal::where('user_id', $data['assigned_to'])->whereMonth('goals_date', date('m'))->whereYear('goals_date', date('Y'))->count();
-            if ($countGoal > 0) {
-                $milestone = ProjectMilestone::where(['project_id' => $data['project_id'], 'payment_status' => 'Paid'])->whereMonth('payment_date', date('m'))->whereYear('payment_date', date('Y'))->sum('milestone_value');
-                $goal = Goal::where('user_id', $data['assigned_to'])->whereMonth('goals_date', date('m'))->whereYear('goals_date', date('Y'))->first();
-                $goal->goals_achieve = $goal->goals_achieve + $milestone;
-                $goal->save();
-            }
+            // $countGoal = Goal::where('user_id', $data['assigned_to'])->whereMonth('goals_date', date('m'))->whereYear('goals_date', date('Y'))->count();
+            // if ($countGoal > 0) {
+            //     $milestone = ProjectMilestone::where(['project_id' => $data['project_id'], 'payment_status' => 'Paid'])->whereMonth('payment_date', date('m'))->whereYear('payment_date', date('Y'))->sum('milestone_value');
+            //     $goal = Goal::where('user_id', $data['assigned_to'])->whereMonth('goals_date', date('m'))->whereYear('goals_date', date('Y'))->first();
+            //     $goal->goals_achieve = $goal->goals_achieve + $milestone;
+            //     $goal->save();
+            // }
             return response()->json(['status' => 'success', 'message' => 'Project assigned successfully.']);
         }
     }

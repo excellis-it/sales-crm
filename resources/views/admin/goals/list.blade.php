@@ -171,12 +171,30 @@
                     role: role
                 },
                 success: function(resp) {
+                    // space remove
+                    role = role.replace(/\s/g, '');
                     if (role == 'SALES_MANAGER') {
                         // select user type
                         $('#user_type').val('SALES_MANAGER');
-                    } else {
+                        console.log('sales manager');
+                    } else if (role == 'ACCOUNT_MANAGER') {
+                        // select user type
                         $('#user_type').val('ACCOUNT_MANAGER');
+                        console.log('account manager');
+                    } else if (role == 'SALES_EXCUETIVE') {
+                        // select user type
+                        $('#user_type').val('SALES_EXCUETIVE');
+                        console.log('sales excuetive');
+                    } else if (role == 'BUSINESS_DEVELOPMENT_MANAGER') {
+                        console.log('business development manager');
+                        // select user type
+                        $('#user_type').val('BUSINESS_DEVELOPMENT_MANAGER');
+                    } else {
+                        // select user type
+                        $('#user_type').val('BUSINESS_DEVELOPMENT_EXCECUTIVE');
+                        console.log('business development excuetive');
                     }
+
                     console.log(resp.users);
                     var html = '<option value="">Select a user</option>';
                     $.each(resp.users, function(key, value) {

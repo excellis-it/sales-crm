@@ -7,13 +7,130 @@
         .dataTables_filter {
             margin-bottom: 10px !important;
         }
+        #canvas {
+    height: 20rem;
+}
+        .chartjs-custom {
+    position: relative;
+    overflow: hidden;
+    margin-right: auto;
+    margin-left: auto
+}
+
+.hs-chartjs-tooltip-wrap {
+    position: absolute;
+    z-index: 3;
+    transition: opacity .2s ease-in-out, left .2s ease, top .2s ease
+}
+
+.hs-chartjs-tooltip {
+    position: relative;
+    font-size: .75rem;
+    background-color: #132144;
+    border-radius: .3125rem;
+    padding: .54688rem .875rem;
+    transition: opacity .2s ease-in-out, left .2s ease, top .2s ease, top 0s
+}
+
+.hs-chartjs-tooltip::before {
+    position: absolute;
+    left: calc(50% - .5rem);
+    bottom: -.4375rem;
+    width: 1rem;
+    height: .5rem;
+    content: "";
+    background-image: url("data:image/svg+xml,%3Csvg width='1rem' height='0.5rem' xmlns='http://www.w3.org/2000/svg' x='0px' y='0px' viewBox='0 0 50 22.49'%3E%3Cpath fill='%23132144' d='M0,0h50L31.87,19.65c-3.45,3.73-9.33,3.79-12.85,0.13L0,0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 1rem .5rem
+}
+
+.hs-chartjs-tooltip-left {
+    left: -130%
+}
+
+.hs-chartjs-tooltip-left::before {
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    right: -.6875rem;
+    left: auto;
+    -webkit-transform: translateY(-50%) rotate(270deg);
+    transform: translateY(-50%) rotate(270deg)
+}
+
+.hs-chartjs-tooltip-right {
+    left: 30%
+}
+
+.hs-chartjs-tooltip-right::before {
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    left: -.6875rem;
+    right: auto;
+    -webkit-transform: translateY(-50%) rotate(90deg);
+    transform: translateY(-50%) rotate(90deg)
+}
+
+.hs-chartjs-tooltip-header {
+    color: rgba(255, 255, 255, .7);
+    font-weight: 600;
+    white-space: nowrap
+}
+
+.hs-chartjs-tooltip-body {
+    color: #fff
+}
+
+.chartjs-doughnut-custom {
+    position: relative
+}
+
+.chartjs-doughnut-custom-stat {
+    position: absolute;
+    top: 8rem;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%)
+}
+
+.chartjs-matrix-custom {
+    position: relative
+}
+
+.hs-chartjs-matrix-legend {
+    display: inline-block;
+    position: relative;
+    height: 2.5rem;
+    list-style: none;
+    padding-left: 0
+}
+
+.hs-chartjs-matrix-legend-item {
+    width: .625rem;
+    height: .625rem;
+    display: inline-block
+}
+
+.hs-chartjs-matrix-legend-min {
+    position: absolute;
+    left: 0;
+    bottom: 0
+}
+
+.hs-chartjs-matrix-legend-max {
+    position: absolute;
+    right: 0;
+    bottom: 0
+}
     </style>
 @endpush
 
 @section('content')
     @php
-       $totalProspects = ($count['prospects'] == 0) ? 1 : $count['prospects'];
-        $winProspects = ($count['win'] == 0) ? 1 : $count['win'];
+        $totalProspects = $count['prospects'] == 0 ? 1 : $count['prospects'];
+        $winProspects = $count['win'] == 0 ? 1 : $count['win'];
         $percentage['win'] = round(($winProspects / $totalProspects) * 100);
         $percentage['follow_up'] = round(($count['follow_up'] / $totalProspects) * 100);
         $percentage['sent_proposal'] = round(($count['sent_proposal'] / $totalProspects) * 100);
@@ -51,308 +168,209 @@
                         </div>
                     </div>
                     <div class="row">
-                      @if ($goal['gross_goals'])
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="stats-card-one mb-30">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <p class="mb-10 line-height-1">Gross Sales</p>
-                                        <h3 class="fs-25"> {{ $goal['gross_goals'] ? '$' . $goal['gross_goals'] : 'N/A' }} /
-                                            ${{ $goal['gross_goals_achieve'] ?? 0 }} </h3>
-                                    </div>
-                                    <?php
-                                    $target = $goal['gross_goals'] ?? 0;
-                                    $achieve = $goal['gross_goals_achieve'] ?? 0;
-                                    // round percentage
-                                    $percentage['gross_goals_achieve'] = round(($achieve / $target) * 100, 0);
-                                    ?>
-                                    <span class="badge badge-cyan fs-12">
-                                        <i class="icofont-swoosh-up"></i>
-                                        <span class="fw-600 m-l-5">{{ $percentage['gross_goals_achieve'] ?? 0 }}%</span>
-                                    </span>
-                                </div>
-
-                                <div class="mt-15">
+                        <div class="col-lg-3">
+                            <div class="card mb-30">
+                                <div class="card-body">
                                     <div class="d-flex justify-content-between">
                                         <div class="d-flex align-items-center">
-                                            <span class="monthly_goal">Monthly Goal</span>
+                                            <span>Sales Manager</span>
                                         </div>
-                                        <span class="fw-600">{{ $percentage['gross_goals_achieve'] ?? 0 }}%</span>
-                                    </div>
 
-                                    <div class="progress progress-sm mt-1">
-                                        <div class="progress-bar bg-primary"
-                                            style="width: {{ $percentage['gross_goals_achieve'] ?? 0 }}%">
-                                        </div>
+                                        <span class="fw-600">{{ $count['users'] ?? 0 }}</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        @else
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="stats-card-one mb-30">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <p class="mb-10 line-height-1">Gross Sales</p>
-                                        <h3 class="fs-25"> No Gross Sales Set</h3>
-                                    </div>
-                                    <span class="badge badge-cyan fs-12">
-                                        <i class="icofont-swoosh-up"></i>
-                                        <span class="fw-600 m-l-5">0%</span>
-                                    </span>
-                                </div>
 
-                                <div class="mt-15">
+                        <div class="col-lg-3">
+                            <div class="card mb-30">
+                                <div class="card-body">
                                     <div class="d-flex justify-content-between">
                                         <div class="d-flex align-items-center">
-                                            <span class="monthly_goal">Monthly Goal</span>
+                                            <span>Sales Executive</span>
                                         </div>
-                                        <span class="fw-600 monthly_goal">0%</span>
-                                    </div>
-
-                                    <div class="progress progress-sm mt-1">
-                                        <div class="progress-bar bg-primary"
-                                            style="width: 0%">
-                                        </div>
+                                        <span class="fw-600">{{ $count['sales_excecutive'] }}</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                         @endif
 
-                       @if ($goal['net_goals'])
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="stats-card-one mb-30">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <p class="mb-10 line-height-1">Revenue</p>
-                                        <h3 class="fs-25"> {{ $goal['net_goals'] ? '$' . $goal['net_goals'] : 'N/A' }}
-                                            ${{ $goal['net_goals_achieve'] ?? 0 }} </h3>
-                                    </div>
-                                    <?php
-                                    $target = $goal['net_goals'] ?? 0;
-                                    $achieve = $goal['net_goals_achieve'] ?? 0;
-                                    // round percentage
-                                    $percentage['net_goals_achieve'] = round(($achieve / $target) * 100, 0);
-                                    ?>
-                                    <span class="badge badge-cyan font-size-12">
-                                        <i class="icofont-swoosh-up"></i>
-                                        <span class="fw-600 m-l-5">{{ $percentage['net_goals_achieve'] ?? 0 }}%</span>
-                                    </span>
-                                </div>
-
-                                <div class="mt-15">
+                        <div class="col-lg-3">
+                            <div class="card mb-30">
+                                <div class="card-body">
                                     <div class="d-flex justify-content-between">
                                         <div class="d-flex align-items-center">
-                                            <span class="monthly_goal">Monthly Goal</span>
+                                            <span>Account Manager</span>
                                         </div>
-                                        <span class="fw-600 monthly_goal">{{ $percentage['net_goals_achieve'] ?? 0 }}%</span>
-                                    </div>
-
-                                    <div class="progress progress-sm mt-1">
-                                        <div class="progress-bar bg-danger"
-                                            style="width: {{ $percentage['net_goals_achieve'] ?? 0 }}%">
-                                        </div>
+                                        <span class="fw-600">{{ $count['account_managers'] }}</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        @else
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="stats-card-one mb-30">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <p class="mb-10 line-height-1">Revenue</p>
-                                        <h3 class="fs-25"> No Goals Set </h3>
-                                    </div>
-                                    <span class="badge badge-cyan font-size-12">
-                                        <i class="icofont-swoosh-up"></i>
-                                        <span class="fw-600 m-l-5">0%</span>
-                                    </span>
-                                </div>
 
-                                <div class="mt-15">
+                        <div class="col-lg-3">
+                            <div class="card mb-30">
+                                <div class="card-body">
                                     <div class="d-flex justify-content-between">
                                         <div class="d-flex align-items-center">
-                                            <span class="monthly_goal">Monthly Goal</span>
+                                            <span>BDM</span>
                                         </div>
-                                        <span class="fw-600 monthly_goal">0%</span>
-                                    </div>
-
-                                    <div class="progress progress-sm mt-1">
-                                        <div class="progress-bar bg-danger"
-                                            style="width:0%">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                      @endif
-
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="stats-card-one mb-30">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <p class="mb-10 line-height-1">On Board Prospect</p>
-                                        <h3 class="fs-25">{{ $count['win'] }}</h3>
-                                    </div>
-
-                                    <span class="badge badge-red font-size-12">
-                                        <i class="icofont-swoosh-down"></i>
-                                        <span class="fw-600 m-l-5">{{ $percentage['win'] }}%</span>
-                                    </span>
-                                </div>
-
-                                <div class="mt-15">
-                                    <div class="d-flex justify-content-between">
-                                        <div class="d-flex align-items-center">
-                                            <span class="monthly_goal">Monthly Goal</span>
-                                        </div>
-                                        <span class="fw-600 monthly_goal">{{ $percentage['win'] }}%</span>
-                                    </div>
-
-                                    <div class="progress progress-sm mt-1">
-                                        <div class="progress-bar bg-purple" style="width: {{ $percentage['win'] }}%"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="stats-card-one mb-30">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <p class="mb-10 line-height-1">Total Projects</p>
-                                        <h3 class="fs-25">{{ $count['projects'] }}</h3>
-                                    </div>
-
-                                    <span class="badge badge-red font-size-12">
-                                        <i class="icofont-swoosh-down"></i>
-                                        <span class="fw-600 m-l-5">100%</span>
-                                    </span>
-                                </div>
-
-                                <div class="mt-15">
-                                    <div class="d-flex justify-content-between">
-                                        <div class="d-flex align-items-center">
-                                            <span class="monthly_goal">Monthly Goal</span>
-                                        </div>
-                                        <span class="fw-600 monthly_goal">100%</span>
-                                    </div>
-
-                                    <div class="progress progress-sm mt-1">
-                                        <div class="progress-bar bg-black" style="width: 100%"></div>
+                                        <span class="fw-600">{{ $count['bdm'] }}</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="stats-card-one mb-30">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <p class="mb-10 line-height-1">Sales Manager</p>
-                                        <h3 class="fs-25"> {{ $count['sales_managers'] }} </h3>
-                                    </div>
-                                    <?php
-                                    $totalUsers = ($count['users'] == 0) ? 1 : $count['users'];
-                                    $percentage['sales_manager'] = round(($totalUsers / $totalUsers) * 100, 0);
-                                    $percentage['account_manager'] = round(($totalUsers / $totalUsers) * 100, 0);
-                                    $percentage['sales_excecutive'] = round(($totalUsers / $totalUsers) * 100, 0);
-                                    ?>
-                                    <span class="badge badge-cyan fs-12">
-                                        <i class="icofont-swoosh-up"></i>
-                                        <span class="fw-600 m-l-5">{{ $percentage['sales_manager'] ?? 0 }}%</span>
-                                    </span>
-                                </div>
-
-                                <div class="mt-15">
-                                    <div class="d-flex justify-content-between">
-                                        <div class="d-flex align-items-center">
-                                            <span class="monthly_goal">Total Users</span>
+                        @if ($goal['gross_goals'])
+                            <div class="col-lg-3 col-sm-6">
+                                <div class="stats-card-one mb-30">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <p class="mb-10 line-height-1">Gross Sales</p>
+                                            <h3 class="fs-25">
+                                                {{ $goal['gross_goals'] ? '$' . $goal['gross_goals'] : 'N/A' }} /
+                                                ${{ $goal['gross_goals_achieve'] ?? 0 }} </h3>
                                         </div>
-                                        <span class="fw-600 monthly_goal">{{ $count['users'] ?? 0 }}</span>
+                                        <?php
+                                        $target = $goal['gross_goals'] ?? 0;
+                                        $achieve = $goal['gross_goals_achieve'] ?? 0;
+                                        // round percentage
+                                        $percentage['gross_goals_achieve'] = round(($achieve / $target) * 100, 0);
+                                        ?>
+                                        <span class="badge badge-cyan fs-12">
+                                            <i class="icofont-swoosh-up"></i>
+                                            <span class="fw-600 m-l-5">{{ $percentage['gross_goals_achieve'] ?? 0 }}%</span>
+                                        </span>
                                     </div>
 
-                                    <div class="progress progress-sm mt-1">
-                                        <div class="progress-bar bg-primary"
-                                            style="width: {{ $percentage['sales_manager'] ?? 0 }}%">
+                                    <div class="mt-15">
+                                        <div class="d-flex justify-content-between">
+                                            <div class="d-flex align-items-center">
+                                                <span class="monthly_goal">Monthly Goal</span>
+                                            </div>
+                                            <span class="fw-600">{{ $percentage['gross_goals_achieve'] ?? 0 }}%</span>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="stats-card-one mb-30">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <p class="mb-10 line-height-1">Sales Excecutive</p>
-                                        <h3 class="fs-25"> {{ $count['sales_excecutive'] }} </h3>
-                                    </div>
 
-                                    <span class="badge badge-cyan font-size-12">
-                                        <i class="icofont-swoosh-up"></i>
-                                        <span class="fw-600 m-l-5">{{ $percentage['sales_excecutive'] ?? 0 }}%</span>
-                                    </span>
-                                </div>
-
-                                <div class="mt-15">
-                                    <div class="d-flex justify-content-between">
-                                        <div class="d-flex align-items-center">
-                                            <span class="monthly_goal">Total Users</span>
-                                        </div>
-                                        <span class="fw-600 monthly_goal">{{ $count['users'] ?? 0 }}</span>
-                                    </div>
-
-                                    <div class="progress progress-sm mt-1">
-                                        <div class="progress-bar bg-danger"
-                                            style="width: {{ $percentage['sales_excecutive'] ?? 0 }}%">
+                                        <div class="progress progress-sm mt-1">
+                                            <div class="progress-bar bg-primary"
+                                                style="width: {{ $percentage['gross_goals_achieve'] ?? 0 }}%">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        @else
+                            <div class="col-lg-3 col-sm-6">
+                                <div class="stats-card-one mb-30">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <p class="mb-10 line-height-1">Gross Sales</p>
+                                            <h3 class="fs-25"> No Gross Sales Set</h3>
+                                        </div>
+                                        <span class="badge badge-cyan fs-12">
+                                            <i class="icofont-swoosh-up"></i>
+                                            <span class="fw-600 m-l-5">0%</span>
+                                        </span>
+                                    </div>
+
+                                    <div class="mt-15">
+                                        <div class="d-flex justify-content-between">
+                                            <div class="d-flex align-items-center">
+                                                <span class="monthly_goal">Monthly Goal</span>
+                                            </div>
+                                            <span class="fw-600 monthly_goal">0%</span>
+                                        </div>
+
+                                        <div class="progress progress-sm mt-1">
+                                            <div class="progress-bar bg-primary" style="width: 0%">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
+                        @if ($goal['net_goals'])
+                            <div class="col-lg-3 col-sm-6">
+                                <div class="stats-card-one mb-30">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <p class="mb-10 line-height-1">Revenue</p>
+                                            <h3 class="fs-25"> {{ $goal['net_goals'] ? '$' . $goal['net_goals'] : 'N/A' }}
+                                                ${{ $goal['net_goals_achieve'] ?? 0 }} </h3>
+                                        </div>
+                                        <?php
+                                        $target = $goal['net_goals'] ?? 0;
+                                        $achieve = $goal['net_goals_achieve'] ?? 0;
+                                        // round percentage
+                                        $percentage['net_goals_achieve'] = round(($achieve / $target) * 100, 0);
+                                        ?>
+                                        <span class="badge badge-cyan font-size-12">
+                                            <i class="icofont-swoosh-up"></i>
+                                            <span class="fw-600 m-l-5">{{ $percentage['net_goals_achieve'] ?? 0 }}%</span>
+                                        </span>
+                                    </div>
+
+                                    <div class="mt-15">
+                                        <div class="d-flex justify-content-between">
+                                            <div class="d-flex align-items-center">
+                                                <span class="monthly_goal">Monthly Goal</span>
+                                            </div>
+                                            <span
+                                                class="fw-600 monthly_goal">{{ $percentage['net_goals_achieve'] ?? 0 }}%</span>
+                                        </div>
+
+                                        <div class="progress progress-sm mt-1">
+                                            <div class="progress-bar bg-danger"
+                                                style="width: {{ $percentage['net_goals_achieve'] ?? 0 }}%">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @else
+                            <div class="col-lg-3 col-sm-6">
+                                <div class="stats-card-one mb-30">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <p class="mb-10 line-height-1">Revenue</p>
+                                            <h3 class="fs-25"> No Goals Set </h3>
+                                        </div>
+                                        <span class="badge badge-cyan font-size-12">
+                                            <i class="icofont-swoosh-up"></i>
+                                            <span class="fw-600 m-l-5">0%</span>
+                                        </span>
+                                    </div>
+
+                                    <div class="mt-15">
+                                        <div class="d-flex justify-content-between">
+                                            <div class="d-flex align-items-center">
+                                                <span class="monthly_goal">Monthly Goal</span>
+                                            </div>
+                                            <span class="fw-600 monthly_goal">0%</span>
+                                        </div>
+
+                                        <div class="progress progress-sm mt-1">
+                                            <div class="progress-bar bg-danger" style="width:0%">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
 
                         <div class="col-lg-3 col-sm-6">
                             <div class="stats-card-one mb-30">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
-                                        <p class="mb-10 line-height-1">Account Manager</p>
-                                        <h3 class="fs-25">{{ $count['account_managers'] }}</h3>
+                                        <p class="mb-10 line-height-1">Account Manager Revenue</p>
+                                        <h3 class="fs-25"> {{ $count['account_manager_revenue'] }}</h3>
                                     </div>
 
                                     <span class="badge badge-red font-size-12">
                                         <i class="icofont-swoosh-down"></i>
-                                        <span class="fw-600 m-l-5">{{ $percentage['account_manager'] }}%</span>
-                                    </span>
-                                </div>
-
-                                <div class="mt-15">
-                                    <div class="d-flex justify-content-between">
-                                        <div class="d-flex align-items-center">
-                                            <span class="monthly_goal">Total User</span>
-                                        </div>
-                                        <span class="fw-600 monthly_goal">{{ $count['users'] }}</span>
-                                    </div>
-
-                                    <div class="progress progress-sm mt-1">
-                                        <div class="progress-bar bg-black" style="width: {{ $percentage['account_manager'] }}%">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="stats-card-one mb-30">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <p class="mb-10 line-height-1">Total Customers</p>
-                                        <h3 class="fs-25">{{ $count['win'] }}</h3>
-                                    </div>
-
-                                    <span class="badge badge-red font-size-12">
-                                        <i class="icofont-swoosh-down"></i>
-                                        <span class="fw-600 m-l-5">{{ $percentage['win'] }}%</span>
+                                        <span class="fw-600 m-l-5"></span>
                                     </span>
                                 </div>
 
@@ -361,70 +379,102 @@
                                         <div class="d-flex align-items-center">
                                             <span class="monthly_goal">Monthly Goal</span>
                                         </div>
-                                        <span class="fw-600 monthly_goal">{{ $percentage['win'] }}%</span>
+                                        <span
+                                            class="fw-600 monthly_goal">{{ $count['account_manager_percentage'] }}%</span>
                                     </div>
 
                                     <div class="progress progress-sm mt-1">
-                                        <div class="progress-bar bg-purple" style="width: {{ $percentage['win'] }}%"></div>
+                                        <div class="progress-bar bg-purple"
+                                            style="width: {{ $count['account_manager_percentage'] }}%">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="stats-card-one mb-30">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <p class="mb-10 line-height-1">BDM Revenue</p>
+                                        <h3 class="fs-25">{{ $count['bdm_revenue'] }}</h3>
+                                    </div>
+
+                                    <span class="badge badge-red font-size-12">
+                                        <i class="icofont-swoosh-down"></i>
+                                        <span class="fw-600 m-l-5">{{ $count['bdm_percentage'] }}%</span>
+                                    </span>
+                                </div>
+
+                                <div class="mt-15">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <span class="monthly_goal">Monthly Goal</span>
+                                        </div>
+                                        <span class="fw-600 monthly_goal">{{ $count['bdm_percentage'] }}%</span>
+                                    </div>
+
+                                    <div class="progress progress-sm mt-1">
+                                        <div class="progress-bar bg-black"
+                                            style="width: {{ $count['bdm_percentage'] }}%"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                <div class="col-lg-3">
-                    <div class="card mb-30">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <div class="d-flex align-items-center">
-                                    <span>Total Prospects</span>
-                                </div>
+                        <div class="col-lg-3">
+                            <div class="card mb-30">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <span>No of Prospects</span>
+                                        </div>
 
-                                <span class="fw-600">{{ $count['prospects'] }}</span>
+                                        <span class="fw-600">{{ $count['prospects'] }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3">
+                            <div class="card mb-30">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <span>Completed Prospects</span>
+                                        </div>
+                                        <span class="fw-600">{{ $count['win'] }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3">
+                            <div class="card mb-30">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <span>No of Customers</span>
+                                        </div>
+                                        <span class="fw-600">{{ $count['projects'] }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3">
+                            <div class="card mb-30">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <span>No of Project</span>
+                                        </div>
+                                        <span class="fw-600">{{ $count['projects'] }}</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="col-lg-3">
-                    <div class="card mb-30">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <div class="d-flex align-items-center">
-                                    <span>Follow Up Prospects</span>
-                                </div>
-                                <span class="fw-600">{{ $count['follow_up'] }}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-3">
-                    <div class="card mb-30">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <div class="d-flex align-items-center">
-                                    <span>Sent Proposal Prospects</span>
-                                </div>
-                                <span class="fw-600">{{ $count['sent_proposal'] }}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-3">
-                    <div class="card mb-30">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <div class="d-flex align-items-center">
-                                    <span>Close Prospects</span>
-                                </div>
-                                <span class="fw-600">{{ $count['close'] }}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
                 </div>
             </div>
 
@@ -434,12 +484,12 @@
                     <div class="card mb-30">
                         <div class="card-body" style="position: relative;">
                             <div class="">
-                                <h5 class="card-title">Monthly Revenue</h5>
+                                <h5 class="card-title">Statistics</h5>
                             </div>
 
 
                             <div class="resize-triggers">
-                                <div class="expand-trigger">
+                                <div class="expand-trigger chartjs-custom">
                                     <canvas id="canvas"></canvas>
                                 </div>
                                 <div class="contract-trigger"></div>
@@ -570,7 +620,7 @@
                         <div class="card-body" style="position: relative;">
                             <div class="d-flex align-items-center justify-content-between mb-3">
                                 <h5 class="card-title mb-0">Latest Projects</h5>
-                                <a href="" class="view_all">View All</a>
+                                <a href="{{ route('sales-projects.index') }}" class="view_all">View All</a>
                             </div>
                             <div class="table-responsive dashboard_mini_table">
                                 <table class="table table-hover">
@@ -582,69 +632,27 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Deluxe Online</td>
-                                            <td>Deluxe Online</td>
-                                            <td>
-                                                <div class="project_value">
-                                                    <h5 class="shop-sell">$ 4,944.80</h5>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Deluxe Online</td>
-                                            <td>Deluxe Online</td>
-                                            <td>
-                                                <div class="project_value">
-                                                    <h5 class="shop-sell">$ 4,944.80</h5>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Deluxe Online</td>
-                                            <td>Deluxe Online</td>
-                                            <td>
-                                                <div class="project_value">
-                                                    <h5 class="shop-sell">$ 4,944.80</h5>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Deluxe Online</td>
-                                            <td>Deluxe Online</td>
-                                            <td>
-                                                <div class="project_value">
-                                                    <h5 class="shop-sell">$ 4,944.80</h5>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Deluxe Online</td>
-                                            <td>Deluxe Online</td>
-                                            <td>
-                                                <div class="project_value">
-                                                    <h5 class="shop-sell">$ 4,944.80</h5>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Deluxe Online</td>
-                                            <td>Deluxe Online</td>
-                                            <td>
-                                                <div class="project_value">
-                                                    <h5 class="shop-sell">$ 4,944.80</h5>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Deluxe Online</td>
-                                            <td>Deluxe Online</td>
-                                            <td>
-                                                <div class="project_value">
-                                                    <h5 class="shop-sell">$ 4,944.80</h5>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                        @if (count($projects) == 0)
+                                            <tr>
+                                                <td colspan="3" class="text-center">No Project Found</td>
+                                            </tr>
+                                        @else
+                                            @foreach ($projects as $key => $project)
+                                                <tr>
+                                                    <td>
+                                                        {{ $project->business_name }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $project->projectTypes->name ?? '' }}
+                                                    </td>
+                                                    <td>
+                                                        <div class="project_value">
+                                                            <h5 class="shop-sell">$ {{ $project->project_value }}</h5>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>
@@ -764,15 +772,15 @@
                     <div class="card mb-30">
                         <div class="card-body" style="position: relative;">
                             <div class="">
-                                <h5 class="card-title">Prospects Statistics</h5>
+                                <h5 class="card-title">Last 10 Prospects</h5>
                             </div>
                             <div class="row justify-content-end">
                                 <div class="col-md-6">
                                     <div class="row g-1 justify-content-end">
                                         <div class="col-md-8 pr-0">
                                             <div class="search-field prod-search">
-                                                <input type="text" name="search" id="search" placeholder="search..." required
-                                                    class="form-control rounded_search">
+                                                <input type="text" name="search" id="search"
+                                                    placeholder="search..." required class="form-control rounded_search">
                                                 <a href="javascript:void(0)" class="prod-search-icon submit_search"><i
                                                         class="fa fa-search"></i></a>
                                             </div>
@@ -781,31 +789,43 @@
                                 </div>
                             </div>
                             <div class="table-responsive">
-                                <table id="myTable" class="dd table table-striped table-bordered table-hover" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th class="sorting" data-tippy-content="Sort by Sale Date" data-sorting_type="desc"
-                                data-column_name="sale_date" style="cursor: pointer">Date <span id="date_icon"></span></th>
-                                <th class="sorting" data-tippy-content="Sort by Business Name" data-sorting_type="asc"
-                                data-column_name="business_name" style="cursor: pointer">Business Name <span id="business_name_icon"></span></th>
-                                <th class="sorting" data-tippy-content="Sort by Client Name" data-sorting_type="asc"
-                                data-column_name="client_name" style="cursor: pointer">Client Name <span id="client_name_icon"></span></th>
-                                <th class="sorting" data-tippy-content="Sort by Phone" data-sorting_type="asc"
-                                data-column_name="phone" style="cursor: pointer">Email <span id="email_icon"></span></th>
-                                <th class="sorting" data-tippy-content="Sort by Phone" data-sorting_type="asc"
-                                data-column_name="phone" style="cursor: pointer">Phone <span id="phone_icon"></span></th>
-                                <th data-tippy-content="Cant't sort by Transfer taken by" style="cursor: pointer">Transfer Taken By</th>
-                                <th>Status</th>
-                                <th data-tippy-content="Cant't sort by Service offer" style="cursor: pointer">Service Offered</th>
-                                <th class="sorting" data-tippy-content="Sort by Follow" data-sorting_type="asc"
-                                data-column_name="follow" style="cursor: pointer">Followup Date <span id="follow_icon"></span></th>
-                                <th class="sorting" data-tippy-content="Sort by Price quoted" data-sorting_type="asc"
-                                data-column_name="price" style="cursor: pointer">Price Quoted <span id="price_quoted_icon"></span></th>
-                            </tr>
-                        </thead>
-                        <tbody class="prospect-filter">
-                            @include('admin.dashboard_prospect_table')
-                            {{-- @foreach ($prospects as $key => $prospect)
+                                <table id="myTable" class="dd table table-striped table-bordered table-hover"
+                                    style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th class="sorting" data-tippy-content="Sort by Sale Date"
+                                                data-sorting_type="desc" data-column_name="sale_date"
+                                                style="cursor: pointer">Date <span id="date_icon"></span></th>
+                                            <th class="sorting" data-tippy-content="Sort by Business Name"
+                                                data-sorting_type="asc" data-column_name="business_name"
+                                                style="cursor: pointer">Business Name <span
+                                                    id="business_name_icon"></span></th>
+                                            <th class="sorting" data-tippy-content="Sort by Client Name"
+                                                data-sorting_type="asc" data-column_name="client_name"
+                                                style="cursor: pointer">Client Name <span id="client_name_icon"></span>
+                                            </th>
+                                            <th class="sorting" data-tippy-content="Sort by Phone"
+                                                data-sorting_type="asc" data-column_name="phone" style="cursor: pointer">
+                                                Email <span id="email_icon"></span></th>
+                                            <th class="sorting" data-tippy-content="Sort by Phone"
+                                                data-sorting_type="asc" data-column_name="phone" style="cursor: pointer">
+                                                Phone <span id="phone_icon"></span></th>
+                                            <th data-tippy-content="Cant't sort by Transfer taken by"
+                                                style="cursor: pointer">Transfer Taken By</th>
+                                            <th>Status</th>
+                                            <th data-tippy-content="Cant't sort by Service offer" style="cursor: pointer">
+                                                Service Offered</th>
+                                            <th class="sorting" data-tippy-content="Sort by Follow"
+                                                data-sorting_type="asc" data-column_name="follow"
+                                                style="cursor: pointer">Followup Date <span id="follow_icon"></span></th>
+                                            <th class="sorting" data-tippy-content="Sort by Price quoted"
+                                                data-sorting_type="asc" data-column_name="price" style="cursor: pointer">
+                                                Price Quoted <span id="price_quoted_icon"></span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="prospect-filter">
+                                        @include('admin.dashboard_prospect_table')
+                                        {{-- @foreach ($prospects as $key => $prospect)
                                 <tr>
                                     <td>
                                         {{ date('d M, Y', strtotime($prospect->created_at)) }}
@@ -852,8 +872,8 @@
 
                                 </tr>
                             @endforeach --}}
-                        </tbody>
-                    </table>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -925,24 +945,117 @@
             ]
         };
 
+        // var chartOptions = {
+        //     responsive: true,
+        //     legend: {
+        //         position: "top"
+        //     },
+        //     title: {
+        //         display: true,
+        //         text: ""
+        //     },
+        //     scales: {
+        //         yAxes: [{
+        //             ticks: {
+        //                 beginAtZero: true
+        //             }
+        //         }]
+        //     },
+
+        //     // change text style
+        //     legend: {
+        //         labels: {
+        //             // This more specific font property overrides the global property
+        //             fontColor: "black",
+        //             fontSize: 12,
+        //             fontFamily: "Montserrat",
+        //             fontStyle: "normal",
+        //             padding: 25,
+        //         }
+        //     },
+
+        //     // change title font style
+        //     title: {
+        //         fontColor: "black",
+        //         fontSize: 18,
+        //         fontFamily: "Montserrat",
+        //         fontStyle: "normal",
+        //         padding: 25,
+        //     },
+
+        //     // change scale font style
+        //     scales: {
+        //         xAxes: [{
+        //             ticks: {
+        //                 fontColor: "black",
+        //                 fontSize: 12,
+        //                 fontFamily: "Montserrat",
+        //                 fontStyle: "normal",
+        //                 padding: 25,
+        //             }
+        //         }],
+        //         yAxes: [{
+        //             ticks: {
+        //                 fontColor: "black",
+        //                 fontSize: 12,
+        //                 fontFamily: "Montserrat",
+        //                 fontStyle: "normal",
+        //                 padding: 25,
+        //             }
+        //         }]
+        //     },
+
+        //     // decrease bar width
+        //     scales: {
+        //         xAxes: [{
+        //             barPercentage: 0.5
+        //         }]
+        //     },
+
+        //     // dcrease space between bar
+        //     scales: {
+        //         xAxes: [{
+        //             categoryPercentage: 0.4
+        //         }]
+        //     },
+
+
+        // }
         var chartOptions = {
             responsive: true,
-            legend: {
-                position: "top"
-            },
-            title: {
-                display: true,
-                text: ""
-            },
+            bezierCurve: false,
+            maintainAspectRatio: false,
             scales: {
+                xAxes: [{
+                    gridLines: {
+                        color: "rgba(180, 208, 224, 0.5)",
+                        zeroLineColor: "rgba(180, 208, 224, 0.5)",
+                    }
+                }],
                 yAxes: [{
-                    ticks: {
-                        beginAtZero: true
+                    gridLines: {
+                        color: "rgba(180, 208, 224, 0.5)",
+                        zeroLineColor: "rgba(180, 208, 224, 0.5)",
+                        borderDash: [8, 4],
                     }
                 }]
-            }
-        }
-
+            },
+            legend: {
+                display: true,
+                position: "top",
+                labels: {
+                    usePointStyle: true,
+                    boxWidth: 6,
+                    fontColor: "#758590",
+                    fontSize: 14
+                }
+            },
+            plugins: {
+                datalabels: {
+                    display: false
+                }
+            },
+        };
         window.onload = function() {
             var ctx = document.getElementById("canvas").getContext("2d");
             window.myBar = new Chart(ctx, {
@@ -1085,6 +1198,6 @@
                 fetch_data(page, sort_type, column_name, query);
             });
 
-            });
-        </script>
+        });
+    </script>
 @endpush

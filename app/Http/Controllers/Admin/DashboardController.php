@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Goal;
 use App\Models\Project;
+use App\Models\ProjectMilestone;
 use App\Models\User;
 use App\Models\Prospect;
 use Illuminate\Http\Request;
@@ -19,13 +20,24 @@ class DashboardController extends Controller
         $count['account_managers'] = User::Role('ACCOUNT_MANAGER')->count();
         $count['sales_excecutive'] = User::Role('SALES_EXCUETIVE')->count();
         $count['projects'] = Project::orderBy('created_at', 'desc')->count();
+        $count['bdm'] = User::Role('BUSINESS_DEVELOPMENT_MANAGER')->count();
         // $prospects = Prospect::orderBy('sale_date', 'desc')->get();
-        $prospects = Prospect::orderBy('sale_date', 'desc')->paginate('10');
+        $prospects = Prospect::orderBy('sale_date', 'desc')->take(10)->get();
         $count['prospects'] = Prospect::count();
         $count['win'] = Prospect::where('status', 'Win')->count();
         $count['follow_up'] = Prospect::where('status', 'Follow Up')->count();
         $count['close'] = Prospect::where('status', 'Close')->count();
         $count['sent_proposal'] = Prospect::where('status', 'Sent Proposal')->count();
+        $projects = Project::orderBy('sale_date', 'desc')->take(7)->get();
+        // account manager revenue this month
+        $account_manager_id = User::Role('ACCOUNT_MANAGER')->pluck('id');
+        $bdma_manager_id = User::Role('BUSINESS_DEVELOPMENT_MANAGER')->pluck('id');
+        $count['account_manager_revenue'] = Goal::whereIn('user_id', $account_manager_id)->whereMonth('goals_date', date('m'))->whereYear('goals_date', date('Y'))->sum('goals_achieve');
+        $count['bdm_revenue'] = Goal::whereIn('user_id', $bdma_manager_id)->whereMonth('goals_date', date('m'))->whereYear('goals_date', date('Y'))->sum('goals_achieve');
+        $count['account_manager_goals'] = Goal::whereIn('user_id', $account_manager_id)->whereMonth('goals_date', date('m'))->whereYear('goals_date', date('Y'))->sum('goals_amount');
+        $count['bdm_goals'] = Goal::whereIn('user_id', $bdma_manager_id)->whereMonth('goals_date', date('m'))->whereYear('goals_date', date('Y'))->sum('goals_amount');
+        $count['account_manager_percentage'] = ($count['account_manager_goals'] > 0) ? round(($count['account_manager_revenue']  / $count['account_manager_goals']) * 100) : 0;
+        $count['bdm_percentage'] = ($count['bdm_goals'] > 0) ? round(($count['bdm_revenue'] / $count['bdm_goals']) * 100) : 0;
         // get sales manager id
         $sales_manager_id = User::Role('SALES_MANAGER')->pluck('id');
         $goal['gross_goals_achieve'] = Goal::where('goals_type', 1)->whereIn('user_id', $sales_manager_id)->whereMonth('goals_date', date('m'))->sum('goals_achieve');
@@ -73,12 +85,12 @@ class DashboardController extends Controller
         $goal['prospect_november'] = Prospect::whereMonth('sale_date', 11)->whereYear('sale_date', date('Y'))->count();
         $goal['prospect_december'] = Prospect::whereMonth('sale_date', 12)->whereYear('sale_date', date('Y'))->count();
         // dd($count);
-        return view('admin.dashboard')->with(compact('count', 'goal', 'prospects'));
+        return view('admin.dashboard')->with(compact('count', 'goal', 'prospects','projects'));
     }
 
     public function dashboardProspectFetch(Request $request)
     {
-        
+
         if ($request->ajax()) {
             $sort_by = $request->get('sortby');
             $sort_type = $request->get('sorttype');
@@ -95,7 +107,7 @@ class DashboardController extends Controller
                 ->orWhere('offered_for', 'like', '%' . $query . '%')
                 ->orWhere('price_quote', 'like', '%' . $query . '%')
                 ->paginate(10);
-                
+
             return response()->json(['data' => view('admin.dashboard_prospect_table', compact('prospects'))->render()]);
         }
     }

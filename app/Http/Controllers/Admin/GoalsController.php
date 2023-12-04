@@ -106,7 +106,7 @@ class GoalsController extends Controller
     // }
 
     public function search(Request $request)
-    { 
+    {
         if ($request->ajax()) {
             $goals = Goal::query();
                 $columns = ['goals_date','goals_type','user_id','goals_amount', 'goals_achieve'];
@@ -118,7 +118,7 @@ class GoalsController extends Controller
                 $query->where('name', 'LIKE', '%' . $request->text . '%');
             });
 
-            
+
             if ($request->text == 'Gross') {
                 $goals->orWhere('goals_type', 1);
             } else if ($request->text == 'Net') {

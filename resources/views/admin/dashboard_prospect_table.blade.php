@@ -1,6 +1,6 @@
 @if (count($prospects) == 0)
     <tr>
-        <td colspan="12" class="text-center">No Prospect Found</td>
+        <td colspan="10" class="text-center">No Prospect Found</td>
     </tr>
 @else
 
@@ -49,10 +49,3 @@
 @endforeach
 @endif
 
-<tr>
-    <td colspan="12">
-        <div class="d-flex justify-content-center">
-            {!! $prospects->links() !!}
-        </div>
-    </td>
-</tr>
