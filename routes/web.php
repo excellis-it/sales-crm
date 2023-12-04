@@ -318,6 +318,8 @@ Route::group(['middleware' => ['BDE'], 'prefix' => 'bde'], function () {
         'bde-prospects' => BDEProspectController::class,
         'bde-projects' => BDEProjectController::class,
     ]);
-    Route::get('/filter-prospects', [BDEProspectController::class, 'filterProspectFilter'])->name('bde.prospects.filter'); // filter
+    Route::get('/filter-prospects', [BDEProspectController::class, 'bdeProspectFilter'])->name('bde.prospects.filter'); // prospect filter
+    Route::get('/filter-projects', [BDEProjectController::class, 'bdeProjectFilter'])->name('bde.projects.filter'); // filter
+
 
 });

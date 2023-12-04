@@ -30,18 +30,20 @@ class ProspectController extends Controller
             $count['follow_up'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Follow Up')->count();
             $count['close'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Close')->count();
             $count['sent_proposal'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Sent Proposal')->count();
+            $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE','BUSINESS_DEVELOPMENT_EXCECUTIVE'])->get();
         } else {
             $prospects = Prospect::where('user_id', Auth::user()->id)->orderBy('sale_date', 'desc')->paginate(10);
             $count['win'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Win')->count();
             $count['follow_up'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Follow Up')->count();
             $count['close'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Close')->count();
             $count['sent_proposal'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Sent Proposal')->count();
+            $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE','BUSINESS_DEVELOPMENT_EXCECUTIVE'])->get();
         }
 
-        return view('bde.prospect.list')->with(compact('prospects', 'count'));
+        return view('bde.prospect.list')->with(compact('prospects', 'count','users'));
     }
 
-    public function filterProspectFilter(Request $request)
+    public function bdeProspectFilter(Request $request)
     {
         if ($request->ajax()) {
             $status = $request->status;
@@ -219,9 +221,10 @@ class ProspectController extends Controller
     public function edit($id)
     {
         try {
-            $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->get();
+            $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE','BUSINESS_DEVELOPMENT_EXCECUTIVE'])->get();
             $prospect = Prospect::find($id);
-            return view('bde.prospect.edit')->with(compact('prospect', 'users'));
+            $type = true;
+            return response()->json(['view' => view('bde.prospect.edit', compact('prospect', 'users','type'))->render()]);
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }

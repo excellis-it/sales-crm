@@ -89,7 +89,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @include('sales_excecutive.project.table')
+                                @include('bde.project.table')
                                 {{-- @foreach ($projects as $key => $project)
                                     <tr>
                                         <td>
@@ -150,7 +150,7 @@
     $(document).ready(function() {
         function clear_icon() {
             $('#date_icon').html('');
-            $('#project_name_icon').html('');
+            $('#business_name_icon').html('');
             $('#customer_name_icon').html('');
             $('#phone_number_icon').html('');
             $('#project_type_icon').html('');
@@ -164,7 +164,7 @@
         function fetch_data(page, sort_type, sort_by, query) {
             
             $.ajax({
-                url: "{{ route('sales-excecutive.project.filter') }}",
+                url: "{{ route('bde.projects.filter') }}",
                 data: {
                     page: page,
                     sortby: sort_by,

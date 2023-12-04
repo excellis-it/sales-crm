@@ -25,7 +25,6 @@
             <td>
                 {{ $project->project_value }}
             </td>
-
             <td>
                 {{ $project->project_upfront }}
             </td>
@@ -38,12 +37,19 @@
             <td>
                 {{ (int)$project->project_value - (int)$project->project_upfront }}
             </td>
-
             <td>
-            <a title="View Project" data-route=""
-                href="{{ route('sales-excecutive.projects.show', $project->id) }}"><i
-                    class="fas fa-eye"></i></a>
-        </td>
+                <a title="View Project" data-route=""
+                    href="{{ route('bde-projects.show', $project->id) }}"><i
+                        class="fas fa-eye"></i></a>
+            </td>
     </tr>
     @endforeach
-@endif    
+@endif   
+
+<tr>
+    <td colspan="11">
+        <div class="d-flex justify-content-center">
+            {!! $projects->links() !!}
+        </div>
+    </td>
+</tr>

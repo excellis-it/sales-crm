@@ -1,30 +1,30 @@
 
 @if (count($prospects) == 0)
 <tr>
-    <td colspan="12" class="text-center">No Prospect Found</td>
+    <td colspan="11" class="text-center">No Prospect Found</td>
 </tr>
 @else
     @foreach ($prospects as $key => $prospect)
         <tr>
-            <td>
+            <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bde-prospects.edit', $prospect->id) }}" @endif>
                 {{ ($prospect->sale_date) ?  date('d-m-Y', strtotime($prospect->sale_date) ) : '' }}
             </td>
-            <td>
+            <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bde-prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->business_name }}
             </td>
-            <td>
+            <td  @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bde-prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->client_name }}
             </td>
-            <td>
+            <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bde-prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->client_email }}
             </td>
-            <td>
+            <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bde-prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->client_phone }}
             </td>
-            <td>
+            <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bde-prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->transferTakenBy->name ?? '' }}
             </td>
-            <td>
+            <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bde-prospects.edit', $prospect->id) }}" @endif>
                 @if ($prospect->status == 'Win')
                     <span>On Board</span>
                 @elseif ($prospect->status == 'Follow Up')
@@ -35,21 +35,20 @@
                     <span>Cancel</span>
                 @endif
             </td>
-            <td>
+            <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bde-prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->offered_for }}
             </td>
-            <td>
+            <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bde-prospects.edit', $prospect->id) }}" @endif>
                 {{ date('d M, Y', strtotime($prospect->followup_date)) }}
             </td>
-            <td>
+            <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bde-prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->price_quote }}
             </td>
-
             <td>
-                @if ($prospect->status != 'Win')
-                    <a title="Edit Prospect" data-route="" href="{{ route('bde-prospects.edit', $prospect->id) }}"><i
-                            class="fas fa-edit"></i></a> &nbsp;&nbsp;
-                @endif
+                {{-- @if ($prospect->status != 'Win')
+                    <a title="Edit Prospect"  data-route="" href="{{ route('bde-prospects.edit', $prospect->id) }}"><i
+                            class="fas fa-edit"></i></a> &nbsp;&nbsp;         
+                @endif --}}
                 {{-- @if ($prospect->status == 'Win' && $prospect->is_project == false)
                 <a title="Assign to project" data-route="" href="{{ route('prospects.assign-project', $prospect->id) }}"><i
                     class="fa fa-shield"></i></a> &nbsp;&nbsp;
@@ -65,7 +64,7 @@
 @endif
 
 <tr>
-    <td colspan="12">
+    <td colspan="11">
         <div class="d-flex justify-content-center">
             {!! $prospects->links() !!}
         </div>

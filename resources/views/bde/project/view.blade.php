@@ -1,4 +1,4 @@
-@extends('sales_excecutive.layouts.master')
+@extends('bde.layouts.master')
 @section('title')
     {{ env('APP_NAME') }} | View Project Details
 @endsection
