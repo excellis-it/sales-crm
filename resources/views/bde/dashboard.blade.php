@@ -423,12 +423,12 @@
                     backgroundColor: "#6c757d",
                     borderColor: "#6c757d",
                     borderWidth: 1,
-                    data: [{{ $goal['prospect_december'] ?? 0 }}, {{ $goal['prospect_january'] ?? 0 }},
-                        {{ $goal['prospect_february'] ?? 0 }}, {{ $goal['prospect_march'] ?? 0 }},
-                        {{ $goal['prospect_april'] ?? 0 }}, {{ $goal['prospect_may'] ?? 0 }},
-                        {{ $goal['prospect_june'] ?? 0 }}, {{ $goal['prospect_july'] ?? 0 }},
-                        {{ $goal['prospect_august'] ?? 0 }}, {{ $goal['prospect_september'] ?? 0 }},
-                        {{ $goal['prospect_october'] ?? 0 }}, {{ $goal['prospect_november'] ?? 0 }}
+                    data: [{{ $goal['prospect_january'] ?? 0 }},{{ $goal['prospect_february'] ?? 0 }}, 
+                        {{ $goal['prospect_march'] ?? 0 }},{{ $goal['prospect_april'] ?? 0 }}, 
+                        {{ $goal['prospect_may'] ?? 0 }},{{ $goal['prospect_june'] ?? 0 }}, 
+                        {{ $goal['prospect_july'] ?? 0 }},{{ $goal['prospect_august'] ?? 0 }}, 
+                        {{ $goal['prospect_september'] ?? 0 }},{{ $goal['prospect_october'] ?? 0 }}, 
+                        {{ $goal['prospect_november'] ?? 0 }},{{ $goal['prospect_december'] ?? 0 }}
                     ]
                 },
             ]

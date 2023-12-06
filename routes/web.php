@@ -93,6 +93,7 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     });
     Route::get('/admin-followups-filter', [AdminFollowupController::class, 'adminFollowupProject'])->name('admin.followups.filter');
     // search
+    Route::get('/earning-statistics', [DashboardController::class,'getEarningStatistics'])->name('admin.dashboard.earning-statistics');
 
     Route::get('/prospect-search', [DashboardController::class, 'dashboardProspectFetch'])->name('admin.dashboard.prospect-fetch-data');
     Route::get('/goals-search', [GoalsController::class, 'search'])->name('project-goals.search');

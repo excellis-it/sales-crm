@@ -7,123 +7,125 @@
         .dataTables_filter {
             margin-bottom: 10px !important;
         }
+
         #canvas {
-    height: 20rem;
-}
+            height: 20rem;
+        }
+
         .chartjs-custom {
-    position: relative;
-    overflow: hidden;
-    margin-right: auto;
-    margin-left: auto
-}
+            position: relative;
+            overflow: hidden;
+            margin-right: auto;
+            margin-left: auto
+        }
 
-.hs-chartjs-tooltip-wrap {
-    position: absolute;
-    z-index: 3;
-    transition: opacity .2s ease-in-out, left .2s ease, top .2s ease
-}
+        .hs-chartjs-tooltip-wrap {
+            position: absolute;
+            z-index: 3;
+            transition: opacity .2s ease-in-out, left .2s ease, top .2s ease
+        }
 
-.hs-chartjs-tooltip {
-    position: relative;
-    font-size: .75rem;
-    background-color: #132144;
-    border-radius: .3125rem;
-    padding: .54688rem .875rem;
-    transition: opacity .2s ease-in-out, left .2s ease, top .2s ease, top 0s
-}
+        .hs-chartjs-tooltip {
+            position: relative;
+            font-size: .75rem;
+            background-color: #132144;
+            border-radius: .3125rem;
+            padding: .54688rem .875rem;
+            transition: opacity .2s ease-in-out, left .2s ease, top .2s ease, top 0s
+        }
 
-.hs-chartjs-tooltip::before {
-    position: absolute;
-    left: calc(50% - .5rem);
-    bottom: -.4375rem;
-    width: 1rem;
-    height: .5rem;
-    content: "";
-    background-image: url("data:image/svg+xml,%3Csvg width='1rem' height='0.5rem' xmlns='http://www.w3.org/2000/svg' x='0px' y='0px' viewBox='0 0 50 22.49'%3E%3Cpath fill='%23132144' d='M0,0h50L31.87,19.65c-3.45,3.73-9.33,3.79-12.85,0.13L0,0z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: 1rem .5rem
-}
+        .hs-chartjs-tooltip::before {
+            position: absolute;
+            left: calc(50% - .5rem);
+            bottom: -.4375rem;
+            width: 1rem;
+            height: .5rem;
+            content: "";
+            background-image: url("data:image/svg+xml,%3Csvg width='1rem' height='0.5rem' xmlns='http://www.w3.org/2000/svg' x='0px' y='0px' viewBox='0 0 50 22.49'%3E%3Cpath fill='%23132144' d='M0,0h50L31.87,19.65c-3.45,3.73-9.33,3.79-12.85,0.13L0,0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: 1rem .5rem
+        }
 
-.hs-chartjs-tooltip-left {
-    left: -130%
-}
+        .hs-chartjs-tooltip-left {
+            left: -130%
+        }
 
-.hs-chartjs-tooltip-left::before {
-    top: 50%;
-    -webkit-transform: translateY(-50%);
-    transform: translateY(-50%);
-    right: -.6875rem;
-    left: auto;
-    -webkit-transform: translateY(-50%) rotate(270deg);
-    transform: translateY(-50%) rotate(270deg)
-}
+        .hs-chartjs-tooltip-left::before {
+            top: 50%;
+            -webkit-transform: translateY(-50%);
+            transform: translateY(-50%);
+            right: -.6875rem;
+            left: auto;
+            -webkit-transform: translateY(-50%) rotate(270deg);
+            transform: translateY(-50%) rotate(270deg)
+        }
 
-.hs-chartjs-tooltip-right {
-    left: 30%
-}
+        .hs-chartjs-tooltip-right {
+            left: 30%
+        }
 
-.hs-chartjs-tooltip-right::before {
-    top: 50%;
-    -webkit-transform: translateY(-50%);
-    transform: translateY(-50%);
-    left: -.6875rem;
-    right: auto;
-    -webkit-transform: translateY(-50%) rotate(90deg);
-    transform: translateY(-50%) rotate(90deg)
-}
+        .hs-chartjs-tooltip-right::before {
+            top: 50%;
+            -webkit-transform: translateY(-50%);
+            transform: translateY(-50%);
+            left: -.6875rem;
+            right: auto;
+            -webkit-transform: translateY(-50%) rotate(90deg);
+            transform: translateY(-50%) rotate(90deg)
+        }
 
-.hs-chartjs-tooltip-header {
-    color: rgba(255, 255, 255, .7);
-    font-weight: 600;
-    white-space: nowrap
-}
+        .hs-chartjs-tooltip-header {
+            color: rgba(255, 255, 255, .7);
+            font-weight: 600;
+            white-space: nowrap
+        }
 
-.hs-chartjs-tooltip-body {
-    color: #fff
-}
+        .hs-chartjs-tooltip-body {
+            color: #fff
+        }
 
-.chartjs-doughnut-custom {
-    position: relative
-}
+        .chartjs-doughnut-custom {
+            position: relative
+        }
 
-.chartjs-doughnut-custom-stat {
-    position: absolute;
-    top: 8rem;
-    left: 50%;
-    -webkit-transform: translateX(-50%);
-    transform: translateX(-50%)
-}
+        .chartjs-doughnut-custom-stat {
+            position: absolute;
+            top: 8rem;
+            left: 50%;
+            -webkit-transform: translateX(-50%);
+            transform: translateX(-50%)
+        }
 
-.chartjs-matrix-custom {
-    position: relative
-}
+        .chartjs-matrix-custom {
+            position: relative
+        }
 
-.hs-chartjs-matrix-legend {
-    display: inline-block;
-    position: relative;
-    height: 2.5rem;
-    list-style: none;
-    padding-left: 0
-}
+        .hs-chartjs-matrix-legend {
+            display: inline-block;
+            position: relative;
+            height: 2.5rem;
+            list-style: none;
+            padding-left: 0
+        }
 
-.hs-chartjs-matrix-legend-item {
-    width: .625rem;
-    height: .625rem;
-    display: inline-block
-}
+        .hs-chartjs-matrix-legend-item {
+            width: .625rem;
+            height: .625rem;
+            display: inline-block
+        }
 
-.hs-chartjs-matrix-legend-min {
-    position: absolute;
-    left: 0;
-    bottom: 0
-}
+        .hs-chartjs-matrix-legend-min {
+            position: absolute;
+            left: 0;
+            bottom: 0
+        }
 
-.hs-chartjs-matrix-legend-max {
-    position: absolute;
-    right: 0;
-    bottom: 0
-}
+        .hs-chartjs-matrix-legend-max {
+            position: absolute;
+            right: 0;
+            bottom: 0
+        }
     </style>
 @endpush
 
@@ -487,12 +489,41 @@
                                 <h5 class="card-title">Statistics</h5>
                             </div>
 
+                            <div class="col-md-6 d-flex justify-content-md-end">
+                                <ul class="option-select-btn">
+                                    <li>
+                                        <label class="basic-box-shadow">
+                                            <input type="radio" name="statistics2" hidden="" checked="">
+                                            <span data-earn-type="yearEarn" class="earningStatisticsUpdate">This
+                                                year</span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="basic-box-shadow">
+                                            <input type="radio" name="statistics2" hidden="">
+                                            <span data-earn-type="MonthEarn" class="earningStatisticsUpdate">This
+                                                month</span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="basic-box-shadow">
+                                            <input type="radio" name="statistics2" hidden="">
+                                            <span data-earn-type="WeekEarn" class="earningStatisticsUpdate">This
+                                                week</span>
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
 
-                            <div class="resize-triggers">
-                                <div class="expand-trigger chartjs-custom">
-                                    <canvas id="canvas"></canvas>
+                            <div>
+                                <div class="resize-triggers">
+                                    <div class="expand-trigger chartjs-custom" id="statisticAjaxBarChart">
+
+                                        {{-- <canvas id="canvas"></canvas> --}}
+                                        @include('admin.statistic_ajax_bar_chart')
+                                    </div>
+                                    <div class="contract-trigger"></div>
                                 </div>
-                                <div class="contract-trigger"></div>
                             </div>
                         </div>
                     </div>
@@ -883,208 +914,37 @@
         </div>
     </div>
     </div>
+
+
 @endsection
 
 @push('scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.min.js"></script>
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.min.js"></script> --}}
+    {{-- ajax bar chart for statistics --}}
     <script>
-        var barChartData = {
-            labels: [
-                "Jan",
-                "Febr",
-                "Mar",
-                "Apr",
-                "May",
-                "Jun",
-                "Jul",
-                'Aug',
-                'Sept',
-                'Oct',
-                'Nov',
-                'Dec'
-            ],
-            datasets: [{
-                    label: "Gross Sales",
-                    backgroundColor: "#fa8d35",
-                    borderColor: "#fa8d35",
-                    borderWidth: 1,
-                    data: [{{ $goal['gross_goals_january'] ?? 0 }}, {{ $goal['gross_goals_february'] ?? 0 }},
-                        {{ $goal['gross_goals_march'] ?? 0 }}, {{ $goal['gross_goals_april'] ?? 0 }},
-                        {{ $goal['gross_goals_may'] ?? 0 }}, {{ $goal['gross_goals_june'] ?? 0 }},
-                        {{ $goal['gross_goals_july'] ?? 0 }}, {{ $goal['gross_goals_august'] ?? 0 }},
-                        {{ $goal['gross_goals_september'] ?? 0 }}, {{ $goal['gross_goals_october'] ?? 0 }},
-                        {{ $goal['gross_goals_november'] ?? 0 }}, {{ $goal['gross_goals_december'] ?? 0 }}
-                    ]
-                },
-                {
-                    label: "Revenue",
-                    backgroundColor: "#ad1e23",
-                    borderColor: "#ad1e23",
-                    borderWidth: 1,
-                    data: [{{ $goal['net_goals_january'] ?? 0 }}, {{ $goal['net_goals_february'] ?? 0 }},
-                        {{ $goal['net_goals_march'] ?? 0 }}, {{ $goal['net_goals_april'] ?? 0 }},
-                        {{ $goal['net_goals_may'] ?? 0 }}, {{ $goal['net_goals_june'] ?? 0 }},
-                        {{ $goal['net_goals_july'] ?? 0 }}, {{ $goal['net_goals_august'] ?? 0 }},
-                        {{ $goal['net_goals_september'] ?? 0 }}, {{ $goal['net_goals_october'] ?? 0 }},
-                        {{ $goal['net_goals_november'] ?? 0 }}, {{ $goal['net_goals_december'] ?? 0 }}
-                    ]
-                },
-                {
-                    label: "Prospect",
-                    backgroundColor: "#6c757d",
-                    borderColor: "#6c757d",
-                    borderWidth: 1,
-                    data: [{{ $goal['prospect_december'] ?? 0 }}, {{ $goal['prospect_january'] ?? 0 }},
-                        {{ $goal['prospect_february'] ?? 0 }}, {{ $goal['prospect_march'] ?? 0 }},
-                        {{ $goal['prospect_april'] ?? 0 }}, {{ $goal['prospect_may'] ?? 0 }},
-                        {{ $goal['prospect_june'] ?? 0 }}, {{ $goal['prospect_july'] ?? 0 }},
-                        {{ $goal['prospect_august'] ?? 0 }}, {{ $goal['prospect_september'] ?? 0 }},
-                        {{ $goal['prospect_october'] ?? 0 }}, {{ $goal['prospect_november'] ?? 0 }}
-                    ]
-                },
-            ]
-        };
-
-        // var chartOptions = {
-        //     responsive: true,
-        //     legend: {
-        //         position: "top"
-        //     },
-        //     title: {
-        //         display: true,
-        //         text: ""
-        //     },
-        //     scales: {
-        //         yAxes: [{
-        //             ticks: {
-        //                 beginAtZero: true
-        //             }
-        //         }]
-        //     },
-
-        //     // change text style
-        //     legend: {
-        //         labels: {
-        //             // This more specific font property overrides the global property
-        //             fontColor: "black",
-        //             fontSize: 12,
-        //             fontFamily: "Montserrat",
-        //             fontStyle: "normal",
-        //             padding: 25,
-        //         }
-        //     },
-
-        //     // change title font style
-        //     title: {
-        //         fontColor: "black",
-        //         fontSize: 18,
-        //         fontFamily: "Montserrat",
-        //         fontStyle: "normal",
-        //         padding: 25,
-        //     },
-
-        //     // change scale font style
-        //     scales: {
-        //         xAxes: [{
-        //             ticks: {
-        //                 fontColor: "black",
-        //                 fontSize: 12,
-        //                 fontFamily: "Montserrat",
-        //                 fontStyle: "normal",
-        //                 padding: 25,
-        //             }
-        //         }],
-        //         yAxes: [{
-        //             ticks: {
-        //                 fontColor: "black",
-        //                 fontSize: 12,
-        //                 fontFamily: "Montserrat",
-        //                 fontStyle: "normal",
-        //                 padding: 25,
-        //             }
-        //         }]
-        //     },
-
-        //     // decrease bar width
-        //     scales: {
-        //         xAxes: [{
-        //             barPercentage: 0.5
-        //         }]
-        //     },
-
-        //     // dcrease space between bar
-        //     scales: {
-        //         xAxes: [{
-        //             categoryPercentage: 0.4
-        //         }]
-        //     },
-
-
-        // }
-        var chartOptions = {
-            responsive: true,
-            bezierCurve: false,
-            maintainAspectRatio: false,
-            scales: {
-                xAxes: [{
-                    gridLines: {
-                        color: "rgba(180, 208, 224, 0.5)",
-                        zeroLineColor: "rgba(180, 208, 224, 0.5)",
-                    }
-                }],
-                yAxes: [{
-                    gridLines: {
-                        color: "rgba(180, 208, 224, 0.5)",
-                        zeroLineColor: "rgba(180, 208, 224, 0.5)",
-                        borderDash: [8, 4],
-                    }
-                }]
-            },
-            legend: {
-                display: true,
-                position: "top",
-                labels: {
-                    usePointStyle: true,
-                    boxWidth: 6,
-                    fontColor: "#758590",
-                    fontSize: 14
-                }
-            },
-            plugins: {
-                datalabels: {
-                    display: false
-                }
-            },
-        };
-        window.onload = function() {
-            var ctx = document.getElementById("canvas").getContext("2d");
-            window.myBar = new Chart(ctx, {
-                type: "bar",
-                data: barChartData,
-                options: chartOptions
-            });
-
-
-        };
-    </script>
-    {{-- <script>
         $(document).ready(function() {
-            //Default data table
-            $('#myTable').DataTable({
-                "aaSorting": [],
-                "columnDefs": [{
-                        "orderable": false,
-                        "targets": []
-                    },
-                    {
-                        "orderable": true,
-                        "targets": [0, 1, 2, 5, 6, 7, 8, 9]
-                    }
-                ]
-            });
+            $(document).on('click', '.earningStatisticsUpdate', function(e) {
+                // alert($(this).data('earn-type'));
+                var type = $(this).data('earn-type');
 
+                $.ajax({
+                    url: "{{ route('admin.dashboard.earning-statistics') }}",
+                    data: {
+                        type: type
+                    },
+                    success: function(resp) {
+
+                        $('#statisticAjaxBarChart').html(resp.view);
+
+                    },
+                    error: function() {
+                        console.log('alert');
+                    }
+                });
+            });
         });
-    </script> --}}
+    </script>
+
     <script>
         $(document).ready(function() {
             //how to place holder in "jquery datatable" search box

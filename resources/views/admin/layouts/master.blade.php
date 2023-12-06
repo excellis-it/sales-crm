@@ -64,6 +64,7 @@
 <script src="{{ asset('admin_assets/plugins/morris/morris.min.js') }}"></script>
 <script src="{{ asset('admin_assets/plugins/raphael/raphael.min.js') }}"></script>
 <script src="{{ asset('admin_assets/js/chart.js') }}"></script>
+<script src="{{ asset('admin_assets/js/Chart.min.js') }}"></script>
 <script src="{{ asset('admin_assets/js/greedynav.js') }}"></script>
 <script src="{{ asset('admin_assets/js/select2.min.js') }}"></script>
 <script src="{{ asset('admin_assets/js/bootstrap-datetimepicker.min.js') }}"></script>
