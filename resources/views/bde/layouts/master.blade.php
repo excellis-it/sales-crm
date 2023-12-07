@@ -116,6 +116,17 @@
 
 </script>
 
+<script src="https://unpkg.com/popper.js@1"></script>
+    <script src="https://unpkg.com/tippy.js@5"></script>
+    {{-- trippy --}}
+    <script>
+        tippy('[data-tippy-content]', {
+            allowHTML: true,
+            placement: 'bottom',
+            theme: 'light-theme',
+        });
+    </script>
+
 @stack('scripts')
 
 </html>

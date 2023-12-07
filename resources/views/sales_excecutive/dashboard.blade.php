@@ -337,7 +337,7 @@
                         </div>
 
                         <div class="table-responsive" id="dashboard-prospect">
-                            <table id="myTable" class="dd table table-striped table-bordered table-hover"
+                            <table id="myTable" class="dd table table-striped  table-hover"
                                 style="width:100%">
                                 <thead>
                                     <tr>

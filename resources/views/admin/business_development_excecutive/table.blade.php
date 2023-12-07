@@ -1,4 +1,4 @@
-<table id="myTable" class="dd table table-striped table-bordered table-hover" style="width:100%">
+<table id="myTable" class="dd table table-striped  table-hover" style="width:100%">
     <thead>
         <tr>
             <th>Report To</th>

@@ -326,33 +326,33 @@
 
                     </div>
                     <div class="table-responsive" id="project-data">
-                        <table class="dd table table-striped table-bordered table-hover" style="width:100%">
+                        <table class="dd table table-striped  table-hover" style="width:100%">
                             <thead>
                                 <tr>
                                     <th class="sorting" data-tippy-content="Sort by Sale Date" data-sorting_type="desc"
-                                        data-column_name="sale_date" style="cursor: pointer"> Date <span
-                                            id="date_icon"></span></th>
+                                        data-column_name="sale_date" style="cursor: pointer">Sale Date <span
+                                            id="date_icon"><span class="fa fa-sort-down"></span></span></th>
                                     <th data-tippy-content="Cant't sort by Sale By" style="cursor: pointer"> Sale By</th>
                                     <th class="sorting" data-tippy-content="Sort by Project Name" data-sorting_type="asc"
                                         data-column_name="project_name" style="cursor: pointer"> Project Name <span
-                                            id="project_name_icon"></span></th>
+                                            id="project_name_icon"><span class="fa fa-sort-down"></span> </span></th>
                                     <th class="sorting" data-tippy-content="Sort by Client Name" data-sorting_type="asc"
                                         data-column_name="client_name" style="cursor: pointer"> Client Name <span
-                                            id="client_name_icon"></span></th>
+                                            id="client_name_icon"><span class="fa fa-sort-down"></span></span></th>
                                     <th class="sorting" data-tippy-content="Sort by Phone" data-sorting_type="asc"
                                         data-column_name="phone" style="cursor: pointer"> Phone <span
-                                            id="phone_icon"></span></th>
+                                            id="phone_icon"><span class="fa fa-sort-down"></span></span></th>
                                     <th class="sorting" data-tippy-content="Sort by Project Value"
                                         data-sorting_type="asc" data-column_name="project_value" style="cursor: pointer">
-                                        Project Value <span id="project_value_icon"></span></th>
+                                        Project Value <span id="project_value_icon"><span class="fa fa-sort-down"></span></span></th>
                                     <th class="sorting" data-tippy-content="Sort by Project Upfront"
                                         data-sorting_type="asc" data-column_name="project_upfront"
-                                        style="cursor: pointer"> Project Upfront <span id="project_upfront_icon"></span>
+                                        style="cursor: pointer"> Project Upfront <span id="project_upfront_icon"><span class="fa fa-sort-down"></span></span>
                                     </th>
                                     {{-- <th> </th> --}}
                                     <th class="sorting" data-tippy-content="Sort by Currency" data-sorting_type="asc"
                                         data-column_name="currency" style="cursor: pointer"> Currency <span
-                                            id="currency_icon"></span></th>
+                                            id="currency_icon"><span class="fa fa-sort-down"></span></span></th>
                                     <th data-tippy-content="Cant't sort by Payment Mode" style="cursor: pointer"> Payment
                                         Mode</th>
                                     <th data-tippy-content="Cant't sort by Due Amount" style="cursor: pointer"> Due Amount

@@ -75,7 +75,7 @@
                                     enctype="multipart/form-data" id="sales-excecutive-form-create">
                                     @csrf
                                     <div class="row">
-                                        <div class="col-md-12 mb-3">
+                                        <div class="col-md-8 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label"> Name <span
                                                     style="color: red;">*</span></label>
                                             <input type="text" name="name" class="form-control"
@@ -83,13 +83,23 @@
                                             <span class="text-danger name_error"></span>
 
                                         </div>
-                                        <div class="col-md-12 mb-3">
+                                        <div class="col-md-4 mb-3">
+                                            <label for="inputEnterYourName" class="col-form-label"> Status
+                                                <span style="color: red;">*</span></label>
+                                            <select name="status" class="form-control">
+                                                <option value="">Select a Status</option>
+                                                <option value="1">Active</option>
+                                                <option value="0">Inactive</option>
+                                            </select>
+                                            <span class="text-danger status_error"></span>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label"> Employee Id </label>
                                             <input type="text" name="employee_id" class="form-control"
                                                 value="{{ old('employee_id') }}" placeholder="Enter Employee Id">
                                             <span class="text-danger employee_id_error"></span>
                                         </div>
-                                        <div class="col-md-12 mb-3">
+                                        <div class="col-md-6 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label"> Date Of Joining </label>
                                             <input type="date" name="date_of_joining" max="{{ date('Y-m-d') }}"
                                                 class="form-control" value="{{ old('date_of_joining') }}">
@@ -111,30 +121,21 @@
                                         </div>
 
 
-                                        <div class="col-md-12 mb-3">
+                                        <div class="col-md-6 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label"> Password
                                                 <span style="color: red;">*</span></label>
                                             <input type="password" name="password" class="form-control"
                                                 value="{{ old('password') }}" placeholder="Enter pasword">
                                             <span class="text-danger password_error"></span>
                                         </div>
-                                        <div class="col-md-12 mb-3">
+                                        <div class="col-md-6 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label"> Confirm
                                                 Password <span style="color: red;">*</span></label>
                                             <input type="password" name="confirm_password" class="form-control"
                                                 value="{{ old('confirm_password') }}">
                                             <span class="text-danger confirm_password_error"></span>
                                         </div>
-                                        <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label"> Status
-                                                <span style="color: red;">*</span></label>
-                                            <select name="status" class="form-control">
-                                                <option value="">Select a Status</option>
-                                                <option value="1">Active</option>
-                                                <option value="0">Inactive</option>
-                                            </select>
-                                            <span class="text-danger status_error"></span>
-                                        </div>
+                                        
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label"> Profile
                                                 Picture </label>
@@ -169,7 +170,7 @@
                                     @method('PUT')
                                     @csrf
                                     <div class="row">
-                                        <div class="col-md-12 mb-3">
+                                        <div class="col-md-8 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label"> Name <span
                                                     style="color: red;">*</span></label>
                                             <input type="text" name="name" class="form-control" id="name"
@@ -177,14 +178,24 @@
                                             <span class="text-danger name_msg_error"></span>
 
                                         </div>
-                                        <div class="col-md-12 mb-3">
+                                        <div class="col-md-4 mb-3">
+                                            <label for="inputEnterYourName" class="col-form-label"> Status
+                                                <span style="color: red;">*</span></label>
+                                            <select name="status" class="form-control" id="status">
+                                                <option value="">Select a Status</option>
+                                                <option value="1">Active</option>
+                                                <option value="0">Inactive</option>
+                                            </select>
+                                            <span class="text-danger status_msg_error"></span>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label"> Employee Id </label>
                                             <input type="text" name="employee_id" class="form-control"
                                                 id="employee_id" value="{{ old('employee_id') }}"
                                                 placeholder="Enter Employee Id">
                                             <span class="text-danger employee_id_msg_error"></span>
                                         </div>
-                                        <div class="col-md-12 mb-3">
+                                        <div class="col-md-6 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label"> Date Of Joining
                                             </label>
                                             <input type="date" name="date_of_joining" max="{{ date('Y-m-d') }}"
@@ -208,30 +219,21 @@
                                         </div>
 
 
-                                        <div class="col-md-12 mb-3">
+                                        <div class="col-md-6 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label"> Password
                                                 <span style="color: red;">*</span></label>
                                             <input type="password" name="password" class="form-control" id="password"
                                                 value="{{ old('password') }}" placeholder="Enter pasword">
                                             <span class="text-danger password_msg_error"></span>
                                         </div>
-                                        <div class="col-md-12 mb-3">
+                                        <div class="col-md-6 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label"> Confirm
                                                 Password <span style="color: red;">*</span></label>
                                             <input type="password" name="confirm_password" id="confirm_password"
                                                 class="form-control" value="{{ old('confirm_password') }}">
                                             <span class="text-danger confirm_password_msg_error"></span>
                                         </div>
-                                        <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label"> Status
-                                                <span style="color: red;">*</span></label>
-                                            <select name="status" class="form-control" id="status">
-                                                <option value="">Select a Status</option>
-                                                <option value="1">Active</option>
-                                                <option value="0">Inactive</option>
-                                            </select>
-                                            <span class="text-danger status_msg_error"></span>
-                                        </div>
+                                        
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label"> Profile
                                                 Picture </label>

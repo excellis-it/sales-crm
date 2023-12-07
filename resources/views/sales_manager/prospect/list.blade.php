@@ -292,11 +292,11 @@
 
 
                     <div class="table-responsive" id="show-prospect">
-                        <table id="myTable" class="dd table table-striped table-bordered table-hover"
+                        <table id="myTable" class="dd table table-striped table-hover"
                             style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>Date</th>
+                                    <th>Sale Date</th>
                                     <th>Business Name</th>
                                     <th>Client Name</th>
                                     <th>Email</th>

@@ -41,7 +41,7 @@
 
                     <hr />
                     <div class="table-responsive">
-                        <table id="example" class="dd table table-striped table-bordered table-hover" style="width:100%">
+                        <table id="example" class="dd table table-striped  table-hover" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>Name</th>

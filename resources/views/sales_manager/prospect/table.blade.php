@@ -8,7 +8,7 @@
         @foreach ($prospects as $key => $prospect)
             <tr>
                 <td   @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('sales-manager.prospects.edit', $prospect->id) }}" @endif>
-                    {{ ($prospect->sale_date) ?  $prospect->sale_date: '' }}
+                    {{ ($prospect->sale_date) ?  date('d-m-Y', strtotime($prospect->sale_date)): '' }}
                 </td>
                 <td   @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('sales-manager.prospects.edit', $prospect->id) }}" @endif>
                     {{ $prospect->business_name }}

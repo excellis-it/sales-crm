@@ -159,7 +159,7 @@
                                         <h3 class="card-title">Milestone Details
 
                                         </h3>
-                                        <table id="myTable" class="dd table table-striped table-bordered table-hover"
+                                        <table id="myTable" class="dd table table-striped  table-hover"
                                             style="width:100%">
                                             <thead>
                                                 <tr>

@@ -8,7 +8,7 @@
     @foreach ($projects as $key => $project)
         <tr>
             <td>
-                {{ ($project->sale_date) ?  $project->sale_date : '' }}
+                {{ ($project->sale_date) ?  date('d-m-Y', strtotime($project->sale_date)) : '' }}
             </td>
             <td>
                 {{ $project->business_name }}

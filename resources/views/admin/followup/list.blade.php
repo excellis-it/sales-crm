@@ -135,10 +135,10 @@
 
 
                     <div class="table-responsive">
-                        <table id="myTable" class="dd table table-striped table-bordered table-hover" style="width:100%">
+                        <table id="myTable" class="dd table table-striped  table-hover" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th data-tippy-content=" Can't sort by Business Name" style="cursor: pointer">
+                                    <th data-tippy-content=" Can't sort by Follow up" style="cursor: pointer">
                                         Follow_Up By </th>
                                     <th class="sorting" data-tippy-content="Sort by Business Name"
                                         data-sorting_type="desc" data-column_name="business_name"
@@ -146,10 +146,12 @@
                                                 class="fa fa-sort-down"></span></span></th>
                                     <th class="sorting" data-tippy-content="Sort by Customer Name"
                                         data-sorting_type="desc" data-column_name="client_name" style="cursor: pointer">
-                                        Customer Name <span id="client_name_icon"></span></th>
+                                        Customer Name <span id="client_name_icon"><span
+                                                class="fa fa-sort-down"></span></span></th>
                                     <th class="sorting" data-tippy-content="Sort by Phone Number"
                                         data-sorting_type="desc" data-column_name="client_phone" style="cursor: pointer">
-                                        Phone Number <span id="client_phone_icon"></span></th>
+                                        Phone Number <span id="client_phone_icon"><span
+                                                class="fa fa-sort-down"></span></span></th>
                                     <th data-tippy-content="Can't Sort by Last Follow-Up Date" data-sorting_type="desc"
                                         style="cursor: pointer">
                                         Last Follow-Up Date </th>

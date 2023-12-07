@@ -1,7 +1,7 @@
 @foreach ($projects as $key => $project)
 <tr>
     <td class="edit-route" data-route="{{ route('projects.edit', $project->id) }}">
-        {{ ($project->sale_date) ?  $project->sale_date : '' }}
+        {{ ($project->sale_date) ?  date('d-m-Y', strtotime($project->sale_date)) : '' }}
     </td>
     <td class="edit-route" data-route="{{ route('projects.edit', $project->id) }}">
         {{ $project->business_name }}

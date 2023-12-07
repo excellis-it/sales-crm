@@ -363,26 +363,26 @@
                         </div>
 
                         <div class="table-responsive" id="dashboard-prospect">
-                            <table id="myTable" class="dd table table-striped table-bordered" style="width:100%">
+                            <table id="myTable" class="dd table table-striped" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th class="sorting" data-tippy-content="Sort by Sale Date" data-sorting_type="desc"
-                                        data-column_name="sale_date" style="cursor: pointer">Date <span id="date_icon"></span></th>
+                                        data-column_name="sale_date" style="cursor: pointer">Date <span id="date_icon"><span class="fa fa-sort-down"></span></span></th>
                                         <th class="sorting" data-tippy-content="Sort by Business Name" data-sorting_type="asc"
-                                        data-column_name="business_name" style="cursor: pointer">Business Name <span id="business_name_icon"></span></th>
+                                        data-column_name="business_name" style="cursor: pointer">Business Name <span id="business_name_icon"><span class="fa fa-sort-down"></span></span></th>
                                         <th class="sorting" data-tippy-content="Sort by Client Name" data-sorting_type="asc"
-                                        data-column_name="client_name" style="cursor: pointer">Client Name <span id="client_name_icon"></span></th>
+                                        data-column_name="client_name" style="cursor: pointer">Client Name <span id="client_name_icon"><span class="fa fa-sort-down"></span></span></th>
+                                        <th class="sorting" data-tippy-content="Sort by Email" data-sorting_type="asc"
+                                        data-column_name="email" style="cursor: pointer">Email <span id="email_icon"><span class="fa fa-sort-down"></span></span></th>
                                         <th class="sorting" data-tippy-content="Sort by Phone" data-sorting_type="asc"
-                                        data-column_name="phone" style="cursor: pointer">Email <span id="email_icon"></span></th>
-                                        <th class="sorting" data-tippy-content="Sort by Phone" data-sorting_type="asc"
-                                        data-column_name="phone" style="cursor: pointer">Phone <span id="phone_icon"></span></th>
+                                        data-column_name="phone" style="cursor: pointer">Phone <span id="phone_icon"><span class="fa fa-sort-down"></span></span></th>
                                         <th data-tippy-content="Cant't sort by Transfer taken by" style="cursor: pointer">Transfer Taken By</th>
                                         <th>Status</th>
                                         <th data-tippy-content="Cant't sort by Service offer" style="cursor: pointer">Service Offered</th>
                                         <th class="sorting" data-tippy-content="Sort by Follow" data-sorting_type="asc"
-                                        data-column_name="follow" style="cursor: pointer">Followup Date<span id="follow_icon"></span></th>
+                                        data-column_name="follow" style="cursor: pointer">Followup Date<span id="follow_icon"><span class="fa fa-sort-down"></span></span></th>
                                         <th class="sorting" data-tippy-content="Sort by Price quoted" data-sorting_type="asc"
-                                        data-column_name="price" style="cursor: pointer">Price Quoted <span id="price_quoted_icon"></span></th>
+                                        data-column_name="price" style="cursor: pointer">Price Quoted <span id="price_quoted_icon"><span class="fa fa-sort-down"></span></span></th>
                                     </tr>
                                 </thead>
                                 <tbody class="prospect-filter">
