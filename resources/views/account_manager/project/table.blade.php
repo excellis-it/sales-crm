@@ -18,7 +18,7 @@
                 {{ $project->client_phone }}
             </td>
             <td class="edit-route" data-route="{{ route('account-manager.projects.edit', $project->id) }}">
-                <span class="">{{ $project->projectTypes->type }}</span>
+                <span class="">{{ $project->projectTypes->type ?? '' }}</span>
             </td>
             <td class="edit-route" data-route="{{ route('account-manager.projects.edit', $project->id) }}">
                 {{ $project->project_value }}

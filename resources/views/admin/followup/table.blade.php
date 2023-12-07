@@ -8,7 +8,7 @@
         <tr>
             <td class="view-details-btn" data-bs-toggle="modal"
             data-bs-target="#exampleModal" data-route="{{route('account-manager.followups.show', $project->id)}}">
-        {{ $project->accountManager->name }}
+        {{ $project->accountManager->name ?? '' }}
     </td>
             <td class="view-details-btn" data-bs-toggle="modal"
                     data-bs-target="#exampleModal" data-route="{{route('admin.followups.show', $project->id)}}">

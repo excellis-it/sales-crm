@@ -70,30 +70,30 @@
                             data-parsley-trigger="keyup" class="form-control">
                             <option value="" >Select Project Type</option>
                             <option value="Website Design & Development"
-                                @if ($project['projectTypes']['type'] == 'Website Design & Development') {{ 'selected' }} @endif>
+                                @if (isset($project['projectTypes']['type']) && $project['projectTypes']['type'] == 'Website Design & Development') {{ 'selected' }} @endif>
                                 Website Design & Development</option>
                             <option value="Mobile Application Development"
-                                @if ($project['projectTypes']['type'] == 'Mobile Application Development') {{ 'selected' }} @endif>
+                                @if (isset($project['projectTypes']['type']) && $project['projectTypes']['type'] == 'Mobile Application Development') {{ 'selected' }} @endif>
                                 Mobile Application Development</option>
                             <option value="Digital Marketing"
-                                @if ($project['projectTypes']['type'] == 'Digital Marketing') {{ 'selected' }} @endif>
+                                @if (isset($project['projectTypes']['type']) && $project['projectTypes']['type'] == 'Digital Marketing') {{ 'selected' }} @endif>
                                 Digital Marketing</option>
                             <option value="Logo Design"
-                                @if ($project['projectTypes']['type'] == 'Logo Design') {{ 'selected' }} @endif>
+                                @if (isset($project['projectTypes']['type']) && $project['projectTypes']['type'] == 'Logo Design') {{ 'selected' }} @endif>
                                 Logo Design</option>
                             <option value="SEO"
-                                @if ($project['projectTypes']['type'] == 'SEO') {{ 'selected' }} @endif>
+                                @if (isset($project['projectTypes']['type']) && $project['projectTypes']['type'] == 'SEO') {{ 'selected' }} @endif>
                                 SEO</option>
                             <option value="SMO"
-                                @if ($project['projectTypes']['type'] == 'SMO') {{ 'selected' }} @endif>
+                                @if (isset($project['projectTypes']['type']) && $project['projectTypes']['type'] == 'SMO') {{ 'selected' }} @endif>
                                 SMO</option>
                             <option value="Other"
-                                @if ($project['projectTypes']['type'] == 'Other') {{ 'selected' }} @endif>
+                                @if (isset($project['projectTypes']['type']) && $project['projectTypes']['type'] == 'Other') {{ 'selected' }} @endif>
                                 Other</option>
                         </select>
                     </div>
                     <div id="other-value" class="col-md-12 mb-3">
-                        @if ($project['projectTypes']['type'] == 'Other')
+                        @if (isset($project['projectTypes']['type']) && $project['projectTypes']['type'] == 'Other')
                             <label for="inputEnterYourName" class="col-form-label">Other
                                 Value <span style="color: red;">*</span></label>
                             <input type="text" name="other_value" id="other_value"
