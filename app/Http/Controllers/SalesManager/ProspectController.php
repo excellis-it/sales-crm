@@ -19,8 +19,19 @@ class ProspectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->user_id) {
+            $count['total'] = Prospect::where('report_to', auth()->user()->id)->where('user_id', $request->user_id)->count();
+            $count['win'] = Prospect::where('report_to', auth()->user()->id)->where('user_id', $request->user_id)->where('status', 'Win')->count();
+            $count['follow_up'] = Prospect::where('report_to', auth()->user()->id)->where('user_id', $request->user_id)->where('status', 'Follow Up')->count();
+            $count['close'] = Prospect::where('report_to', auth()->user()->id)->where('user_id', $request->user_id)->where('status', 'Close')->count();
+            $count['sent_proposal'] = Prospect::where('report_to', auth()->user()->id)->where('user_id', $request->user_id)->where('status', 'Sent Proposal')->count();
+            $prospects = Prospect::where('report_to', Auth::user()->id)->where('user_id', $request->user_id)->orderBy('sale_date', 'desc')->paginate(15);
+            $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->get();
+            $sales_executives = User::role('SALES_EXCUETIVE')->where(['status' => 1, 'sales_manager_id' => Auth::user()->id])->orderBy('id', 'desc')->get();
+            return view('sales_manager.prospect.list')->with(compact('prospects', 'count', 'users', 'sales_executives'));
+        }
         $count['win'] = Prospect::where('report_to', auth()->user()->id)->where('status', 'Win')->count();
         $count['follow_up'] = Prospect::where('report_to', auth()->user()->id)->where('status', 'Follow Up')->count();
         $count['close'] = Prospect::where('report_to', auth()->user()->id)->where('status', 'Close')->count();
@@ -359,6 +370,9 @@ class ProspectController extends Controller
                             $q->where('name', 'like', '%' . $query . '%');
                         });
                 });
+            }
+            if ($request->user_id) {
+                $prospects = $prospects->where('user_id', $request->user_id);
             }
             if ($status == 'All') {
                 $prospects = $prospects->orderBy('sale_date', 'desc')->where('report_to', Auth::user()->id)->paginate('10');

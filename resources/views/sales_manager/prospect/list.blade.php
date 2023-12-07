@@ -384,9 +384,11 @@
         $(document).ready(function() {
             function fetch_data(page, status, query) {
                 console.log(status + ' ' + page);
+                var user_id = "{{ request()->user_id }}";
                 $.ajax({
                     url: "{{ route('sales-manager.prospects.status-filter') }}",
                     data: {
+                        user_id: user_id,
                         status: status,
                         page: page,
                         query: query
