@@ -156,6 +156,7 @@ class ProjectController extends Controller
                     $project_milestone->payment_date = ($data['payment_status'][$key] == 'Paid') ? date('Y-m-d') : '';
                     $project_milestone->milestone_comment = $data['milestone_comment'][$key];
                     $project_milestone->save();
+
                 }
             }
         }

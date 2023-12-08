@@ -448,8 +448,6 @@
      </script>
      <script>
          $(document).ready(function() {
-             $('.select2').select2();
-
              $('#project_type').on('change', function() {
                  //    select 2 value get and seo,other value check
                  var project_type = $(this).val();
@@ -469,12 +467,13 @@
 
      <script>
          $(document).ready(function() {
-             $('#status').on('change', function() {
+             $(document).on('change', '#status', function() {
+
                  // get value win show the upfront value
                  var status = $(this).val();
+                //  alert(status);
                  if (status.includes('Win')) {
-                     $('#upfront_value_show').html(
-                         ' <div class="col-md-12 mb-3" ><label for="inputEnterYourName" data-parsley-type="number" class="col-form-label">Upfront Value <span style="color: red;">*</span></label><input type="text" name="upfront_value" id="upfront_value"  required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number." class="form-control" value="{{ old('upfront_value') }}" placeholder="Enter Upfront Value"></div><div class="col-md-12 mb-3"> <label for = "inputEnterYourName" class="col-form-label"> Sale Date <span style="color: red;">*</span></label></label> <input type="date" name ="sale_date" id ="sale_date" class ="form-control"></div>'
+                     $('#upfront_value_show').html('<div class="col-md-12 mb-3" ><label for="inputEnterYourName" data-parsley-type="number" class="col-form-label">Upfront Value <span style="color: red;">*</span></label><input type="text" name="upfront_value" id="upfront_value"  required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number." class="form-control" value="" placeholder="Enter Upfront Value"></div><div class="col-md-12 mb-3"> <label for = "inputEnterYourName" class="col-form-label"> Sale Date <span style="color: red;">*</span></label></label> <input type="date" name ="sale_date" id ="sale_date" class="form-control"></div>'
                      );
                  } else {
                      $('#upfront_value_show').html('');

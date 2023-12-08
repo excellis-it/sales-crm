@@ -591,6 +591,9 @@
             });
             $(document).on('click', '.remove', function() {
                 $(this).closest('.row').remove();
+                var number_of_milestone = $('#number_of_milestone').val();
+                var new_number_of_milestone = number_of_milestone - 1;
+                $('#number_of_milestone').val(new_number_of_milestone);
             });
 
             // when select2 other option in project type then show other value

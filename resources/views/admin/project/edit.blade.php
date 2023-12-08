@@ -7,8 +7,8 @@
             <h4 id="offcanvasEditLabel">Edit Project Details</h4>
         </div>
         <div class="offcanvas-body">
-            <form action="{{ route('sales-projects.update', $project->id) }}" method="post"
-                data-parsley-validate="" enctype="multipart/form-data">
+            <form action="{{ route('sales-projects.update', $project->id) }}" method="post" data-parsley-validate=""
+                enctype="multipart/form-data">
                 @method('PUT')
                 @csrf
                 <div class="row">
@@ -16,9 +16,8 @@
                     <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label"> Client Name
                             <span style="color: red;">*</span></label>
-                        <input type="text" name="client_name" id="client_name" required
-                            data-parsley-trigger="keyup" value="{{ $project->client_name }}" class="form-control"
-                            placeholder="Enter Client Name">
+                        <input type="text" name="client_name" id="client_name" required data-parsley-trigger="keyup"
+                            value="{{ $project->client_name }}" class="form-control" placeholder="Enter Client Name">
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Client Email
@@ -43,8 +42,8 @@
                         <label for="inputEnterYourName" class="col-form-label">Client
                             Address <span style="color: red;">*</span></label>
                         <input type="text" name="client_address" id="client_address" required
-                            data-parsley-trigger="keyup" class="form-control"
-                            value=" {{ $project->client_address }}" placeholder="Enter Address">
+                            data-parsley-trigger="keyup" class="form-control" value=" {{ $project->client_address }}"
+                            placeholder="Enter Address">
                         @if ($errors->has('address'))
                             <div class="error" style="color:red;">
                                 {{ $errors->first('address') }}</div>
@@ -75,8 +74,7 @@
                             <option value="Digital Marketing"
                                 @if (isset($project['projectTypes']['type']) && $project['projectTypes']['type'] == 'Digital Marketing') {{ 'selected' }} @endif>
                                 Digital Marketing</option>
-                            <option value="Logo Design"
-                                @if (isset($project['projectTypes']['type']) && $project['projectTypes']['type'] == 'Logo Design') {{ 'selected' }} @endif>
+                            <option value="Logo Design" @if (isset($project['projectTypes']['type']) && $project['projectTypes']['type'] == 'Logo Design') {{ 'selected' }} @endif>
                                 Logo Design</option>
                             <option value="SEO" @if (isset($project['projectTypes']['type']) && $project['projectTypes']['type'] == 'SEO') {{ 'selected' }} @endif>
                                 SEO</option>
@@ -199,9 +197,9 @@
                             value="{{ $project->delivery_tat }}" placeholder="Enter Sale Date">
                     </div>
                     <div class="col-md-12 mb-3">
-                        <label for="inputEnterYourName" class="col-form-label">Assigned To <span style="color: red;">*</span></label>
-                        <select name="assigned_to" id="assigned_to " required
-                            class="form-control select2" required>
+                        <label for="inputEnterYourName" class="col-form-label">Assigned To <span
+                                style="color: red;">*</span></label>
+                        <select name="assigned_to" id="assigned_to " required class="form-control select2" required>
                             <option value="">Select user
                             </option>
                             @foreach ($account_managers as $account_manager)
@@ -221,8 +219,8 @@
                         <label for="inputEnterYourName" class="col-form-label">No. of
                             Milestone</label>
                         <input type="number" id="number_of_milestone_edit"
-                            value="{{ $project->projectMilestones->count() }}" required name="number_of_milestone_edit"
-                            class="form-control">
+                            value="{{ $project->projectMilestones->count() }}" required
+                            name="number_of_milestone_edit" class="form-control">
                     </div>
                     <div class="col-md-12 mb-3" style="margin-top:40px;">
                         <button type="button" class="btn px-5 submit-btn milestone-print">Process</button>
@@ -330,7 +328,7 @@
     </div>
 
 
-<script src="http://parsleyjs.org/dist/parsley.js"></script>
+    <script src="http://parsleyjs.org/dist/parsley.js"></script>
     <!-- PARSLEY -->
     <script>
         window.ParsleyConfig = {
@@ -386,6 +384,9 @@
             });
             $(document).on('click', '.remove', function() {
                 $(this).closest('.row').remove();
+                var number_of_milestone_edit = $('#number_of_milestone_edit').val();
+                var new_number_of_milestone = number_of_milestone_edit - 1;
+                $('#number_of_milestone_edit').val(new_number_of_milestone);
             });
 
             // when select2 other option in project type then show other value
@@ -526,13 +527,27 @@
         $('.milestone-print').on('click', function() {
             var number_of_milestone_edit = $('#number_of_milestone_edit').val();
             if (number_of_milestone_edit == '') {
-                console.log(number_of_milestone_edit);
                 $('#number_of_milestone_edit').html('');
                 $('#number_of_milestone_edit').after(
                     '<span class="error" style="color:red;">Number of milestone is required</span>');
                 return false;
             }
-            $('.add-milestone').html('');
+            //count .add-milestone div and show in number_of_milestone_edit field
+            var count = $('.add-milestone').children().length;
+
+            if (count > 0) {
+                if (number_of_milestone_edit > count) {
+                    var new_number_of_milestone = number_of_milestone_edit - count;
+                } else {
+                    $('#number_of_milestone_edit').after(
+                        '<span class="error" style="color:red;">Please enter valid number of milestone</span>')
+                    return false;
+                }
+            } else {
+                $('.add-milestone').html('');
+                var new_number_of_milestone = number_of_milestone_edit;
+            }
+
             // show milestone field as per number of milestone
             for (let index = 1; index <= number_of_milestone_edit; index++) {
                 console.log(number_of_milestone_edit);
@@ -573,8 +588,12 @@
                     '<button type="button" class="btn btn-danger remove"><i class="fas fa-minus"></i> Remove</button>';
                 html += '</div>';
                 html += '</div>';
-                console.log(html);
+                // console.log(html);
+                //
                 $('.add-milestone').append(html);
+
+                //count .add-milestone div and show in number_of_milestone_edit field
+
             }
         });
     </script>

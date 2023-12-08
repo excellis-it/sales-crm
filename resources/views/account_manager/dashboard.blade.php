@@ -43,7 +43,7 @@
                             <div class="card-body">
                                 <span class="dash-widget-icon"><i class="fas fa-dollar"></i></span>
                                 <div class="dash-widget-info">
-                                    <h3>$20</h3>
+                                    <h3>${{$count['net_target']['goals_amount'] ?? 'No Goal Set'}}</h3>
                                     <span>Net Target This Month</span>
                                 </div>
                             </div>
@@ -56,14 +56,14 @@
                             <div class="card-body">
                                 <span class="dash-widget-icon"><i class="fas fa-dollar"></i></span>
                                 <div class="dash-widget-info">
-                                    <h3>$10</h3>
+                                    <h3>${{$count['net_target']['goals_achieve'] ?? 'No Goal Set'}}</h3>
                                     <span>Net Achieve This Month</span>
                                 </div>
                             </div>
                         </div>
                     </a>
                 </div>
-                
+
             </div>
 
             <div class="row">

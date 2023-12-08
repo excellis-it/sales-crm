@@ -367,7 +367,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
                                         <p class="mb-10 line-height-1">Account Manager Revenue</p>
-                                        <h3 class="fs-25"> {{ $count['account_manager_revenue'] }}</h3>
+                                        <h3 class="fs-25"> ${{ $count['account_manager_revenue'] }}</h3>
                                     </div>
 
                                     <span class="badge badge-red font-size-12">
@@ -398,7 +398,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
                                         <p class="mb-10 line-height-1">BDM Revenue</p>
-                                        <h3 class="fs-25">{{ $count['bdm_revenue'] }}</h3>
+                                        <h3 class="fs-25">${{ $count['bdm_revenue'] }}</h3>
                                     </div>
 
                                     <span class="badge badge-red font-size-12">

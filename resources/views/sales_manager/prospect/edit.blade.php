@@ -140,27 +140,6 @@
                             class="form-control" value="{{ $prospect->price_quote }}"
                             placeholder="Enter Price Quote">
                     </div>
-                    {{-- status --}}
-                    <div class="col-md-12 mb-3">
-                        <label for="inputEnterYourName" class="col-form-label">Status
-                            <span style="color: red;">*</span></label>
-                        <select name="status" id="status" class="form-control"
-                            required data-parsley-trigger="keyup">
-                            <option value="">Select Status</option>
-                            <option value="Win"
-                                {{ $prospect->status == 'Win' ? 'selected' : '' }}>On board
-                            </option>
-                            <option value="Follow Up"
-                                {{ $prospect->status == 'Follow Up' ? 'selected' : '' }}>
-                                Follow Up</option>
-                            <option value="Sent Proposal"
-                                {{ $prospect->status == 'Sent Proposal' ? 'selected' : '' }}>
-                                Sent Proposal</option>
-                            <option value="Close"
-                                {{ $prospect->status == 'Close' ? 'selected' : '' }}>Cancel
-                            </option>
-                        </select>
-                    </div>
                     {{-- transfer_token_by --}}
                     <div class="col-md-12 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Transfer
@@ -197,7 +176,7 @@
                     <div class="col-md-12 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Status
                             <span style="color: red;">*</span></label>
-                        <select name="status" id="status" class="form-control"
+                        <select name="status" id="status_edit" class="form-control"
                             required data-parsley-trigger="keyup">
                             <option value="">Select Status</option>
                             <option value="Win"
@@ -214,7 +193,7 @@
                             </option>
                         </select>
                     </div>
-                    <div class="row" id="upfront_value_show">
+                    <div class="row" id="upfront_value_show_edit">
                         @if ($prospect->status == 'Win')
                             <div class="col-md-12 mb-3">
                                 <label for="inputEnterYourName"
@@ -293,7 +272,7 @@
 
 <script>
     $(document).ready(function() {
-        $('#status').on('change', function() {
+        $('#status_edit').on('change', function() {
             // get value win show the upfront value
             var status = $(this).val();
             // alert(status);
@@ -301,9 +280,9 @@
                 var html = '';
                 html +=
                     '<div class="col-md-12 mb-3"><label for="inputEnterYourName" class="col-form-label">Upfront Value<span style="color: red;">*</span></label><input type="text" name="upfront_value" id="upfront_value" class="form-control" value="{{ $prospect->upfront_value ?? '' }}" placeholder="Enter Upfront Value"></div> <div class="col-md-12 mb-3"><label for="inputEnterYourName" class="col-form-label">Sale Date <span style="color: red;">*</span></label><input type="date" name="sale_date" id="sale_date" class="form-control" value="{{ $prospect->sale_date ?? '' }}" placeholder="Enter Sale Date"></div>';
-                $('#upfront_value_show').html(html);
+                $('#upfront_value_show_edit').html(html);
             } else {
-                $('#upfront_value_show').html('');
+                $('#upfront_value_show_edit').html('');
             }
         });
     });
