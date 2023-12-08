@@ -13,7 +13,7 @@
     <tbody>
         @if (count($customers) == 0)
             <tr>
-                <td colspan="8" class="text-center">No Customer found</td>
+                <td colspan="7" class="text-center">No Customer found</td>
             </tr>
         @else
             @foreach ($customers as $key => $customer)
@@ -22,29 +22,28 @@
                     <td class="edit-route" data-route="{{ route('customers.edit', $customer['id']) }}">{{ $customer->customer_email }}</td>
                     <td class="edit-route" data-route="{{ route('customers.edit', $customer['id']) }}">{{ $customer->customer_phone }}</td>
                     <td class="edit-route" data-route="{{ route('customers.edit', $customer['id']) }}">{{ $customer->customer_address }}</td>
-                    <td class="edit-route" data-route="{{ route('customers.edit', $customer['id']) }}"></td>
-                    <td><a
-                            href="{{ route('customers.index', ['customers' => $customer->id]) }}"></a>
-                    </td>
-                    
                     <td>
-                        <a title="Edit Account manager" data-route=""
-                            href=""
-                            class="edit_acma"><i class="fas fa-edit"></i></a> &nbsp;&nbsp;
+                       ${{ $customer->projects()->sum('project_value') }}
+                    </td>
+                    <td> {{ $customer->projects->count() }}</td>
 
-                        <a title="Delete Account manager"
-                            data-route=""  class="delete_acma"
+
+                    <td>
+                        <a title="Delete Customer"
+                            data-route="{{ route('customers.delete', ['id' => $customer->id]) }}"  class="delete_acma"
                             href="javascipt:void(0);" id="delete"><i
                                 class="fas fa-trash"></i></a>
                     </td>
                 </tr>
             @endforeach
+            <tr>
+                <td colspan="7">
+                    <div class="d-flex justify-content-center">
+                        {!! $customers->links() !!}
+                    </div>
+                </td>
+            </tr>
         @endif
 
     </tbody>
 </table>
-
-{{-- pagination --}}
-<div class="d-flex justify-content-center">
-    {!! $customers->links() !!}
-</div>

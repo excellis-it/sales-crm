@@ -127,8 +127,11 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('/projectDocumentDownload/{id}', [AdminProjectController::class, 'DocumentDownload'])->name('sales-projects.document.download');
     Route::get('/new-customer', [AdminProjectController::class, 'newCustomer'])->name('sales-projects.new-customer');
     Route::get('/customer-details', [AdminProjectController::class, 'customerDetails'])->name('sales-projects.customer-details');
-
-
+    // cutomer list
+    Route::prefix('customers')->group(function () {
+        Route::get('/customers-delete/{id}', [UserController::class, 'delete'])->name('customers.delete');
+    });
+    Route::get('/customers-search', [UserController::class, 'search'])->name('customers.search');
     //  Sales manager Routes
     Route::prefix('sales_managers')->group(function () {
         Route::get('/sales_manager-delete/{id}', [CustomerController::class, 'delete'])->name('sales_managers.delete');

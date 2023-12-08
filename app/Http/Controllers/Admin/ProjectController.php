@@ -92,6 +92,7 @@ class ProjectController extends Controller
         $project = new Project();
         $project->user_id = $data['user_id'];
         $project->assigned_to = $data['assigned_to'];
+        
         $project->assigned_date = date('Y-m-d');
         $project->customer_id = $data['customer'];
         $project->client_name = $data['client_name'];

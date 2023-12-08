@@ -83,13 +83,13 @@
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Type of customer
                                                 <span style="color: red;">*</span></label>
-                                            <input type="radio" name="customer" id="new_user" value="1" required class="customer"
-                                                data-parsley-trigger="keyup" checked> New user
-                                            <input type="radio" name="customer" id="existing_user" value="0" required class="customer"
-                                                data-parsley-trigger="keyup"> Existing user
+                                            <input type="radio" name="customer" id="new_user" value="1" required
+                                                class="customer" data-parsley-trigger="keyup" checked> New user
+                                            <input type="radio" name="customer" id="existing_user" value="0" required
+                                                class="customer" data-parsley-trigger="keyup"> Existing user
                                         </div>
                                         {{-- select user --}}
-                                        <div class="col-md-12 mb-3" id="select_user">
+                                        <div class="col-md-12 mb-3 select_user" id="select_user">
 
                                         </div>
                                         {{-- salemangers select option --}}
@@ -97,7 +97,7 @@
                                             <label for="inputEnterYourName" class="col-form-label"> Client Name
                                                 <span style="color: red;">*</span></label>
                                             <input type="text" name="client_name" id="client_name" required
-                                                data-parsley-trigger="keyup" class="form-control"
+                                                data-parsley-trigger="keyup" class="form-control client_name"
                                                 value="{{ old('client_name') }}" placeholder="Enter Client Name">
                                         </div>
 
@@ -107,7 +107,7 @@
                                             <input type="text" name="client_email" id="client_email" required
                                                 data-parsley-trigger="keyup" data-parsley-type="email"
                                                 data-parsley-type-message="Please enter a valid email address."
-                                                class="form-control" value="{{ old('client_email') }}"
+                                                class="form-control client_email" value="{{ old('client_email') }}"
                                                 placeholder="Enter Client Email">
                                         </div>
                                         <div class="col-md-6 mb-3">
@@ -116,7 +116,7 @@
                                             <input type="text" name="client_phone" id="client_phone" required
                                                 data-parsley-trigger="keyup" data-parsley-type="number"
                                                 data-parsley-type-message="Please enter a valid phone number."
-                                                class="form-control" value="{{ old('client_phone') }}"
+                                                class="form-control client_phone" value="{{ old('client_phone') }}"
                                                 placeholder="Enter Client Phone Number">
                                         </div>
 
@@ -125,7 +125,7 @@
                                             <label for="inputEnterYourName" class="col-form-label">Client
                                                 Address <span style="color: red;">*</span></label>
                                             <input type="text" name="client_address" id="client_address" required
-                                                data-parsley-trigger="keyup" class="form-control"
+                                                data-parsley-trigger="keyup" class="form-control client_address"
                                                 value="{{ old('client_address') }}" placeholder="Enter Address">
                                             @if ($errors->has('address'))
                                                 <div class="error" style="color:red;">
@@ -145,7 +145,7 @@
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Project
                                                 Type <span style="color: red;">*</span></label>
-                                            <select name="project_type" id="project_type"  class="form-control">
+                                            <select name="project_type" id="project_type" class="form-control">
                                                 <option value="">Select Project Type</option>
                                                 <option value="Website Design & Development">Website Design &
                                                     Development</option>
@@ -266,13 +266,15 @@
                                         </div>
 
                                         <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Assigned To <span style="color: red;">*</span></label>
+                                            <label for="inputEnterYourName" class="col-form-label">Assigned To <span
+                                                    style="color: red;">*</span></label>
                                             <select name="assigned_to" id="assigned_to " required
                                                 class="form-control select2" required>
                                                 <option value="">Select user
                                                 </option>
                                                 @foreach ($account_managers as $account_manager)
-                                                    <option value="{{ $account_manager->id }}">{{ $account_manager->name }}
+                                                    <option value="{{ $account_manager->id }}">
+                                                        {{ $account_manager->name }}
                                                         ({{ $account_manager->email }})
                                                     </option>
                                                 @endforeach
@@ -359,10 +361,12 @@
                                             id="phone_icon"><span class="fa fa-sort-down"></span></span></th>
                                     <th class="sorting" data-tippy-content="Sort by Project Value"
                                         data-sorting_type="asc" data-column_name="project_value" style="cursor: pointer">
-                                        Project Value <span id="project_value_icon"><span class="fa fa-sort-down"></span></span></th>
+                                        Project Value <span id="project_value_icon"><span
+                                                class="fa fa-sort-down"></span></span></th>
                                     <th class="sorting" data-tippy-content="Sort by Project Upfront"
                                         data-sorting_type="asc" data-column_name="project_upfront"
-                                        style="cursor: pointer"> Project Upfront <span id="project_upfront_icon"><span class="fa fa-sort-down"></span></span>
+                                        style="cursor: pointer"> Project Upfront <span id="project_upfront_icon"><span
+                                                class="fa fa-sort-down"></span></span>
                                     </th>
                                     {{-- <th> </th> --}}
                                     <th class="sorting" data-tippy-content="Sort by Currency" data-sorting_type="asc"
@@ -857,66 +861,73 @@
         });
     </script>
     <script>
-        // check new user or existing user
-       $('.customer').on('change', function() {
-            var customer = $(this).val();
-            if (customer == 0) {
-                $('#loading').addClass('loading');
-                $('#loading-content').addClass('loading-content');
-                $.ajax({
-                    url: "{{ route('sales-projects.new-customer') }}",
-                    type: 'GET',
-                    success: function(response) {
-                        // console.log(response.data);
-                       $('#select_user').append(' <label for="inputEnterYourName" class="col-form-label"> Select customer <span style="color: red;">*</span></label> <select name="customer_id" id="customer_id" required data-parsley-trigger="keyup" class="form-control select2"> <option value="">Select a user</option>')
-                        $.each(response, function(key, value) {
-                            $('#customer_id').append('<option value="' + value.id + '">' + value.customer_name +
-                                '(' + value.customer_email + ')' + '</option>');
-                        });
-                        $('#select_user').append('</select>');
-                        $('#loading').removeClass('loading');
-                        $('#loading-content').removeClass('loading-content');
-                    },
-                    error: function(xhr) {
-                        // Handle errors
-                        $('#loading').removeClass('loading');
-                        $('#loading-content').removeClass('loading-content');
-                        console.log(xhr);
-                    }
-                })
-            } else {
-                $('#select_user').html('');
-                $('#client_email').removeAttr("style");
-                $('#client_phone').removeAttr("style");
-                $('#client_address').removeAttr("style");
-                $('#client_name').removeAttr("style");
-                $('#client_email').val('');
-                $('#client_phone').val('');
-                $('#client_address').val('');
-                $('#client_name').val('');
-            }
+        $(document).ready(function() {
+            // Handle the click event for the edit-route button
+            $(document).on('change', '.customer', function() {
+                var customer = $(this).val();
+                if (customer == 0) {
+                    $('#loading').addClass('loading');
+                    $('#loading-content').addClass('loading-content');
+                    $.ajax({
+                        url: "{{ route('sales-projects.new-customer') }}",
+                        type: 'GET',
+                        success: function(response) {
+                            // console.log(response.data);
+                            $('.select_user').append(
+                                ' <label for="inputEnterYourName" class="col-form-label"> Select customer <span style="color: red;">*</span></label> <select name="customer_id" id="customer_id" required data-parsley-trigger="keyup" class="form-control customer_id select2"> <option value="">Select a user</option>'
+                                )
+                            $.each(response, function(key, value) {
+                                $('.customer_id').append('<option value="' + value.id +
+                                    '">' + value.customer_name +
+                                    '(' + value.customer_email + ')' + '</option>');
+                            });
+                            $('.select_user').append('</select>');
+                            $('#loading').removeClass('loading');
+                            $('#loading-content').removeClass('loading-content');
+                        },
+                        error: function(xhr) {
+                            // Handle errors
+                            $('#loading').removeClass('loading');
+                            $('#loading-content').removeClass('loading-content');
+                            console.log(xhr);
+                        }
+                    })
+                } else {
+                    $('.select_user').html('');
+                    $('.client_email').removeAttr("style");
+                    $('.client_phone').removeAttr("style");
+                    $('.client_address').removeAttr("style");
+                    $('.client_name').removeAttr("style");
+                    $('.client_email').val('');
+                    $('.client_phone').val('');
+                    $('.client_address').val('');
+                    $('.client_name').val('');
+                }
+            });
         });
     </script>
 
     <script>
-        $(document).ready(function(){
-            $(document).on('change','#customer_id',function(){
+        $(document).ready(function() {
+            $(document).on('change', '#customer_id', function() {
                 var customer_id = $(this).val();
 
                 $.ajax({
                     url: "{{ route('sales-projects.customer-details') }}",
                     type: 'GET',
-                    data:{customer_id:customer_id},
+                    data: {
+                        customer_id: customer_id
+                    },
                     success: function(response) {
                         // console.log(response);
-                        $('#client_email').attr("style", "pointer-events: none;");
-                        $('#client_phone').attr("style", "pointer-events: none;");
-                        $('#client_address').attr("style", "pointer-events: none;");
-                        $('#client_name').attr("style", "pointer-events: none;");
-                        $('#client_email').val(response.customer_email);
-                        $('#client_phone').val(response.customer_phone);
-                        $('#client_address').val(response.customer_address);
-                        $('#client_name').val(response.customer_name);
+                        $('.client_email').attr("style", "pointer-events: none;");
+                        $('.client_phone').attr("style", "pointer-events: none;");
+                        $('.client_address').attr("style", "pointer-events: none;");
+                        $('.client_name').attr("style", "pointer-events: none;");
+                        $('.client_email').val(response.customer_email);
+                        $('.client_phone').val(response.customer_phone);
+                        $('.client_address').val(response.customer_address);
+                        $('.client_name').val(response.customer_name);
                     },
                     error: function(xhr) {
                         // Handle errors

@@ -12,19 +12,29 @@
                 @method('PUT')
                 @csrf
                 <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label for="inputEnterYourName" class="col-form-label">Type of customer
+                            <span style="color: red;">*</span></label>
+                        <input type="radio" name="customer" id="new_user" value="1" required class="customer"
+                            data-parsley-trigger="keyup" checked> New user
+                        <input type="radio" name="customer" id="existing_user" value="0" required class="customer"
+                            data-parsley-trigger="keyup"> Existing user
+                    </div>
+                    <div class="col-md-12 mb-3 select_user" id="select_user">
 
+                    </div>
                     <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label"> Client Name
                             <span style="color: red;">*</span></label>
                         <input type="text" name="client_name" id="client_name" required data-parsley-trigger="keyup"
-                            value="{{ $project->client_name }}" class="form-control" placeholder="Enter Client Name">
+                            value="{{ $project->client_name }}" class="form-control client_name" placeholder="Enter Client Name">
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Client Email
                             <span style="color: red;">*</span></label>
                         <input type="text" name="client_email" id="client_email" required
                             data-parsley-trigger="keyup" data-parsley-type="email"
-                            data-parsley-type-message="Please enter a valid email address." class="form-control"
+                            data-parsley-type-message="Please enter a valid email address." class="form-control client_email"
                             value="{{ $project->client_email }}" placeholder="Enter Client Email">
                     </div>
                     <div class="col-md-6 mb-3">
@@ -33,7 +43,7 @@
                         <input type="text" name="client_phone" id="client_phone" required
                             data-parsley-trigger="keyup" data-parsley-type="number"
                             data-parsley-type-message="Please enter a valid phone number."
-                            value="{{ $project->client_phone }}" class="form-control"
+                            value="{{ $project->client_phone }}" class="form-control client_phone"
                             placeholder="Enter Client Phone Number">
                     </div>
 
@@ -42,7 +52,7 @@
                         <label for="inputEnterYourName" class="col-form-label">Client
                             Address <span style="color: red;">*</span></label>
                         <input type="text" name="client_address" id="client_address" required
-                            data-parsley-trigger="keyup" class="form-control" value=" {{ $project->client_address }}"
+                            data-parsley-trigger="keyup" class="form-control client_address" value=" {{ $project->client_address }}"
                             placeholder="Enter Address">
                         @if ($errors->has('address'))
                             <div class="error" style="color:red;">

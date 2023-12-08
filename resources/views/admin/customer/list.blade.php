@@ -28,7 +28,7 @@
                             <li class="breadcrumb-item active">List</li>
                         </ul>
                     </div>
-                    
+
                 </div>
             </div>
 
@@ -41,7 +41,7 @@
                             </div>
                             <div class="col-md-6 text-end">
                                 <a href="javascript:void(0);" class="btn px-5 submit-btn" data-bs-toggle="offcanvas"
-                                data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"><i
+                                    data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"><i
                                         class="fas fa-plus"></i> Add New
                                     customer</a>
                             </div>
@@ -72,8 +72,8 @@
                                 <h4 id="offcanvasEditLabel">Add Customer Details</h4>
                             </div>
                             <div class="offcanvas-body">
-                                <form action="{{ route('customers.store') }}" method="post"
-                                    enctype="multipart/form-data" id="cutomer-form-create">
+                                <form action="{{ route('customers.store') }}" method="post" enctype="multipart/form-data"
+                                    id="cutomer-form-create">
                                     @csrf
                                     <div class="row">
                                         <div class="col-md-12 mb-3">
@@ -83,7 +83,7 @@
                                                 value="{{ old('name') }}" placeholder="Enter Customer Name">
                                             <span class="text-danger name_error"></span>
                                         </div>
-                                        
+
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label"> Email <span
                                                     style="color: red;">*</span></label>
@@ -101,8 +101,7 @@
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label"> Address <span
                                                     style="color: red;">*</span></label>
-                                            <textarea name="address" class="form-control"
-                                                value="{{ old('address') }}" ></textarea>
+                                            <textarea name="address" class="form-control" value="{{ old('address') }}"></textarea>
                                             <span class="text-danger address_error"></span>
                                         </div>
 
@@ -129,7 +128,7 @@
                             </div>
                             <div class="offcanvas-body">
                                 <form action="" method="POST" enctype="multipart/form-data"
-                                    id="customer-edit-form">
+                                    id="customers-edit-form">
                                     @method('PUT')
                                     @csrf
                                     <div class="row">
@@ -141,7 +140,7 @@
                                             <span class="text-danger name_msg_error"></span>
 
                                         </div>
-                                        
+
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label"> Email <span
                                                     style="color: red;">*</span></label>
@@ -156,29 +155,11 @@
                                                 value="{{ old('phone') }}" placeholder="Enter Phone Number">
                                             <span class="text-danger phone_msg_error"></span>
                                         </div>
-
-
                                         <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label"> Password
-                                                <span style="color: red;">*</span></label>
-                                            <input type="password" name="password" class="form-control" id="password"
-                                                value="{{ old('password') }}" placeholder="Enter pasword">
-                                            <span class="text-danger password_msg_error"></span>
-                                        </div>
-                                        <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label"> Confirm
-                                                Password <span style="color: red;">*</span></label>
-                                            <input type="password" name="confirm_password" id="confirm_password"
-                                                class="form-control" value="{{ old('confirm_password') }}">
-                                            <span class="text-danger confirm_password_msg_error"></span>
-                                        </div>
-                                       
-                                        <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label"> Profile
-                                                Picture </label>
-                                            <input type="file" name="profile_picture" class="form-control"
-                                                value="{{ old('profile_picture') }}">
-                                            <span class="text-danger profile_picture_msg_error"></span>
+                                            <label for="inputEnterYourName" class="col-form-label"> Address <span
+                                                    style="color: red;">*</span></label>
+                                            <textarea name="address" class="form-control" id="address" value="{{ old('address') }}"></textarea>
+                                            <span class="text-danger address_msg_error"></span>
                                         </div>
                                     </div>
                                     <div class="d-flex alin-items-center w-100 text-end">
@@ -192,7 +173,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="table-responsive" id="account_managers_data">
+                    <div class="table-responsive" id="customers_data">
                         @include('admin.customer.table')
                     </div>
                 </div>
@@ -204,12 +185,33 @@
 @endsection
 
 @push('scripts')
-    
+    <script>
+        $(document).ready(function() {
+            $('#search').on('keyup', function() {
+                var text = $('#search').val();
+                url = "{{ route('customers.search') }}"
+                $('#loading').addClass('loading');
+                $('#loading-content').addClass('loading-content');
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    data: {
+                        text: text,
+                    },
+                    success: function(response) {
+                        $('#customers_data').html(response.view);
+                        $('#loading').removeClass('loading');
+                        $('#loading-content').removeClass('loading-content');
+                    }
+                });
+            });
+        });
+    </script>
     <script>
         $(document).on('click', '#delete', function(e) {
             swal({
                     title: "Are you sure?",
-                    text: "To delete this account_manager.",
+                    text: "To delete this customer.",
                     type: "warning",
                     confirmButtonText: "Yes",
                     showCancelButton: true
@@ -227,15 +229,76 @@
                 })
         });
     </script>
-   
+
     <script>
         $(document).ready(function() {
             //how to place holder in "jquery datatable" search box
             $('#myTable_filter input').attr("placeholder", "Search");
         });
     </script>
-    
-      @if (count($customers) > 0)
-   
-      @endif
+
+    @if (count($customers) > 0)
+        <script>
+            $(document).ready(function() {
+                $(document).on('click', '.edit-route', function() {
+                    var route = $(this).data('route');
+                    $('#loading').addClass('loading');
+                    $('#loading-content').addClass('loading-content');
+                    $.ajax({
+                        url: route,
+                        type: 'GET',
+                        success: function(response) {
+                            // alert(response);
+                            var customer = response.customer;
+                            // console.log(response);
+                            $('#name').val(customer.customer_name);
+                            $('#email').val(customer.customer_email);
+                            $('#phone').val(customer.customer_phone);
+                            $('#address').val(customer.customer_address);
+                            var updateRoute =
+                                "{{ route('customers.update', ['customer' => ':id']) }}";
+                            updateRoute = updateRoute.replace(':id', customer.id);
+                            $('#customers-edit-form').attr('action', updateRoute);
+                            $('#loading').removeClass('loading');
+                            $('#loading-content').removeClass('loading-content');
+                            $('#offcanvasEdit').offcanvas('show');
+                        },
+                        error: function(xhr) {
+                            // Handle errors
+                            $('#loading').removeClass('loading');
+                            $('#loading-content').removeClass('loading-content');
+                            console.log(xhr);
+                        }
+                    });
+                });
+
+                // Handle the form submission
+                $('#customers-edit-form').submit(function(e) {
+                    e.preventDefault();
+
+                    var formData = $(this).serialize();
+
+                    $.ajax({
+                        url: $(this).attr('action'),
+                        type: $(this).attr('method'),
+                        data: formData,
+                        success: function(response) {
+                            window.location.reload();
+                            toastr.success('Customer details updated successfully');
+                        },
+                        error: function(xhr) {
+                            // Handle errors (e.g., display validation errors)
+                            var errors = xhr.responseJSON.errors;
+                            $.each(errors, function(key, value) {
+                                // Assuming you have a span with class "text-danger" next to each input
+                                $('.' + key + '_msg_error').html(value[0]);
+                            });
+                            $('#loading').removeClass('loading');
+                            $('#loading-content').removeClass('loading-content');
+                        }
+                    });
+                });
+            });
+        </script>
+    @endif
 @endpush

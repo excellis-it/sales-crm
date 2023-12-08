@@ -339,12 +339,6 @@
     </script>
     <script>
         $(document).ready(function() {
-            //how to place holder in "jquery datatable" search box
-            $('#myTable_filter input').attr("placeholder", "Search");
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
             $('#account-manager-form-create').submit(function(e) {
                 e.preventDefault();
 
