@@ -23,6 +23,10 @@
                 <li class="menu-title">
                     <span>User Management</span>
                 </li>
+                <li class="{{ Request::is('admin/customers*') ? 'active' : ' ' }}">
+                    <a href="{{ route('customers.index') }}"><i class="la la-users"></i> <span>
+                            Customers</span></a>
+                </li>
 
                 <li class="{{ Request::is('admin/goals*') ? 'active' : ' ' }}">
                     <a href="{{ route('goals.index') }}"><i class="la la-bullseye"></i> <span>
