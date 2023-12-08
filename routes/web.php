@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\ForgetPasswordController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\BusinessDevelopmentExcecutiveController;
 use App\Http\Controllers\Admin\BusinessDevelopmentManagerController;
 use App\Http\Controllers\Admin\ProfileController;
@@ -84,6 +85,7 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
         'goals' => GoalsController::class,
         'business-development-managers' => BusinessDevelopmentManagerController::class,
         'business-development-excecutive' => BusinessDevelopmentExcecutiveController::class,
+        'customers' => UserController::class,
     ]);
 
     Route::name('admin.')->group(function () {
