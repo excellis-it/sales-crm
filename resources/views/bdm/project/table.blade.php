@@ -1,6 +1,6 @@
 @if (count($projects) == 0)
     <tr>
-        <td colspan="12" class="text-center">No Projects Found</td>
+        <td colspan="11" class="text-center">No Projects Found</td>
     </tr>
 @else
     @foreach ($projects as $key => $project)
@@ -36,16 +36,16 @@
             <td class="edit-route" data-route="{{ route('bdm.projects.edit', $project->id) }}">
                 {{ (int) $project->project_value - (int) $project->project_upfront }}
             </td>
-            <td>
+            {{-- <td>
                 <a title="Delete Project" class="btn btn-sm btn-danger" data-route="{{ route('bdm.projects.delete', $project->id) }}"
                     href="javascipt:void(0);" id="delete"><i class="fas fa-trash"></i></a>
-            </td>
+            </td> --}}
         </tr>
     @endforeach
 @endif
 
 <tr>
-    <td colspan="12">
+    <td colspan="11">
         <div class="d-flex justify-content-center">
             {!! $projects->links() !!}
         </div>

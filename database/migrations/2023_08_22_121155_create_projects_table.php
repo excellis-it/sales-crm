@@ -17,6 +17,7 @@ class CreateProjectsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->nullable()->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('assigned_to')->nullable()->references('id')->on('users')->onDelete('cascade');
+            $table->string('customer_id')->nullable();
             $table->string('client_name')->nullable();
             $table->string('business_name')->nullable();
             $table->string('client_email')->nullable();

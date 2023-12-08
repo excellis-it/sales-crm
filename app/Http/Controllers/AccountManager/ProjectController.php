@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\AccountManager;
 
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
 use App\Models\Project;
 use App\Models\ProjectMilestone;
 use App\Models\ProjectType;
@@ -47,9 +48,22 @@ class ProjectController extends Controller
     {
         $data = $request->all();
 
+        if ($data['customer'] == 0) {  //new customer == 1 and existing customer == 0
+            $data['customer'] = $request->customer_id;
+        } else {
+            $customer = new Customer();
+            $customer->customer_name = $data['client_name'];
+            $customer->customer_email = $data['client_email'];
+            $customer->customer_phone = $data['client_phone'];
+            $customer->customer_address = $data['client_address'];
+            $customer->save();
+            $data['customer'] = $customer->id;
+        }
+
         $project = new Project();
         $project->user_id = Auth::user()->id;
         $project->client_name = $data['client_name'];
+        $project->customer_id = $data['customer'];
         $project->business_name = $data['business_name'];
         $project->client_email = $data['client_email'];
         $project->client_phone = $data['client_phone'];
@@ -58,7 +72,7 @@ class ProjectController extends Controller
         $project->project_value = $data['project_value'];
         $project->currency = $data['currency'];
         $project->payment_mode = $data['payment_mode'];
-        $project->project_opener = $data['project_opener'];
+        $project->project_opener = Auth::user()->id;
         $project->project_closer = $data['project_closer'];
         $project->project_upfront = $data['project_upfront'];
         $project->website = $data['website'];
@@ -161,7 +175,7 @@ class ProjectController extends Controller
         $project->project_value = $data['project_value'];
         $project->currency = $data['currency'];
         $project->payment_mode = $data['payment_mode'];
-        $project->project_opener = $data['project_opener'];
+        $project->project_opener = Auth::user()->id;
         $project->project_closer = $data['project_closer'];
         $project->project_upfront = $data['project_upfront'];
         $project->website = $data['website'];
@@ -271,5 +285,21 @@ class ProjectController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function newCustomer(Request $request)
+    {
+        if ($request->ajax()) {
+            $customers = Customer::orderBy('customer_name', 'asc')->get();
+            return response()->json($customers);
+        }
+    }
+
+    public function customerDetails(Request $request)
+    {
+        if ($request->ajax()) {
+            $customer = Customer::find($request->customer_id);
+            return response()->json($customer);
+        }
     }
 }

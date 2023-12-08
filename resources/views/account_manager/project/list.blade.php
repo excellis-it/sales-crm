@@ -80,8 +80,20 @@
                                             data-parsley-validate="" enctype="multipart/form-data">
                                             @csrf
                                     <div class="row">
-
+                                        {{-- new user and existing user radio button --}}
                                         <div class="col-md-12 mb-3">
+                                            <label for="inputEnterYourName" class="col-form-label">Type of customer
+                                                <span style="color: red;">*</span></label>
+                                            <input type="radio" name="customer" id="new_user" value="1" required class="customer"
+                                                data-parsley-trigger="keyup" checked> New user
+                                            <input type="radio" name="customer" id="existing_user" value="0" required class="customer"
+                                                data-parsley-trigger="keyup"> Existing user
+                                        </div>
+                                        {{-- select user --}}
+                                        <div class="col-md-12 mb-3" id="select_user">
+
+                                        </div>
+                                        <div class="col-md-6 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label"> Client Name
                                                 <span style="color: red;">*</span></label>
                                             <input type="text" name="client_name" id="client_name" required
@@ -89,15 +101,8 @@
                                                 value="{{ old('client_name') }}"
                                                 placeholder="Enter Client Name">
                                         </div>
-                                        <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Business Name
-                                                <span style="color: red;">*</span></label>
-                                            <input type="text" name="business_name" id="business_name"
-                                                required data-parsley-trigger="keyup" class="form-control"
-                                                value="{{ old('business_name') }}"
-                                                placeholder="Enter Business Name">
-                                        </div>
-                                        <div class="col-md-12 mb-3">
+
+                                        <div class="col-md-6 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Client Email
                                                 <span style="color: red;">*</span></label>
                                             <input type="text" name="client_email" id="client_email" required
@@ -106,7 +111,7 @@
                                                 class="form-control" value="{{ old('client_email') }}"
                                                 placeholder="Enter Client Email">
                                         </div>
-                                        <div class="col-md-12 mb-3">
+                                        <div class="col-md-6 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Client Phone
                                                 <span style="color: red;">*</span></label>
                                             <input type="text" name="client_phone" id="client_phone" required
@@ -117,7 +122,7 @@
                                         </div>
 
                                         {{-- clinent address --}}
-                                        <div class="col-md-12 mb-3">
+                                        <div class="col-md-6 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Client
                                                 Address <span style="color: red;">*</span></label>
                                             <input type="text" name="client_address" id="client_address"
@@ -127,6 +132,14 @@
                                                 <div class="error" style="color:red;">
                                                     {{ $errors->first('address') }}</div>
                                             @endif
+                                        </div>
+                                        <div class="col-md-12 mb-3">
+                                            <label for="inputEnterYourName" class="col-form-label">Business Name
+                                                <span style="color: red;">*</span></label>
+                                            <input type="text" name="business_name" id="business_name"
+                                                required data-parsley-trigger="keyup" class="form-control"
+                                                value="{{ old('business_name') }}"
+                                                placeholder="Enter Business Name">
                                         </div>
                                         <h3 class="mt-4 text-uppercase">Project Details</h3>
                                         <hr>
@@ -152,7 +165,7 @@
 
                                         </div>
                                         {{-- Project value --}}
-                                        <div class="col-md-12 mb-3">
+                                        <div class="col-md-6 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Project
                                                 Value <span style="color: red;">*</span></label>
                                             <input type="text" name="project_value" id="project_value"
@@ -162,7 +175,7 @@
                                                 class="form-control" placeholder="Enter Project Value">
                                         </div>
                                         {{-- Project project_upfront --}}
-                                        <div class="col-md-12 mb-3">
+                                        <div class="col-md-6 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Project
                                                 Upfront <span style="color: red;">*</span></label>
                                             <input type="text" name="project_upfront" id="project_upfront"
@@ -173,7 +186,7 @@
                                                 placeholder="Enter Project Upfront">
                                         </div>
                                         {{-- currency select box --}}
-                                        <div class="col-md-12 mb-3">
+                                        <div class="col-md-6 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Currency
                                                 <span style="color: red;">*</span></label>
                                             <select name="currency" id="currency" class="form-control"
@@ -189,7 +202,7 @@
                                         </div>
 
                                         {{-- Project payment_mode --}}
-                                        <div class="col-md-12 mb-3">
+                                        <div class="col-md-6 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Project
                                                 Payment Mode <span style="color: red;">*</span></label>
                                             <input type="text" name="payment_mode" required
@@ -197,24 +210,9 @@
                                                 class="form-control" value="{{ old('payment_mode') }}"
                                                 placeholder="Enter Project Payment Mode">
                                         </div>
-                                        {{-- Project opener --}}
-                                        <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Project
-                                                Opener <span style="color: red;">*</span></label>
-                                            <select name="project_opener" id="project_opener" required
-                                                class="form-control select2" required>
-                                                <option value="" >Select Project
-                                                    Opener
-                                                </option>
-                                                @foreach ($users as $user)
-                                                    <option value="{{ $user->id }}">{{ $user->name }}
-                                                        ({{ $user->email }})
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+
                                         {{-- Project closer --}}
-                                        <div class="col-md-12 mb-3">
+                                        <div class="col-md-6 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Project
                                                 Closer <span style="color: red;">*</span></label>
                                             <select name="project_closer" id="project_closer" required
@@ -230,7 +228,7 @@
                                             </select>
                                         </div>
                                         {{-- sale date --}}
-                                        <div class="col-md-12 mb-3">
+                                        <div class="col-md-6 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Sale Date
                                                 <span style="color: red;">*</span></label>
                                             <input type="date" name="sale_date" id="sale_date" required
@@ -239,7 +237,7 @@
                                                 placeholder="Enter Sale Date">
                                         </div>
                                         {{-- website --}}
-                                        <div class="col-md-12 mb-3">
+                                        <div class="col-md-6 mb-3">
                                             <label for="inputEnterYourName"
                                                 class="col-form-label">Website</label>
                                             <input type="text" name="website" id="website"
@@ -249,7 +247,7 @@
                                                 class="form-control" value="{{ old('website') }}"
                                                 placeholder="Enter Website">
                                         </div>
-                                        <div class="col-md-12 mb-3">
+                                        <div class="col-md-6 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Delivery
                                                 TAT
                                                 <span style="color: red;">*</span></label>
@@ -343,7 +341,7 @@
                                     <th class="sorting" data-tippy-content="Sort by Payment Mode" data-sorting_type="desc"
                                     data-column_name="payment_mode" style="cursor: pointer"> Payment Mode <span id="payment_mode_icon"><span class="fa fa-sort-down"></span></span></th>
                                     <th data-tippy-content="Cant't sort by Due Amount" style="cursor: pointer"> Due Amount <span id="due_amount_icon"></span></th>
-                                    <th> Action</th>
+                                    {{-- <th> Action</th> --}}
                                 </tr>
                             </thead>
                             <tbody>
@@ -783,6 +781,78 @@
                     // Handle errors
                     $('#loading').removeClass('loading');
                     $('#loading-content').removeClass('loading-content');
+                    console.log(xhr);
+                }
+            });
+        });
+    });
+</script>
+<script>
+    // check new user or existing user
+   $('.customer').on('change', function() {
+        var customer = $(this).val();
+        if (customer == 0) {
+            $('#loading').addClass('loading');
+            $('#loading-content').addClass('loading-content');
+            $.ajax({
+                url: "{{ route('account-manager.projects.new-customer') }}",
+                type: 'GET',
+                success: function(response) {
+                    // console.log(response.data);
+                   $('#select_user').append(' <label for="inputEnterYourName" class="col-form-label"> Select customer <span style="color: red;">*</span></label> <select name="customer_id" id="customer_id" required data-parsley-trigger="keyup" class="form-control select2"> <option value="">Select a user</option>')
+                    $.each(response, function(key, value) {
+                        $('#customer_id').append('<option value="' + value.id + '">' + value.customer_name +
+                            '(' + value.customer_email + ')' + '</option>');
+                    });
+                    $('#select_user').append('</select>');
+                    $('#loading').removeClass('loading');
+                    $('#loading-content').removeClass('loading-content');
+                },
+                error: function(xhr) {
+                    // Handle errors
+                    console.log(xhr);
+                    $('#loading').removeClass('loading');
+                    $('#loading-content').removeClass('loading-content');
+                }
+            })
+        } else {
+            $('#select_user').html('');
+        //    remove pointer event attr
+            $('#client_email').removeAttr("style");
+            $('#client_phone').removeAttr("style");
+            $('#client_address').removeAttr("style");
+            $('#client_name').removeAttr("style");
+            $('#client_email').val('');
+            $('#client_phone').val('');
+            $('#client_address').val('');
+            $('#client_name').val('');
+
+        }
+    });
+</script>
+
+<script>
+    $(document).ready(function(){
+        $(document).on('change','#customer_id',function(){
+            var customer_id = $(this).val();
+
+            $.ajax({
+                url: "{{ route('account-manager.projects.customer-details') }}",
+                type: 'GET',
+                data:{customer_id:customer_id},
+                success: function(response) {
+                    // console.log(response);
+                    $('#client_email').attr("style", "pointer-events: none;");
+                    $('#client_phone').attr("style", "pointer-events: none;");
+                    $('#client_address').attr("style", "pointer-events: none;");
+                    $('#client_name').attr("style", "pointer-events: none;");
+                    $('#client_email').val(response.customer_email);
+                    $('#client_phone').val(response.customer_phone);
+                    $('#client_address').val(response.customer_address);
+                    $('#client_name').val(response.customer_name);
+                },
+                error: function(xhr) {
+                    // Handle errors
                     console.log(xhr);
                 }
             });

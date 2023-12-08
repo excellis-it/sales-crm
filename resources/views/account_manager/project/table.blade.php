@@ -1,6 +1,6 @@
 @if (count($projects) == 0)
 <tr>
-    <td colspan="11" class="text-center">No Project found</td>
+    <td colspan="10" class="text-center">No Project found</td>
 </tr>
 @else
     @foreach ($projects as $key => $project)
@@ -36,16 +36,16 @@
             <td class="edit-route" data-route="{{ route('account-manager.projects.edit', $project->id) }}">
                 {{ (int)$project->project_value - (int)$project->project_upfront }}
             </td>
-            <td>
+            {{-- <td>
                 <a title="View Project" data-route=""
                     href="{{ route('account-manager.projects.show', $project->id) }}"><i
                         class="fas fa-eye"></i></a>
-            </td>
+            </td> --}}
         </tr>
     @endforeach
 
     <tr>
-        <td colspan="11">
+        <td colspan="10">
             <div class="d-flex justify-content-center">
                 {!! $projects->links() !!}
             </div>

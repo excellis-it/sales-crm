@@ -120,7 +120,7 @@
                                     aria-label="Close">
                                     <i class="fa fa-chevron-right" aria-hidden="true"></i>
                                 </button>
-                                <h4 id="offcanvasEditLabel">Add Project Details</h4>
+                                <h4 id="offcanvasEditLabel">Add Prospect Details</h4>
                             </div>
                             <div class="offcanvas-body">
                                 <form action="{{ route('admin.prospects.store') }}" method="post" data-parsley-validate=""
@@ -386,13 +386,15 @@
     <script>
         $(document).ready(function() {
             function fetch_data(page, status, query) {
-                console.log(status + ' ' + page);
+                // console.log(status + ' ' + page);
+                var user_id = {{request()->user_id ?? 0}};
                 $.ajax({
                     url: "{{ route('admin.prospects.filter') }}",
                     data: {
                         status: status,
                         page: page,
-                        query: query
+                        query: query,
+                        user_id: user_id
                     },
                     success: function(resp) {
                         $('tbody').html(resp.data);

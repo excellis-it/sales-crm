@@ -1,6 +1,6 @@
 @if (count($projects) == 0)
     <tr>
-        <td colspan="12" class="text-center">No Projects Found</td>
+        <td colspan="11" class="text-center">No Projects Found</td>
     </tr>
 @else
     @foreach ($projects as $key => $project)
@@ -44,10 +44,6 @@
                 @endif
             </td>
             <td>
-                <a title="View Project" data-route="" href="{{ route('sales-projects.show', $project->id) }}"><i
-                        class="fas fa-eye"></i></a> &nbsp;&nbsp;
-
-
                 <a title="Delete Project" data-route="{{ route('sales-projects.delete', $project->id) }}"
                     href="javascipt:void(0);" id="delete"><i class="fas fa-trash"></i></a>
             </td>
@@ -56,7 +52,7 @@
 @endif
 
 <tr>
-    <td colspan="12">
+    <td colspan="11">
         <div class="d-flex justify-content-center">
             {!! $projects->links() !!}
         </div>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\BDM;
 
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
 use App\Models\Goal;
 use App\Models\Project;
 use App\Models\ProjectDocument;
@@ -25,8 +26,10 @@ class ProjectController extends Controller
     public function index()
     {
         $projects = Project::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->paginate(10);
+        $account_managers = User::role('ACCOUNT_MANAGER')->orderBy('name', 'DESC')->where('status', 1)->get();
         $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE', 'BUSINESS_DEVELOPMENT_MANAGER', 'BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
-        return view('bdm.project.list',compact('projects','users'));
+        $project_openers = User::role(['BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where(['bdm_id' => Auth::user()->id, 'status' => 1])->orderBy('id', 'desc')->get();
+        return view('bdm.project.list', compact('projects', 'users', 'account_managers', 'project_openers'));
     }
 
     public function bdmProjectFilter(Request $request)
@@ -78,10 +81,23 @@ class ProjectController extends Controller
     {
         // try {
         $data = $request->all();
-
+        if ($data['customer'] == 0) {  //new customer == 1 and existing customer == 0
+            $data['customer'] = $request->customer_id;
+        } else {
+            $customer = new Customer();
+            $customer->customer_name = $data['client_name'];
+            $customer->customer_email = $data['client_email'];
+            $customer->customer_phone = $data['client_phone'];
+            $customer->customer_address = $data['client_address'];
+            $customer->save();
+            $data['customer'] = $customer->id;
+        }
         $project = new Project();
         $project->user_id = Auth::user()->id;
         $project->client_name = $data['client_name'];
+        $project->customer_id = $data['customer'];
+        $project->assigned_to = Auth::user()->id;
+        $project->assigned_date = date('Y-m-d');
         $project->business_name = $data['business_name'];
         $project->client_email = $data['client_email'];
         $project->client_phone = $data['client_phone'];
@@ -182,9 +198,11 @@ class ProjectController extends Controller
     {
         try {
             $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE', 'BUSINESS_DEVELOPMENT_MANAGER', 'BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
+            $project_openers = User::role(['BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where(['bdm_id' => Auth::user()->id, 'status' => 1])->orderBy('id', 'desc')->get();
+            $account_managers = User::role('ACCOUNT_MANAGER')->orderBy('name', 'DESC')->where('status', 1)->get();
             $project = Project::find($id);
             $type = true;
-            return response()->json(['view' => view('bdm.project.edit', compact('project', 'users', 'type'))->render()]);
+            return response()->json(['view' => view('bdm.project.edit', compact('project', 'users', 'type', 'project_openers', 'account_managers'))->render()]);
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }
@@ -308,5 +326,21 @@ class ProjectController extends Controller
         $project = Project::find($id);
         $project->delete();
         return redirect()->back()->with('message', 'Project deleted successfully.');
+    }
+
+    public function newCustomer(Request $request)
+    {
+        if ($request->ajax()) {
+            $customers = Customer::orderBy('customer_name', 'asc')->get();
+            return response()->json($customers);
+        }
+    }
+
+    public function customerDetails(Request $request)
+    {
+        if ($request->ajax()) {
+            $customer = Customer::find($request->customer_id);
+            return response()->json($customer);
+        }
     }
 }

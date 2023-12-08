@@ -4,7 +4,7 @@
             <button type="button" class="text-reset cls_btn_left" data-bs-dismiss="offcanvas" aria-label="Close">
                 <i class="fa fa-chevron-right" aria-hidden="true"></i>
             </button>
-            <h4 id="offcanvasEditLabel">Edit Sales managers Details</h4>
+            <h4 id="offcanvasEditLabel">Edit Project Details</h4>
         </div>
         <div class="offcanvas-body">
             <form action="{{ route('sales-projects.update', $project->id) }}" method="post"
@@ -12,35 +12,15 @@
                 @method('PUT')
                 @csrf
                 <div class="row">
-                    <div class="col-md-12 mb-3">
-                        <label for="inputEnterYourName" class="col-form-label"> Assigned To
-                            <span style="color: red;">*</span></label>
-                        <select name="user_id" id="user_id" required data-parsley-trigger="keyup"
-                            class="form-control">
-                            <option value="">Select a user</option>
-                            @foreach ($sales_managers as $sales_manager)
-                                <option value="{{ $sales_manager->id }}"
-                                    {{ $sales_manager->id == $project->user_id ? 'selected' : '' }}>
-                                    {{ $sales_manager->name }} ({{ $sales_manager->email }})
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-12 mb-3">
+
+                    <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label"> Client Name
                             <span style="color: red;">*</span></label>
                         <input type="text" name="client_name" id="client_name" required
                             data-parsley-trigger="keyup" value="{{ $project->client_name }}" class="form-control"
                             placeholder="Enter Client Name">
                     </div>
-                    <div class="col-md-12 mb-3">
-                        <label for="inputEnterYourName" class="col-form-label">Business Name
-                            <span style="color: red;">*</span></label>
-                        <input type="text" name="business_name" id="business_name" required
-                            data-parsley-trigger="keyup" value="{{ $project->business_name }}" class="form-control"
-                            placeholder="Enter Business Name">
-                    </div>
-                    <div class="col-md-12 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Client Email
                             <span style="color: red;">*</span></label>
                         <input type="text" name="client_email" id="client_email" required
@@ -48,7 +28,7 @@
                             data-parsley-type-message="Please enter a valid email address." class="form-control"
                             value="{{ $project->client_email }}" placeholder="Enter Client Email">
                     </div>
-                    <div class="col-md-12 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Client Phone
                             <span style="color: red;">*</span></label>
                         <input type="text" name="client_phone" id="client_phone" required
@@ -59,7 +39,7 @@
                     </div>
 
                     {{-- clinent address --}}
-                    <div class="col-md-12 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Client
                             Address <span style="color: red;">*</span></label>
                         <input type="text" name="client_address" id="client_address" required
@@ -69,6 +49,13 @@
                             <div class="error" style="color:red;">
                                 {{ $errors->first('address') }}</div>
                         @endif
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label for="inputEnterYourName" class="col-form-label">Business Name
+                            <span style="color: red;">*</span></label>
+                        <input type="text" name="business_name" id="business_name" required
+                            data-parsley-trigger="keyup" value="{{ $project->business_name }}" class="form-control"
+                            placeholder="Enter Business Name">
                     </div>
                     <h3 class="mt-4 text-uppercase">Project Details</h3>
                     <hr>
@@ -109,7 +96,7 @@
                         @endif
                     </div>
                     {{-- Project value --}}
-                    <div class="col-md-12 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Project
                             Value <span style="color: red;">*</span></label>
                         <input type="text" name="project_value" id="project_value" required
@@ -118,7 +105,7 @@
                             value="{{ $project->project_value }}" placeholder="Enter Project Value">
                     </div>
                     {{-- Project project_upfront --}}
-                    <div class="col-md-12 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Project
                             Upfront <span style="color: red;">*</span></label>
                         <input type="text" name="project_upfront" id="project_upfront" required
@@ -127,7 +114,7 @@
                             value="{{ $project->project_upfront }}" placeholder="Enter Project Upfront">
                     </div>
                     {{-- currency select box --}}
-                    <div class="col-md-12 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Currency
                             <span style="color: red;">*</span></label>
                         <select name="currency" id="currency" class="form-control" required
@@ -149,7 +136,7 @@
                     </div>
 
                     {{-- Project payment_mode --}}
-                    <div class="col-md-12 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Project
                             Payment Mode <span style="color: red;">*</span></label>
                         <input type="text" name="payment_mode" required data-parsley-trigger="keyup"
@@ -157,22 +144,22 @@
                             placeholder="Enter Project Payment Mode">
                     </div>
                     {{-- Project opener --}}
-                    <div class="col-md-12 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Project
                             Opener <span style="color: red;">*</span></label>
                         <select name="project_opener" id="project_opener" required class="form-control select2">
                             <option value="">Select Project
                                 Opener
                             </option>
-                            @foreach ($users as $user)
-                                <option value="{{ $user->id }}"
-                                    {{ $project->project_opener == $user->id ? 'selected' : '' }}>
-                                    {{ $user->name }}</option>
+                            @foreach ($project_openers as $project_opener)
+                                <option value="{{ $project_opener->id }}"
+                                    {{ $project->project_opener == $project_opener->id ? 'selected' : '' }}>
+                                    {{ $project_opener->name }}</option>
                             @endforeach
                         </select>
                     </div>
                     {{-- Project closer --}}
-                    <div class="col-md-12 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Project
                             Closer <span style="color: red;">*</span></label>
                         <select name="project_closer" id="project_closer" required class="form-control select2">
@@ -187,7 +174,7 @@
                         </select>
                     </div>
                     {{-- sale date --}}
-                    <div class="col-md-12 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Sale Date
                             <span style="color: red;">*</span></label>
                         <input type="date" name="sale_date" id="sale_date" required data-parsley-trigger="keyup"
@@ -195,14 +182,14 @@
                             class="form-control" value="{{ $project->sale_date }}" placeholder="Enter Sale Date">
                     </div>
                     {{-- website --}}
-                    <div class="col-md-12 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Website</label>
                         <input type="text" name="website" id="website" data-parsley-required="false"
                             data-parsley-trigger="keyup" data-parsley-type="url"
                             data-parsley-type-message="Please enter a valid url." class="form-control"
                             value="{{ $project->website }}" placeholder="Enter Website">
                     </div>
-                    <div class="col-md-12 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Delivery
                             TAT
                             <span style="color: red;">*</span></label>
@@ -210,6 +197,19 @@
                             data-parsley-trigger="keyup" data-parsley-type="date"
                             data-parsley-type-message="Please enter a valid date." class="form-control"
                             value="{{ $project->delivery_tat }}" placeholder="Enter Sale Date">
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label for="inputEnterYourName" class="col-form-label">Assigned To <span style="color: red;">*</span></label>
+                        <select name="assigned_to" id="assigned_to " required
+                            class="form-control select2" required>
+                            <option value="">Select user
+                            </option>
+                            @foreach ($account_managers as $account_manager)
+                                <option value="{{ $account_manager->id }}"
+                                    {{ $project->assigned_to == $account_manager->id ? 'selected' : '' }}>
+                                    {{ $account_manager->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     {{-- comment --}}
                     <div class="col-md-12 mb-3">

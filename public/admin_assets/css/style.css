@@ -9863,13 +9863,13 @@ textarea.parsley-error {
 }
 .basic-box-shadow:hover {
     box-shadow: 2px 2px 15px rgba(7,59,116,.15);
-    
+
 }
  .project_value h5{
      margin-bottom:0;
      color:#ac1e23;
  }
-    
+
 .dashboard_mini_table tr th, .dashboard_mini_table tr td{
     padding:10px;
 }
@@ -9884,23 +9884,23 @@ textarea.parsley-error {
     --bs-table-accent-bg: rgb(255 160 0 / 8%);
     color: var(--bs-table-hover-color);
 }
-    
+
 @media (max-width: 1025px) {
     .grid-card-wrap {
         columns: 2;
     }
 }
-    
-    
-    
+
+
+
 .offcanvas-end{
     width:600px;
     padding:0;
 }
-    
+
 .table tbody tr:hover{
     cursor:pointer;
-} 
+}
 .offcanvas-header h4{
     margin-bottom:0;
     font-size:25px;
@@ -9911,15 +9911,15 @@ textarea.parsley-error {
    background:#ac1e23;
    justify-content: start;
     padding-left: 45px;
-} 
-    
-    
+}
+
+
 
 .table > thead {
     background: rgb(243 126 32 / 13%);
 }
-    
-    
+
+
  /* 06-12-2023 - check box */
 .option-select-btn {
     display: flex;
@@ -9948,16 +9948,18 @@ textarea.parsley-error {
     background-color: var(--c1);
     font-weight: 700;
 }
-   
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+.disable-input {
+    pointer-events: none;
+}
+
+
+
+
+
+
+
+
+
+

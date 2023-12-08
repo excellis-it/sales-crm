@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
 use App\Models\Goal;
 use App\Models\Project;
 use App\Models\ProjectMilestone;
@@ -24,80 +25,25 @@ class ProjectController extends Controller
     public function index(Request $request)
     {
         $sales_managers = User::Role(['SALES_MANAGER','ACCOUNT_MANAGER','BUSINESS_DEVELOPMENT_MANAGER'])->orderBy('name', 'DESC')->where('status', 1)->get();
-        $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->orderBy('id', 'desc')->get();
+        $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE','BUSINESS_DEVELOPMENT_MANAGER','BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
+        $account_managers = User::role('ACCOUNT_MANAGER')->orderBy('name', 'DESC')->where('status', 1)->get();
+        $project_openers = User::role(['ACCOUNT_MANAGER', 'SALES_EXCUETIVE','BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
         if ($request->sales_manager_id) {
             $projects = Project::orderBy('sale_date', 'desc')->where('user_id', $request->sales_manager_id)->paginate(15);
-            return view('admin.project.list')->with(compact('projects','sales_managers','users'));
+            return view('admin.project.list')->with(compact('projects','sales_managers','users','account_managers','project_openers'));
         }
 
         if ($request->account_manager_id) {
             $projects = Project::orderBy('sale_date', 'desc')->where('assigned_to', $request->account_manager_id)->paginate(15);
-            return view('admin.project.list')->with(compact('projects','sales_managers','users'));
+            return view('admin.project.list')->with(compact('projects','sales_managers','users','account_managers','project_openers'));
         }
 
 
         $projects = Project::orderBy('sale_date', 'desc')->paginate(15);
-        return view('admin.project.list')->with(compact('projects','sales_managers','users'));
+        return view('admin.project.list')->with(compact('projects','sales_managers','users','account_managers','project_openers'));
     }
 
-    // public function ajaxList(Request $request)
-    // {
-    //     $draw = $request->get('draw');
-    //     $start = $request->get("start");
-    //     $rowperpage = $request->get("length"); // Rows display per page
 
-    //     $columnIndex_arr = $request->get('order');
-    //     $columnName_arr = $request->get('columns');
-    //     $order_arr = $request->get('order');
-    //     $search_arr = $request->get('search');
-
-    //     $columnIndex = $columnIndex_arr[0]['column']; // Column index
-    //     $columnName = $columnName_arr[$columnIndex]['data']; // Column name
-    //     $columnSortOrder = $order_arr[0]['dir']; // asc or desc
-    //     $searchValue = $search_arr['value']; // Search value
-
-    //     // return $columnName.' '.$columnSortOrder;
-
-    //     if ($request->sales_manager_id) {
-    //         $totalRecordswithFilter = Project::where('client_name', 'like', '%' . $searchValue . '%')->where('user_id', $request->sales_manager_id)->count();
-    //         $totalRecords = Project::where('user_id', $request->sales_manager_id)->count();
-    //         $records = Project::orderBy($columnName, $columnSortOrder)->where('user_id', $request->sales_manager_id)->where('client_name', 'like', '%' . $searchValue . '%')->skip($start)->take($rowperpage)->get();
-    //     } elseif ($request->account_manager_id) {
-    //         $totalRecordswithFilter = Project::where('client_name', 'like', '%' . $searchValue . '%')->where('assigned_to', $request->account_manager_id)->count();
-    //         $totalRecords = Project::where('assigned_to', $request->account_manager_id)->count();
-    //         $records = Project::orderBy($columnName, $columnSortOrder)->where('assigned_to', $request->account_manager_id)->where('client_name', 'like', '%' . $searchValue . '%')->skip($start)->take($rowperpage)->get();
-    //     } else {
-    //         $totalRecordswithFilter = Project::where('client_name', 'like', '%' . $searchValue . '%')->count();
-    //         $totalRecords = Project::count();
-    //         $records = Project::orderBy($columnName, $columnSortOrder)->where('client_name', 'like', '%' . $searchValue . '%')->skip($start)->take($rowperpage)->get();
-    //     }
-    //     $data_arr = array();
-    //     foreach ($records as $key => $record) {
-    //         $data_arr[] = array(
-    //             'sale_date' => ($record->sale_date) ? date('d-m-Y', strtotime($record->sale_date)) : '',
-    //             'sale_by' => $record->salesManager->name ?? '',
-    //             'sales_manager_email' => $record->salesManager->email ?? '',
-    //             'client_name' => $record->client_name,
-    //             'client_phone' => $record->client_phone,
-    //             'project_value' => (int)$record->project_value,
-    //             'project_upfront' => (int)$record->project_upfront,
-    //             'currency' => $record->currency,
-    //             'payment_mode' => $record->payment_mode,
-    //             'due_amount' => (int)$record->project_value - (int)$record->project_upfront,
-    //             'assigned_to' => $record->assigned_to ? '<span class="badge bg-success">Assigned</span>' : '<span class="badge bg-danger">Not Assigned</span>',
-    //             'action' => '<a href="' . route('sales-projects.show', $record->id) . '" class="btn btn-sm btn-primary"><i class="fa fa-eye"></i></a> <a href="' . route('sales-projects.edit', $record->id) . '" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a> <a href="javascipt:void(0);" data-route="' . route('sales-projects.delete', $record->id) . '" class="btn btn-sm btn-danger" id="delete"><i class="fa fa-trash"></i></a>'
-    //         );
-    //     }
-
-    //     $response = array(
-    //         "draw" => intval($draw),
-    //         "iTotalRecords" => $totalRecords,
-    //         "iTotalDisplayRecords" => $totalRecordswithFilter,
-    //         "aaData" => $data_arr
-    //      );
-
-    //      return response()->json($response);
-    // }
 
     /**
      * Show the form for creating a new resource.
@@ -106,9 +52,10 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->orderBy('id', 'desc')->get();
+        $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE','BUSINESS_DEVELOPMENT_MANAGER','BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
         $sales_managers = User::Role(['SALES_MANAGER','ACCOUNT_MANAGER','BUSINESS_DEVELOPMENT_MANAGER'])->orderBy('name', 'DESC')->where('status', 1)->get();
-        return view('admin.project.create')->with(compact('sales_managers', 'users'));
+        $project_openers = User::role(['ACCOUNT_MANAGER', 'SALES_EXCUETIVE','BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
+        return view('admin.project.create')->with(compact('sales_managers', 'users', 'project_openers'));
     }
 
     /**
@@ -119,12 +66,34 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
+        $userRole = User::find($request->project_opener);
+        if ($userRole->hasRole('SALES_EXCUETIVE')) {
+            $request->merge(['user_id' => $userRole->sales_manager_id ]);
+        } elseif ($userRole->hasRole('BUSINESS_DEVELOPMENT_EXCECUTIVE')) {
+            $request->merge(['user_id' => $userRole->bdm_id]);
+        } else {
+            $request->merge(['user_id' => $request->project_opener]);
+        }
 
-        // try {
+
         $data = $request->all();
+        if ($data['customer'] == 0) {  //new customer == 1 and existing customer == 0
+            $data['customer'] = $request->customer_id;
+        } else {
+            $customer = new Customer();
+            $customer->customer_name = $data['client_name'];
+            $customer->customer_email = $data['client_email'];
+            $customer->customer_phone = $data['client_phone'];
+            $customer->customer_address = $data['client_address'];
+            $customer->save();
+            $data['customer'] = $customer->id;
+        }
 
         $project = new Project();
         $project->user_id = $data['user_id'];
+        $project->assigned_to = $data['assigned_to'];
+        $project->assigned_date = date('Y-m-d');
+        $project->customer_id = $data['customer'];
         $project->client_name = $data['client_name'];
         $project->business_name = $data['business_name'];
         $project->client_email = $data['client_email'];
@@ -180,8 +149,20 @@ class ProjectController extends Controller
             }
         }
 
-        // goals count
-        $countGross = Goal::where(['user_id' => $data['user_id'], 'goals_type' => 1])->whereMonth('goals_date', date('m'))->whereYear('goals_date', date('Y'))->count();
+        $user = User::findOrFail($data['user_id']);
+        if ($user->hasRole('SALES_MANAGER') || $user->hasRole('BUSINESS_DEVELOPMENT_MANAGER')) {
+            $gross_goals = Goal::where('user_id', $data['user_id'])->whereMonth('goals_date', date('m', strtotime($data['sale_date'])))->whereYear('goals_date', date('Y', strtotime($data['sale_date'])))->where('goals_type', 1)->first();
+            if ($gross_goals) {
+                $gross_goals->goals_achieve = $gross_goals->goals_achieve + $data['project_value'];
+                $gross_goals->save();
+            }
+
+            $net_goals = Goal::where('user_id', $data['user_id'])->whereMonth('goals_date', date('m', strtotime($data['sale_date'])))->whereYear('goals_date', date('Y', strtotime($data['sale_date'])))->where('goals_type', 2)->first();
+            if ($net_goals) {
+                $net_goals->goals_achieve = $net_goals->goals_achieve + $data['project_upfront'];
+                $net_goals->save();
+            }
+        }
 
 
         return redirect()->route('sales-projects.index')->with('message', 'Project created successfully.');
@@ -217,11 +198,13 @@ class ProjectController extends Controller
     public function edit($id)
     {
         try {
-            $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->orderBy('id', 'desc')->get();
+            $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE','BUSINESS_DEVELOPMENT_MANAGER','BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
             $sales_managers = User::Role(['SALES_MANAGER','ACCOUNT_MANAGER','BUSINESS_DEVELOPMENT_MANAGER'])->get();
+            $account_managers = User::role('ACCOUNT_MANAGER')->orderBy('name', 'DESC')->where('status', 1)->get();
+            $project_openers = User::role(['ACCOUNT_MANAGER', 'SALES_EXCUETIVE','BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
             $project = Project::find($id);
             $type = true;
-            return response()->json(['view' => view('admin.project.edit', compact('project', 'sales_managers', 'users', 'type'))->render()]);
+            return response()->json(['view' => view('admin.project.edit', compact('project', 'sales_managers', 'users', 'type','account_managers','project_openers'))->render()]);
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }
@@ -236,9 +219,21 @@ class ProjectController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $userRole = User::find($request->project_opener);
+        if ($userRole->hasRole('SALES_EXCUETIVE')) {
+            $request->merge(['user_id' => $userRole->sales_manager_id ]);
+        } elseif ($userRole->hasRole('BUSINESS_DEVELOPMENT_EXCECUTIVE')) {
+            $request->merge(['user_id' => $userRole->bdm_id]);
+        } else {
+            $request->merge(['user_id' => $request->project_opener]);
+        }
+
         $data = $request->all();
         $project = Project::findOrfail($id);
+        $user_id = $project->user_id;
         $project->user_id = $data['user_id'];
+        $project->assigned_to = $data['assigned_to'] ?? null;
+        $project->assigned_date = date('Y-m-d');
         $project->client_name = $data['client_name'];
         $project->business_name = $data['business_name'];
         $project->client_email = $data['client_email'];
@@ -303,6 +298,39 @@ class ProjectController extends Controller
                 $project_pdf->project_id = $project->id;
                 $project_pdf->document_file = $this->imageUpload($pdfFile, 'project_pdf');
                 $project_pdf->save();
+            }
+        }
+        // dd($user_id.' '. $data['user_id']);
+        if ($user_id != $data['user_id']) {
+             $past_user = User::findOrFail($user_id);
+            if ($past_user->hasRole('SALES_MANAGER') || $past_user->hasRole('BUSINESS_DEVELOPMENT_MANAGER')) {
+
+                $gross_goals = Goal::where('user_id', $user_id)->whereMonth('goals_date', date('m', strtotime($project->sale_date)))->whereYear('goals_date', date('Y', strtotime($project->sale_date)))->where('goals_type', 1)->first();
+                if ($gross_goals) {
+                    $gross_goals->goals_achieve = $gross_goals->goals_achieve - $project->project_value;
+                    $gross_goals->save();
+                }
+
+                $net_goals = Goal::where('user_id', $user_id)->whereMonth('goals_date', date('m', strtotime($project->sale_date)))->whereYear('goals_date', date('Y', strtotime($project->sale_date)))->where('goals_type', 2)->first();
+                if ($net_goals) {
+                    $net_goals->goals_achieve = $net_goals->goals_achieve - $project->project_upfront;
+                    $net_goals->save();
+                }
+            }
+
+            $user = User::findOrFail($data['user_id']);
+            if ($user->hasRole('SALES_MANAGER') || $user->hasRole('BUSINESS_DEVELOPMENT_MANAGER')) {
+                $gross_goals = Goal::where('user_id', $data['user_id'])->whereMonth('goals_date', date('m', strtotime($project->sale_date)))->whereYear('goals_date', date('Y', strtotime($project->sale_date)))->where('goals_type', 1)->first();
+                if ($gross_goals) {
+                    $gross_goals->goals_achieve = $gross_goals->goals_achieve + $project->project_value;
+                    $gross_goals->save();
+                }
+
+                $net_goals = Goal::where('user_id', $data['user_id'])->whereMonth('goals_date', date('m', strtotime($project->sale_date)))->whereYear('goals_date', date('Y', strtotime($project->sale_date)))->where('goals_type', 2)->first();
+                if ($net_goals) {
+                    $net_goals->goals_achieve = $net_goals->goals_achieve + $project->project_upfront;
+                    $net_goals->save();
+                }
             }
         }
 
@@ -379,6 +407,22 @@ class ProjectController extends Controller
                 ->paginate(15);
 
             return response()->json(['data' => view('admin.project.table', compact('projects'))->render()]);
+        }
+    }
+
+    public function newCustomer(Request $request)
+    {
+        if ($request->ajax()) {
+            $customers = Customer::orderBy('customer_name', 'asc')->get();
+            return response()->json($customers);
+        }
+    }
+
+    public function customerDetails(Request $request)
+    {
+        if ($request->ajax()) {
+            $customer = Customer::find($request->customer_id);
+            return response()->json($customer);
         }
     }
 }

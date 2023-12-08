@@ -299,7 +299,7 @@
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div>
                                             <p class="mb-10 line-height-1">Revenue</p>
-                                            <h3 class="fs-25"> {{ $goal['net_goals'] ? '$' . $goal['net_goals'] : 'N/A' }}
+                                            <h3 class="fs-25"> {{ $goal['net_goals'] ? '$' . $goal['net_goals'] : 'N/A' }} /
                                                 ${{ $goal['net_goals_achieve'] ?? 0 }} </h3>
                                         </div>
                                         <?php

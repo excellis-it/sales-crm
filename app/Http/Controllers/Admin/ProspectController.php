@@ -351,6 +351,10 @@ class ProspectController extends Controller
                         });
                 });
             }
+            if ($request->user_id) {
+                $prospects = $prospects->where(['user_id' => $request->user_id]);
+            }
+            
             if ($status == 'All') {
                 $prospects = $prospects->orderBy('sale_date', 'desc')->paginate('10');
             } else {

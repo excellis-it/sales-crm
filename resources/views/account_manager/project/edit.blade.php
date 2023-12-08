@@ -13,22 +13,14 @@
                 @csrf
                 <div class="row">
 
-                    <div class="col-md-12 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label"> Client Name
                             <span style="color: red;">*</span></label>
                         <input type="text" name="client_name" id="client_name" required
                             data-parsley-trigger="keyup" value="{{ $project->client_name }}"
                             class="form-control" placeholder="Enter Client Name">
                     </div>
-                    <div class="col-md-12 mb-3">
-                        <label for="inputEnterYourName" class="col-form-label">Business Name
-                            <span style="color: red;">*</span></label>
-                        <input type="text" name="business_name" id="business_name"
-                            required data-parsley-trigger="keyup"
-                            value="{{ $project->business_name }}" class="form-control"
-                            placeholder="Enter Business Name">
-                    </div>
-                    <div class="col-md-12 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Client Email
                             <span style="color: red;">*</span></label>
                         <input type="text" name="client_email" id="client_email" required
@@ -37,7 +29,7 @@
                             class="form-control" value="{{ $project->client_email }}"
                             placeholder="Enter Client Email">
                     </div>
-                    <div class="col-md-12 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Client Phone
                             <span style="color: red;">*</span></label>
                         <input type="text" name="client_phone" id="client_phone" required
@@ -48,7 +40,7 @@
                     </div>
 
                     {{-- clinent address --}}
-                    <div class="col-md-12 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Client
                             Address <span style="color: red;">*</span></label>
                         <input type="text" name="client_address" id="client_address"
@@ -59,6 +51,14 @@
                             <div class="error" style="color:red;">
                                 {{ $errors->first('address') }}</div>
                         @endif
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label for="inputEnterYourName" class="col-form-label">Business Name
+                            <span style="color: red;">*</span></label>
+                        <input type="text" name="business_name" id="business_name"
+                            required data-parsley-trigger="keyup"
+                            value="{{ $project->business_name }}" class="form-control"
+                            placeholder="Enter Business Name">
                     </div>
                     <h3 class="mt-4 text-uppercase">Project Details</h3>
                     <hr>
@@ -103,7 +103,7 @@
                         @endif
                     </div>
                     {{-- Project value --}}
-                    <div class="col-md-12 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Project
                             Value <span style="color: red;">*</span></label>
                         <input type="text" name="project_value" id="project_value"
@@ -114,7 +114,7 @@
                             placeholder="Enter Project Value">
                     </div>
                     {{-- Project project_upfront --}}
-                    <div class="col-md-12 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Project
                             Upfront <span style="color: red;">*</span></label>
                         <input type="text" name="project_upfront" id="project_upfront"
@@ -125,7 +125,7 @@
                             placeholder="Enter Project Upfront">
                     </div>
                     {{-- currency select box --}}
-                    <div class="col-md-12 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Currency
                             <span style="color: red;">*</span></label>
                         <select name="currency" id="currency" class="form-control"
@@ -153,7 +153,7 @@
                     </div>
 
                     {{-- Project payment_mode --}}
-                    <div class="col-md-12 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Project
                             Payment Mode <span style="color: red;">*</span></label>
                         <input type="text" name="payment_mode" required
@@ -161,24 +161,9 @@
                             class="form-control" value="{{ $project->payment_mode }}"
                             placeholder="Enter Project Payment Mode">
                     </div>
-                    {{-- Project opener --}}
-                    <div class="col-md-12 mb-3">
-                        <label for="inputEnterYourName" class="col-form-label">Project
-                            Opener <span style="color: red;">*</span></label>
-                        <select name="project_opener" id="project_opener" required
-                            class="form-control select2">
-                            <option value="" >Select Project
-                                Opener
-                            </option>
-                            @foreach ($users as $user)
-                                <option value="{{ $user->id }}"
-                                    {{ $project->project_opener == $user->id ? 'selected' : '' }}>
-                                    {{ $user->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                   
                     {{-- Project closer --}}
-                    <div class="col-md-12 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Project
                             Closer <span style="color: red;">*</span></label>
                         <select name="project_closer" id="project_closer" required
@@ -194,7 +179,7 @@
                         </select>
                     </div>
                     {{-- sale date --}}
-                    <div class="col-md-12 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Sale Date
                             <span style="color: red;">*</span></label>
                         <input type="date" name="sale_date" id="sale_date" required
@@ -204,7 +189,7 @@
                             placeholder="Enter Sale Date">
                     </div>
                     {{-- website --}}
-                    <div class="col-md-12 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName"
                             class="col-form-label">Website</label>
                         <input type="text" name="website" id="website"
@@ -214,7 +199,7 @@
                             class="form-control" value="{{ $project->website }}"
                             placeholder="Enter Website">
                     </div>
-                    <div class="col-md-12 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Delivery
                             TAT
                             <span style="color: red;">*</span></label>

@@ -123,6 +123,8 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('/project-delete/{id}', [AdminProjectController::class, 'delete'])->name('sales-projects.delete');
     Route::get('/projectAssignTo', [AdminProjectController::class, 'projectAssignTo'])->name('sales-projects.updateAssignedTo');
     Route::get('/projectDocumentDownload/{id}', [AdminProjectController::class, 'DocumentDownload'])->name('sales-projects.document.download');
+    Route::get('/new-customer', [AdminProjectController::class, 'newCustomer'])->name('sales-projects.new-customer');
+    Route::get('/customer-details', [AdminProjectController::class, 'customerDetails'])->name('sales-projects.customer-details');
 
 
     //  Sales manager Routes
@@ -200,9 +202,12 @@ Route::group(['middleware' => ['SalesManager'], 'prefix' => 'sales-manager'], fu
         Route::get('/sales-excecutive-delete/{id}', [SalesManagerSalesExcecutiveController::class, 'delete'])->name('sales-manager.sales-excecutive.delete');
     });
     // delete project
-    Route::get('/project-delete/{id}', [ProjectController::class, 'delete'])->name('projects.delete');
+    // Route::get('/project-delete/{id}', [ProjectController::class, 'delete'])->name('projects.delete');
     // Route::get('/project-document/{id}', [ProjectController::class, 'projectDocument'])->name('projects.document');
     Route::get('/project-document_download/{id}', [ProjectController::class, 'projectDocumentDownload'])->name('projects.document.download');
+    Route::get('/project-delete/{id}', [ProjectController::class, 'delete'])->name('projects.delete');
+    Route::get('/new-customer', [ProjectController::class, 'newCustomer'])->name('projects.new-customer');
+    Route::get('/customer-details', [ProjectController::class, 'customerDetails'])->name('projects.customer-details');
 });
 
 /**---------------------------------------------------------------Account Manager ---------------------------------------------------------------------------------- */
@@ -222,6 +227,8 @@ Route::group(['middleware' => ['AccountManager'], 'prefix' => 'account-manager']
             'projects' => AccountManagerProjectController::class,
             'followups' => FollowupController::class,
         ]);
+        Route::get('/new-customer', [AccountManagerProjectController::class, 'newCustomer'])->name('projects.new-customer');
+        Route::get('/customer-details', [AccountManagerProjectController::class, 'customerDetails'])->name('projects.customer-details');
     });
 
     Route::get('/account-manager-projects-filter', [AccountManagerProjectController::class, 'accountManagerFilterProject'])->name('account-manager.project.filter');
@@ -282,19 +289,22 @@ Route::group(['middleware' => ['BDM'], 'prefix' => 'bdm'], function () {
         // delete prospect
         // filter prospects
         Route::get('/prospect-delete/{id}', [BDMProspectController::class, 'delete'])->name('prospects.delete');
+
     });
 
     Route::resources([
         'bde' => BDMBusinessDevelopmentExcecutiveController::class,
     ]);
-    
+
     Route::get('/bdm-business-development-executive-search', [BDMBusinessDevelopmentExcecutiveController::class, 'bdmBusinessDevelopmentExecutiveSearch'])->name('bdm.business-development-executive.search');
     Route::get('/bdm-prospects-search', [BDMDashboardController::class, 'bdmDashboardProspectSearch'])->name('bdm.dashboard.prospect-search-data');
     Route::get('/bdm-projects-filter', [BDMProjectController::class, 'bdmProjectFilter'])->name('bdm.project.filter');
     Route::get('/bdm-prospect-filter', [BDMProspectController::class, 'bdmProspectFilter'])->name('bdm.prospects.filter');
     Route::get('/project-document_download/{id}', [BDMProjectController::class, 'projectDocumentDownload'])->name('bdm.projects.document.download');
     // delete project
-    Route::get('/project-delete/{id}', [BDMProjectController::class, 'delete'])->name('bdm.projects.delete');
+    // Route::get('/project-delete/{id}', [BDMProjectController::class, 'delete'])->name('bdm.projects.delete');
+    Route::get('/new-customer', [BDMProjectController::class, 'newCustomer'])->name('bdm.projects.new-customer');
+    Route::get('/customer-details', [BDMProjectController::class, 'customerDetails'])->name('bdm.projects.customer-details');
     //project list
 
     Route::prefix('bde')->group(function () {

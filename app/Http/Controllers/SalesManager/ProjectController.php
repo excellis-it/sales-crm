@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\SalesManager;
 
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
 use App\Models\Goal;
 use App\Models\Project;
 use App\Models\ProjectDocument;
@@ -24,13 +25,15 @@ class ProjectController extends Controller
     public function index()
     {
         $projects = Project::where('user_id', Auth::user()->id)->orderBy('sale_date', 'desc')->paginate(15);
-        $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->orderBy('id', 'desc')->get();
-        return view('sales_manager.project.list')->with(compact('projects', 'users'));
+        $account_managers = User::role('ACCOUNT_MANAGER')->orderBy('name', 'DESC')->where('status', 1)->get();
+        $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE', 'BUSINESS_DEVELOPMENT_MANAGER', 'BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
+        $project_openers = User::role(['SALES_EXCUETIVE'])->where(['sales_manager_id' => Auth::user()->id, 'status' => 1])->orderBy('id', 'desc')->get();
+        return view('sales_manager.project.list')->with(compact('projects', 'users', 'project_openers', 'account_managers'));
     }
 
     public function filterProject(Request $request)
     {
-    // return $request->all();
+        // return $request->all();
         if ($request->ajax()) {
             $sort_by = $request->get('sortby');
             $sort_type = $request->get('sorttype');
@@ -48,10 +51,9 @@ class ProjectController extends Controller
                     ->orWhere('currency', 'like', '%' . $query . '%')
                     ->orWhere('payment_mode', 'like', '%' . $query . '%')
                     ->orWhereHas('projectTypes', function ($q) use ($query) {
-                            $q->Where('type', 'like', '%' . $query . '%');
+                        $q->Where('type', 'like', '%' . $query . '%');
                     })
                     ->orWhereRaw('project_value - project_upfront like ?', ["%{$query}%"]);
-
             })->paginate(15);
 
             return response()->json(['data' => view('sales_manager.project.table', compact('projects'))->render()]);
@@ -78,13 +80,29 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        // try {
+
+
         $data = $request->all();
+
+        if ($data['customer'] == 0) {  //new customer == 1 and existing customer == 0
+            $data['customer'] = $request->customer_id;
+        } else {
+            $customer = new Customer();
+            $customer->customer_name = $data['client_name'];
+            $customer->customer_email = $data['client_email'];
+            $customer->customer_phone = $data['client_phone'];
+            $customer->customer_address = $data['client_address'];
+            $customer->save();
+            $data['customer'] = $customer->id;
+        }
 
         $project = new Project();
         $project->user_id = Auth::user()->id;
+        $project->customer_id = $data['customer'];
         $project->client_name = $data['client_name'];
         $project->business_name = $data['business_name'];
+        $project->assigned_to = $data['assigned_to'];
+        $project->assigned_date = date('Y-m-d');
         $project->client_email = $data['client_email'];
         $project->client_phone = $data['client_phone'];
         $project->client_address = $data['client_address'];
@@ -135,7 +153,7 @@ class ProjectController extends Controller
                     $project_milestone->milestone_name = $milestone;
                     $project_milestone->milestone_value = $data['milestone_value'][$key];
                     $project_milestone->payment_status = $data['payment_status'][$key];
-                    $project_milestone->payment_date =($data['payment_status'][$key] == 'Paid') ? date('Y-m-d') : '';
+                    $project_milestone->payment_date = ($data['payment_status'][$key] == 'Paid') ? date('Y-m-d') : '';
                     $project_milestone->milestone_comment = $data['milestone_comment'][$key];
                     $project_milestone->save();
                 }
@@ -183,10 +201,12 @@ class ProjectController extends Controller
     public function edit($id)
     {
         try {
-            $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->orderBy('id', 'desc')->get();
+            $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE', 'BUSINESS_DEVELOPMENT_MANAGER', 'BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
+            $project_openers = User::role(['SALES_EXCUETIVE'])->where(['sales_manager_id' => Auth::user()->id, 'status' => 1])->orderBy('id', 'desc')->get();
+            $account_managers = User::role('ACCOUNT_MANAGER')->orderBy('name', 'DESC')->where('status', 1)->get();
             $project = Project::find($id);
             $type = true;
-            return response()->json(['view' => view('sales_manager.project.edit', compact('project', 'users', 'type'))->render()]);
+            return response()->json(['view' => view('sales_manager.project.edit', compact('project', 'users', 'type','project_openers','account_managers'))->render()]);
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }
@@ -208,6 +228,7 @@ class ProjectController extends Controller
 
         $project->user_id = Auth::user()->id;
         $project->client_name = $data['client_name'];
+        $project->assigned_to = $data['assigned_to'];
         $project->business_name = $data['business_name'];
         $project->client_email = $data['client_email'];
         $project->client_phone = $data['client_phone'];
@@ -310,5 +331,21 @@ class ProjectController extends Controller
         $project = Project::find($id);
         $project->delete();
         return redirect()->back()->with('message', 'Project deleted successfully.');
+    }
+
+    public function newCustomer(Request $request)
+    {
+        if ($request->ajax()) {
+            $customers = Customer::orderBy('customer_name', 'asc')->get();
+            return response()->json($customers);
+        }
+    }
+
+    public function customerDetails(Request $request)
+    {
+        if ($request->ajax()) {
+            $customer = Customer::find($request->customer_id);
+            return response()->json($customer);
+        }
     }
 }
