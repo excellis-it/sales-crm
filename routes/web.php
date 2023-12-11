@@ -39,6 +39,7 @@ use App\Http\Controllers\BDE\DashboardController as BDEDashboardController;
 use App\Http\Controllers\BDE\ProspectController as BDEProspectController;
 use App\Http\Controllers\BDE\ProjectController as BDEProjectController;
 use App\Http\Controllers\BDE\ProfileController as BDEProfileController;
+use App\Http\Controllers\DefaultController;
 use Illuminate\Support\Facades\Artisan;
 
 /*
@@ -57,6 +58,8 @@ Route::get('clear', function () {
     Artisan::call('optimize:clear');
     return "Optimize clear has been successfully";
 });
+Route::get('/email-validation', [DefaultController::class, 'emailValidation'])->name('email-validation');
+
 
 Route::get('/', [AuthController::class, 'login'])->name('admin.login');
 Route::post('/login-check', [AuthController::class, 'loginCheck'])->name('admin.login.check');  //login check
@@ -107,6 +110,7 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
 
     // fetch data
     Route::get('/fetch-data', [AdminProjectController::class, 'fetchData'])->name('sales-projects.fetch-data');
+
     Route::name('admin.')->group(function () {
         Route::resources([
             'prospects' => AdminProspectController::class,

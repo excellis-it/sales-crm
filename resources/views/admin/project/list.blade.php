@@ -75,8 +75,8 @@
                                 <h4 id="offcanvasEditLabel">Add Project Details</h4>
                             </div>
                             <div class="offcanvas-body">
-                                <form action="{{ route('sales-projects.store') }}" method="post" data-parsley-validate=""
-                                    enctype="multipart/form-data">
+                                <form action="{{ route('sales-projects.store') }}" method="post" id="form-validation"
+                                    data-parsley-validate="" enctype="multipart/form-data">
                                     @csrf
                                     <div class="row">
                                         {{-- new user and existing user radio button --}}
@@ -104,11 +104,10 @@
                                         <div class="col-md-6 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Client Email
                                                 <span style="color: red;">*</span></label>
-                                            <input type="text" name="client_email" id="client_email" required
-                                                data-parsley-trigger="keyup" data-parsley-type="email"
-                                                data-parsley-type-message="Please enter a valid email address."
+                                            <input type="text" name="client_email" id="client_email"
                                                 class="form-control client_email" value="{{ old('client_email') }}"
                                                 placeholder="Enter Client Email">
+                                            <span class="client_email_error text-danger"></span>
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Client Phone
@@ -331,7 +330,8 @@
                                         <button class="print_btn cancel_btn me-3" type="reset"><i
                                                 class="far fa-times-circle"></i>
                                             Cancel</button>
-                                        <button class="print_btn" type="submit"><i class="far fa-check-circle"></i>
+                                        <button class="print_btn check-form" type="submit"><i
+                                                class="far fa-check-circle"></i>
                                             Create</button>
                                     </div>
                                 </form>
@@ -875,7 +875,7 @@
                             // console.log(response.data);
                             $('.select_user').append(
                                 ' <label for="inputEnterYourName" class="col-form-label"> Select customer <span style="color: red;">*</span></label> <select name="customer_id" id="customer_id" required data-parsley-trigger="keyup" class="form-control customer_id select2"> <option value="">Select a user</option>'
-                                )
+                            )
                             $.each(response, function(key, value) {
                                 $('.customer_id').append('<option value="' + value.id +
                                     '">' + value.customer_name +
@@ -932,6 +932,87 @@
                     error: function(xhr) {
                         // Handle errors
                         console.log(xhr);
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        // email validation
+        $(document).ready(function() {
+            var isFormSubmitted = false;
+
+            $(document).on('submit', '#form-validation', function(e) {
+                if (isFormSubmitted) {
+                    // If the form is already submitted, do nothing
+                    return;
+                }
+
+                e.preventDefault();
+
+                var client_email = $('#client_email').val();
+                var customer_id = $('#customer_id').val() || 0;
+                // alert(customer_id)
+                $.ajax({
+                    url: "{{ route('email-validation') }}",
+                    type: 'GET',
+                    data: {
+                        client_email: client_email,
+                        customer_id: customer_id
+                    },
+                    success: function(response) {
+                        if (response.status === false) {
+                            $('.client_email_error').html(response.message);
+                        } else {
+                            // No validation errors, allow the form to submit
+                            $('.client_email_error').html('');
+                            isFormSubmitted = true;
+                            $('#form-validation').submit();
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+        // email validation
+        $(document).ready(function() {
+            var isOkFormSubmitted = false;
+
+            $(document).on('submit', '#edit-form-validation', function(e) {
+                if (isOkFormSubmitted) {
+                    // If the form is already submitted, do nothing
+                    return;
+                }
+
+                e.preventDefault();
+
+                var client_email = $('#edit_client_email').val();
+                var customer_id = $('.edit_customer_id').val() || 0;
+                // alert(customer_id)
+                $.ajax({
+                    url: "{{ route('email-validation') }}",
+                    type: 'GET',
+                    data: {
+                        client_email: client_email,
+                        customer_id: customer_id
+                    },
+                    success: function(response) {
+                        if (response.status === false) {
+                            $('.edit_client_email_error').html(response.message);
+                        } else {
+                            // No validation errors, allow the form to submit
+                            $('.edit_client_email_error').html('');
+                            isOkFormSubmitted = true;
+                            $('#edit-form-validation').submit();
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
                     }
                 });
             });

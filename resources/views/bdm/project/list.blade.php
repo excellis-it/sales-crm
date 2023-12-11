@@ -75,7 +75,7 @@
                                 <h4 id="offcanvasEditLabel">Add Project Details</h4>
                             </div>
                             <div class="offcanvas-body">
-                                <form action="{{ route('bdm.projects.store') }}" method="post" data-parsley-validate=""
+                                <form action="{{ route('bdm.projects.store') }}" method="post" data-parsley-validate="" id="form-validation"
                                     enctype="multipart/form-data">
                                     @csrf
                                     <div class="row">
@@ -108,6 +108,7 @@
                                                 data-parsley-type-message="Please enter a valid email address."
                                                 class="form-control" value="{{ old('client_email') }}"
                                                 placeholder="Enter Client Email">
+                                                <span class="client_email_error"></span>
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Client Phone
@@ -871,6 +872,46 @@
                     error: function(xhr) {
                         // Handle errors
                         console.log(xhr);
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        // email validation
+        $(document).ready(function() {
+            var isFormSubmitted = false;
+
+            $(document).on('submit', '#form-validation', function(e) {
+                if (isFormSubmitted) {
+                    // If the form is already submitted, do nothing
+                    return;
+                }
+
+                e.preventDefault();
+
+                var client_email = $('#client_email').val();
+                var customer_id = $('#customer_id').val() || 0;
+                // alert(customer_id)
+                $.ajax({
+                    url: "{{ route('email-validation') }}",
+                    type: 'GET',
+                    data: {
+                        client_email: client_email,
+                        customer_id: customer_id
+                    },
+                    success: function(response) {
+                        if (response.status === false) {
+                            $('.client_email_error').html(response.message);
+                        } else {
+                            // No validation errors, allow the form to submit
+                            $('.client_email_error').html('');
+                            isFormSubmitted = true;
+                            $('#form-validation').submit();
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
                     }
                 });
             });

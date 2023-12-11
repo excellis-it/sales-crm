@@ -7,10 +7,11 @@
             <h4 id="offcanvasEditLabel">Edit Project Details</h4>
         </div>
         <div class="offcanvas-body">
-            <form action="{{ route('sales-projects.update', $project->id) }}" method="post" data-parsley-validate=""
+            <form action="{{ route('sales-projects.update', $project->id) }}" method="post" data-parsley-validate="" id="edit-form-validation"
                 enctype="multipart/form-data">
                 @method('PUT')
                 @csrf
+                <input type="hidden" name="customer_id" class="edit_customer_id" value="{{ $project->customer_id }}">
                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Type of customer
@@ -32,10 +33,11 @@
                     <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Client Email
                             <span style="color: red;">*</span></label>
-                        <input type="text" name="client_email" id="client_email" required
+                        <input type="text" name="client_email" id="edit_client_email" required
                             data-parsley-trigger="keyup" data-parsley-type="email"
                             data-parsley-type-message="Please enter a valid email address." class="form-control client_email"
                             value="{{ $project->client_email }}" placeholder="Enter Client Email">
+                            <span class="edit_client_email_error" style="color:red;"></span>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Client Phone

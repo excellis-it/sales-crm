@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Traits\ImageTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class ProjectController extends Controller
 {
@@ -66,6 +67,7 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
+
         $userRole = User::find($request->project_opener);
         if ($userRole->hasRole('SALES_EXCUETIVE')) {
             $request->merge(['user_id' => $userRole->sales_manager_id ]);
@@ -92,7 +94,7 @@ class ProjectController extends Controller
         $project = new Project();
         $project->user_id = $data['user_id'];
         $project->assigned_to = $data['assigned_to'];
-        
+
         $project->assigned_date = date('Y-m-d');
         $project->customer_id = $data['customer'];
         $project->client_name = $data['client_name'];
@@ -426,4 +428,6 @@ class ProjectController extends Controller
             return response()->json($customer);
         }
     }
+
+
 }
