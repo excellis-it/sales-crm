@@ -290,6 +290,21 @@
                                     </div>
 
                                     <div class="col-md-12 mb-3">
+                                        <div style="display: flex">
+                                            <input type="date" name="milestone_payment_date[]"
+                                                class="form-control" value="{{ $milestone->payment_date }}" id="" required
+                                                data-parsley-trigger="keyup">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <div style="display: flex">
+                                            <input type="text" name="milestone_payment_mode[]"
+                                                class="form-control" value="{{ $milestone->payment_mode }}" id="" required
+                                                data-parsley-trigger="keyup">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12 mb-3">
                                         @if ($milestone->payment_status == 'Paid')
                                             <button type="button"
                                                 class="btn btn-danger remove" disabled><i
