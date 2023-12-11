@@ -299,7 +299,8 @@
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div>
                                             <p class="mb-10 line-height-1">Revenue</p>
-                                            <h3 class="fs-25"> {{ $goal['net_goals'] ? '$' . $goal['net_goals'] : 'N/A' }} /
+                                            <h3 class="fs-25"> {{ $goal['net_goals'] ? '$' . $goal['net_goals'] : 'N/A' }}
+                                                /
                                                 ${{ $goal['net_goals_achieve'] ?? 0 }} </h3>
                                         </div>
                                         <?php
@@ -536,111 +537,29 @@
                         <div class="card-body" style="position: relative;">
                             <div class="d-flex align-items-center justify-content-between mb-3">
                                 <h5 class="card-title mb-0">Top Customer</h5>
-                                <a href="" class="view_all">View All</a>
+                                <a href="{{route('customers.index')}}" class="view_all">View All</a>
                             </div>
                             <div class="grid-card-wrap">
-                                <div class="cursor-pointer">
-                                    <div class="grid-card basic-box-shadow">
-                                        <div class="text-center">
-                                            <img class="avatar rounded-circle avatar-lg"
-                                                src="https://6valley.6amtech.com/storage/app/public/profile/2022-04-20-625fa7d513aa5.png">
-                                        </div>
-                                        <h5 class="mb-0">fatema</h5>
-                                        <div class="orders-count d-flex gap-1">
-                                            <div>Value : </div>
-                                            <div>$ 137</div>
-                                        </div>
-                                        <div class="orders-count d-flex gap-1">
-                                            <div>No Of Projects : </div>
-                                            <div>7</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="cursor-pointer">
-                                    <div class="grid-card basic-box-shadow">
-                                        <div class="text-center">
-                                            <img class="avatar rounded-circle avatar-lg"
-                                                src="https://6valley.6amtech.com/storage/app/public/profile/2022-04-20-625fa7d513aa5.png">
-                                        </div>
-                                        <h5 class="mb-0">fatema</h5>
-                                        <div class="orders-count d-flex gap-1">
-                                            <div>Value : </div>
-                                            <div>$ 137</div>
-                                        </div>
-                                        <div class="orders-count d-flex gap-1">
-                                            <div>No Of Projects : </div>
-                                            <div>7</div>
+                                @foreach ($top_customers as $item)
+                                    <div class="cursor-pointer">
+                                        <div class="grid-card basic-box-shadow">
+                                            <div class="text-center">
+                                                <img class="avatar rounded-circle avatar-lg"
+                                                    src="{{ asset('admin_assets/img/profiles/avatar-21.jpg') }}">
+                                            </div>
+                                            <h5 class="mb-0">{{ $item['customer_name'] }}</h5>
+                                            <div class="orders-count d-flex gap-1">
+                                                <div>Value : </div>
+                                                <div>$ {{ $item->projects()->sum('project_value') ?? '' }}</div>
+                                            </div>
+                                            <div class="orders-count d-flex gap-1">
+                                                <div>No Of Projects : </div>
+                                                <div>{{ $item->projects()->count() ?? '' }}</div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="cursor-pointer">
-                                    <div class="grid-card basic-box-shadow">
-                                        <div class="text-center">
-                                            <img class="avatar rounded-circle avatar-lg"
-                                                src="https://6valley.6amtech.com/storage/app/public/profile/2022-04-20-625fa7d513aa5.png">
-                                        </div>
-                                        <h5 class="mb-0">fatema</h5>
-                                        <div class="orders-count d-flex gap-1">
-                                            <div>Value : </div>
-                                            <div>$ 137</div>
-                                        </div>
-                                        <div class="orders-count d-flex gap-1">
-                                            <div>No Of Projects : </div>
-                                            <div>7</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="cursor-pointer">
-                                    <div class="grid-card basic-box-shadow">
-                                        <div class="text-center">
-                                            <img class="avatar rounded-circle avatar-lg"
-                                                src="https://6valley.6amtech.com/storage/app/public/profile/2022-04-20-625fa7d513aa5.png">
-                                        </div>
-                                        <h5 class="mb-0">fatema</h5>
-                                        <div class="orders-count d-flex gap-1">
-                                            <div>Value : </div>
-                                            <div>$ 137</div>
-                                        </div>
-                                        <div class="orders-count d-flex gap-1">
-                                            <div>No Of Projects : </div>
-                                            <div>7</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="cursor-pointer">
-                                    <div class="grid-card basic-box-shadow">
-                                        <div class="text-center">
-                                            <img class="avatar rounded-circle avatar-lg"
-                                                src="https://6valley.6amtech.com/storage/app/public/profile/2022-04-20-625fa7d513aa5.png">
-                                        </div>
-                                        <h5 class="mb-0">fatema</h5>
-                                        <div class="orders-count d-flex gap-1">
-                                            <div>Value : </div>
-                                            <div>$ 137</div>
-                                        </div>
-                                        <div class="orders-count d-flex gap-1">
-                                            <div>No Of Projects : </div>
-                                            <div>7</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="cursor-pointer">
-                                    <div class="grid-card basic-box-shadow">
-                                        <div class="text-center">
-                                            <img class="avatar rounded-circle avatar-lg"
-                                                src="https://6valley.6amtech.com/storage/app/public/profile/2022-04-20-625fa7d513aa5.png">
-                                        </div>
-                                        <h5 class="mb-0">fatema</h5>
-                                        <div class="orders-count d-flex gap-1">
-                                            <div>Value : </div>
-                                            <div>$ 137</div>
-                                        </div>
-                                        <div class="orders-count d-flex gap-1">
-                                            <div>No Of Projects : </div>
-                                            <div>7</div>
-                                        </div>
-                                    </div>
-                                </div>
+                                @endforeach
+
                             </div>
 
                         </div>
@@ -825,21 +744,25 @@
                                         <tr>
                                             <th class="sorting" data-tippy-content="Sort by Sale Date"
                                                 data-sorting_type="desc" data-column_name="sale_date"
-                                                style="cursor: pointer"> Date <span id="date_icon"><span class="fa fa-sort-down"></span></span></th>
+                                                style="cursor: pointer"> Date <span id="date_icon"><span
+                                                        class="fa fa-sort-down"></span></span></th>
                                             <th class="sorting" data-tippy-content="Sort by Business Name"
                                                 data-sorting_type="asc" data-column_name="business_name"
-                                                style="cursor: pointer">Business Name <span
-                                                    id="business_name_icon"><span class="fa fa-sort-down"></span></span></th>
+                                                style="cursor: pointer">Business Name <span id="business_name_icon"><span
+                                                        class="fa fa-sort-down"></span></span></th>
                                             <th class="sorting" data-tippy-content="Sort by Client Name"
                                                 data-sorting_type="asc" data-column_name="client_name"
-                                                style="cursor: pointer">Client Name <span id="client_name_icon"><span class="fa fa-sort-down"></span></span>
+                                                style="cursor: pointer">Client Name <span id="client_name_icon"><span
+                                                        class="fa fa-sort-down"></span></span>
                                             </th>
                                             <th class="sorting" data-tippy-content="Sort by Phone"
                                                 data-sorting_type="asc" data-column_name="phone" style="cursor: pointer">
-                                                Email <span id="email_icon"><span class="fa fa-sort-down"></span></span></th>
+                                                Email <span id="email_icon"><span class="fa fa-sort-down"></span></span>
+                                            </th>
                                             <th class="sorting" data-tippy-content="Sort by Phone"
                                                 data-sorting_type="asc" data-column_name="phone" style="cursor: pointer">
-                                                Phone <span id="phone_icon"><span class="fa fa-sort-down"></span></span></th>
+                                                Phone <span id="phone_icon"><span class="fa fa-sort-down"></span></span>
+                                            </th>
                                             <th data-tippy-content="Cant't sort by Transfer taken by"
                                                 style="cursor: pointer">Transfer Taken By</th>
                                             <th>Status</th>
@@ -847,10 +770,12 @@
                                                 Service Offered</th>
                                             <th class="sorting" data-tippy-content="Sort by Follow"
                                                 data-sorting_type="asc" data-column_name="follow"
-                                                style="cursor: pointer">Followup Date <span id="follow_icon"><span class="fa fa-sort-down"></span></span></th>
+                                                style="cursor: pointer">Followup Date <span id="follow_icon"><span
+                                                        class="fa fa-sort-down"></span></span></th>
                                             <th class="sorting" data-tippy-content="Sort by Price quoted"
                                                 data-sorting_type="asc" data-column_name="price" style="cursor: pointer">
-                                                Price Quoted <span id="price_quoted_icon"><span class="fa fa-sort-down"></span></span></th>
+                                                Price Quoted <span id="price_quoted_icon"><span
+                                                        class="fa fa-sort-down"></span></span></th>
                                         </tr>
                                     </thead>
                                     <tbody class="prospect-filter">

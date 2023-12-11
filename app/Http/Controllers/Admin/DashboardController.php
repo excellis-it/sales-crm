@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
 use App\Models\Goal;
 use App\Models\Project;
 use App\Models\ProjectMilestone;
@@ -87,8 +88,14 @@ class DashboardController extends Controller
         $goal['prospect_december'] = Prospect::whereMonth('sale_date', 12)->whereYear('sale_date', date('Y'))->count();
         $labels = ['Jan', 'Febr', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
         $type = 'YearEarn';
+        // top 6 customers
+        $top_customers = Customer::with('projects')->get();
+        $top_customers = $top_customers->sortByDesc(function ($customer) {
+            return $customer->projects->sum('project_value');
+        })->take(6);
+
         // dd($count);
-        return view('admin.dashboard')->with(compact('count', 'goal', 'prospects','projects','labels','type'));
+        return view('admin.dashboard')->with(compact('count', 'goal', 'prospects','projects','labels','type','top_customers'));
     }
 
     public function dashboardProspectFetch(Request $request)
@@ -117,11 +124,11 @@ class DashboardController extends Controller
 
     public function getEarningStatistics(Request $request)
     {
-      
+
         $type = $request->type;
         if($type == 'yearEarn')
         {
-           
+
             $goal['gross_goals_january'] = Goal::where('goals_type', 1)->whereMonth('goals_date', 1)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
             $goal['gross_goals_febuary'] = Goal::where('goals_type', 1)->whereMonth('goals_date', 2)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
             $goal['gross_goals_march'] = Goal::where('goals_type', 1)->whereMonth('goals_date', 3)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
@@ -162,7 +169,7 @@ class DashboardController extends Controller
             $goal['prospect_december'] = Prospect::whereMonth('sale_date', 12)->whereYear('sale_date', date('Y'))->count();
             $labels = ['Jan', 'Febr', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
             $type = 'YearEarn';
-           
+
 
             return response()->json(['view'=>(String)View::make('admin.statistic_ajax_bar_chart')->with(compact('labels','goal','type'))]);
             // return "gg";
@@ -188,8 +195,8 @@ class DashboardController extends Controller
                     //     ->whereYear('goals_date', date('Y'))
                     //     ->sum('goals_achieve');
                 }
-                
-            
+
+
             $type = 'MonthEarn';
 
             return response()->json(['view'=>(String)View::make('admin.statistic_ajax_bar_chart')->with(compact('labels','gross_goals','type','net_goals','prospects'))]);
@@ -210,7 +217,7 @@ class DashboardController extends Controller
 
             for ($i = 1; $i <= $total_days; $i++) {
                 // store all days in array in labels
-                
+
                 $j =$i -1;
                 $currentDay = $labels[$j];
                 $gross_goals[] = Goal::where('goals_type', 1)
@@ -230,12 +237,12 @@ class DashboardController extends Controller
                     ->whereYear('sale_date', date('Y'))
                     ->count();
             }
-            
+
             $type = 'WeekEarn';
             return response()->json(['view'=>(String)View::make('admin.statistic_ajax_bar_chart')->with(compact('labels','gross_goals','type','net_goals','prospects'))]);
         }
 
-        
-        
+
+
     }
 }
