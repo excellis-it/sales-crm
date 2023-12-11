@@ -18,6 +18,7 @@ class CreateProjectMilestonesTable extends Migration
             $table->foreignId('project_id')->nullable()->references('id')->on('projects')->onDelete('cascade');
             $table->string('milestone_name')->nullable();
             $table->string('milestone_value')->nullable();
+            $table->string('payment_mode')->nullable();
             $table->timestamps();
         });
     }
