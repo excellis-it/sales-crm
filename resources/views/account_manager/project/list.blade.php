@@ -110,7 +110,7 @@
                                                 data-parsley-type-message="Please enter a valid email address."
                                                 class="form-control" value="{{ old('client_email') }}"
                                                 placeholder="Enter Client Email">
-                                                <span class="client_email_error"></span>
+                                                <span class="client_email_error text-danger"></span>
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Client Phone
