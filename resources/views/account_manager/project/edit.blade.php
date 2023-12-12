@@ -225,7 +225,7 @@
                     </div>
                     <div class="col-md-12 mb-3" style="margin-top:40px;">
                         <button type="button"
-                            class="btn btn-success milestone-print disabled">Process</button>
+                            class="btn btn-success edit-milestone-print disabled">Process</button>
                     </div>
 
                     <input type="hidden" value="{{ $project->payment_type }}"
@@ -235,7 +235,7 @@
 
                     <h3 class="mt-4 text-uppercase">Milestone</h3>
                     <hr>
-                    <div class="add-milestone">
+                    <div class="edit-milestone">
                         @if ($project->projectMilestones->count() > 0)
                             @foreach ($project->projectMilestones as $key => $milestone)
                                 <div class="row">
@@ -409,7 +409,7 @@
                     '<button type="button" class="btn btn-danger remove"><i class="fas fa-minus"></i> Remove</button>';
                 html += '</div>';
                 html += '</div>';
-                $('.add-milestone').append(html);
+                $('.edit-milestone').append(html);
             });
             $(document).on('click', '.remove', function() {
                 $(this).closest('.row').remove();
@@ -554,7 +554,7 @@
         });
     </script>
     <script>
-        $('.milestone-print').on('click', function() {
+        $('.edit-milestone-print').on('click', function() {
             var number_of_milestone_edit = $('#number_of_milestone_edit').val();
             if (number_of_milestone_edit == '') {
                 $('#number_of_milestone_edit').html('');
@@ -562,7 +562,7 @@
                     '<span class="error" style="color:red;">Number of milestone is required</span>');
                 return false;
             }
-            $('.add-milestone').html('');
+            $('.edit-milestone').html('');
             // show milestone field as per number of milestone
             for (let index = 1; index <= number_of_milestone_edit; index++) {
                 console.log(number_of_milestone_edit);
@@ -604,7 +604,7 @@
                 html += '</div>';
                 html += '</div>';
                 console.log(html);
-                $('.add-milestone').append(html);
+                $('.edit-milestone').append(html);
             }
         });
     </script>
