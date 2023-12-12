@@ -237,14 +237,14 @@
                             name="number_of_milestone_edit" class="form-control">
                     </div>
                     <div class="col-md-12 mb-3" style="margin-top:40px;">
-                        <button type="button" class="btn px-5 submit-btn milestone-print">Process</button>
+                        <button type="button" class="btn px-5 submit-btn edit-milestone-print">Process</button>
                     </div>
 
                     <input type="hidden" value="{{ $project->payment_type }}" name="payment_types">
                     <h3 class="mt-4 text-uppercase">Milestone</h3>
                     <hr>
-                    <div class="add-milestone">
-                        
+                    <div class="edit-milestone">
+
                         @if ($project->projectMilestones->count() > 0)
                             @foreach ($project->projectMilestones as $key => $milestone)
                                 <div class="row">
@@ -416,7 +416,7 @@
                     '<button type="button" class="btn btn-danger remove"><i class="fas fa-minus"></i> Remove</button>';
                 html += '</div>';
                 html += '</div>';
-                $('.add-milestone').append(html);
+                $('.edit-milestone').append(html);
             });
             $(document).on('click', '.remove', function() {
                 $(this).closest('.row').remove();
@@ -570,7 +570,7 @@
         });
     </script>
     <script>
-        $('.milestone-print').on('click', function() {
+        $('.edit-milestone-print').on('click', function() {
             var number_of_milestone_edit = $('#number_of_milestone_edit').val();
             if (number_of_milestone_edit == '') {
                 $('#number_of_milestone_edit').html('');
@@ -578,25 +578,27 @@
                     '<span class="error" style="color:red;">Number of milestone is required</span>');
                 return false;
             }
-            //count .add-milestone div and show in number_of_milestone_edit field
-            var count = $('.add-milestone').children().length;
-
+            //count .edit-milestone div and show in number_of_milestone_edit field
+            var count = $('.edit-milestone').children().length;
+            console.log(number_of_milestone_edit, count);
             if (count > 0) {
                 if (number_of_milestone_edit > count) {
                     var new_number_of_milestone = number_of_milestone_edit - count;
+                    $('#number_of_milestone_edit').html('');
                 } else {
                     $('#number_of_milestone_edit').after(
                         '<span class="error" style="color:red;">Please enter valid number of milestone</span>')
                     return false;
                 }
             } else {
-                $('.add-milestone').html('');
+                $('#number_of_milestone_edit').html('');
+                $('.edit-milestone').html('');
                 var new_number_of_milestone = number_of_milestone_edit;
             }
-
+            console.log(new_number_of_milestone);
             // show milestone field as per number of milestone
-            for (let index = 1; index <= number_of_milestone_edit; index++) {
-                console.log(number_of_milestone_edit);
+            for (let index = 1; index <= new_number_of_milestone; index++) {
+                // console.log(number_of_milestone_edit);
                 var html = '';
                 html += '<div class="row">';
                 html += '<div class="col-md-12  mb-3">';
@@ -644,11 +646,11 @@
                     '<button type="button" class="btn btn-danger remove"><i class="fas fa-minus"></i> Remove</button>';
                 html += '</div>';
                 html += '</div>';
-                // console.log(html);
+                console.log(html);
                 //
-                $('.add-milestone').append(html);
+                $('.edit-milestone').append(html);
 
-                //count .add-milestone div and show in number_of_milestone_edit field
+                //count .edit-milestone div and show in number_of_milestone_edit field
 
             }
         });

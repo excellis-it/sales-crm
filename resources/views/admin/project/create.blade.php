@@ -490,14 +490,14 @@
                 months = months <= 0 ? 0 : months;
                 var total = months + 1;
                 var new_project_value = project_value / total;
-                console.log(project_value);
-                console.log(new_project_value);
+                // console.log(project_value);
+                // console.log(new_project_value);
                 //show amount in 2 decimal point
                 var update_project_value = new_project_value.toFixed(2);
-                console.log(total);
+                // console.log(total);
 
                 for (let index = 1; index <= total; index++) {
-                    console.log(total);
+                    // console.log(total);
                     var html = '';
                     html += '<div class="row">';
                     html += '<div class="col-md-4 pb-3">';
@@ -546,7 +546,7 @@
         $('.milestone-print').on('click', function() {
             var number_of_milestone = $('#number_of_milestone').val();
             if (number_of_milestone == '') {
-                console.log(number_of_milestone);
+                // console.log(number_of_milestone);
                 $('#number_of_milestone').after(
                     '<span class="error" style="color:red;">Number of milestone is required</span>');
                 return false;
@@ -554,7 +554,7 @@
             $('.add-milestone').html('');
             // show milestone field as per number of milestone
             for (let index = 1; index <= number_of_milestone; index++) {
-                console.log(number_of_milestone);
+                // console.log(number_of_milestone);
                 var html = '';
                 html += '<div class="row">';
                 html += '<div class="col-md-4 pb-3">';
@@ -592,7 +592,7 @@
                     '<button type="button" class="btn btn-danger remove"><i class="fas fa-minus"></i> Remove</button>';
                 html += '</div>';
                 html += '</div>';
-                console.log(html);
+                // console.log(html);
                 $('.add-milestone').append(html);
             }
         });
