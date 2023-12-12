@@ -151,6 +151,8 @@ class ProjectController extends Controller
                     $project_milestone->payment_status = $data['payment_status'][$key];
                     $project_milestone->payment_date = ($data['payment_status'][$key] == 'Paid') ? date('Y-m-d') : '';
                     $project_milestone->milestone_comment = $data['milestone_comment'][$key];
+                    $project_milestone->payment_mode = $data['milestone_payment_mode'][$key];
+                    $project_milestone->payment_date = $data['milestone_payment_date'][$key];
                     $project_milestone->save();
                     if ($data['payment_status'][$key] == 'Paid') {
                         $net_goals_t = Goal::where('user_id', Auth::user()->id)->whereMonth('goals_date', date('m', strtotime($data['sale_date'])))->whereYear('goals_date', date('Y', strtotime($data['sale_date'])))->where('goals_type', 2)->first();
@@ -291,6 +293,8 @@ class ProjectController extends Controller
                     $project_milestone->payment_status = $data['payment_status'][$key];
                     $project_milestone->payment_date = ($data['payment_status'][$key] == 'Paid') ? date('Y-m-d') : '';
                     $project_milestone->milestone_comment = $data['milestone_comment'][$key];
+                    $project_milestone->payment_mode = $data['milestone_payment_mode'][$key];
+                    $project_milestone->payment_date = $data['milestone_payment_date'][$key];
                     $project_milestone->save();
 
                     if ($data['payment_status'][$key] == 'Paid') {

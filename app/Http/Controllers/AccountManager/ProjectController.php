@@ -111,6 +111,8 @@ class ProjectController extends Controller
                     $project_milestone->payment_status = $data['payment_status'][$key];
                     $project_milestone->payment_date = ($data['payment_status'][$key] == 'Paid') ? date('Y-m-d') : '';
                     $project_milestone->milestone_comment = $data['milestone_comment'][$key];
+                    $project_milestone->payment_mode = $data['milestone_payment_mode'][$key];
+                    $project_milestone->payment_date = $data['milestone_payment_date'][$key];
                     $project_milestone->save();
 
                     if ($data['payment_status'][$key] == 'Paid') {
@@ -211,10 +213,7 @@ class ProjectController extends Controller
             $project_type->name = $data['project_type'];
         }
 
-
-
         $project_type->save();
-
         $previous_milestone_value = ProjectMilestone::where(['project_id'=> $id, 'payment_status' => 'Paid'])->sum('milestone_value');
 
         ProjectMilestone::where('project_id', $id)->delete();
@@ -231,6 +230,8 @@ class ProjectController extends Controller
                     $project_milestone->payment_status = $data['payment_status'][$key];
                     $project_milestone->payment_date = ($data['payment_status'][$key] == 'Paid') ? date('Y-m-d') : '';
                     $project_milestone->milestone_comment = $data['milestone_comment'][$key];
+                    $project_milestone->payment_mode = $data['milestone_payment_mode'][$key];
+                    $project_milestone->payment_date = $data['milestone_payment_date'][$key];
                     $project_milestone->save();
 
                     if ($data['payment_status'][$key] == 'Paid') {
@@ -243,12 +244,8 @@ class ProjectController extends Controller
                     $net_goals_t->goals_achieve = $net_goals_t->goals_achieve +(( $paid_amount - $previous_milestone_value)) ;
                     $net_goals_t->save();
                 }
-
-
             }
         }
-
-
 
         if (isset($data['pdf'])) {
             foreach ($data['pdf'] as $key => $pdfFile) {

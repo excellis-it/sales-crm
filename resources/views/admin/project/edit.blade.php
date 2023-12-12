@@ -7,8 +7,8 @@
             <h4 id="offcanvasEditLabel">Edit Project Details</h4>
         </div>
         <div class="offcanvas-body">
-            <form action="{{ route('sales-projects.update', $project->id) }}" method="post" data-parsley-validate="" id="edit-form-validation"
-                enctype="multipart/form-data">
+            <form action="{{ route('sales-projects.update', $project->id) }}" method="post" data-parsley-validate=""
+                id="edit-form-validation" enctype="multipart/form-data">
                 @method('PUT')
                 @csrf
                 <input type="hidden" name="customer_id" class="edit_customer_id" value="{{ $project->customer_id }}">
@@ -18,8 +18,8 @@
                             <span style="color: red;">*</span></label>
                         <input type="radio" name="customer" id="new_user" value="1" required class="customer"
                             data-parsley-trigger="keyup" checked> New user
-                        <input type="radio" name="customer" id="existing_user" value="0" required class="customer"
-                            data-parsley-trigger="keyup"> Existing user
+                        <input type="radio" name="customer" id="existing_user" value="0" required
+                            class="customer" data-parsley-trigger="keyup"> Existing user
                     </div>
                     <div class="col-md-12 mb-3 select_user" id="select_user">
 
@@ -28,16 +28,18 @@
                         <label for="inputEnterYourName" class="col-form-label"> Client Name
                             <span style="color: red;">*</span></label>
                         <input type="text" name="client_name" id="client_name" required data-parsley-trigger="keyup"
-                            value="{{ $project->client_name }}" class="form-control client_name" placeholder="Enter Client Name">
+                            value="{{ $project->client_name }}" class="form-control client_name"
+                            placeholder="Enter Client Name">
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Client Email
                             <span style="color: red;">*</span></label>
                         <input type="text" name="client_email" id="edit_client_email" required
                             data-parsley-trigger="keyup" data-parsley-type="email"
-                            data-parsley-type-message="Please enter a valid email address." class="form-control client_email"
-                            value="{{ $project->client_email }}" placeholder="Enter Client Email">
-                            <span class="edit_client_email_error" style="color:red;"></span>
+                            data-parsley-type-message="Please enter a valid email address."
+                            class="form-control client_email" value="{{ $project->client_email }}"
+                            placeholder="Enter Client Email">
+                        <span class="edit_client_email_error" style="color:red;"></span>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Client Phone
@@ -54,8 +56,8 @@
                         <label for="inputEnterYourName" class="col-form-label">Client
                             Address <span style="color: red;">*</span></label>
                         <input type="text" name="client_address" id="client_address" required
-                            data-parsley-trigger="keyup" class="form-control client_address" value=" {{ $project->client_address }}"
-                            placeholder="Enter Address">
+                            data-parsley-trigger="keyup" class="form-control client_address"
+                            value=" {{ $project->client_address }}" placeholder="Enter Address">
                         @if ($errors->has('address'))
                             <div class="error" style="color:red;">
                                 {{ $errors->first('address') }}</div>
@@ -239,12 +241,10 @@
                     </div>
 
                     <input type="hidden" value="{{ $project->payment_type }}" name="payment_types">
-
-
-
                     <h3 class="mt-4 text-uppercase">Milestone</h3>
                     <hr>
                     <div class="add-milestone">
+                        
                         @if ($project->projectMilestones->count() > 0)
                             @foreach ($project->projectMilestones as $key => $milestone)
                                 <div class="row">
@@ -276,6 +276,20 @@
                                                     {{ $milestone->payment_status == 'Due' ? 'selected' : '' }}>
                                                     Due</option>
                                             </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <div style="display: flex">
+                                            <input type="date" name="milestone_payment_date[]"
+                                                class="form-control" value="{{ $milestone->payment_date }}" id="" required
+                                                data-parsley-trigger="keyup">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <div style="display: flex">
+                                            <input type="text" name="milestone_payment_mode[]"
+                                                class="form-control" value="{{ $milestone->payment_mode }}" id="" required
+                                                data-parsley-trigger="keyup">
                                         </div>
                                     </div>
                                     {{-- <div class="col-md-12  mb-3">
@@ -373,6 +387,16 @@
                 html += '<div style="display: flex">';
                 html +=
                     '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value="" disabled >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
+                html += '</div>';
+                html += '</div>';
+                html += '<div class="col-md-12 mb-3">';
+                html += '<div style="display: flex">';
+                html += '<input type="date" name="milestone_payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
+                html += '</div>';
+                html += '</div>';
+                html += '<div class="col-md-12 mb-3">';
+                html += '<div style="display: flex">';
+                html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
                 html += '</div>';
                 html += '</div>';
                 // html += '<div class="col-md-12  mb-3">';
@@ -508,6 +532,16 @@
                         '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value="" disabled >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
                     html += '</div>';
                     html += '</div>';
+                    html += '<div class="col-md-12 mb-3">';
+                    html += '<div style="display: flex">';
+                    html += '<input type="date" name="milestone_payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
+                    html += '</div>';
+                    html += '</div>';
+                    html += '<div class="col-md-12 mb-3">';
+                    html += '<div style="display: flex">';
+                    html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
+                    html += '</div>';
+                    html += '</div>';
                     // html += '<div class="col-md-12  mb-3">';
                     // html += '<div style="display: flex">';
                     // html +=
@@ -581,6 +615,16 @@
                 html += '<div style="display: flex">';
                 html +=
                     '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value="" disabled >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
+                html += '</div>';
+                html += '</div>';
+                html += '<div class="col-md-12 mb-3">';
+                html += '<div style="display: flex">';
+                html += '<input type="date" name="milestone_payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
+                html += '</div>';
+                html += '</div>';
+                html += '<div class="col-md-12 mb-3">';
+                html += '<div style="display: flex">';
+                html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
                 html += '</div>';
                 html += '</div>';
                 // html += '<div class="col-md-12  mb-3">';

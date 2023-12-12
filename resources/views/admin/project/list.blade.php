@@ -573,6 +573,16 @@
                     '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value=""  >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
                 html += '</div>';
                 html += '</div>';
+                html += '<div class="col-md-12 mb-3">';
+                html += '<div style="display: flex">';
+                html += '<input type="date" name="milestone_payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
+                html += '</div>';
+                html += '</div>';
+                html += '<div class="col-md-12 mb-3">';
+                html += '<div style="display: flex">';
+                html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
+                html += '</div>';
+                html += '</div>';
                 // html += '<div class="col-md-12 mb-3">';
                 // html += '<div style="display: flex">';
                 // html +=
@@ -649,7 +659,7 @@
                 $('#milestone_name').prop('required', true);
                 $('#milestone_value').prop('required', true);
                 $('#payment_status').prop('required', true);
-                $('#payment_date').prop('required', true);
+                $('#milestone_payment_date').prop('required', true);
                 //monthly field required false
                 $('#start_date').prop('required', false);
                 $('#end_date').prop('required', false);
@@ -662,12 +672,12 @@
                 $('#milestone_name').prop('required', false);
                 $('#milestone_value').prop('required', false);
                 $('#payment_status').prop('required', false);
-                $('#payment_date').prop('required', false);
+                $('#milestone_payment_date').prop('required', false);
             } else {
                 $('#milestone_name').prop('required', false);
                 $('#milestone_value').prop('required', false);
                 $('#payment_status').prop('required', false);
-                $('#payment_date').prop('required', false);
+                $('#milestone_payment_date').prop('required', false);
                 $('#start_date').prop('required', false);
                 $('#end_date').prop('required', false);
                 $('#milestone_field').hide();
@@ -748,6 +758,16 @@
                         '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value=""  >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
                     html += '</div>';
                     html += '</div>';
+                    html += '<div class="col-md-12 mb-3">';
+                    html += '<div style="display: flex">';
+                    html += '<input type="date" name="milestone_payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
+                    html += '</div>';
+                    html += '</div>';
+                    html += '<div class="col-md-12 mb-3">';
+                    html += '<div style="display: flex">';
+                    html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
+                    html += '</div>';
+                    html += '</div>';
                     // html += '<div class="col-md-12 mb-3">';
                     // html += '<div style="display: flex">';
                     // html +=
@@ -810,12 +830,16 @@
                     '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value=""  >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
                 html += '</div>';
                 html += '</div>';
-                // html += '<div class="col-md-12 mb-3">';
-                // html += '<div style="display: flex">';
-                // html +=
-                //     '<input type="date" name="payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
-                // html += '</div>';
-                // html += '</div>';
+                html += '<div class="col-md-12 mb-3">';
+                html += '<div style="display: flex">';
+                html += '<input type="date" name="milestone_payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
+                html += '</div>';
+                html += '</div>';
+                html += '<div class="col-md-12 mb-3">';
+                html += '<div style="display: flex">';
+                html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
+                html += '</div>';
+                html += '</div>';
                 html += '<div class="col-md-12 mb-3">';
                 html += '<div style="display: flex">';
                 html +=
