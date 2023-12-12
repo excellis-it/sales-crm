@@ -235,12 +235,12 @@
                         <label for="inputEnterYourName" class="col-form-label">No. of
                             Milestone</label>
                         <input type="number" id="number_of_milestone_edit"
-                            value="{{ $project->projectMilestones->count() }}" required
-                            name="number_of_milestone_edit" class="form-control disable-input">
+                            value="{{ $project->projectMilestones->count() }}" required min="0" 
+                            name="number_of_milestone_edit" class="form-control">
                     </div>
                     <div class="col-md-12 mb-3" style="margin-top:40px;">
                         <button type="button"
-                            class="btn px-5 submit-btn milestone-print">Process</button>
+                            class="btn px-5 submit-btn milestone-print" >Process</button>
                     </div>
 
                     <input type="hidden" value="{{ $project->payment_type }}"
@@ -318,14 +318,7 @@
                                                 cols="3" rows="2">{{ $milestone->milestone_comment }}</textarea>
                                         </div>
                                     </div>
-                                    @if ($key == 0)
-                                        <div class="col-md-12 mb-3">
-                                            <button type="button"
-                                                class="btn btn-success add good-button"><i
-                                                    class="fas fa-plus"></i> Add
-                                                Milestone</button>
-                                        </div>
-                                    @else
+                                   
                                         <div class="col-md-12 mb-3">
                                             @if ($milestone->payment_status == 'Paid')
                                                 <button type="button"
@@ -340,7 +333,7 @@
                                             @endif
 
                                         </div>
-                                    @endif
+                                    
                                 </div>
                             @endforeach
                         @endif
@@ -368,6 +361,20 @@
                                         class="fas fa-plus"></i> Add PDF</button>
                             </div>
                         </div>
+                        @if ($project->projectDocuments->count() > 0)
+                            <div class="row">
+                                <h4 class="mt-4 text-uppercase">Download Documents</h4>
+                                @foreach ($project->projectDocuments as $key => $document)
+                                <div class="col-md-6 mb-3 download-button">
+                                    <a href="{{ route('bdm.projects.document.download',$document->id) }}" download="downloaded_project_documents.pdf">
+                                        <button type="button" class="btn submit-btn add-pdf-button good-button">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                    </a>
+                                </div>
+                                @endforeach
+                            </div>
+                            @endif
                         {{-- </br> --}}
                     </div>
                 </div>
@@ -601,12 +608,29 @@
         $('.milestone-print').on('click', function() {
             var number_of_milestone_edit = $('#number_of_milestone_edit').val();
             if (number_of_milestone_edit == '') {
+                $('#number_of_milestone_edit').html('');
                 console.log(number_of_milestone_edit);
                 $('#number_of_milestone_edit').after(
                     '<span class="error" style="color:red;">Number of milestone is required</span>');
                 return false;
             }
             $('.edit-milestone').html('');
+            var count = $('.edit-milestone').children().length;
+            console.log(number_of_milestone_edit, count);
+            if (count > 0) {
+                if (number_of_milestone_edit > count) {
+                    var new_number_of_milestone = number_of_milestone_edit - count;
+                    $('#number_of_milestone_edit').html('');
+                } else {
+                    $('#number_of_milestone_edit').after(
+                        '<span class="error" style="color:red;">Please enter valid number of milestone</span>')
+                    return false;
+                }
+            } else {
+                $('#number_of_milestone_edit').html('');
+                $('.edit-milestone').html('');
+                var new_number_of_milestone = number_of_milestone_edit;
+            }
             // show milestone field as per number of milestone
             for (let index = 1; index <= number_of_milestone_edit; index++) {
                 console.log(number_of_milestone_edit);

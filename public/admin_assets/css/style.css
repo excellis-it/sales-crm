@@ -9955,6 +9955,23 @@ textarea.parsley-error {
 }
 
 
+/* 12-12-2023 - download button */
+.download-button a button{
+    background: #f37e20;
+    color: #fff;
+    padding: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    min-width: auto; 
+}
+
+
+
+
 
 
 

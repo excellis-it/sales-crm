@@ -275,7 +275,7 @@
                                             <label for="inputEnterYourName" class="col-form-label">No. of
                                                 Milestone</label>
                                             <input type="number" id="number_of_milestone" required
-                                                name="number_of_milestone" class="form-control">
+                                                name="number_of_milestone" class="form-control" min="0" >
                                         </div>
                                         <div class="col-md-12 mb-3" style="margin-top:40px;">
                                             <button type="button"

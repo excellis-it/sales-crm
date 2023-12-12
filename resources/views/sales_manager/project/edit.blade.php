@@ -236,11 +236,11 @@
                             Milestone</label>
                         <input type="number" id="number_of_milestone_edit" min="0"
                             value="{{ $project->projectMilestones->count() }}" required
-                            name="number_of_milestone_edit" class="form-control disable-input">
+                            name="number_of_milestone_edit" class="form-control">
                     </div>
                     <div class="col-md-12 mb-3" style="margin-top:40px;">
                         <button type="button"
-                            class="btn px-5 submit-btn milestone-print" >Process</button>
+                            class="btn px-5 submit-btn milestone-print" disabled>Process</button>
                     </div>
 
                     <input type="hidden" value="{{ $project->payment_type }}"
@@ -319,29 +319,23 @@
                                                 cols="3" rows="2">{{ $milestone->milestone_comment }}</textarea>
                                         </div>
                                     </div>
-                                    @if ($key == 0)
-                                        <div class="col-md-12 mb-3">
+                                    
+                                   
+                                    <div class="col-md-12 mb-3">
+                                        @if ($milestone->payment_status == 'Paid')
                                             <button type="button"
-                                                class="btn btn-success add good-button"><i
-                                                    class="fas fa-plus"></i> Add
-                                                Milestone</button>
-                                        </div>
-                                    @else
-                                        <div class="col-md-12 mb-3">
-                                            @if ($milestone->payment_status == 'Paid')
-                                                <button type="button"
-                                                    class="btn btn-danger remove"
-                                                    disabled><i class="fas fa-minus"></i>
-                                                    Remove</button>
-                                            @else
-                                                <button type="button"
-                                                    class="btn btn-danger remove"><i
-                                                        class="fas fa-minus"></i>
-                                                    Remove</button>
-                                            @endif
+                                                class="btn btn-danger remove"
+                                                disabled><i class="fas fa-minus"></i>
+                                                Remove</button>
+                                        @else
+                                            <button type="button"
+                                                class="btn btn-danger remove"><i
+                                                    class="fas fa-minus"></i>
+                                                Remove</button>
+                                        @endif
 
-                                        </div>
-                                    @endif
+                                    </div>
+                                    
                                 </div>
                             @endforeach
                         @endif
@@ -369,6 +363,20 @@
                                         class="fas fa-plus"></i> Add PDF</button>
                             </div>
                         </div>
+                        @if ($project->projectDocuments->count() > 0)
+                            <div class="row">
+                                <h4 class="mt-4 text-uppercase">Download Documents</h4>
+                                @foreach ($project->projectDocuments as $key => $document)
+                                <div class="col-md-6 mb-3 download-button">
+                                    <a href="{{ route('projects.document.download',$document->id) }}" download="downloaded_project_documents.pdf">
+                                        <button type="button" class="btn submit-btn add-pdf-button good-button">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                    </a>
+                                </div>
+                                @endforeach
+                            </div>
+                            @endif
                         {{-- </br> --}}
                     </div>
                 </div>

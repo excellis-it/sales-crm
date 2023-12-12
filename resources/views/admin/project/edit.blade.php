@@ -232,14 +232,12 @@
                     <div class="col-md-12 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">No. of
                             Milestone</label>
-                           
-
-                        <input type="number" id="number_of_milestone_edit" 
-                            value="{{ $project->projectMilestones->count() }}" required min="0" 
+                        <input type="number" id="number_of_milestone_edit" min="0"
+                            value="{{ $project->projectMilestones->count() }}" required
                             name="number_of_milestone_edit" class="form-control">
                     </div>
                     <div class="col-md-12 mb-3" style="margin-top:40px;">
-                        <button type="button" class="btn px-5 submit-btn edit-milestone-print" disabled>Process</button>
+                        <button type="button" class="btn px-5 submit-btn edit-milestone-print">Process</button>
                     </div>
 
                     <input type="hidden" value="{{ $project->payment_type }}" name="payment_types">
@@ -341,6 +339,20 @@
                                         class="fas fa-plus"></i> Add PDF</button>
                             </div>
                         </div>
+                        @if ($project->projectDocuments->count() > 0)
+                        <div class="row">
+                            <h4 class="mt-4 text-uppercase">Download Documents</h4>
+                            @foreach ($project->projectDocuments as $key => $document)
+                            <div class="col-md-6 mb-3 download-button">
+                                <a href="{{ route('sales-projects.document.download',$document->id) }}" download="downloaded_project_documents.pdf">
+                                    <button type="button" class="btn submit-btn add-pdf-button good-button">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                </a>
+                            </div>
+                            @endforeach
+                        </div>
+                        @endif
                         {{-- </br> --}}
                     </div>
 

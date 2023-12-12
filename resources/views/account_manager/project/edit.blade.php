@@ -344,6 +344,20 @@
                                         class="fas fa-plus"></i> Add PDF</button>
                             </div>
                         </div>
+                        @if ($project->projectDocuments->count() > 0)
+                        <div class="row">
+                            <h4 class="mt-4 text-uppercase">Download Documents</h4>
+                            @foreach ($project->projectDocuments as $key => $document)
+                            <div class="col-md-6 mb-3 download-button">
+                                <a href="{{ route('account-manager.projects.document.download',$document->id) }}" download="downloaded_project_documents.pdf">
+                                    <button type="button" class="btn submit-btn add-pdf-button good-button">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                </a>
+                            </div>
+                            @endforeach
+                        </div>
+                        @endif
                         {{-- </br> --}}
                     </div>
                 </div>
