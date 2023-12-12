@@ -155,7 +155,7 @@ class ProjectController extends Controller
                     $project_milestone->payment_date = $data['milestone_payment_date'][$key];
                     $project_milestone->save();
                     if ($data['payment_status'][$key] == 'Paid') {
-                        $net_goals_t = Goal::where('user_id', Auth::user()->id)->whereMonth('goals_date', date('m', strtotime(['milestone_payment_date'][$key])))->whereYear('goals_date', date('Y', strtotime($data['milestone_payment_date'][$key])))->where('goals_type', 2)->first();
+                        $net_goals_t = Goal::where('user_id', Auth::user()->id)->whereMonth('goals_date', date('m', strtotime($data['milestone_payment_date'][$key])))->whereYear('goals_date', date('Y', strtotime($data['milestone_payment_mode'][$key])))->where('goals_type', 2)->first();
                         if ($net_goals_t) {
                             $net_goals_t->goals_achieve = $net_goals_t->goals_achieve + $data['milestone_value'][$key];
                             $net_goals_t->save();
@@ -284,6 +284,7 @@ class ProjectController extends Controller
         if (isset($data['milestone_name'])) {
             $paid_amount = 0;
             foreach ($data['milestone_name'] as $key => $milestone) {
+                
                 //check if data is null
                 if ($data['milestone_name'][$key]) {
                     $project_milestone = new ProjectMilestone();
@@ -298,7 +299,7 @@ class ProjectController extends Controller
                     $project_milestone->save();
 
                     if ($data['payment_status'][$key] == 'Paid') {
-                        $net_goals_t = Goal::where('user_id', Auth::user()->id)->whereMonth('goals_date', date('m', strtotime(['milestone_payment_date'][$key])))->whereYear('goals_date', date('Y', strtotime($data['milestone_payment_date'][$key])))->where('goals_type', 2)->first();
+                        $net_goals_t = Goal::where('user_id', Auth::user()->id)->whereMonth('goals_date', date('m', strtotime($data['milestone_payment_date'][$key])))->whereYear('goals_date', date('Y', strtotime($data['milestone_payment_date'][$key])))->where('goals_type', 2)->first();
                         if ($net_goals_t) {
                             $net_goals_t->goals_achieve = $net_goals_t->goals_achieve + $data['milestone_value'][$key];
                             $net_goals_t->save();

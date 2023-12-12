@@ -232,12 +232,14 @@
                     <div class="col-md-12 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">No. of
                             Milestone</label>
-                        <input type="number" id="number_of_milestone_edit"
-                            value="{{ $project->projectMilestones->count() }}" required
+                           
+
+                        <input type="number" id="number_of_milestone_edit" 
+                            value="{{ $project->projectMilestones->count() }}" required min="0" 
                             name="number_of_milestone_edit" class="form-control">
                     </div>
                     <div class="col-md-12 mb-3" style="margin-top:40px;">
-                        <button type="button" class="btn px-5 submit-btn edit-milestone-print">Process</button>
+                        <button type="button" class="btn px-5 submit-btn edit-milestone-print" disabled>Process</button>
                     </div>
 
                     <input type="hidden" value="{{ $project->payment_type }}" name="payment_types">
