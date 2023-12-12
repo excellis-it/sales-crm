@@ -523,7 +523,7 @@
             html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
             html += '</div>';
             html += '</div>';
-            
+
             html += '<div class="col-md-12 mb-3">';
             html += '<div style="display: flex">';
             html +=
@@ -756,13 +756,13 @@
             html += '</div>';
             html += '<div class="col-md-12 mb-3">';
             html += '<div style="display: flex">';
-            html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
+            html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" placeholder="Payment Mode" required data-parsley-trigger="keyup">';
             html += '</div>';
             html += '</div>';
             html += '<div class="col-md-12 mb-3">';
             html += '<div style="display: flex">';
             html +=
-                '<textarea name="milestone_comment[]" class="form-control" placeholder="Milestone Comment" id="" cols="3" rows="2" ></textarea>';
+                '<textarea name="milestone_comment[]" class="form-control" placeholder="Comment" id="" cols="3" rows="2" ></textarea>';
             html += '</div>';
             html += '</div>';
             html += '<div class="col-md-12 mb-3">';

@@ -225,7 +225,7 @@
                     </div>
                     <div class="col-md-12 mb-3" style="margin-top:40px;">
                         <button type="button"
-                            class="btn btn-success milestone-print">Process</button>
+                            class="btn btn-success milestone-print disabled">Process</button>
                     </div>
 
                     <input type="hidden" value="{{ $project->payment_type }}"
