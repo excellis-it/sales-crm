@@ -43,7 +43,7 @@
                             <div class="card-body">
                                 <span class="dash-widget-icon"><i class="fas fa-dollar"></i></span>
                                 <div class="dash-widget-info">
-                                    <h3>${{$count['net_target']['goals_amount'] ?? 'No Goal Set'}}</h3>
+                                    <h3>{{(isset($count['net_target']['goals_amount'])) ? '$' .$count['net_target']['goals_amount'] : 'No Goal Set'}}</h3>
                                     <span>Net Target This Month</span>
                                 </div>
                             </div>
@@ -56,7 +56,7 @@
                             <div class="card-body">
                                 <span class="dash-widget-icon"><i class="fas fa-dollar"></i></span>
                                 <div class="dash-widget-info">
-                                    <h3>${{$count['net_target']['goals_achieve'] ?? 'No Goal Set'}}</h3>
+                                    <h3>{{(isset($count['net_target']['goals_achieve'])) ? '$'.$count['net_target']['goals_achieve'] :'No Goal Set'}}</h3>
                                     <span>Net Achieve This Month</span>
                                 </div>
                             </div>

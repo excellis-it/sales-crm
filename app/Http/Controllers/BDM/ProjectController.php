@@ -314,10 +314,6 @@ class ProjectController extends Controller
         //     $net_goals_t->save();
         // }
 
-        
-
-
-
         if (isset($data['pdf'])) {
             foreach ($data['pdf'] as $key => $pdfFile) {
                 $project_pdf = new ProjectDocument();
