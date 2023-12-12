@@ -302,7 +302,7 @@
                                         <div style="display: flex">
                                             <input type="text" name="milestone_payment_mode[]"
                                                 class="form-control" value="{{ $milestone->payment_mode }}" id="" required
-                                                data-parsley-trigger="keyup">
+                                                data-parsley-trigger="keyup" placeholder="Milestone payment mode">
                                         </div>
                                     </div>
 
@@ -426,7 +426,7 @@
                 html += '</div>';
                 html += '<div class="col-md-12 mb-3">';
                 html += '<div style="display: flex">';
-                html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
+                html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" placeholder="Milestone payment mode" id="" required data-parsley-trigger="keyup">';
                 html += '</div>';
                 html += '</div>';
                 // html += '<div class="col-md-12 mb-3 pb-3">';
@@ -569,7 +569,7 @@
                     html += '</div>';
                     html += '<div class="col-md-12 mb-3">';
                     html += '<div style="display: flex">';
-                    html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
+                    html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" placeholder="Milestone payment mode" id="" required data-parsley-trigger="keyup">';
                     html += '</div>';
                     html += '</div>';
                     // html += '<div class="col-md-12 mb-3 pb-3">';
@@ -639,7 +639,7 @@
                 html += '</div>';
                 html += '<div class="col-md-12 mb-3">';
                 html += '<div style="display: flex">';
-                html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
+                html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" placeholder="Milestone payment mode" id="" required data-parsley-trigger="keyup">';
                 html += '</div>';
                 html += '</div>';
                 // html += '<div class="col-md-12 mb-3 pb-3">';

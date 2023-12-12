@@ -155,13 +155,13 @@ class ProjectController extends Controller
                     $project_milestone->payment_date = $data['milestone_payment_date'][$key];
                     $project_milestone->save();
                     if ($data['payment_status'][$key] == 'Paid') {
-                        $net_goals_t = Goal::where('user_id', Auth::user()->id)->whereMonth('goals_date', date('m', strtotime($data['sale_date'])))->whereYear('goals_date', date('Y', strtotime($data['sale_date'])))->where('goals_type', 2)->first();
+                        $net_goals_t = Goal::where('user_id', Auth::user()->id)->whereMonth('goals_date', date('m', strtotime(['milestone_payment_mode'][$key])))->whereYear('goals_date', date('Y', strtotime($data['milestone_payment_mode'][$key])))->where('goals_type', 2)->first();
                         if ($net_goals_t) {
                             $net_goals_t->goals_achieve = $net_goals_t->goals_achieve + $data['milestone_value'][$key];
                             $net_goals_t->save();
                         }
                     }
-                }
+                }         
             }
         }
 
@@ -298,17 +298,23 @@ class ProjectController extends Controller
                     $project_milestone->save();
 
                     if ($data['payment_status'][$key] == 'Paid') {
-                        $paid_amount += $data['milestone_value'][$key];
+                        $net_goals_t = Goal::where('user_id', Auth::user()->id)->whereMonth('goals_date', date('m', strtotime(['milestone_payment_mode'][$key])))->whereYear('goals_date', date('Y', strtotime($data['milestone_payment_mode'][$key])))->where('goals_type', 2)->first();
+                        if ($net_goals_t) {
+                            $net_goals_t->goals_achieve = $net_goals_t->goals_achieve + $data['milestone_value'][$key];
+                            $net_goals_t->save();
+                        }
                     }
                 }
             }
         }
 
-        $net_goals_t = Goal::where('user_id', Auth::user()->id)->whereMonth('goals_date', date('m', strtotime($data['sale_date'])))->whereYear('goals_date', date('Y', strtotime($data['sale_date'])))->where('goals_type', 2)->first();
-        if ($net_goals_t) {
-            $net_goals_t->goals_achieve = $net_goals_t->goals_achieve + (($paid_amount - $previous_milestone_value));
-            $net_goals_t->save();
-        }
+        // $net_goals_t = Goal::where('user_id', Auth::user()->id)->whereMonth('goals_date', date('m', strtotime($data['sale_date'])))->whereYear('goals_date', date('Y', strtotime($data['sale_date'])))->where('goals_type', 2)->first();
+        // if ($net_goals_t) {
+        //     $net_goals_t->goals_achieve = $net_goals_t->goals_achieve + (($paid_amount - $previous_milestone_value));
+        //     $net_goals_t->save();
+        // }
+
+        
 
 
 

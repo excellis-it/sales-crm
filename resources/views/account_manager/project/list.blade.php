@@ -520,14 +520,12 @@
             html += '</div>';
             html += '<div class="col-md-12 mb-3">';
             html += '<div style="display: flex">';
-            html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
+            html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" placeholder="Milestone payment mode" id="" required data-parsley-trigger="keyup">';
             html += '</div>';
             html += '</div>';
-
             html += '<div class="col-md-12 mb-3">';
             html += '<div style="display: flex">';
-            html +=
-                '<textarea name="milestone_comment[]" class="form-control" placeholder="Milestone Comment" id="" cols="3" rows="2" ></textarea>';
+            html +='<textarea name="milestone_comment[]" class="form-control" placeholder="Milestone Comment" id="" cols="3" rows="2" ></textarea>';
             html += '</div>';
             html += '</div>';
             html += '<div class="col-md-12 mb-3">';
@@ -689,6 +687,16 @@
                     '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value=""  >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
                 html += '</div>';
                 html += '</div>';
+                html += '<div class="col-md-12 mb-3">';
+                html += '<div style="display: flex">';
+                html += '<input type="date" name="milestone_payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
+                html += '</div>';
+                html += '</div>';
+                html += '<div class="col-md-12 mb-3">';
+                html += '<div style="display: flex">';
+                html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" placeholder="Milestone payment mode" required data-parsley-trigger="keyup">';
+                html += '</div>';
+                html += '</div>';
                 // html += '<div class="col-md-12 mb-3">';
                 // html += '<div style="display: flex">';
                 // html +=
@@ -756,7 +764,7 @@
             html += '</div>';
             html += '<div class="col-md-12 mb-3">';
             html += '<div style="display: flex">';
-            html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" placeholder="Payment Mode" required data-parsley-trigger="keyup">';
+            html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" placeholder="Milestone payment mode" required data-parsley-trigger="keyup">';
             html += '</div>';
             html += '</div>';
             html += '<div class="col-md-12 mb-3">';
