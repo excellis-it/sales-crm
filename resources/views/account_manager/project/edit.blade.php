@@ -7,8 +7,8 @@
             <h4 id="offcanvasEditLabel">Edit Project Details</h4>
         </div>
         <div class="offcanvas-body">
-            <form action="{{ route('account-manager.projects.update', $project->id) }}"
-                method="post" data-parsley-validate="" enctype="multipart/form-data">
+            <form action="{{ route('account-manager.projects.update', $project->id) }}" method="post"
+                data-parsley-validate="" enctype="multipart/form-data">
                 @method('PUT')
                 @csrf
                 <div class="row">
@@ -16,9 +16,9 @@
                     <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label"> Client Name
                             <span style="color: red;">*</span></label>
-                        <input type="text" name="client_name" id="client_name" required
-                            data-parsley-trigger="keyup" value="{{ $project->client_name }}"
-                            class="form-control disable-input" placeholder="Enter Client Name">
+                        <input type="text" name="client_name" id="client_name" required data-parsley-trigger="keyup"
+                            value="{{ $project->client_name }}" class="form-control disable-input"
+                            placeholder="Enter Client Name">
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Client Email
@@ -43,10 +43,9 @@
                     <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Client
                             Address <span style="color: red;">*</span></label>
-                        <input type="text" name="client_address" id="client_address"
-                            required data-parsley-trigger="keyup" class="form-control disable-input"
-                            value=" {{ $project->client_address }}"
-                            placeholder="Enter Address">
+                        <input type="text" name="client_address" id="client_address" required
+                            data-parsley-trigger="keyup" class="form-control disable-input"
+                            value=" {{ $project->client_address }}" placeholder="Enter Address">
                         @if ($errors->has('address'))
                             <div class="error" style="color:red;">
                                 {{ $errors->first('address') }}</div>
@@ -55,10 +54,9 @@
                     <div class="col-md-12 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Business Name
                             <span style="color: red;">*</span></label>
-                        <input type="text" name="business_name" id="business_name"
-                            required data-parsley-trigger="keyup"
-                            value="{{ $project->business_name }}" class="form-control disable-input"
-                            placeholder="Enter Business Name">
+                        <input type="text" name="business_name" id="business_name" required
+                            data-parsley-trigger="keyup" value="{{ $project->business_name }}"
+                            class="form-control disable-input" placeholder="Enter Business Name">
                     </div>
                     <h3 class="mt-4 text-uppercase">Project Details</h3>
                     <hr>
@@ -66,9 +64,9 @@
                     <div class="col-md-12 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Project
                             Type <span style="color: red;">*</span></label>
-                        <select name="project_type" id="project_type" required
-                            data-parsley-trigger="keyup" class="form-control disable-input">
-                            <option value="" >Select Project Type</option>
+                        <select name="project_type" id="project_type" required data-parsley-trigger="keyup"
+                            class="form-control disable-input">
+                            <option value="">Select Project Type</option>
                             <option value="Website Design & Development"
                                 @if (isset($project['projectTypes']['type']) && $project['projectTypes']['type'] == 'Website Design & Development') {{ 'selected' }} @endif>
                                 Website Design & Development</option>
@@ -78,17 +76,13 @@
                             <option value="Digital Marketing"
                                 @if (isset($project['projectTypes']['type']) && $project['projectTypes']['type'] == 'Digital Marketing') {{ 'selected' }} @endif>
                                 Digital Marketing</option>
-                            <option value="Logo Design"
-                                @if (isset($project['projectTypes']['type']) && $project['projectTypes']['type'] == 'Logo Design') {{ 'selected' }} @endif>
+                            <option value="Logo Design" @if (isset($project['projectTypes']['type']) && $project['projectTypes']['type'] == 'Logo Design') {{ 'selected' }} @endif>
                                 Logo Design</option>
-                            <option value="SEO"
-                                @if (isset($project['projectTypes']['type']) && $project['projectTypes']['type'] == 'SEO') {{ 'selected' }} @endif>
+                            <option value="SEO" @if (isset($project['projectTypes']['type']) && $project['projectTypes']['type'] == 'SEO') {{ 'selected' }} @endif>
                                 SEO</option>
-                            <option value="SMO"
-                                @if (isset($project['projectTypes']['type']) && $project['projectTypes']['type'] == 'SMO') {{ 'selected' }} @endif>
+                            <option value="SMO" @if (isset($project['projectTypes']['type']) && $project['projectTypes']['type'] == 'SMO') {{ 'selected' }} @endif>
                                 SMO</option>
-                            <option value="Other"
-                                @if (isset($project['projectTypes']['type']) && $project['projectTypes']['type'] == 'Other') {{ 'selected' }} @endif>
+                            <option value="Other" @if (isset($project['projectTypes']['type']) && $project['projectTypes']['type'] == 'Other') {{ 'selected' }} @endif>
                                 Other</option>
                         </select>
                     </div>
@@ -96,19 +90,17 @@
                         @if (isset($project['projectTypes']['type']) && $project['projectTypes']['type'] == 'Other')
                             <label for="inputEnterYourName" class="col-form-label">Other
                                 Value <span style="color: red;">*</span></label>
-                            <input type="text" name="other_value" id="other_value"
-                                required data-parsley-trigger="keyup" class="form-control disable-input"
-                                value="{{ $project['projectTypes']['name'] }}"
-                                placeholder="Enter Other Value">
+                            <input type="text" name="other_value" id="other_value" required
+                                data-parsley-trigger="keyup" class="form-control disable-input"
+                                value="{{ $project['projectTypes']['name'] }}" placeholder="Enter Other Value">
                         @endif
                     </div>
                     {{-- Project value --}}
                     <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Project
                             Value <span style="color: red;">*</span></label>
-                        <input type="text" name="project_value" id="project_value"
-                            required data-parsley-trigger="keyup"
-                            data-parsley-type="number"
+                        <input type="text" name="project_value" id="project_value" required
+                            data-parsley-trigger="keyup" data-parsley-type="number"
                             data-parsley-type-message="Please enter a valid number."
                             class="form-control disable-input" value="{{ $project->project_value }}"
                             placeholder="Enter Project Value">
@@ -117,9 +109,8 @@
                     <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Project
                             Upfront <span style="color: red;">*</span></label>
-                        <input type="text" name="project_upfront" id="project_upfront"
-                            required data-parsley-trigger="keyup"
-                            data-parsley-type="number"
+                        <input type="text" name="project_upfront" id="project_upfront" required
+                            data-parsley-trigger="keyup" data-parsley-type="number"
                             data-parsley-type-message="Please enter a valid number."
                             class="form-control disable-input" value="{{ $project->project_upfront }}"
                             placeholder="Enter Project Upfront">
@@ -128,26 +119,20 @@
                     <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Currency
                             <span style="color: red;">*</span></label>
-                        <select name="currency" id="currency" class="form-control disable-input"
-                            required data-parsley-trigger="keyup">
-                            <option value="" >Select Currency</option>
-                            <option value="INR"
-                                {{ $project->currency == 'INR' ? 'selected' : '' }}>
+                        <select name="currency" id="currency" class="form-control disable-input" required
+                            data-parsley-trigger="keyup">
+                            <option value="">Select Currency</option>
+                            <option value="INR" {{ $project->currency == 'INR' ? 'selected' : '' }}>
                                 INR</option>
-                            <option value="USD"
-                                {{ $project->currency == 'USD' ? 'selected' : '' }}>
+                            <option value="USD" {{ $project->currency == 'USD' ? 'selected' : '' }}>
                                 USD</option>
-                            <option value="EUR"
-                                {{ $project->currency == 'EUR' ? 'selected' : '' }}>
+                            <option value="EUR" {{ $project->currency == 'EUR' ? 'selected' : '' }}>
                                 EUR</option>
-                            <option value="GBP"
-                                {{ $project->currency == 'GBP' ? 'selected' : '' }}>
+                            <option value="GBP" {{ $project->currency == 'GBP' ? 'selected' : '' }}>
                                 GBP</option>
-                            <option value="AUD"
-                                {{ $project->currency == 'AUD' ? 'selected' : '' }}>
+                            <option value="AUD" {{ $project->currency == 'AUD' ? 'selected' : '' }}>
                                 AUD</option>
-                            <option value="CAD"
-                                {{ $project->currency == 'CAD' ? 'selected' : '' }}>
+                            <option value="CAD" {{ $project->currency == 'CAD' ? 'selected' : '' }}>
                                 CAD</option>
                         </select>
                     </div>
@@ -156,10 +141,9 @@
                     <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Project
                             Payment Mode <span style="color: red;">*</span></label>
-                        <input type="text" name="payment_mode" required
-                            data-parsley-trigger="keyup" id="payment_mode"
-                            class="form-control disable-input" value="{{ $project->payment_mode }}"
-                            placeholder="Enter Project Payment Mode">
+                        <input type="text" name="payment_mode" required data-parsley-trigger="keyup"
+                            id="payment_mode" class="form-control disable-input"
+                            value="{{ $project->payment_mode }}" placeholder="Enter Project Payment Mode">
                     </div>
 
                     {{-- Project closer --}}
@@ -168,7 +152,7 @@
                             Closer <span style="color: red;">*</span></label>
                         <select name="project_closer" id="project_closer" required
                             class="form-control disable-input">
-                            <option value="" >Select Project
+                            <option value="">Select Project
                                 Closer
                             </option>
                             @foreach ($users as $user)
@@ -182,37 +166,31 @@
                     <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Sale Date
                             <span style="color: red;">*</span></label>
-                        <input type="date" name="sale_date" id="sale_date" required
-                            data-parsley-trigger="keyup" data-parsley-type="date"
-                            data-parsley-type-message="Please enter a valid date."
+                        <input type="date" name="sale_date" id="sale_date" required data-parsley-trigger="keyup"
+                            data-parsley-type="date" data-parsley-type-message="Please enter a valid date."
                             class="form-control disable-input" value="{{ $project->sale_date }}"
                             placeholder="Enter Sale Date">
                     </div>
                     {{-- website --}}
                     <div class="col-md-6 mb-3">
-                        <label for="inputEnterYourName"
-                            class="col-form-label">Website</label>
-                        <input type="text" name="website" id="website"
-                            data-parsley-required="false" data-parsley-trigger="keyup"
-                            data-parsley-type="url"
-                            data-parsley-type-message="Please enter a valid url."
-                            class="form-control disable-input" value="{{ $project->website }}"
-                            placeholder="Enter Website">
+                        <label for="inputEnterYourName" class="col-form-label">Website</label>
+                        <input type="text" name="website" id="website" data-parsley-required="false"
+                            data-parsley-trigger="keyup" data-parsley-type="url"
+                            data-parsley-type-message="Please enter a valid url." class="form-control disable-input"
+                            value="{{ $project->website }}" placeholder="Enter Website">
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Delivery
                             TAT
                             <span style="color: red;">*</span></label>
-                        <input type="date" name="delivery_tat" id="delivery_tat"
-                            required data-parsley-trigger="keyup" data-parsley-type="date"
-                            data-parsley-type-message="Please enter a valid date."
-                            class="form-control disable-input" value="{{ $project->delivery_tat }}"
-                            placeholder="Enter Sale Date">
+                        <input type="date" name="delivery_tat" id="delivery_tat" required
+                            data-parsley-trigger="keyup" data-parsley-type="date"
+                            data-parsley-type-message="Please enter a valid date." class="form-control disable-input"
+                            value="{{ $project->delivery_tat }}" placeholder="Enter Sale Date">
                     </div>
                     {{-- comment --}}
                     <div class="col-md-12 mb-3">
-                        <label for="inputEnterYourName"
-                            class="col-form-label">Comment</label>
+                        <label for="inputEnterYourName" class="col-form-label">Comment</label>
                         <textarea name="comment" id="comment" data-parsley-trigger="keyup" class="form-control"
                             placeholder="Enter Comment">{{ $project->comment }}</textarea>
                     </div>
@@ -224,12 +202,10 @@
                             name="number_of_milestone_edit" class="form-control disable-input">
                     </div>
                     <div class="col-md-12 mb-3" style="margin-top:40px;">
-                        <button type="button"
-                            class="btn btn-success edit-milestone-print disabled">Process</button>
+                        <button type="button" class="btn btn-success edit-milestone-print disabled">Process</button>
                     </div>
 
-                    <input type="hidden" value="{{ $project->payment_type }}"
-                        name="payment_types">
+                    <input type="hidden" value="{{ $project->payment_type }}" name="payment_types">
 
 
 
@@ -242,20 +218,17 @@
                                     <div class="col-md-12 mb-3">
                                         <div style="display: flex">
                                             <input type="text" name="milestone_name[]"
-                                                class="form-control {{($milestone->payment_status == 'Paid') ? 'disable-input' : ''}}" required
-                                                data-parsley-trigger="keyup"
-                                                placeholder="Milestone name"
-                                                value="{{ $milestone->milestone_name }}"
-                                                id="" required>
+                                                class="form-control {{ $milestone->payment_status == 'Paid' ? 'disable-input' : '' }}"
+                                                required data-parsley-trigger="keyup" placeholder="Milestone name"
+                                                value="{{ $milestone->milestone_name }}" id="" required>
                                         </div>
                                     </div>
                                     <div class="col-md-12 mb-3">
                                         <div style="display: flex">
                                             <input type="text" name="milestone_value[]"
-                                                class="form-control {{($milestone->payment_status == 'Paid') ? 'disable-input' : ''}}"
+                                                class="form-control {{ $milestone->payment_status == 'Paid' ? 'disable-input' : '' }}"
                                                 value="{{ $milestone->milestone_value }}"
-                                                placeholder="Milestone value"
-                                                data-parsley-trigger="keyup"
+                                                placeholder="Milestone value" data-parsley-trigger="keyup"
                                                 data-parsley-type="number"
                                                 data-parsley-type-message="Please enter a valid number."
                                                 id="" required>
@@ -264,7 +237,7 @@
                                     <div class="col-md-12 mb-3">
                                         <div style="display: flex">
                                             <select name="payment_status[]" id="payment"
-                                                class="form-control {{($milestone->payment_status == 'Paid') ? 'disable-input' : ''}}"
+                                                class="form-control {{ $milestone->payment_status == 'Paid' ? 'disable-input' : '' }}"
                                                 data-parsley-trigger="keyup">
                                                 <option value="Paid"
                                                     {{ $milestone->payment_status == 'Paid' ? 'selected' : '' }}>
@@ -282,19 +255,20 @@
                                                 value="{{ $milestone->payment_date }}">
                                         </div>
                                     </div> --}}
-                                    
+
 
                                     <div class="col-md-12 mb-3">
                                         <div style="display: flex">
                                             <input type="date" name="milestone_payment_date[]"
-                                                class="form-control" value="{{ $milestone->payment_date }}" id="" required
-                                                data-parsley-trigger="keyup">
+                                                class="form-control" value="{{ $milestone->payment_date }}"
+                                                id="" required data-parsley-trigger="keyup">
                                         </div>
                                     </div>
                                     <div class="col-md-12 mb-3">
                                         <div style="display: flex">
                                             <input type="text" name="milestone_payment_mode[]"
-                                                class="form-control" value="{{ $milestone->payment_mode }}" id="" required placeholder="Milestone payment mode"
+                                                class="form-control" value="{{ $milestone->payment_mode }}"
+                                                id="" required placeholder="Milestone payment mode"
                                                 data-parsley-trigger="keyup">
                                         </div>
                                     </div>
@@ -307,13 +281,11 @@
 
                                     <div class="col-md-12 mb-3">
                                         @if ($milestone->payment_status == 'Paid')
-                                            <button type="button"
-                                                class="btn btn-danger remove" disabled><i
+                                            <button type="button" class="btn btn-danger remove" disabled><i
                                                     class="fas fa-minus"></i>
                                                 Remove</button>
                                         @else
-                                            <button type="button"
-                                                class="btn btn-danger remove"><i
+                                            <button type="button" class="btn btn-danger remove"><i
                                                     class="fas fa-minus"></i>
                                                 Remove</button>
                                         @endif
@@ -331,35 +303,34 @@
                         <div class="row">
                             <div class="col-md-12 mb-3">
                                 <div style="display: flex">
-                                    <input type="file" name="pdf[]"
-                                        class="form-control" value=""
-                                        data-parsley-required="false"
-                                        data-parsley-trigger="keyup"
+                                    <input type="file" name="pdf[]" class="form-control" value=""
+                                        data-parsley-required="false" data-parsley-trigger="keyup"
                                         accept="application/pdf" id="">
                                 </div>
                             </div>
                             <div class="col-md-12 mb-3">
-                                <button type="button"
-                                    class="btn btn-success edit-pdf-button good-button"><i
+                                <button type="button" class="btn btn-success edit-pdf-button good-button"><i
                                         class="fas fa-plus"></i> Add PDF</button>
                             </div>
                         </div>
-                        @if ($project->projectDocuments->count() > 0)
+
+                        {{-- </br> --}}
+                    </div>
+                    @if ($project->projectDocuments->count() > 0)
                         <div class="row">
                             <h4 class="mt-4 text-uppercase">Download Documents</h4>
                             @foreach ($project->projectDocuments as $key => $document)
-                            <div class="col-md-6 mb-3 download-button">
-                                <a href="{{ route('account-manager.projects.document.download',$document->id) }}" download="downloaded_project_documents.pdf">
-                                    <button type="button" class="btn submit-btn add-pdf-button good-button">
-                                        <i class="fas fa-download"></i>
-                                    </button>
-                                </a>
-                            </div>
+                                <div class="col-1 mb-3 download-button">
+                                    <a href="{{ route('account-manager.projects.document.download', $document->id) }}"
+                                        download="downloaded_project_documents.pdf">
+                                        <button type="button" class="btn submit-btn add-pdf-button good-button">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                    </a>
+                                </div>
                             @endforeach
                         </div>
-                        @endif
-                        {{-- </br> --}}
-                    </div>
+                    @endif
                 </div>
                 <div class="d-flex alin-items-center w-100 text-end">
                     <button class="print_btn cancel_btn me-3" type="reset"><i class="far fa-times-circle"></i>
@@ -409,12 +380,14 @@
                 html += '</div>';
                 html += '<div class="col-md-12 mb-3">';
                 html += '<div style="display: flex">';
-                html += '<input type="date" name="milestone_payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
+                html +=
+                    '<input type="date" name="milestone_payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
                 html += '</div>';
                 html += '</div>';
                 html += '<div class="col-md-12 mb-3">';
                 html += '<div style="display: flex">';
-                html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" placeholder="Milestone payment mode" id="" required data-parsley-trigger="keyup">';
+                html +=
+                    '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" placeholder="Milestone payment mode" id="" required data-parsley-trigger="keyup">';
                 html += '</div>';
                 html += '</div>';
                 // html += '<div class="col-md-12 mb-3">';
@@ -553,12 +526,14 @@
                     html += '</div>';
                     html += '<div class="col-md-12 mb-3">';
                     html += '<div style="display: flex">';
-                    html += '<input type="date" name="milestone_payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
+                    html +=
+                        '<input type="date" name="milestone_payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
                     html += '</div>';
                     html += '</div>';
                     html += '<div class="col-md-12 mb-3">';
                     html += '<div style="display: flex">';
-                    html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" placeholder="Milestone payment mode" id="" required data-parsley-trigger="keyup">';
+                    html +=
+                        '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" placeholder="Milestone payment mode" id="" required data-parsley-trigger="keyup">';
                     html += '</div>';
                     html += '</div>';
                     // html += '<div class="col-md-12 mb-3">';
@@ -623,12 +598,14 @@
                 html += '</div>';
                 html += '<div class="col-md-12 mb-3">';
                 html += '<div style="display: flex">';
-                html += '<input type="date" name="milestone_payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
+                html +=
+                    '<input type="date" name="milestone_payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
                 html += '</div>';
                 html += '</div>';
                 html += '<div class="col-md-12 mb-3">';
                 html += '<div style="display: flex">';
-                html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" placeholder="Milestone payment mode" id="" required data-parsley-trigger="keyup">';
+                html +=
+                    '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" placeholder="Milestone payment mode" id="" required data-parsley-trigger="keyup">';
                 html += '</div>';
                 html += '</div>';
                 // html += '<div class="col-md-12 mb-3">';

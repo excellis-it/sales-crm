@@ -281,15 +281,16 @@
                                     <div class="col-md-12 mb-3">
                                         <div style="display: flex">
                                             <input type="date" name="milestone_payment_date[]"
-                                                class="form-control" value="{{ $milestone->payment_date }}" id="" required
-                                                data-parsley-trigger="keyup">
+                                                class="form-control" value="{{ $milestone->payment_date }}"
+                                                id="" required data-parsley-trigger="keyup">
                                         </div>
                                     </div>
                                     <div class="col-md-12 mb-3">
                                         <div style="display: flex">
                                             <input type="text" name="milestone_payment_mode[]"
-                                                class="form-control" value="{{ $milestone->payment_mode }}" id="" required
-                                                data-parsley-trigger="keyup" placeholder="Milestone payment mode">
+                                                class="form-control" value="{{ $milestone->payment_mode }}"
+                                                id="" required data-parsley-trigger="keyup"
+                                                placeholder="Milestone payment mode">
                                         </div>
                                     </div>
                                     {{-- <div class="col-md-12  mb-3">
@@ -339,22 +340,24 @@
                                         class="fas fa-plus"></i> Add PDF</button>
                             </div>
                         </div>
-                        @if ($project->projectDocuments->count() > 0)
+
+                        {{-- </br> --}}
+                    </div>
+                    @if ($project->projectDocuments->count() > 0)
                         <div class="row">
                             <h4 class="mt-4 text-uppercase">Download Documents</h4>
                             @foreach ($project->projectDocuments as $key => $document)
-                            <div class="col-md-6 mb-3 download-button">
-                                <a href="{{ route('sales-projects.document.download',$document->id) }}" download="downloaded_project_documents.pdf">
-                                    <button type="button" class="btn submit-btn add-pdf-button good-button">
-                                        <i class="fas fa-download"></i>
-                                    </button>
-                                </a>
-                            </div>
+                                <div class="col-1 mb-3 download-button">
+                                    <a href="{{ route('sales-projects.document.download', $document->id) }}"
+                                        download="downloaded_project_documents.pdf">
+                                        <button type="button" class="btn submit-btn add-pdf-button good-button">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                    </a>
+                                </div>
                             @endforeach
                         </div>
-                        @endif
-                        {{-- </br> --}}
-                    </div>
+                    @endif
 
                 </div>
                 <div class="d-flex alin-items-center w-100 text-end">
@@ -405,12 +408,14 @@
                 html += '</div>';
                 html += '<div class="col-md-12 mb-3">';
                 html += '<div style="display: flex">';
-                html += '<input type="date" name="milestone_payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
+                html +=
+                    '<input type="date" name="milestone_payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
                 html += '</div>';
                 html += '</div>';
                 html += '<div class="col-md-12 mb-3">';
                 html += '<div style="display: flex">';
-                html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" placeholder="Milestone payment mode" required data-parsley-trigger="keyup">';
+                html +=
+                    '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" placeholder="Milestone payment mode" required data-parsley-trigger="keyup">';
                 html += '</div>';
                 html += '</div>';
                 // html += '<div class="col-md-12  mb-3">';
@@ -548,12 +553,14 @@
                     html += '</div>';
                     html += '<div class="col-md-12 mb-3">';
                     html += '<div style="display: flex">';
-                    html += '<input type="date" name="milestone_payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
+                    html +=
+                        '<input type="date" name="milestone_payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
                     html += '</div>';
                     html += '</div>';
                     html += '<div class="col-md-12 mb-3">';
                     html += '<div style="display: flex">';
-                    html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" placeholder="Milestone payment mode" id="" required data-parsley-trigger="keyup">';
+                    html +=
+                        '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" placeholder="Milestone payment mode" id="" required data-parsley-trigger="keyup">';
                     html += '</div>';
                     html += '</div>';
                     // html += '<div class="col-md-12  mb-3">';
@@ -610,6 +617,7 @@
                 var new_number_of_milestone = number_of_milestone_edit;
             }
             console.log(new_number_of_milestone);
+
             // show milestone field as per number of milestone
             for (let index = 1; index <= new_number_of_milestone; index++) {
                 // console.log(number_of_milestone_edit);
@@ -635,12 +643,14 @@
                 html += '</div>';
                 html += '<div class="col-md-12 mb-3">';
                 html += '<div style="display: flex">';
-                html += '<input type="date" name="milestone_payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
+                html +=
+                    '<input type="date" name="milestone_payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
                 html += '</div>';
                 html += '</div>';
                 html += '<div class="col-md-12 mb-3">';
                 html += '<div style="display: flex">';
-                html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" placeholder="Milestone payment mode" required data-parsley-trigger="keyup">';
+                html +=
+                    '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" placeholder="Milestone payment mode" required data-parsley-trigger="keyup">';
                 html += '</div>';
                 html += '</div>';
                 // html += '<div class="col-md-12  mb-3">';
