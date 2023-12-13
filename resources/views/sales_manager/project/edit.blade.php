@@ -241,7 +241,7 @@
                             Milestone</label>
                         <input type="number" id="number_of_milestone_edit" min="0"
                             value="{{ $project->projectMilestones->count() }}" required
-                            name="number_of_milestone_edit" class="form-control">
+                            name="number_of_milestone_edit" class="form-control disable-input">
                     </div>
                     <div class="col-md-12 mb-3" style="margin-top:40px;">
                         <button type="button" class="btn px-5 submit-btn milestone-print" disabled>Process</button>
@@ -259,14 +259,14 @@
                                 <div class="row">
                                     <div class="col-md-12 mb-3 pb-3">
                                         <div style="display: flex">
-                                            <input type="text" name="milestone_name[]" class="form-control"
+                                            <input type="text" name="milestone_name[]" class="form-control disable-input"
                                                 required data-parsley-trigger="keyup" placeholder="Milestone name"
                                                 value="{{ $milestone->milestone_name }}" id="" required>
                                         </div>
                                     </div>
                                     <div class="col-md-12 mb-3 pb-3">
                                         <div style="display: flex">
-                                            <input type="text" name="milestone_value[]" class="form-control"
+                                            <input type="text" name="milestone_value[]" class="form-control disable-input"
                                                 value="{{ $milestone->milestone_value }}"
                                                 placeholder="Milestone value" data-parsley-trigger="keyup"
                                                 data-parsley-type="number"
@@ -276,7 +276,7 @@
                                     </div>
                                     <div class="col-md-12 mb-3 pb-3">
                                         <div style="display: flex">
-                                            <select name="payment_status[]" id="payment" class="form-control"
+                                            <select name="payment_status[]" id="payment" class="form-control disable-input"
                                                 data-parsley-trigger="keyup">
                                                 <option value="Paid"
                                                     {{ $milestone->payment_status == 'Paid' ? 'selected' : '' }}>
@@ -291,14 +291,14 @@
                                     <div class="col-md-12 mb-3">
                                         <div style="display: flex">
                                             <input type="date" name="milestone_payment_date[]"
-                                                class="form-control" value="{{ $milestone->payment_date }}"
+                                                class="form-control disable-input" value="{{ $milestone->payment_date }}"
                                                 id="" required data-parsley-trigger="keyup">
                                         </div>
                                     </div>
                                     <div class="col-md-12 mb-3">
                                         <div style="display: flex">
                                             <input type="text" name="milestone_payment_mode[]"
-                                                class="form-control" value="{{ $milestone->payment_mode }}"
+                                                class="form-control disable-input" value="{{ $milestone->payment_mode }}"
                                                 id="" required data-parsley-trigger="keyup"
                                                 placeholder="Milestone payment mode">
                                         </div>

@@ -178,7 +178,7 @@
                                             <span>Sales Manager</span>
                                         </div>
 
-                                        <span class="fw-600">{{ $count['users'] ?? 0 }}</span>
+                                        <span class="fw-600">{{ $count['sales_managers'] ?? 0 }}</span>
                                     </div>
                                 </div>
                             </div>

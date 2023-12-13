@@ -9,6 +9,7 @@ use App\Models\ProjectType;
 use Illuminate\Http\Request;
 use App\Models\Prospect;
 use App\Models\User;
+use App\Models\ProjectMilestone;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 
@@ -145,6 +146,7 @@ class ProspectController extends Controller
             //sales manager goal
             $net_goal = Goal::where(['user_id' => Auth::user()->bdm_id, 'goals_type' => 1])->whereMonth('goals_date', date('m', strtotime($prospect->sale_date)))->whereYear('goals_date', date('Y', strtotime($prospect->sale_date)))->first();
             if ($net_goal) {
+                
                 $net_goal->goals_achieve = $net_goal->goals_achieve + $prospect->upfront_value;
                 $net_goal->save();
             }
@@ -172,6 +174,25 @@ class ProspectController extends Controller
             $project->sale_date = $prospect->sale_date ?? '';
             $project->comment = $prospect->comments;
             $project->save();
+
+            //prospect milestone
+            if (isset($data['milestone_name'])) {
+                foreach ($data['milestone_name'] as $key => $milestone) {
+                    //check if data is null
+                    if ($data['milestone_name'][$key] != null) {
+                        $project_milestone = new ProjectMilestone();
+                        $project_milestone->project_id = $project->id;
+                        $project_milestone->milestone_name = $milestone;
+                        $project_milestone->milestone_value = $data['milestone_value'][$key];
+                        $project_milestone->payment_status = $data['payment_status'][$key];
+                        // $project_milestone->payment_date = ($data['payment_status'][$key] == 'Paid') ? date('Y-m-d') : '';
+                        $project_milestone->milestone_comment = $data['milestone_comment'][$key];
+                        $project_milestone->payment_mode = $data['milestone_payment_mode'][$key];
+                        $project_milestone->payment_date = $data['milestone_payment_date'][$key];
+                        $project_milestone->save();
+                    }
+                }
+            }
 
             $project_type = new ProjectType();
             $project_type->project_id = $project->id;
@@ -312,6 +333,28 @@ class ProspectController extends Controller
             $project->sale_date = $prospect->sale_date;
             $project->comment = $prospect->comments;
             $project->save();
+
+             //prospect project milestone
+             $previous_milestone_value = ProjectMilestone::where('project_id', $id)->sum('milestone_value');
+
+             ProjectMilestone::where('project_id', $id)->delete();
+             if (isset($data['milestone_name'])) {
+                 foreach ($data['milestone_name'] as $key => $milestone) {
+                     //check if data is null
+                     if ($data['milestone_name'][$key] != null) {
+                         $project_milestone = new ProjectMilestone();
+                         $project_milestone->project_id = $project->id;
+                         $project_milestone->milestone_name = $milestone;
+                         $project_milestone->milestone_value = $data['milestone_value'][$key];
+                         $project_milestone->payment_status = $data['payment_status'][$key];
+                         // $project_milestone->payment_date = ($data['payment_status'][$key] == 'Paid') ? date('Y-m-d') : '';
+                         $project_milestone->milestone_comment = $data['milestone_comment'][$key];
+                         $project_milestone->payment_mode = $data['milestone_payment_mode'][$key];
+                         $project_milestone->payment_date = $data['milestone_payment_date'][$key];
+                         $project_milestone->save();
+                     }
+                 }
+             }
 
             $project_type = new ProjectType();
             $project_type->project_id = $project->id;
