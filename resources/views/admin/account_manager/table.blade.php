@@ -28,14 +28,14 @@
                             href="{{ route('sales-projects.index', ['account_manager_id' => $account_manager->id]) }}">{{ $account_manager->accountManagerProjects->count() }}</a>
                     </td>
                     <td>
-                        <!--<div class="button-switch">-->
-                        <!--    <input type="checkbox" id="switch-orange" class="switch toggle-class"-->
-                        <!--        data-id="{{ $account_manager['id'] }}"-->
-                        <!--        {{ $account_manager['status'] ? 'checked' : '' }} />-->
-                        <!--    <label for="switch-orange" class="lbl-off"></label>-->
-                        <!--    <label for="switch-orange" class="lbl-on"></label>-->
-                        <!--</div>-->
-                        <span class="edit_active">
+                        <div class="button-switch">
+                            <input type="checkbox" id="switch-orange" class="switch toggle-class"
+                                data-id="{{ $account_manager['id'] }}"
+                                {{ $account_manager['status'] ? 'checked' : '' }} />
+                            <label for="switch-orange" class="lbl-off"></label>
+                            <label for="switch-orange" class="lbl-on"></label>
+                        </div>
+                        {{-- <span class="edit_active">
                             @if ($account_manager->status == 0)
                             <i class="fas fa-edit"></i> Inactive
                             @else
@@ -43,12 +43,13 @@
 
                             @endif
 
-                        </span>
+                        </span> --}}
                     </td>
+
                     <td>
-                        <a title="Edit Account manager" data-route=""
+                        {{-- <a title="Edit Account manager" data-route=""
                             href="{{ route('account_managers.edit', $account_manager->id) }}"
-                            class="edit_acma"><i class="fas fa-edit"></i></a> &nbsp;&nbsp;
+                            class="edit_acma"><i class="fas fa-edit"></i></a> &nbsp;&nbsp; --}}
 
                         <a title="Delete Account manager"
                             data-route="{{ route('account_managers.delete', $account_manager->id) }}  class="delete_acma""

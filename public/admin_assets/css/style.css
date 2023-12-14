@@ -2974,7 +2974,7 @@ input[type="file"].form-control {
 
 @media (max-width: 991px) {
     .header .mobile_btn {
-        color: #fff;
+        color: #000;
         font-size: 24px;
         height: 60px;
         line-height: 60px;

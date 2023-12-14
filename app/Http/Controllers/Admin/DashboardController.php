@@ -94,8 +94,11 @@ class DashboardController extends Controller
             return $customer->projects->sum('project_value');
         })->take(6);
 
+        //top performers list in this month calculate from goals_date
+        $top_performers = Goal::whereMonth('goals_date', date('m'))->whereYear('goals_date', date('Y'))->orderBy('goals_achieve','desc')->get();
+
         // dd($count);
-        return view('admin.dashboard')->with(compact('count', 'goal', 'prospects','projects','labels','type','top_customers'));
+        return view('admin.dashboard')->with(compact('count', 'goal', 'prospects','projects','labels','type','top_customers','top_performers'));
     }
 
     public function dashboardProspectFetch(Request $request)
@@ -244,5 +247,24 @@ class DashboardController extends Controller
 
 
 
+    }
+
+    public function topPerformerFilter(Request $request)
+    {
+        // performance filter
+        $duration = $request->duration;
+
+        if($duration == 'Monthly')
+        {
+            $top_performers = Goal::whereMonth('goals_date', date('m'))->whereYear('goals_date', date('Y'))->orderBy('goals_achieve','desc')->get();
+        }
+        else
+        {
+            $top_performers = Goal::whereYear('goals_date', date('Y'))->orderBy('goals_achieve','desc')->get();
+        }
+
+        
+
+        return response()->json(['data' => view('admin.dashboard_performer_table', compact('top_performers'))->render()]);
     }
 }

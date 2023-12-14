@@ -37,9 +37,9 @@
                         </div>
                     </td>
                     <td>
-                        <a title="Edit BDE" data-route=""
+                        {{-- <a title="Edit BDE" data-route=""
                             href="{{ route('business-development-excecutive.edit', $business_development_excecutive->id) }}"><i
-                                class="fas fa-edit"></i></a> &nbsp;&nbsp;
+                                class="fas fa-edit"></i></a> &nbsp;&nbsp; --}}
 
                         <a title="Delete BDE"
                             data-route="{{ route('business-development-excecutive.delete', $business_development_excecutive->id) }}"

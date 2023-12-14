@@ -69,4 +69,6 @@ class User extends Authenticatable
     {
         return $this->belongsTo(User::class, 'bdm_id');
     }
+
+
 }

@@ -614,82 +614,25 @@
                         <div class="card-body" style="position: relative;">
                             <div class="d-flex align-items-center justify-content-between mb-3">
                                 <h5 class="card-title mb-0">Top Performers</h5>
-                                <a href="" class="view_all">View All</a>
+                                {{-- <a href="" class="view_all">View All</a> --}}
+                                <select class="custom-select w-auto duration" name="duration">
+                                    <option data-duration="Monthly" value="Monthly">Monthly</option>
+                                    <option data-duration="Yearly" value="Yearly">Yearly</option>
+                                </select>
                             </div>
 
-                            <div class="table-responsive dashboard_mini_table">
+                            <div class="table-responsive dashboard_mini_table" id="top-performer">
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>
-                                            <th>Project Name</th>
-                                            <th>Project Type</th>
+                                            <th>Employee Name</th>
+                                            <th>Employee Designation</th>
                                             <th>Project Value</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Deluxe Online</td>
-                                            <td>Deluxe Online</td>
-                                            <td>
-                                                <div class="project_value">
-                                                    <h5 class="shop-sell">$ 4,944.80</h5>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Deluxe Online</td>
-                                            <td>Deluxe Online</td>
-                                            <td>
-                                                <div class="project_value">
-                                                    <h5 class="shop-sell">$ 4,944.80</h5>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Deluxe Online</td>
-                                            <td>Deluxe Online</td>
-                                            <td>
-                                                <div class="project_value">
-                                                    <h5 class="shop-sell">$ 4,944.80</h5>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Deluxe Online</td>
-                                            <td>Deluxe Online</td>
-                                            <td>
-                                                <div class="project_value">
-                                                    <h5 class="shop-sell">$ 4,944.80</h5>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Deluxe Online</td>
-                                            <td>Deluxe Online</td>
-                                            <td>
-                                                <div class="project_value">
-                                                    <h5 class="shop-sell">$ 4,944.80</h5>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Deluxe Online</td>
-                                            <td>Deluxe Online</td>
-                                            <td>
-                                                <div class="project_value">
-                                                    <h5 class="shop-sell">$ 4,944.80</h5>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Deluxe Online</td>
-                                            <td>Deluxe Online</td>
-                                            <td>
-                                                <div class="project_value">
-                                                    <h5 class="shop-sell">$ 4,944.80</h5>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                    <tbody class="perfom-filter">
+                                       
+                                        @include('admin.dashboard_performer_table')
                                     </tbody>
                                 </table>
                             </div>
@@ -982,6 +925,26 @@
                 fetch_data(page, sort_type, column_name, query);
             });
 
+        });
+    </script>
+
+    <script>
+
+        $(document).on('change', '.duration', function() {
+            var selectedOption = $('option:selected', this);
+            var duration = selectedOption.data('duration');
+            $.ajax({
+                url: "{{ route('admin.dashboard.top-performer') }}",
+                data: {
+                    duration: duration
+                },
+                success: function(resp) {
+                    $('.perfom-filter').html(resp.data);
+                },
+                error: function() {
+                    console.log('alert');
+                }
+            });
         });
     </script>
 @endpush

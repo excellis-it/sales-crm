@@ -594,5 +594,5 @@
         });
 
         });
-    </script>
+</script>
 @endpush
