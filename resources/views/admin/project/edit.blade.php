@@ -754,9 +754,13 @@
             console.log(payment_status);
             // $('.fetch-payment-hide-'+id).show();
             $('.fetch-payment-hide-'+id).html('<div class="col-md-12 mb-3"><div style="display: flex"><input type="date" name="milestone_payment_date[]" class="form-control picker" value="" required data-parsley-trigger="keyup" id="fetch-milestone-date-'+id+'"></div></div><div class="col-md-12 mb-3"><div style="display: flex"> <input type="text" name="milestone_payment_mode[]"class="form-control" value="" required data-parsley-trigger="keyup" placeholder="Milestone payment mode" id="fetch-milestone-mode-'+id+'"></div></div>');
+            $('#fetch-milestone-date-'+id).prop('required', true);
+            $('#fetch-milestone-mode-'+id).prop('required', true);
         } else {
             // $('.fetch-payment-hide-'+id).hide();
             $('.fetch-payment-hide-'+id).html('');
+            $('#fetch-milestone-date-'+id).prop('required', false);
+            $('#fetch-milestone-mode-'+id).prop('required', false);
         }
     });
     </script>
