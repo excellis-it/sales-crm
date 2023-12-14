@@ -234,6 +234,18 @@ class ProjectController extends Controller
         }
 
         $data = $request->all();
+        if ($data['customer'] == 0) {  //new customer == 1 and existing customer == 0
+            $data['customer'] = $request->customer_id;
+        } else {
+            $customer = new Customer();
+            $customer->customer_name = $data['client_name'];
+            $customer->customer_email = $data['client_email'];
+            $customer->customer_phone = $data['client_phone'];
+            $customer->customer_address = $data['client_address'];
+            $customer->save();
+            $data['customer'] = $customer->id;
+        }
+        
         $project = Project::findOrfail($id);
         $user_id = $project->user_id;
         $project->user_id = $data['user_id'];
