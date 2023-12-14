@@ -662,13 +662,13 @@
                 html += '<div class="col-md-12 mb-3">';
                 html += '<div style="display: flex">';
                 html +=
-                    '<input type="date" name="milestone_payment_date[]" class="form-control picker" value="" id="edit-milestone-date-'+index+'" required data-parsley-trigger="keyup">';
+                    '<input type="date" name="milestone_payment_date[]" class="form-control picker" value="" id="edit-milestone-date-'+index+'"  data-parsley-trigger="keyup">';
                 html += '</div>';
                 html += '</div>';
                 html += '<div class="col-md-12 mb-3">';
                 html += '<div style="display: flex">';
                 html +=
-                    '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="edit-milestone-mode-'+index+'" placeholder="Milestone payment mode" required data-parsley-trigger="keyup">';
+                    '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="edit-milestone-mode-'+index+'" placeholder="Milestone payment mode"  data-parsley-trigger="keyup">';
                 html += '</div>';
                 html += '</div>';
                 html += '</div>';
@@ -730,7 +730,6 @@
         $('#edit-milestone-date-'+id).prop('required', false);
         $('#edit-milestone-mode-'+id).prop('required', false);
         if (payment_status == 'Paid') {
-            
             $('.edit-payment-hide-'+id).show();
             $('#edit-milestone-date-'+id).prop('required', true);
             $('#edit-milestone-mode-'+id).prop('required', true);
