@@ -79,7 +79,7 @@
                                                     <div class="col-md-6">
                                                         <label for="inputEnterYourName" class="col-form-label"> Date Of Joining </label>
                                                         <input type="date" name="date_of_joining" id="" max="{{ date('Y-m-d') }}"
-                                                            class="form-control" value="{{ old('date_of_joining') }}"
+                                                            class="form-control picker" value="{{ old('date_of_joining') }}"
                                                             >
                                                         @if ($errors->has('date_of_joining'))
                                                             <div class="error" style="color:red;">
@@ -177,7 +177,11 @@
 @push('scripts')
 <script>
     $(document).ready(function() {
-        $('.select2').select2();
+          $('.select2').each(function() {
+                $(this).select2({
+                    dropdownParent: $(this).parent()
+                });
+            })
     });
 </script>
 @endpush

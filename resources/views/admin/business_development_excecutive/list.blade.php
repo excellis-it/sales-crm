@@ -107,7 +107,7 @@
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label"> Date Of Joining </label>
                                             <input type="date" name="date_of_joining" max="{{ date('Y-m-d') }}"
-                                                class="form-control" value="{{ old('date_of_joining') }}">
+                                                class="form-control picker" value="{{ old('date_of_joining') }}">
                                             <span class="text-danger date_of_joining_error"></span>
                                         </div>
                                         <div class="col-md-12 mb-3">
@@ -217,7 +217,7 @@
                                             <label for="inputEnterYourName" class="col-form-label"> Date Of Joining
                                             </label>
                                             <input type="date" name="date_of_joining" max="{{ date('Y-m-d') }}"
-                                                class="form-control" id="date_of_joining"
+                                                class="form-control picker" id="date_of_joining"
                                                 value="{{ old('date_of_joining') }}">
                                             <span class="text-danger date_of_joining_msg_error"></span>
                                         </div>

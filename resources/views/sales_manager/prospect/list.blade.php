@@ -440,12 +440,20 @@
     </script>
     <script>
         $(document).ready(function() {
-            $('.select2').select2();
+              $('.select2').each(function() {
+                $(this).select2({
+                    dropdownParent: $(this).parent()
+                });
+            })
         });
     </script>
     <script>
         $(document).ready(function() {
-            $('.select2').select2();
+              $('.select2').each(function() {
+                $(this).select2({
+                    dropdownParent: $(this).parent()
+                });
+            })
 
             $('#project_type').on('change', function() {
                 //    select 2 value get and seo,other value check

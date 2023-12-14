@@ -36,9 +36,9 @@
                     </div>
                 </td>
                 <td>
-                    <a title="Edit Sales excecutive" data-route=""
+                    {{-- <a title="Edit Sales excecutive" data-route=""
                         href="{{ route('sales-manager.sales-excecutive.edit', $sales_excecutive->id) }}"><i
-                            class="fas fa-edit"></i></a> &nbsp;&nbsp;
+                            class="fas fa-edit"></i></a> &nbsp;&nbsp; --}}
 
                     <a title="Delete Sales excecutive"
                         data-route="{{ route('sales-manager.sales-excecutive.delete', $sales_excecutive->id) }}"

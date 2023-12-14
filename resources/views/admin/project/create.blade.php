@@ -3,6 +3,7 @@
     {{ env('APP_NAME') }} | Create Project
 @endsection
 @push('styles')
+
 @endpush
 
 @section('content')
@@ -212,8 +213,9 @@
                                                             <span style="color: red;">*</span></label>
                                                         <input type="date" name="sale_date" id="sale_date" required
                                                             data-parsley-trigger="keyup" max="{{ date('Y-m-d') }}"
-                                                            class="form-control" value="{{ old('sale_date') }}"
-                                                            placeholder="Enter Sale Date">
+                                                            class="form-control picker" value="{{ old('sale_date') }}"
+                                                            placeholder="Enter Sale Date" >
+                                                            
                                                     </div>
                                                     {{-- website --}}
                                                     <div class="col-md-4 mb-3">
@@ -232,7 +234,7 @@
                                                             <span style="color: red;">*</span></label>
                                                         <input type="date" name="delivery_tat" id="delivery_tat"
                                                             required data-parsley-trigger="keyup"
-                                                            min="{{ date('Y-m-d') }}" class="form-control"
+                                                            min="{{ date('Y-m-d') }}" class="form-control picker"
                                                             value="{{ old('delivery_tat') }}"
                                                             placeholder="Enter Sale Date">
                                                     </div>
@@ -445,7 +447,11 @@
     <script>
         $(document).ready(function() {
             $(document).ready(function() {
-                $('.select2').select2();
+                  $('.select2').each(function() {
+                $(this).select2({
+                    dropdownParent: $(this).parent()
+                });
+            })
             });
             $('.calculate_date').on('click', function() {
 
@@ -597,4 +603,5 @@
             }
         });
     </script>
+
 @endpush

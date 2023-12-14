@@ -67,7 +67,7 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-
+        
         $userRole = User::find($request->project_opener);
         if ($userRole->hasRole('SALES_EXCUETIVE')) {
             $request->merge(['user_id' => $userRole->sales_manager_id ]);

@@ -65,7 +65,7 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label for="inputEnterYourName" class="col-form-label"> Date Of Joining </label>
-                                                        <input type="date" name="date_of_joining" id="" max="{{ date('Y-m-d') }}"
+                                                        <input type="date" name="date_of_joining picker" id="" max="{{ date('Y-m-d') }}"
                                                             class="form-control" value="{{ $account_manager['date_of_joining'] }}"
                                                             >
                                                         @if ($errors->has('date_of_joining'))

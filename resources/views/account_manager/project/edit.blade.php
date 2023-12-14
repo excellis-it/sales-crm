@@ -458,7 +458,11 @@
 
     <script>
         $(document).ready(function() {
-            $('.select2').select2();
+              $('.select2').each(function() {
+                $(this).select2({
+                    dropdownParent: $(this).parent()
+                });
+            })
             $('.calculate_date').on('click', function() {
                 $('#fetch_month').html('');
                 var startDate = new Date($('#start_date').val());

@@ -301,7 +301,11 @@
 <script>
     // add more functionality for milestone
     $(document).ready(function() {
-        $('.select2').select2();
+          $('.select2').each(function() {
+                $(this).select2({
+                    dropdownParent: $(this).parent()
+                });
+            })
         $('.add').click(function() {
             var html = '';
             html += '<div class="row">';
