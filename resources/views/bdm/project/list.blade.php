@@ -244,7 +244,7 @@
                                                 <span style="color: red;">*</span></label>
                                             <input type="date" name="sale_date" id="sale_date" required
                                                 data-parsley-trigger="keyup" max="{{ date('Y-m-d') }}"
-                                                class="form-control" value="{{ old('sale_date') }}"
+                                                class="form-control picker" value="{{ old('sale_date') }}"
                                                 placeholder="Enter Sale Date">
                                         </div>
                                         {{-- website --}}
@@ -262,7 +262,7 @@
                                                 <span style="color: red;">*</span></label>
                                             <input type="date" name="delivery_tat" id="delivery_tat" required
                                                 data-parsley-trigger="keyup" min="{{ date('Y-m-d') }}"
-                                                class="form-control" value="{{ old('delivery_tat') }}"
+                                                class="form-control picker" value="{{ old('delivery_tat') }}"
                                                 placeholder="Enter Sale Date">
                                         </div>
                                         {{-- comment --}}
@@ -524,7 +524,7 @@
                 html += '</div>';
                 html += '<div class="col-md-12 mb-3">';
                 html += '<div style="display: flex">';
-                html += '<input type="date" name="milestone_payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
+                html += '<input type="date" name="milestone_payment_date[]" class="form-control picker" value="" id="" required data-parsley-trigger="keyup">';
                 html += '</div>';
                 html += '</div>';
                 html += '<div class="col-md-12 mb-3">';
@@ -608,27 +608,27 @@
                 $('#milestone_name').prop('required', true);
                 $('#milestone_value').prop('required', true);
                 $('#payment_status').prop('required', true);
-                $('#payment_date').prop('required', true);
+                // $('#milestone_payment_date').prop('required', true);
                 //monthly field required false
-                $('#start_date').prop('required', false);
+                // $('#start_date').prop('required', false);
                 $('#end_date').prop('required', false);
             } else if (payment_type.includes('Monthly')) {
                 $('#monthly_field').show();
                 $('#milestone_field').hide();
-                $('#start_date').prop('required', true);
+                // $('#start_date').prop('required', true);
                 $('#end_date').prop('required', true);
                 //milestone filed required false
                 $('#milestone_name').prop('required', false);
                 $('#milestone_value').prop('required', false);
                 $('#payment_status').prop('required', false);
-                $('#payment_date').prop('required', false);
+                // $('#milestone_payment_date').prop('required', false);
             } else {
                 $('#milestone_name').prop('required', false);
                 $('#milestone_value').prop('required', false);
                 $('#payment_status').prop('required', false);
-                $('#payment_date').prop('required', false);
-                $('#start_date').prop('required', false);
-                $('#end_date').prop('required', false);
+                // $('#milestone_payment_date').prop('required', false);
+                // $('#start_date').prop('required', false);
+                // $('#end_date').prop('required', false);
                 $('#milestone_field').hide();
                 $('#monthly_field').hide();
             }
@@ -706,7 +706,7 @@
                     html += '</div>';
                     html += '<div class="col-md-12 mb-3">';
                     html += '<div style="display: flex">';
-                    html += '<input type="date" name="milestone_payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
+                    html += '<input type="date" name="milestone_payment_date[]" class="form-control picker" value="" id="" required data-parsley-trigger="keyup">';
                     html += '</div>';
                     html += '</div>';
                     html += '<div class="col-md-12 mb-3">';
@@ -745,6 +745,7 @@
         $('.milestone-print').on('click', function() {
             var number_of_milestone = $('#number_of_milestone').val();
             if (number_of_milestone == '') {
+                $('#number_of_milestone').html('');
                 console.log(number_of_milestone);
                 $('#number_of_milestone').after(
                     '<span class="error" style="color:red;">Number of milestone is required</span>');
@@ -771,17 +772,23 @@
                 html += '<div class="col-md-12 mb-3 pb-3">';
                 html += '<div style="display: flex">';
                 html +=
-                    '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value="" disabled >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
+                    '<select name="payment_status[]" id="payment_status" data-id="' + index + '" class="form-control payment-status"  data-parsley-trigger="keyup"><option value="" disabled >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
+                html += '</div>';
+                html += '</div>';
+                html += '<div class="edit-payment-hide-'+index+'" style="display:none;">';
+                html += '<div class="col-md-12 mb-3">';
+                html += '<div style="display: flex">';
+                html += '<input type="date" name="milestone_payment_date[]" class="form-control picker" value="" id="milestone-date-'+index+'" data-parsley-trigger="keyup">';
                 html += '</div>';
                 html += '</div>';
                 html += '<div class="col-md-12 mb-3">';
                 html += '<div style="display: flex">';
-                html += '<input type="date" name="milestone_payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
+                html += '<select name="milestone_payment_mode[]" class="form-control" id="milestone-mode-'+index+'" data-parsley-trigger="keyup">';
+                html += '<option value="">Select Payment Mode</option>';
+                html += '<option value="Paypal">Paypal</option>';
+                html += '<option value="Stripe">Stripe</option>';
+                html += '</select>';
                 html += '</div>';
-                html += '</div>';
-                html += '<div class="col-md-12 mb-3">';
-                html += '<div style="display: flex">';
-                html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" placeholder="Milestone payment mode" required data-parsley-trigger="keyup">';
                 html += '</div>';
                 html += '</div>';
                 // html += '<div class="col-md-12 mb-3 pb-3">';
@@ -949,6 +956,46 @@
                     }
                 });
             });
+        });
+    </script>
+    <script>
+        $(document).on('change', '.payment-status', function() {
+           
+            var id = $(this).data('id');
+            var payment_status = $(this).val();
+           
+            // $('#milestone_payment_date').prop('required', false);
+            $('#milestone-date-'+id).prop('required', false);
+            $('#milestone-mode-'+id).prop('required', false);
+            if (payment_status == 'Paid') {
+                
+                $('.edit-payment-hide-'+id).show();
+                $('#milestone-date-'+id).prop('required', true);
+                $('#milestone-mode-'+id).prop('required', true);
+            } else {
+                $('.edit-payment-hide-'+id).hide();
+                $('#milestone-date-'+id).prop('required', false);
+                $('#milestone-mode-'+id).prop('required', false);
+            }
+        });
+    </script>
+     <script>
+        $(document).ready(function() {
+            // Attach an event listener to the Sale Date input
+            $('#sale_date').on('change', function() {
+                // Get the selected Sale Date
+                var saleDate = $(this).val();
+
+                // Set the minimum date for Delivery TAT to be one day after the Sale Date
+                $('#delivery_tat').attr('min', incrementDate(saleDate, 1));
+            });
+
+            // Function to increment date by a specified number of days
+            function incrementDate(date, days) {
+                var result = new Date(date);
+                result.setDate(result.getDate() + days);
+                return result.toISOString().split('T')[0];
+            }
         });
     </script>
 @endpush

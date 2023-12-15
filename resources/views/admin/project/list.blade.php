@@ -9,8 +9,7 @@
         }
         
     </style>
-    <style>
-    </style>
+    
 @endpush
 
 @section('content')
@@ -326,8 +325,6 @@
                                                         class="btn px-5 submit-btn add-pdf-button good-button"><i
                                                             class="fas fa-plus"></i> Add PDF</button>
                                                 </div>
-
-                                                
                                             </div>
                                         </div>
                                     </div>
@@ -827,8 +824,7 @@
                 html += '<div class="row">';
                 html += '<div class="col-md-12 mb-3">';
                 html += '<div style="display: flex">';
-                html +=
-                    '<input type="text" name="milestone_name[]" class="form-control" value="" placeholder="Milestone name" id="" required data-parsley-trigger="keyup">';
+                html += '<input type="text" name="milestone_name[]" class="form-control" value="" placeholder="Milestone name" id="" required data-parsley-trigger="keyup">';
                 html += '</div>';
                 html += '</div>';
                 html += '<div class="col-md-12 mb-3">';
@@ -840,9 +836,7 @@
                 
                 html += '<div class="col-md-12 mb-3">';
                 html += '<div style="display: flex">';
-                html +=
-                    '<select name="payment_status[]" id="payment_status" class="form-control payment-status" data-id="' +
-                        index +
+                html += '<select name="payment_status[]" id="payment_status" class="form-control payment-status" data-id="' + index +
                         '"  required data-parsley-trigger="keyup"><option value="">Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
                 html += '</div>';
                 html += '</div>';
@@ -852,9 +846,18 @@
                 html += '<input type="date" name="milestone_payment_date[]" class="form-control picker" value="" id="milestone-date-'+index+'"  data-parsley-trigger="keyup">';
                 html += '</div>';
                 html += '</div>';
+                // html += '<div class="col-md-12 mb-3">';
+                // html += '<div style="display: flex">';
+                // html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" placeholder="Milestone payment mode" id="milestone-mode-'+index+'"  data-parsley-trigger="keyup">';
+                // html += '</div>';
+                // html += '</div>';
                 html += '<div class="col-md-12 mb-3">';
                 html += '<div style="display: flex">';
-                html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" placeholder="Milestone payment mode" id="milestone-mode-'+index+'"  data-parsley-trigger="keyup">';
+                html += '<select name="milestone_payment_mode[]" class="form-control" id="milestone-mode-'+index+'" data-parsley-trigger="keyup">';
+                html += '<option value="">Select Payment Mode</option>';
+                html += '<option value="Paypal">Paypal</option>';
+                html += '<option value="Stripe">Stripe</option>';
+                html += '</select>';
                 html += '</div>';
                 html += '</div>';
                 html += '</div>';
@@ -983,13 +986,11 @@
         // email validation
         $(document).ready(function() {
             var isFormSubmitted = false;
-
             $(document).on('submit', '#form-validation', function(e) {
                 if (isFormSubmitted) {
                     // If the form is already submitted, do nothing
                     return;
                 }
-
                 e.preventDefault();
 
                 var client_email = $('#client_email').val();
@@ -1060,8 +1061,7 @@
             });
         });
     </script>
-<script>
-   
+    <script>
         $(document).on('change', '.payment-status', function() {
            
             var id = $(this).data('id');
@@ -1081,27 +1081,25 @@
                 $('#milestone-mode-'+id).prop('required', false);
             }
         });
-
     </script>
+    <script>
+        $(document).ready(function() {
+            // Attach an event listener to the Sale Date input
+            $('#sale_date').on('change', function() {
+                // Get the selected Sale Date
+                var saleDate = $(this).val();
 
-<script>
-    $(document).ready(function() {
-        // Attach an event listener to the Sale Date input
-        $('#sale_date').on('change', function() {
-            // Get the selected Sale Date
-            var saleDate = $(this).val();
+                // Set the minimum date for Delivery TAT to be one day after the Sale Date
+                $('#delivery_tat').attr('min', incrementDate(saleDate, 1));
+            });
 
-            // Set the minimum date for Delivery TAT to be one day after the Sale Date
-            $('#delivery_tat').attr('min', incrementDate(saleDate, 1));
+            // Function to increment date by a specified number of days
+            function incrementDate(date, days) {
+                var result = new Date(date);
+                result.setDate(result.getDate() + days);
+                return result.toISOString().split('T')[0];
+            }
         });
-
-        // Function to increment date by a specified number of days
-        function incrementDate(date, days) {
-            var result = new Date(date);
-            result.setDate(result.getDate() + days);
-            return result.toISOString().split('T')[0];
-        }
-    });
-</script>
+    </script>
 
 @endpush

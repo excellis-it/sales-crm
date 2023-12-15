@@ -155,6 +155,9 @@
                             id="payment_mode" class="form-control" value="{{ $project->payment_mode }}"
                             placeholder="Enter Project Payment Mode">
                     </div>
+
+                    
+
                     {{-- Project opener --}}
                     <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Project
@@ -292,10 +295,15 @@
                                             </div>
                                             <div class="col-md-12 mb-3">
                                                 <div style="display: flex">
-                                                    <input type="text" name="milestone_payment_mode[]"
+                                                    {{-- <input type="text" name="milestone_payment_mode[]"
                                                         class="form-control" value="{{ $milestone->payment_mode }}"
                                                     required data-parsley-trigger="keyup"
-                                                        placeholder="Milestone payment mode" id="fetch-milestone-mode-{{ $key }}">
+                                                        placeholder="Milestone payment mode" id="fetch-milestone-mode-{{ $key }}"> --}}
+                                                        <select name="milestone_payment_mode[]" class="form-control" id="fetch-milestone-mode-{{ $key }}" required data-parsley-trigger="keyup">
+                                                            
+                                                            <option value="Paypal" {{ $milestone->milestone_payment_mode == 'Paypal' ? 'selected' : '' }}>Paypal</option>
+                                                            <option value="Stripe" {{ $milestone->milestone_payment_mode == 'Stripe' ? 'selected' : '' }}>Stripe</option>
+                                                        </select>    
                                                 </div>
                                             </div>
                                         @else
@@ -424,8 +432,13 @@
                 html += '</div>';
                 html += '<div class="col-md-12 mb-3">';
                 html += '<div style="display: flex">';
-                html +=
-                    '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" placeholder="Milestone payment mode" required data-parsley-trigger="keyup">';
+                // html +=
+                //     '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" placeholder="Milestone payment mode" required data-parsley-trigger="keyup">';
+                html += '<select name="milestone_payment_mode[]" class="form-control"  required data-parsley-trigger="keyup">';
+                html += '<option value="">Select Payment Mode</option>';
+                html += '<option value="Paypal">Paypal</option>';
+                html += '<option value="Stripe">Stripe</option>';
+                html += '</select>';
                 html += '</div>';
                 html += '</div>';
                 // html += '<div class="col-md-12  mb-3">';
@@ -573,8 +586,13 @@
                     html += '</div>';
                     html += '<div class="col-md-12 mb-3">';
                     html += '<div style="display: flex">';
-                    html +=
-                        '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" placeholder="Milestone payment mode" id="" required data-parsley-trigger="keyup">';
+                    // html +=
+                    //     '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" placeholder="Milestone payment mode" id="" required data-parsley-trigger="keyup">';
+                    html += '<select name="milestone_payment_mode[]" class="form-control"  required data-parsley-trigger="keyup">';
+                    html += '<option value="">Select Payment Mode</option>';
+                    html += '<option value="Paypal">Paypal</option>';
+                    html += '<option value="Stripe">Stripe</option>';
+                    html += '</select>';
                     html += '</div>';
                     html += '</div>';
                     // html += '<div class="col-md-12  mb-3">';
@@ -667,8 +685,11 @@
                 html += '</div>';
                 html += '<div class="col-md-12 mb-3">';
                 html += '<div style="display: flex">';
-                html +=
-                    '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="edit-milestone-mode-'+index+'" placeholder="Milestone payment mode"  data-parsley-trigger="keyup">';
+                html += '<select name="milestone_payment_mode[]" class="form-control" id="edit-milestone-mode-'+index+'"  data-parsley-trigger="keyup">';
+                html += '<option value="">Select Payment Mode</option>';
+                html += '<option value="Paypal">Paypal</option>';
+                html += '<option value="Stripe">Stripe</option>';
+                html += '</select>';
                 html += '</div>';
                 html += '</div>';
                 html += '</div>';
@@ -752,7 +773,7 @@
         if (payment_status == 'Paid') {
             console.log(payment_status);
             // $('.fetch-payment-hide-'+id).show();
-            $('.fetch-payment-hide-'+id).html('<div class="col-md-12 mb-3"><div style="display: flex"><input type="date" name="milestone_payment_date[]" class="form-control picker" value="" required data-parsley-trigger="keyup" id="fetch-milestone-date-'+id+'"></div></div><div class="col-md-12 mb-3"><div style="display: flex"> <input type="text" name="milestone_payment_mode[]"class="form-control" value="" required data-parsley-trigger="keyup" placeholder="Milestone payment mode" id="fetch-milestone-mode-'+id+'"></div></div>');
+            $('.fetch-payment-hide-'+id).html('<div class="col-md-12 mb-3"><div style="display: flex"><input type="date" name="milestone_payment_date[]" class="form-control picker" value="" required data-parsley-trigger="keyup" id="fetch-milestone-date-'+id+'"></div></div><div class="col-md-12 mb-3"><div style="display: flex"> <select name="milestone_payment_mode[]" class="form-control" required data-parsley-trigger="keyup" id="fetch-milestone-mode-'+id+'"><option value="">Select Payment Mode</option><option value="Paypal">Paypal</option><option value="Stripe">Stripe</option></select></div></div>');
             $('#fetch-milestone-date-'+id).prop('required', true);
             $('#fetch-milestone-mode-'+id).prop('required', true);
         } else {

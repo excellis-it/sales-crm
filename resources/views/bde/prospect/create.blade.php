@@ -148,7 +148,7 @@
                                             <label for="inputEnterYourName" class="col-form-label">Followup Date <span
                                                     style="color: red;">*</span></label>
                                             <input type="date" name="followup_date" id="followup_date" required
-                                                class="form-control" placeholder="Enter Followup Date">
+                                                class="form-control picker" placeholder="Enter Followup Date">
                                         </div>
                                         {{-- followup_time --}}
                                         <div class="col-md-4 mb-3">

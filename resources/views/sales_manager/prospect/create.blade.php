@@ -164,7 +164,7 @@
                                                         <label for="inputEnterYourName" class="col-form-label">Followup
                                                             Date <span style="color: red;">*</span></label>
                                                         <input type="date" name="followup_date" id="followup_date"
-                                                            required class="form-control"
+                                                            required class="form-control picker"
                                                             placeholder="Enter Followup Date">
                                                     </div>
                                                     {{-- followup_time --}}
@@ -270,7 +270,7 @@
             var status = $(this).val();
             if (status.includes('Win')) {
                 $('#upfront_value_show').html(
-                    ' <div class="col-md-4 mb-3" ><label for="inputEnterYourName" data-parsley-type="number" class="col-form-label">Upfront Value <span style="color: red;">*</span></label><input type="text" name="upfront_value" id="upfront_value"  required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number." class="form-control" value="{{ old('upfront_value') }}" placeholder="Enter Upfront Value"></div><div class="col-md-4 mb-3"> <label for = "inputEnterYourName" class="col-form-label"> Sale Date <span style="color: red;">*</span></label></label> <input type="date" name ="sale_date" id ="sale_date" class ="form-control"></div>'
+                    ' <div class="col-md-4 mb-3" ><label for="inputEnterYourName" data-parsley-type="number" class="col-form-label">Upfront Value <span style="color: red;">*</span></label><input type="text" name="upfront_value" id="upfront_value"  required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number." class="form-control" value="{{ old('upfront_value') }}" placeholder="Enter Upfront Value"></div><div class="col-md-4 mb-3"> <label for = "inputEnterYourName" class="col-form-label"> Sale Date <span style="color: red;">*</span></label></label> <input type="date" name ="sale_date" id ="sale_date" class ="form-control picker"></div>'
                 );
             } else {
                 $('#upfront_value_show').html('');

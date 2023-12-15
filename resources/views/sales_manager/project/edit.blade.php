@@ -194,7 +194,7 @@
                             <span style="color: red;">*</span></label>
                         <input type="date" name="sale_date" id="sale_date" required data-parsley-trigger="keyup"
                             data-parsley-type="date" data-parsley-type-message="Please enter a valid date."
-                            class="form-control disable-input" value="{{ $project->sale_date }}"
+                            class="form-control disable-input picker" value="{{ $project->sale_date }}"
                             placeholder="Enter Sale Date">
                     </div>
                     {{-- website --}}
@@ -211,7 +211,7 @@
                             <span style="color: red;">*</span></label>
                         <input type="date" name="delivery_tat" id="delivery_tat" required
                             data-parsley-trigger="keyup" data-parsley-type="date"
-                            data-parsley-type-message="Please enter a valid date." class="form-control disable-input"
+                            data-parsley-type-message="Please enter a valid date." class="form-control disable-input picker"
                             value="{{ $project->delivery_tat }}" placeholder="Enter Sale Date">
                     </div>
 
@@ -248,8 +248,6 @@
                     </div>
 
                     <input type="hidden" value="{{ $project->payment_type }}" name="payment_types">
-
-
 
                     <h3 class="mt-4 text-uppercase">Milestone</h3>
                     <hr>
@@ -288,10 +286,12 @@
                                         </div>
                                     </div>
 
+                                    
+                                    @if($milestone->payment_status=='Paid')
                                     <div class="col-md-12 mb-3">
                                         <div style="display: flex">
                                             <input type="date" name="milestone_payment_date[]"
-                                                class="form-control disable-input" value="{{ $milestone->payment_date }}"
+                                                class="form-control disable-input picker" value="{{ $milestone->payment_date }}"
                                                 id="" required data-parsley-trigger="keyup">
                                         </div>
                                     </div>
@@ -303,6 +303,10 @@
                                                 placeholder="Milestone payment mode">
                                         </div>
                                     </div>
+                                    @else
+                                        
+                                    @endif
+                                    
 
                                     {{-- <div class="col-md-12 mb-3 pb-3">
                                         <div style="display: flex">
@@ -325,8 +329,8 @@
                                                     class="fas fa-minus"></i>
                                                 Remove</button>
                                         @else
-                                            <button type="button" class="btn btn-danger remove"><i
-                                                    class="fas fa-minus"></i>
+                                            <button type="button" class="btn btn-danger remove" ><i
+                                                    class="fas fa-minus" ></i>
                                                 Remove</button>
                                         @endif
 
@@ -429,7 +433,7 @@
                 html += '<div class="col-md-12 mb-3">';
                 html += '<div style="display: flex">';
                 html +=
-                    '<input type="date" name="milestone_payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
+                    '<input type="date" name="milestone_payment_date[]" class="form-control picker" value="" id="" required data-parsley-trigger="keyup">';
                 html += '</div>';
                 html += '</div>';
                 html += '<div class="col-md-12 mb-3">';
@@ -574,7 +578,7 @@
                     html += '<div class="col-md-12 mb-3">';
                     html += '<div style="display: flex">';
                     html +=
-                        '<input type="date" name="milestone_payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
+                        '<input type="date" name="milestone_payment_date[]" class="form-control picker" value="" id="" required data-parsley-trigger="keyup">';
                     html += '</div>';
                     html += '</div>';
                     html += '<div class="col-md-12 mb-3">';
@@ -646,7 +650,7 @@
                 html += '<div class="col-md-12 mb-3">';
                 html += '<div style="display: flex">';
                 html +=
-                    '<input type="date" name="milestone_payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
+                    '<input type="date" name="milestone_payment_date[]" class="form-control picker" value="" id="" required data-parsley-trigger="keyup">';
                 html += '</div>';
                 html += '</div>';
                 html += '<div class="col-md-12 mb-3">';
