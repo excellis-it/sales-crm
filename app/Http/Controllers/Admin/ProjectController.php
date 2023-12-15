@@ -434,7 +434,7 @@ class ProjectController extends Controller
     public function newCustomer(Request $request)
     {
         if ($request->ajax()) {
-            $customers = Customer::orderBy('customer_name', 'asc')->get();
+            $customers = Customer::orderBy('customer_name', 'asc')->where('deleted_at', null)->get();
             return response()->json($customers);
         }
     }
