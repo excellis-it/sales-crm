@@ -486,12 +486,11 @@
                 <div class="col-lg-12">
                     <div class="card mb-30">
                         <div class="card-body" style="position: relative;">
-                            <div class="">
-                                <h5 class="card-title">Statistics</h5>
-                            </div>
-
                             <div class="row justify-content-center">
-                                <div class="col-xl-12 text-center">
+                                <div class="col-lg-6">
+                                    <h5 class="card-title">Statistics</h5>
+                                </div>
+                                <div class="col-lg-6 text-end">
                                     <ul class="option-select-btn">
                                         <li>
                                             <label class="basic-box-shadow">
@@ -539,7 +538,7 @@
                         <div class="card-body" style="position: relative;">
                             <div class="d-flex align-items-center justify-content-between mb-3">
                                 <h5 class="card-title mb-0">Top Customer</h5>
-                                <a href="{{route('customers.index')}}" class="view_all">View All</a>
+                                <a href="{{ route('customers.index') }}" class="view_all">View All</a>
                             </div>
                             <div class="grid-card-wrap">
                                 @foreach ($top_customers as $item)
@@ -633,7 +632,7 @@
                                         </tr>
                                     </thead>
                                     <tbody class="perfom-filter">
-                                       
+
                                         @include('admin.dashboard_performer_table')
                                     </tbody>
                                 </table>
@@ -931,7 +930,6 @@
     </script>
 
     <script>
-
         $(document).on('change', '.duration', function() {
             var selectedOption = $('option:selected', this);
             var duration = selectedOption.data('duration');

@@ -95,7 +95,7 @@ class DashboardController extends Controller
         })->take(6);
 
         //top performers list in this month calculate from goals_date
-        $top_performers = Goal::whereMonth('goals_date', date('m'))->whereYear('goals_date', date('Y'))->orderBy('goals_achieve','desc')->get();
+        $top_performers = Goal::whereMonth('goals_date', date('m'))->whereYear('goals_date', date('Y'))->orderBy('goals_achieve','desc')->take(7)->get();
 
         // dd($count);
         return view('admin.dashboard')->with(compact('count', 'goal', 'prospects','projects','labels','type','top_customers','top_performers'));
@@ -256,11 +256,11 @@ class DashboardController extends Controller
 
         if($duration == 'Monthly')
         {
-            $top_performers = Goal::whereMonth('goals_date', date('m'))->whereYear('goals_date', date('Y'))->orderBy('goals_achieve','desc')->get();
+            $top_performers = Goal::whereMonth('goals_date', date('m'))->whereYear('goals_date', date('Y'))->orderBy('goals_achieve','desc')->take(7)->get();
         }
         else
         {
-            $top_performers = Goal::whereYear('goals_date', date('Y'))->orderBy('goals_achieve','desc')->get();
+            $top_performers = Goal::whereYear('goals_date', date('Y'))->orderBy('goals_achieve','desc')->take(7)->get();
         }
 
         
