@@ -94,7 +94,6 @@ class ProjectController extends Controller
         $project = new Project();
         $project->user_id = $data['user_id'];
         $project->assigned_to = $data['assigned_to'];
-
         $project->assigned_date = date('Y-m-d');
         $project->customer_id = $data['customer'];
         $project->client_name = $data['client_name'];
@@ -302,7 +301,8 @@ class ProjectController extends Controller
                     $project_milestone->payment_status = $data['payment_status'][$key];
                     // $project_milestone->payment_date = ($data['payment_status'][$key] == 'Paid') ? date('Y-m-d') : '';
                     $project_milestone->milestone_comment = $data['milestone_comment'][$key];
-                    if($data['payment_status'][$key] == 'Paid'){
+                    if($data['payment_status'][$key] == 'Paid')
+                    {
                         $project_milestone->payment_mode = $data['milestone_payment_mode'][$key] ?? null;
                         $project_milestone->payment_date = $data['milestone_payment_date'][$key] ?? null;
                     }

@@ -9922,13 +9922,15 @@ textarea.parsley-error {
 
  /* 06-12-2023 - check box */
 .option-select-btn {
-    display: flex;
+    display: inline-block;
     background: #ffffff;
     border: 1px solid #b4d0e0;
     border-radius: 5px;
     padding: 3px;
 }
-
+.option-select-btn li{
+    display: inline-block;
+}
 .option-select-btn label {
     margin: 0;
 }
@@ -9945,7 +9947,7 @@ textarea.parsley-error {
 
 .option-select-btn label input:checked ~ span {
     color: #fff;
-    background-color: var(--c1);
+    background-color: #ac1e23;
     font-weight: 700;
 }
 
@@ -9954,19 +9956,22 @@ textarea.parsley-error {
     pointer-events: none;
 }
 
-
 /* 12-12-2023 - download button */
-.download-button a button{
+.download-button{
+    display:inline-block;
+}
+.download-button a{
     background: #f37e20;
     color: #fff;
     padding: 8px;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    align-items:center;
+    justify-content:center;
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    min-width: auto; 
+    min-width: auto;
+    margin-bottom: 10px;
 }
 
 
@@ -9985,11 +9990,22 @@ input.picker[type="date"] {
     background: transparent;
   }
 
+@media (max-width: 992px) {
+    .page-wrapper .content {
+        padding: 0 30px 30px 30px;
+    }
+}
 
 
 
-
-
+@media (max-width: 767px) {
+    .print_btn {
+        padding: 13px 30px;
+    }
+    .offcanvas-header h4 {
+        font-size: 20px;
+    }
+}
 
 
 

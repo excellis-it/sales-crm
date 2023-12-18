@@ -490,30 +490,32 @@
                                 <h5 class="card-title">Statistics</h5>
                             </div>
 
-                            <div class="col-md-6 d-flex justify-content-md-end">
-                                <ul class="option-select-btn">
-                                    <li>
-                                        <label class="basic-box-shadow">
-                                            <input type="radio" name="statistics2" hidden="" checked="">
-                                            <span data-earn-type="yearEarn" class="earningStatisticsUpdate">This
-                                                year</span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="basic-box-shadow">
-                                            <input type="radio" name="statistics2" hidden="">
-                                            <span data-earn-type="MonthEarn" class="earningStatisticsUpdate">This
-                                                month</span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="basic-box-shadow">
-                                            <input type="radio" name="statistics2" hidden="">
-                                            <span data-earn-type="WeekEarn" class="earningStatisticsUpdate">This
-                                                week</span>
-                                        </label>
-                                    </li>
-                                </ul>
+                            <div class="row justify-content-center">
+                                <div class="col-xl-12 text-center">
+                                    <ul class="option-select-btn">
+                                        <li>
+                                            <label class="basic-box-shadow">
+                                                <input type="radio" name="statistics2" hidden="" checked="">
+                                                <span data-earn-type="yearEarn" class="earningStatisticsUpdate">This
+                                                    year</span>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="basic-box-shadow">
+                                                <input type="radio" name="statistics2" hidden="">
+                                                <span data-earn-type="MonthEarn" class="earningStatisticsUpdate">This
+                                                    month</span>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="basic-box-shadow">
+                                                <input type="radio" name="statistics2" hidden="">
+                                                <span data-earn-type="WeekEarn" class="earningStatisticsUpdate">This
+                                                    week</span>
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
 
                             <div>

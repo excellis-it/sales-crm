@@ -148,11 +148,11 @@ class ProspectController extends Controller
                         $project_milestone->project_id = $project->id;
                         $project_milestone->milestone_name = $milestone;
                         $project_milestone->milestone_value = $data['milestone_value'][$key];
-                        $project_milestone->payment_status = $data['payment_status'][$key];
+                        $project_milestone->payment_status = 'Due';
                         // $project_milestone->payment_date = ($data['payment_status'][$key] == 'Paid') ? date('Y-m-d') : '';
                         $project_milestone->milestone_comment = $data['milestone_comment'][$key];
-                        $project_milestone->payment_mode = $data['milestone_payment_mode'][$key];
-                        $project_milestone->payment_date = $data['milestone_payment_date'][$key];
+                        // $project_milestone->payment_mode = $data['milestone_payment_mode'][$key];
+                        // $project_milestone->payment_date = $data['milestone_payment_date'][$key];
                         $project_milestone->save();
                     }
                 }
@@ -311,11 +311,11 @@ class ProspectController extends Controller
                         $project_milestone->project_id = $project->id;
                         $project_milestone->milestone_name = $milestone;
                         $project_milestone->milestone_value = $data['milestone_value'][$key];
-                        $project_milestone->payment_status = $data['payment_status'][$key];
+                        $project_milestone->payment_status = 'Due';
                         // $project_milestone->payment_date = ($data['payment_status'][$key] == 'Paid') ? date('Y-m-d') : '';
                         $project_milestone->milestone_comment = $data['milestone_comment'][$key];
-                        $project_milestone->payment_mode = $data['milestone_payment_mode'][$key];
-                        $project_milestone->payment_date = $data['milestone_payment_date'][$key];
+                        // $project_milestone->payment_mode = $data['milestone_payment_mode'][$key];
+                        // $project_milestone->payment_date = $data['milestone_payment_date'][$key];
                         $project_milestone->save();
                     }
                 }

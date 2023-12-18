@@ -16,9 +16,9 @@
                     <div class="col-md-12 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Type of customer
                             <span style="color: red;">*</span></label>
-                        <input type="radio" name="customer" id="new_user" value="1" required class="customer"
+                        <input type="radio" name="customer" id="new_user" value=""  class="customer"
                             data-parsley-trigger="keyup" checked> New user
-                        <input type="radio" name="customer" id="existing_user" value="0" required
+                        <input type="radio" name="customer" id="existing_user" value="0" 
                             class="customer" data-parsley-trigger="keyup"> Existing user
                     </div>
                     <div class="col-md-12 mb-3 select_user" id="select_user">
@@ -300,9 +300,9 @@
                                                     required data-parsley-trigger="keyup"
                                                         placeholder="Milestone payment mode" id="fetch-milestone-mode-{{ $key }}"> --}}
                                                         <select name="milestone_payment_mode[]" class="form-control" id="fetch-milestone-mode-{{ $key }}" required data-parsley-trigger="keyup">
-                                                            
-                                                            <option value="Paypal" {{ $milestone->milestone_payment_mode == 'Paypal' ? 'selected' : '' }}>Paypal</option>
-                                                            <option value="Stripe" {{ $milestone->milestone_payment_mode == 'Stripe' ? 'selected' : '' }}>Stripe</option>
+                                                            <option value="">Select Payment Mode</option>
+                                                            <option value="Paypal" {{ $milestone->payment_mode == 'Paypal' ? 'selected' : '' }}>Paypal</option>
+                                                            <option value="Stripe" {{ $milestone->payment_mode == 'Stripe' ? 'selected' : '' }}>Stripe</option>
                                                         </select>    
                                                 </div>
                                             </div>
@@ -362,21 +362,18 @@
                         {{-- </br> --}}
                     </div>
                     @if ($project->projectDocuments->count() > 0)
-                        <div class="row">
-                            <h4 class="mt-4 text-uppercase">Download Documents</h4>
-                            @foreach ($project->projectDocuments as $key => $document)
-                                <div class="col-1 mb-3 download-button">
-                                    <a href="{{ route('sales-projects.document.download', $document->id) }}"
-                                        download="downloaded_project_documents.pdf">
-                                        <button type="button" class="btn submit-btn add-pdf-button good-button">
-                                            <i class="fas fa-download"></i>
-                                        </button>
-                                    </a>
-                                </div>
-                            @endforeach
-                        </div>
+                    <div class="col-lg-12"> 
+                        <h4 class="mt-4 text-uppercase">Download Documents</h4>
+                        @foreach ($project->projectDocuments as $key => $document)
+                            <div class="download-button">
+                                <a href="{{ route('sales-projects.document.download', $document->id) }}"
+                                    download="downloaded_project_documents.pdf" class="btn submit-btn add-pdf-button good-button">
+                                        <i class="fas fa-download"></i>
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
                     @endif
-
                 </div>
                 <div class="d-flex alin-items-center w-100 text-end">
                     <button class="print_btn cancel_btn me-3" type="reset"><i class="far fa-times-circle"></i>
