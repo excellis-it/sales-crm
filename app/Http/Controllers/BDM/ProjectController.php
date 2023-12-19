@@ -130,15 +130,20 @@ class ProjectController extends Controller
             $goals->save();
         }
 
-        $project_type = new ProjectType();
-        $project_type->project_id = $project->id;
-        $project_type->type = $data['project_type'];
-        if ($data['project_type'] == 'Other') {
-            $project_type->name = $data['other_value'];
-        } else {
-            $project_type->name = $data['project_type'];
+        if (isset($data['project_type'])) {
+            foreach ($data['project_type'] as $key => $project_type) {
+                $add_project_type = new ProjectType();
+                $add_project_type->project_id = $project->id;
+                $add_project_type->type = $project_type;
+                if ($project_type == 'Other') {
+                    $add_project_type->name = $data['other_value'];
+                } else {
+                    $add_project_type->name = $project_type;
+                }
+                $add_project_type->save();
+            }
         }
-        $project_type->save();
+
 
         if (isset($data['milestone_name'])) {
             foreach ($data['milestone_name'] as $key => $milestone) {
@@ -267,16 +272,20 @@ class ProjectController extends Controller
 
         ProjectType::where('project_id', $id)->delete();
 
-        $project_type = new ProjectType();
-        $project_type->project_id = $project->id;
-        $project_type->type = $data['project_type'];
-        if ($data['project_type'] == 'Other') {
-            $project_type->name = $data['other_value'];
-        } else {
-            $project_type->name = $data['project_type'];
-        }
 
-        $project_type->save();
+        if (isset($data['project_type'])) {
+            foreach ($data['project_type'] as $key => $project_type) {
+                $update_project_type = new ProjectType();
+                $update_project_type->project_id = $project->id;
+                $update_project_type->type = $project_type;
+                if ($project_type == 'Other') {
+                    $update_project_type->name = $data['other_value'];
+                } else {
+                    $update_project_type->name = $project_type;
+                }
+                $update_project_type->save();
+            }
+        }
 
         $previous_milestone_value = ProjectMilestone::where(['project_id' => $id, 'payment_status' => 'Paid'])->sum('milestone_value');
 

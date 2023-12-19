@@ -83,7 +83,12 @@
                                         <li>
                                             <div class="title">Project Type:-</div>
                                             <div class="text">
-                                                <span class="">{{ $project->projectTypes->name ?? '' }}</span>
+                                                @foreach ($project->projectTypes as $index => $projectType)
+                                                    <span class="">{{ Str::limit($projectType->type, 20) }}</span>
+                                                    @if (!$loop->last)
+                                                        <span>,</span>
+                                                    @endif
+                                                @endforeach
                                             </div>
                                         </li>
                                         <li>

@@ -18,7 +18,12 @@
                 {{ $project->client_phone ?? '' }}
             </td>
             <td class="edit-route" data-route="{{ route('bdm.projects.edit', $project->id) }}">
-                <span class="">{{ $project->projectTypes->type }}</span>
+                @foreach ($project->projectTypes as $index => $projectType)
+                <span class="">{{ Str::limit($projectType->type, 20) }}</span>
+                @if (!$loop->last)
+                    <span>,</span>
+                @endif
+                @endforeach
             </td>
             <td class="edit-route" data-route="{{ route('bdm.projects.edit', $project->id) }}">
                 {{ $project->project_value ?? '' }}
@@ -45,10 +50,13 @@
 @endif
 
 <tr>
+    
     <td colspan="11">
         <div class="d-flex justify-content-center">
             {!! $projects->links() !!}
         </div>
     </td>
+    (Showing {{ $projects->firstItem() }} – {{ $projects->lastItem() }} Projects of
+    {{$projects->count() }} Projects)
 </tr>
 

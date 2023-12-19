@@ -84,15 +84,19 @@ class ProjectController extends Controller
         $project->comment = $data['comment'];
         $project->save();
 
-        $project_type = new ProjectType();
-        $project_type->project_id = $project->id;
-        $project_type->type = $data['project_type'];
-        if ($data['project_type'] == 'Other') {
-            $project_type->name = $data['other_value'];
-        } else {
-            $project_type->name = $data['project_type'];
+        if (isset($data['project_type'])) {
+            foreach ($data['project_type'] as $key => $project_type) {
+                $add_project_type = new ProjectType();
+                $add_project_type->project_id = $project->id;
+                $add_project_type->type = $project_type;
+                if ($project_type == 'Other') {
+                    $add_project_type->name = $data['other_value'];
+                } else {
+                    $add_project_type->name = $project_type;
+                }
+                $add_project_type->save();
+            }
         }
-        $project_type->save();
 
         $net_goals = Goal::where('user_id', Auth::user()->id)->whereMonth('goals_date', date('m', strtotime($data['sale_date'])))->whereYear('goals_date', date('Y', strtotime($data['sale_date'])))->where('goals_type', 2)->first();
         if ($net_goals) {
@@ -203,17 +207,17 @@ class ProjectController extends Controller
         $project->comment = $data['comment'];
         $project->save();
 
-        ProjectType::where('project_id', $id)->delete();
-        $project_type = new ProjectType();
-        $project_type->project_id = $project->id;
-        $project_type->type = $data['project_type'];
-        if ($data['project_type'] == 'Other') {
-            $project_type->name = $data['other_value'];
-        } else {
-            $project_type->name = $data['project_type'];
-        }
+        // ProjectType::where('project_id', $id)->delete();
+        // $project_type = new ProjectType();
+        // $project_type->project_id = $project->id;
+        // $project_type->type = $data['project_type'];
+        // if ($data['project_type'] == 'Other') {
+        //     $project_type->name = $data['other_value'];
+        // } else {
+        //     $project_type->name = $data['project_type'];
+        // }
 
-        $project_type->save();
+        // $project_type->save();
         $previous_milestone_value = ProjectMilestone::where(['project_id'=> $id, 'payment_status' => 'Paid'])->get();
 
         // $net_goals_t = Goal::where('user_id', Auth::user()->id)->whereMonth('goals_date', date('m', strtotime($data['sale_date'])))->whereYear('goals_date', date('Y', strtotime($data['sale_date'])))->where('goals_type', 2)->first();

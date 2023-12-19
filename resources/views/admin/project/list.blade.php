@@ -36,7 +36,11 @@
                     <div class="card-title">
                         <div class="row">
                             <div class="col-md-6">
-                                <h4 class="mb-0">Projects Details</h4>
+                                <div class="d-flex align-items-center">
+                                    <h4 class="mb-0">Projects List</h4>
+                                    
+                                </div>
+                                
                             </div>
                             <div class="col-md-6 text-end">
                                 <a href="javascrip:void(0);" class="btn px-5 submit-btn" data-bs-toggle="offcanvas"
@@ -144,7 +148,8 @@
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Project
                                                 Type <span style="color: red;">*</span></label>
-                                            <select name="project_type" id="project_type" class="form-control">
+                                            <select name="project_type[]" id="project_type" class="form-control mySelect"
+                                                multiple="multiple">
                                                 <option value="">Select Project Type</option>
                                                 <option value="Website Design & Development">Website Design &
                                                     Development</option>
@@ -915,8 +920,8 @@
     <script>
         $(document).ready(function() {
             $('.customer_id').select2({
-    dropdownParent: $('.customer_id').parent()
-});
+                dropdownParent: $('.customer_id').parent()
+            });
             // Handle the click event for the edit-route button
             $(document).on('change', '.customer', function() {
                 var customer = $(this).val();
@@ -1112,6 +1117,12 @@
                 result.setDate(result.getDate() + days);
                 return result.toISOString().split('T')[0];
             }
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $('.mySelect').select2();
         });
     </script>
 @endpush

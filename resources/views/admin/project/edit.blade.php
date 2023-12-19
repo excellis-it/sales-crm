@@ -73,40 +73,31 @@
                     <h3 class="mt-4 text-uppercase">Project Details</h3>
                     <hr>
                     {{-- project type in select2 box --}}
+                   
                     <div class="col-md-12 mb-3">
-                        <label for="inputEnterYourName" class="col-form-label">Project
-                            Type <span style="color: red;">*</span></label>
-                        <select name="project_type" id="project_type" required data-parsley-trigger="keyup"
-                            class="form-control">
-                            <option value="">Select Project Type</option>
-                            <option value="Website Design & Development"
-                                @if (isset($project['projectTypes']['type']) && $project['projectTypes']['type'] == 'Website Design & Development') {{ 'selected' }} @endif>
-                                Website Design & Development</option>
-                            <option value="Mobile Application Development"
-                                @if (isset($project['projectTypes']['type']) && $project['projectTypes']['type'] == 'Mobile Application Development') {{ 'selected' }} @endif>
-                                Mobile Application Development</option>
-                            <option value="Digital Marketing"
-                                @if (isset($project['projectTypes']['type']) && $project['projectTypes']['type'] == 'Digital Marketing') {{ 'selected' }} @endif>
-                                Digital Marketing</option>
-                            <option value="Logo Design" @if (isset($project['projectTypes']['type']) && $project['projectTypes']['type'] == 'Logo Design') {{ 'selected' }} @endif>
-                                Logo Design</option>
-                            <option value="SEO" @if (isset($project['projectTypes']['type']) && $project['projectTypes']['type'] == 'SEO') {{ 'selected' }} @endif>
-                                SEO</option>
-                            <option value="SMO" @if (isset($project['projectTypes']['type']) && $project['projectTypes']['type'] == 'SMO') {{ 'selected' }} @endif>
-                                SMO</option>
-                            <option value="Other" @if (isset($project['projectTypes']['type']) && $project['projectTypes']['type'] == 'Other') {{ 'selected' }} @endif>
-                                Other</option>
-                        </select>
+                        <label for="inputEnterYourName" class="col-form-label">Project Type <span style="color: red;">*</span></label>
+                        <select name="project_type[]" id="project_type_other" required multiple="multiple" class="form-control mySelects">
+                            <!-- Static data for the options -->
+                            <option value="Website Design & Development" {{ in_array('Website Design & Development', $project->projectTypes()->pluck('type')->toArray()) ? 'selected' : '' }}>Website Design & Development</option>
+                            <option value="Mobile Application Development" {{ in_array('Mobile Application Development', $project->projectTypes()->pluck('type')->toArray()) ? 'selected' : '' }}>Mobile Application Development</option>
+                            <option value="Digital Marketing" {{ in_array('Digital Marketing', $project->projectTypes()->pluck('type')->toArray()) ? 'selected' : '' }}>Digital Marketing</option>
+                            <option value="Logo Design" {{ in_array('Logo Design', $project->projectTypes()->pluck('type')->toArray()) ? 'selected' : '' }}>Logo Design</option>
+                            <option value="SEO" {{ in_array('SEO', $project->projectTypes()->pluck('type')->toArray()) ? 'selected' : '' }}>SEO</option>
+                            <option value="SMO" {{ in_array('SMO', $project->projectTypes()->pluck('type')->toArray()) ? 'selected' : '' }}>SMO</option>
+                            <option value="Other" {{ in_array('Other', $project->projectTypes()->pluck('type')->toArray()) ? 'selected' : '' }}>Other</option>
+                        </select> 
                     </div>
-                    <div id="other-value" class="col-md-12 mb-3">
-                        @if (isset($project['projectTypes']['type']) && $project['projectTypes']['type'] == 'Other')
-                            <label for="inputEnterYourName" class="col-form-label">Other
-                                Value <span style="color: red;">*</span></label>
-                            <input type="text" name="other_value" id="other_value" required
-                                data-parsley-trigger="keyup" class="form-control"
-                                value="{{ $project['projectTypes']['name'] }}" placeholder="Enter Other Value">
+                    
+                    <div id="other-value-edit" class="col-md-12 mb-3">
+                        
+                    @foreach ($project['projectTypes'] as $project_show)
+                        @if ($project_show->type == 'Other')
+                            <label for="inputEnterYourName" class="col-form-label">Other Value <span style="color: red;">*</span></label>
+                            <input type="text" name="other_value" id="other_value" required data-parsley-trigger="keyup" class="form-control" value="{{ $project_show->name }}" placeholder="Enter Other Value">
                         @endif
+                    @endforeach
                     </div>
+
                     {{-- Project value --}}
                     <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Project
@@ -465,7 +456,7 @@
             });
 
             // when select2 other option in project type then show other value
-            $('#project_type').on('change', function() {
+            $('#project_type_other').on('change', function() {
                 //    select 2 value get and seo,other value check
                 var project_type = $(this).val();
                 if (project_type.includes('Other')) {
@@ -474,9 +465,9 @@
                         '<label for="inputEnterYourName" class="col-form-label">Other Value <span style="color: red;">*</span></label>';
                     html +=
                         '<input type="text" name="other_value" id="other_value" class="form-control" value="{{ old('other_value') }}" placeholder="Enter Other Value" required data-parsley-trigger="keyup">';
-                    $('#other-value').html(html);
+                    $('#other-value-edit').html(html);
                 } else {
-                    $('#other-value').html('');
+                    $('#other-value-edit').html('');
                 }
             });
         });
@@ -781,4 +772,10 @@
         }
     });
     </script>
+    
+<script>
+    $(document).ready(function () {
+        $('.mySelects').select2();
+    });
+</script>
 @endif

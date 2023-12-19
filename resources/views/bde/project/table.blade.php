@@ -20,7 +20,12 @@
                 {{ $project->client_phone }}
             </td>
             <td>
-                <span>{{ $project->projectTypes->type ?? '' }}</span>
+                @foreach ($project->projectTypes as $index => $projectType)
+                <span class="">{{ Str::limit($projectType->type, 20) }}</span>
+                @if (!$loop->last)
+                    <span>,</span>
+                @endif
+                @endforeach
             </td>
             <td>
                 {{ $project->project_value }}
@@ -51,5 +56,11 @@
         <div class="d-flex justify-content-center">
             {!! $projects->links() !!}
         </div>
+        {{-- page no of page --}}
+
+       
+        
     </td>
+    (Showing {{ $projects->firstItem() }} – {{ $projects->lastItem() }} Projects of
+    {{$projects->count() }} Projects)
 </tr>

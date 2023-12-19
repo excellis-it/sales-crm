@@ -10,6 +10,7 @@ use App\Models\ProjectMilestone;
 use App\Models\ProjectType;
 use App\Models\ProjectDocument;
 use App\Models\User;
+use Session;
 use App\Traits\ImageTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,17 +31,17 @@ class ProjectController extends Controller
         $account_managers = User::role('ACCOUNT_MANAGER')->orderBy('name', 'DESC')->where('status', 1)->get();
         $project_openers = User::role(['ACCOUNT_MANAGER', 'SALES_EXCUETIVE','BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
         if ($request->sales_manager_id) {
-            $projects = Project::orderBy('sale_date', 'desc')->where('user_id', $request->sales_manager_id)->paginate(15);
+            $projects = Project::orderBy('sale_date', 'desc')->where('user_id', $request->sales_manager_id)->paginate(10);
             return view('admin.project.list')->with(compact('projects','sales_managers','users','account_managers','project_openers'));
         }
 
         if ($request->account_manager_id) {
-            $projects = Project::orderBy('sale_date', 'desc')->where('assigned_to', $request->account_manager_id)->paginate(15);
+            $projects = Project::orderBy('sale_date', 'desc')->where('assigned_to', $request->account_manager_id)->paginate(10);
             return view('admin.project.list')->with(compact('projects','sales_managers','users','account_managers','project_openers'));
         }
 
 
-        $projects = Project::orderBy('sale_date', 'desc')->paginate(15);
+        $projects = Project::orderBy('sale_date', 'desc')->paginate(10);
         return view('admin.project.list')->with(compact('projects','sales_managers','users','account_managers','project_openers'));
     }
 
@@ -115,15 +116,20 @@ class ProjectController extends Controller
         $project->comment = $data['comment'];
         $project->save();
 
-        $project_type = new ProjectType();
-        $project_type->project_id = $project->id;
-        $project_type->type = $data['project_type'];
-        if ($data['project_type'] == 'Other') {
-            $project_type->name = $data['other_value'];
-        } else {
-            $project_type->name = $data['project_type'];
+        
+        if (isset($data['project_type'])) {
+            foreach ($data['project_type'] as $key => $project_type) {
+                $add_project_type = new ProjectType();
+                $add_project_type->project_id = $project->id;
+                $add_project_type->type = $project_type;
+                if ($project_type == 'Other') {
+                    $add_project_type->name = $data['other_value'];
+                } else {
+                    $add_project_type->name = $project_type;
+                }
+                $add_project_type->save();
+            }
         }
-        $project_type->save();
 
         if (isset($data['milestone_name'])) {
             foreach ($data['milestone_name'] as $key => $milestone) {
@@ -201,12 +207,15 @@ class ProjectController extends Controller
      */
     public function edit($id)
     {
+
+        
         try {
             $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE','BUSINESS_DEVELOPMENT_MANAGER','BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
             $sales_managers = User::Role(['SALES_MANAGER','ACCOUNT_MANAGER','BUSINESS_DEVELOPMENT_MANAGER'])->get();
             $account_managers = User::role('ACCOUNT_MANAGER')->orderBy('name', 'DESC')->where('status', 1)->get();
             $project_openers = User::role(['ACCOUNT_MANAGER', 'SALES_EXCUETIVE','BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
             $project = Project::find($id);
+            // return $project->projectTypes()->pluck('type');
             $type = true;
             return response()->json(['view' => view('admin.project.edit', compact('project', 'sales_managers', 'users', 'type','account_managers','project_openers'))->render()]);
         } catch (\Throwable $th) {
@@ -272,21 +281,27 @@ class ProjectController extends Controller
 
         ProjectType::where('project_id', $id)->delete();
 
-        $project_type = new ProjectType();
-        $project_type->project_id = $project->id;
-        $project_type->type = $data['project_type'];
-        if ($data['project_type'] == 'Other') {
-            $project_type->name = $data['other_value'];
-        } else {
-            $project_type->name = $data['project_type'];
+
+        if (isset($data['project_type'])) {
+            foreach ($data['project_type'] as $key => $project_type) {
+                $update_project_type = new ProjectType();
+                $update_project_type->project_id = $project->id;
+                $update_project_type->type = $project_type;
+                if ($project_type == 'Other') {
+                    $update_project_type->name = $data['other_value'];
+                } else {
+                    $update_project_type->name = $project_type;
+                }
+                $update_project_type->save();
+            }
         }
 
         if (isset($data['start_date'])) {
-            $project_type->start_date = $data['start_date'];
-            $project_type->end_date = $data['end_date'];
+            $update_project_type->start_date = $data['start_date'];
+            $update_project_type->end_date = $data['end_date'];
         }
 
-        $project_type->save();
+        $update_project_type->save();
 
         $previous_milestone_value = ProjectMilestone::where('project_id', $id)->sum('milestone_value');
         ProjectMilestone::where('project_id', $id)->delete();
@@ -354,6 +369,11 @@ class ProjectController extends Controller
                 }
             }
         }
+
+        $page_no = Session::get('page_number');
+        // $url = '/admin/sales-project/?page=' . $page_no;
+        // return redirect()->to($url);
+
 
         return redirect()->route('sales-projects.index')->with('message', 'Project updated successfully.');
     }
@@ -425,7 +445,8 @@ class ProjectController extends Controller
                 ->orWhereHas('salesManager', function ($q) use ($query) {
                     $q->where('name', 'like', '%' . $query . '%');
                 })
-                ->paginate(15);
+                ->paginate(10);
+                $page = Session::put('page_number',$request->get('page'));
 
             return response()->json(['data' => view('admin.project.table', compact('projects'))->render()]);
         }

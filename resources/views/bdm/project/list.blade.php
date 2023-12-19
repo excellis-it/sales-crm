@@ -145,8 +145,8 @@
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Project
                                                 Type <span style="color: red;">*</span></label>
-                                            <select name="project_type" id="project_type" required
-                                                data-parsley-trigger="keyup" class="form-control">
+                                            <select name="project_type[]" id="project_type" required
+                                                data-parsley-trigger="keyup" class="form-control mySelect" multiple="multiple">
                                                 <option value="">Select Project Type</option>
                                                 <option value="Website Design & Development">Website Design &
                                                     Development</option>
@@ -998,4 +998,10 @@
             }
         });
     </script>
+
+<script>
+    $(document).ready(function() {
+        $('.mySelect').select2();
+    });
+</script>
 @endpush

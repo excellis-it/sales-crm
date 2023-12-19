@@ -18,7 +18,12 @@
                 {{ $project->client_phone }}
             </td>
             <td class="edit-route" data-route="{{ route('projects.edit', $project->id) }}">
-                <span>{{ $project->projectTypes->type ?? '' }}</span>
+                @foreach ($project->projectTypes as $index => $projectType)
+                <span class="">{{ Str::limit($projectType->type, 20) }}</span>
+                @if (!$loop->last)
+                    <span>,</span>
+                @endif
+            @endforeach
             </td>
             <td class="edit-route" data-route="{{ route('projects.edit', $project->id) }}">
                 {{ $project->project_value }}
