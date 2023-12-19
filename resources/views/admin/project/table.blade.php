@@ -59,11 +59,11 @@
         </div>
         {{-- page no of page --}}
 
-        
+        (Showing {{ $projects->firstItem() }} – {{ $projects->lastItem() }} Projects of
+        {{$projects->count() }} Projects)  
         
     </td>
-    (Showing {{ $projects->firstItem() }} – {{ $projects->lastItem() }} Projects of
-            {{$projects->count() }} Projects)
+    
     
     
 </tr>

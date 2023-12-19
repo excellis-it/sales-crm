@@ -594,7 +594,12 @@
                                                         {{ $project->business_name }}
                                                     </td>
                                                     <td>
-                                                        {{ $project->projectTypes->name ?? '' }}
+                                                        @foreach ($project->projectTypes as $index => $projectType)
+                                                            <span class="">{{ Str::limit($projectType->type, 20) }}</span>
+                                                            @if (!$loop->last)
+                                                                <span>,</span>
+                                                            @endif
+                                                        @endforeach
                                                     </td>
                                                     <td>
                                                         <div class="project_value">
