@@ -1,6 +1,6 @@
 @if (count($projects) == 0)
     <tr>
-        <td colspan="11" class="text-center">No Projects Found</td>
+        <td colspan="10" class="text-center">No Projects Found</td>
     </tr>
 @else
     @foreach ($projects as $key => $project)
@@ -56,11 +56,18 @@
         </tr>
     @endforeach
     <tr>
-        <td colspan="11">
+        
+    <td colspan="10">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="">
+                (Showing {{ $projects->firstItem() }} – {{ $projects->lastItem() }} Projects of
+                {{ $projects->count() }} Projects)
+            </div>
             <div class="d-flex justify-content-center">
                 {!! $projects->links() !!}
             </div>
-        </td>
+        </div>
+    </td>
     </tr>
 @endif
 

@@ -12,6 +12,7 @@
                 @method('PUT')
                 @csrf
                 <input type="hidden" name="customer_id" class="edit_customer_id" value="{{ $project->customer_id }}">
+                <input type="hidden" name="page_no" id="edit-page-no" >
                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Type of customer
@@ -298,8 +299,31 @@
                                                 </div>
                                             </div>
                                         @else
+                                        <div  style="display:none;">
+                                            <div class="col-md-12 mb-3">
+                                                <div style="display: flex">
+                                                    <input type="date" name="milestone_payment_date[]"
+                                                        class="form-control picker" value=""
+                                                         data-parsley-trigger="keyup" id="fetch-milestone-date-{{ $key }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 mb-3">
+                                                <div style="display: flex">
+                                                    {{-- <input type="text" name="milestone_payment_mode[]"
+                                                        class="form-control" value="{{ $milestone->payment_mode }}"
+                                                    required data-parsley-trigger="keyup"
+                                                        placeholder="Milestone payment mode" id="fetch-milestone-mode-{{ $key }}"> --}}
+                                                        <select name="milestone_payment_mode[]" class="form-control" id="fetch-milestone-mode-{{ $key }}"  data-parsley-trigger="keyup">
+                                                            <option value="">Select Payment Mode</option>
+                                                            <option value="Paypal" >Paypal</option>
+                                                            <option value="Stripe" >Stripe</option>
+                                                        </select>    
+                                                </div>
+                                            </div>
+                                        </div>
                                         
                                         @endif
+                                    
                                     </div>
                                     {{-- </div> --}}
                                     {{-- <div class="col-md-12  mb-3">
@@ -753,20 +777,27 @@
 
 <script>
     $(document).on('change','.payment-fetch', function(){
+        
         var id = $(this).data('id');
         var payment_status = $(this).val();
         console.log(payment_status);
         $('#fetch-milestone-date-'+id).prop('required', false);
         $('#fetch-milestone-mode-'+id).prop('required', false);
         if (payment_status == 'Paid') {
+            
             console.log(payment_status);
-            // $('.fetch-payment-hide-'+id).show();
+            $('.fetch-payment-hide-'+id).show();
             $('.fetch-payment-hide-'+id).html('<div class="col-md-12 mb-3"><div style="display: flex"><input type="date" name="milestone_payment_date[]" class="form-control picker" value="" required data-parsley-trigger="keyup" id="fetch-milestone-date-'+id+'"></div></div><div class="col-md-12 mb-3"><div style="display: flex"> <select name="milestone_payment_mode[]" class="form-control" required data-parsley-trigger="keyup" id="fetch-milestone-mode-'+id+'"><option value="">Select Payment Mode</option><option value="Paypal">Paypal</option><option value="Stripe">Stripe</option></select></div></div>');
             $('#fetch-milestone-date-'+id).prop('required', true);
             $('#fetch-milestone-mode-'+id).prop('required', true);
         } else {
+            
             // $('.fetch-payment-hide-'+id).hide();
-            $('.fetch-payment-hide-'+id).html('');
+            // $('#fetch-milestone-date-'+id).val('');
+            // $('#fetch-milestone-mode-'+id).val('');
+            $('.fetch-payment-hide-'+id).hide('');
+            $('#fetch-milestone-date-'+id).val('');
+            $('#fetch-milestone-mode-'+id).val('');
             $('#fetch-milestone-date-'+id).prop('required', false);
             $('#fetch-milestone-mode-'+id).prop('required', false);
         }

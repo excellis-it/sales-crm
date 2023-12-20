@@ -11,6 +11,7 @@ use App\Models\ProjectType;
 use App\Traits\ImageTrait;
 use App\Models\ProjectDocument;
 use App\Models\User;
+use Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -266,6 +267,9 @@ class ProjectController extends Controller
             }
         }
 
+        Session::put('page_number',$request->page_no);
+        $update_success = Session::put('update_success',true);
+
         return redirect()->route('account-manager.projects.index')->with('message', 'Project updated successfully.');
     }
 
@@ -307,6 +311,18 @@ class ProjectController extends Controller
                     ->orWhereRaw('project_value - project_upfront like ?', ["%{$query}%"]);
 
             })->paginate(15);
+
+            Session::put('call_status',$request->get('call_status'));
+            if($request->get('call_status') == '')
+            {
+                $page = Session::put('page_number',1); 
+            }
+            if(Session::get('call_status') == 'Yes') {
+                Session::put('call_status',"");
+                Session::put('update_success',false);
+            }
+
+            
 
             // ->orWhereHas('projectTypes', function ($q) use ($query) {
             //     $q->orWhere('type', 'like', '%' . $query . '%');

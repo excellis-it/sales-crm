@@ -13,6 +13,8 @@
                 @csrf
                 <div class="row">
 
+                    <input type="hidden" name="page_no" id="edit-page-no" >
+
                     <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label"> Client Name
                             <span style="color: red;">*</span></label>
@@ -64,24 +66,42 @@
                     <div class="col-md-12 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Project
                             Type <span style="color: red;">*</span></label>
-                            <select name="project_type[]" id="project_type_other" required multiple="multiple" class="form-control mySelects" disabled>
-                                <!-- Static data for the options -->
-                                <option value="Website Design & Development" {{ in_array('Website Design & Development', $project->projectTypes()->pluck('type')->toArray()) ? 'selected' : '' }}>Website Design & Development</option>
-                                <option value="Mobile Application Development" {{ in_array('Mobile Application Development', $project->projectTypes()->pluck('type')->toArray()) ? 'selected' : '' }}>Mobile Application Development</option>
-                                <option value="Digital Marketing" {{ in_array('Digital Marketing', $project->projectTypes()->pluck('type')->toArray()) ? 'selected' : '' }}>Digital Marketing</option>
-                                <option value="Logo Design" {{ in_array('Logo Design', $project->projectTypes()->pluck('type')->toArray()) ? 'selected' : '' }}>Logo Design</option>
-                                <option value="SEO" {{ in_array('SEO', $project->projectTypes()->pluck('type')->toArray()) ? 'selected' : '' }}>SEO</option>
-                                <option value="SMO" {{ in_array('SMO', $project->projectTypes()->pluck('type')->toArray()) ? 'selected' : '' }}>SMO</option>
-                                <option value="Other" {{ in_array('Other', $project->projectTypes()->pluck('type')->toArray()) ? 'selected' : '' }}>Other</option>
-                            </select> 
+                        <select name="project_type[]" id="project_type_other" required multiple="multiple"
+                            class="form-control mySelects" disabled>
+                            <!-- Static data for the options -->
+                            <option value="Website Design & Development"
+                                {{ in_array('Website Design & Development',$project->projectTypes()->pluck('type')->toArray())? 'selected': '' }}>
+                                Website Design & Development</option>
+                            <option value="Mobile Application Development"
+                                {{ in_array('Mobile Application Development',$project->projectTypes()->pluck('type')->toArray())? 'selected': '' }}>
+                                Mobile Application Development</option>
+                            <option value="Digital Marketing"
+                                {{ in_array('Digital Marketing',$project->projectTypes()->pluck('type')->toArray())? 'selected': '' }}>
+                                Digital Marketing</option>
+                            <option value="Logo Design"
+                                {{ in_array('Logo Design',$project->projectTypes()->pluck('type')->toArray())? 'selected': '' }}>
+                                Logo Design</option>
+                            <option value="SEO"
+                                {{ in_array('SEO',$project->projectTypes()->pluck('type')->toArray())? 'selected': '' }}>
+                                SEO</option>
+                            <option value="SMO"
+                                {{ in_array('SMO',$project->projectTypes()->pluck('type')->toArray())? 'selected': '' }}>
+                                SMO</option>
+                            <option value="Other"
+                                {{ in_array('Other',$project->projectTypes()->pluck('type')->toArray())? 'selected': '' }}>
+                                Other</option>
+                        </select>
                     </div>
                     <div id="other-value" class="col-md-12 mb-3">
                         @foreach ($project['projectTypes'] as $project_show)
-                        @if ($project_show->type == 'Other')
-                            <label for="inputEnterYourName" class="col-form-label">Other Value <span style="color: red;">*</span></label>
-                            <input type="text" name="other_value" id="other_value" required data-parsley-trigger="keyup" class="form-control disable-input" value="{{ $project_show->name }}" placeholder="Enter Other Value">
-                        @endif
-                    @endforeach
+                            @if ($project_show->type == 'Other')
+                                <label for="inputEnterYourName" class="col-form-label">Other Value <span
+                                        style="color: red;">*</span></label>
+                                <input type="text" name="other_value" id="other_value" required
+                                    data-parsley-trigger="keyup" class="form-control disable-input"
+                                    value="{{ $project_show->name }}" placeholder="Enter Other Value">
+                            @endif
+                        @endforeach
                     </div>
                     {{-- Project value --}}
                     <div class="col-md-6 mb-3">
@@ -154,8 +174,9 @@
                     <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Sale Date
                             <span style="color: red;">*</span></label>
-                        <input type="date" name="sale_date" id="edit_sale_date" required data-parsley-trigger="keyup"
-                            data-parsley-type="date" data-parsley-type-message="Please enter a valid date."
+                        <input type="date" name="sale_date" id="edit_sale_date" required
+                            data-parsley-trigger="keyup" data-parsley-type="date"
+                            data-parsley-type-message="Please enter a valid date."
                             class="form-control disable-input picker" value="{{ $project->sale_date }}"
                             placeholder="Enter Sale Date">
                     </div>
@@ -173,8 +194,9 @@
                             <span style="color: red;">*</span></label>
                         <input type="date" name="delivery_tat" id="edit_delivery_tat" required
                             data-parsley-trigger="keyup" data-parsley-type="date"
-                            data-parsley-type-message="Please enter a valid date." class="form-control disable-input picker"
-                            value="{{ $project->delivery_tat }}" placeholder="Enter Sale Date">
+                            data-parsley-type-message="Please enter a valid date."
+                            class="form-control disable-input picker" value="{{ $project->delivery_tat }}"
+                            placeholder="Enter Sale Date">
                     </div>
                     {{-- comment --}}
                     <div class="col-md-12 mb-3">
@@ -225,8 +247,8 @@
                                     <div class="col-md-12 mb-3">
                                         <div style="display: flex">
                                             <select name="payment_status[]" id="payment"
-                                                class="form-control {{ $milestone->payment_status == 'Paid' ? 'disable-input' : '' }}"
-                                                data-parsley-trigger="keyup">
+                                                class="form-control payment-fetch {{ $milestone->payment_status == 'Paid' ? 'disable-input' : '' }}"
+                                                data-parsley-trigger="keyup" data-id="{{$key}}">
                                                 <option value="Paid"
                                                     {{ $milestone->payment_status == 'Paid' ? 'selected' : '' }}>
                                                     Paid</option>
@@ -244,26 +266,60 @@
                                         </div>
                                     </div> --}}
                                     <div class="fetch-payment-hide-{{ $key }}">
-                                    @if($milestone->payment_status=='Paid')
-                                        <div class="col-md-12 mb-3">
-                                            <div style="display: flex">
-                                                <input type="date" name="milestone_payment_date[]"
-                                                    class="form-control picker disable-input" value="{{ $milestone->payment_date }}"
-                                                    id="fetch-milestone-date-{{ $key }}" required data-parsley-trigger="keyup">
+                                        @if ($milestone->payment_status == 'Paid')
+                                            <div class="col-md-12 mb-3">
+                                                <div style="display: flex">
+                                                    <input type="date" name="milestone_payment_date[]"
+                                                        class="form-control picker disable-input"
+                                                        value="{{ $milestone->payment_date }}"
+                                                        id="fetch-milestone-date-{{ $key }}" required
+                                                        data-parsley-trigger="keyup">
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-12 mb-3">
-                                            <div style="display: flex">
-                                                <select name="milestone_payment_mode[]" class="form-control disable-input" id="fetch-milestone-mode-{{ $key }}" required data-parsley-trigger="keyup">
-                                                    <option value="">Select Payment Mode</option>
-                                                    <option value="Paypal" {{ $milestone->payment_mode == 'Paypal' ? 'selected' : '' }}>Paypal</option>
-                                                    <option value="Stripe" {{ $milestone->payment_mode == 'Stripe' ? 'selected' : '' }}>Stripe</option>
-                                                </select>  
+                                            <div class="col-md-12 mb-3">
+                                                <div style="display: flex">
+                                                    <select name="milestone_payment_mode[]"
+                                                        class="form-control disable-input"
+                                                        id="fetch-milestone-mode-{{ $key }}" required
+                                                        data-parsley-trigger="keyup">
+                                                        <option value="">Select Payment Mode</option>
+                                                        <option value="Paypal"
+                                                            {{ $milestone->payment_mode == 'Paypal' ? 'selected' : '' }}>
+                                                            Paypal</option>
+                                                        <option value="Stripe"
+                                                            {{ $milestone->payment_mode == 'Stripe' ? 'selected' : '' }}>
+                                                            Stripe</option>
+                                                    </select>
+                                                </div>
                                             </div>
-                                        </div>
-                                    @else
-                                    @endif 
-                                    </div>   
+                                        @else
+                                            <div style="display:none;">
+                                                <div class="col-md-12 mb-3">
+                                                    <div style="display: flex">
+                                                        <input type="date" name="milestone_payment_date[]"
+                                                            class="form-control picker" value=""
+                                                            data-parsley-trigger="keyup"
+                                                            id="fetch-milestone-date-{{ $key }}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 mb-3">
+                                                    <div style="display: flex">
+                                                        {{-- <input type="text" name="milestone_payment_mode[]"
+                                                    class="form-control" value="{{ $milestone->payment_mode }}"
+                                                required data-parsley-trigger="keyup"
+                                                    placeholder="Milestone payment mode" id="fetch-milestone-mode-{{ $key }}"> --}}
+                                                        <select name="milestone_payment_mode[]" class="form-control"
+                                                            id="fetch-milestone-mode-{{ $key }}"
+                                                            data-parsley-trigger="keyup">
+                                                            <option value="">Select Payment Mode</option>
+                                                            <option value="Paypal">Paypal</option>
+                                                            <option value="Stripe">Stripe</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
                                     <div class="col-md-12 mb-3">
                                         <div style="display: flex">
                                             <textarea name="milestone_comment[]" class="form-control" placeholder="Milestone Comment" id=""
@@ -309,17 +365,18 @@
                         {{-- </br> --}}
                     </div>
                     @if ($project->projectDocuments->count() > 0)
-                    <div class="col-lg-12"> 
-                        <h4 class="mt-4 text-uppercase">Download Documents</h4>
-                        @foreach ($project->projectDocuments as $key => $document)
-                            <div class="download-button">
-                                <a href="{{ route('sales-projects.document.download', $document->id) }}"
-                                    download="downloaded_project_documents.pdf" class="btn submit-btn add-pdf-button good-button">
+                        <div class="col-lg-12">
+                            <h4 class="mt-4 text-uppercase">Download Documents</h4>
+                            @foreach ($project->projectDocuments as $key => $document)
+                                <div class="download-button">
+                                    <a href="{{ route('sales-projects.document.download', $document->id) }}"
+                                        download="downloaded_project_documents.pdf"
+                                        class="btn submit-btn add-pdf-button good-button">
                                         <i class="fas fa-download"></i>
-                                </a>
-                            </div>
-                        @endforeach
-                    </div>
+                                    </a>
+                                </div>
+                            @endforeach
+                        </div>
                     @endif
                 </div>
                 <div class="d-flex alin-items-center w-100 text-end">
@@ -378,7 +435,8 @@
                 html += '<div style="display: flex">';
                 // html +=
                 //     '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" placeholder="Milestone payment mode" required data-parsley-trigger="keyup">';
-                html += '<select name="milestone_payment_mode[]" class="form-control"  required data-parsley-trigger="keyup">';
+                html +=
+                    '<select name="milestone_payment_mode[]" class="form-control"  required data-parsley-trigger="keyup">';
                 html += '<option value="">Select Payment Mode</option>';
                 html += '<option value="Paypal">Paypal</option>';
                 html += '<option value="Stripe">Stripe</option>';
@@ -453,7 +511,7 @@
 
     <script>
         $(document).ready(function() {
-              $('.select2').each(function() {
+            $('.select2').each(function() {
                 $(this).select2({
                     dropdownParent: $(this).parent()
                 });
@@ -533,7 +591,8 @@
                     html += '<div style="display: flex">';
                     // html +=
                     //     '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" placeholder="Milestone payment mode" required data-parsley-trigger="keyup">';
-                    html += '<select name="milestone_payment_mode[]" class="form-control"  required data-parsley-trigger="keyup">';
+                    html +=
+                        '<select name="milestone_payment_mode[]" class="form-control"  required data-parsley-trigger="keyup">';
                     html += '<option value="">Select Payment Mode</option>';
                     html += '<option value="Paypal">Paypal</option>';
                     html += '<option value="Stripe">Stripe</option>';
@@ -597,19 +656,22 @@
                 html += '<div class="col-md-12 mb-3">';
                 html += '<div style="display: flex">';
                 html +=
-                    '<select name="payment_status[]" id="edit_payment_status" data-id="' + index + '" class="form-control edit_payment_status" required data-parsley-trigger="keyup"><option value=""  >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
+                    '<select name="payment_status[]" id="edit_payment_status" data-id="' + index +
+                    '" class="form-control edit_payment_status" required data-parsley-trigger="keyup"><option value=""  >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
                 html += '</div>';
                 html += '</div>';
-                html += '<div class="edit-payment-hide-'+index+'" style="display:none;">';
+                html += '<div class="edit-payment-hide-' + index + '" style="display:none;">';
                 html += '<div class="col-md-12 mb-3">';
                 html += '<div style="display: flex">';
                 html +=
-                    '<input type="date" name="milestone_payment_date[]" class="form-control picker" value="" id="edit-milestone-date-'+index+'" data-parsley-trigger="keyup">';
+                    '<input type="date" name="milestone_payment_date[]" class="form-control picker" value="" id="edit-milestone-date-' +
+                    index + '" data-parsley-trigger="keyup">';
                 html += '</div>';
                 html += '</div>';
                 html += '<div class="col-md-12 mb-3">';
                 html += '<div style="display: flex">';
-                html += '<select name="milestone_payment_mode[]" id="edit-milestone-mode-'+index+'"  class="form-control"  required data-parsley-trigger="keyup">';
+                html += '<select name="milestone_payment_mode[]" id="edit-milestone-mode-' + index +
+                    '"  class="form-control"  required data-parsley-trigger="keyup">';
                 html += '<option value="">Select Payment Mode</option>';
                 html += '<option value="Paypal">Paypal</option>';
                 html += '<option value="Stripe">Stripe</option>';
@@ -641,48 +703,57 @@
     </script>
 
     <script>
-    
         $(document).on('change', '.edit_payment_status', function() {
-        
+
             var id = $(this).data('id');
             var payment_status = $(this).val();
-        
+
             // $('#milestone_payment_date').prop('required', false);
-            $('#edit-milestone-date-'+id).prop('required', false);
-            $('#edit-milestone-mode-'+id).prop('required', false);
+            $('#edit-milestone-date-' + id).prop('required', false);
+            $('#edit-milestone-mode-' + id).prop('required', false);
             if (payment_status == 'Paid') {
-                $('.edit-payment-hide-'+id).show();
-                $('#edit-milestone-date-'+id).prop('required', true);
-                $('#edit-milestone-mode-'+id).prop('required', true);
+                $('.edit-payment-hide-' + id).show();
+                $('#edit-milestone-date-' + id).prop('required', true);
+                $('#edit-milestone-mode-' + id).prop('required', true);
             } else {
-                $('.edit-payment-hide-'+id).hide();
-                $('#edit-milestone-date-'+id).prop('required', false);
-                $('#edit-milestone-mode-'+id).prop('required', false);
+                $('.edit-payment-hide-' + id).hide();
+                $('#edit-milestone-date-' + id).prop('required', false);
+                $('#edit-milestone-mode-' + id).prop('required', false);
             }
         });
-
     </script>
 
-<script>
-    $(document).on('change','.payment-fetch', function(){
-        var id = $(this).data('id');
-        var payment_status = $(this).val();
-        console.log(payment_status);
-        $('#fetch-milestone-date-'+id).prop('required', false);
-        $('#fetch-milestone-mode-'+id).prop('required', false);
-        if (payment_status == 'Paid') {
+    <script>
+        $(document).on('change', '.payment-fetch', function() {
+            
+            var id = $(this).data('id');
+            var payment_status = $(this).val();
             console.log(payment_status);
-            // $('.fetch-payment-hide-'+id).show();
-            $('.fetch-payment-hide-'+id).html('<div class="col-md-12 mb-3"><div style="display: flex"><input type="date" name="milestone_payment_date[]" class="form-control picker" value="" required data-parsley-trigger="keyup" id="fetch-milestone-date-'+id+'"></div></div><div class="col-md-12 mb-3"><div style="display: flex">  <select name="milestone_payment_mode[]" class="form-control" required data-parsley-trigger="keyup" id="fetch-milestone-mode-'+id+'"><option value="">Select Payment Mode</option><option value="Paypal">Paypal</option><option value="Stripe">Stripe</option></select></div></div>');
-            $('#fetch-milestone-date-'+id).prop('required', true);
-            $('#fetch-milestone-mode-'+id).prop('required', true);
-        } else {
-            // $('.fetch-payment-hide-'+id).hide();
-            $('.fetch-payment-hide-'+id).html('');
-            $('#fetch-milestone-date-'+id).prop('required', false);
-            $('#fetch-milestone-mode-'+id).prop('required', false);
-        }
-    });
+            $('#fetch-milestone-date-' + id).prop('required', false);
+            $('#fetch-milestone-mode-' + id).prop('required', false);
+            if (payment_status == 'Paid') {
+                console.log(payment_status);
+                // $('.fetch-payment-hide-'+id).show();
+                $('.fetch-payment-hide-' + id).show();
+                $('.fetch-payment-hide-' + id).html(
+                    '<div class="col-md-12 mb-3"><div style="display: flex"><input type="date" name="milestone_payment_date[]" class="form-control picker" value="" required data-parsley-trigger="keyup" id="fetch-milestone-date-' +
+                    id +
+                    '"></div></div><div class="col-md-12 mb-3"><div style="display: flex">  <select name="milestone_payment_mode[]" class="form-control" required data-parsley-trigger="keyup" id="fetch-milestone-mode-' +
+                    id +
+                    '"><option value="">Select Payment Mode</option><option value="Paypal">Paypal</option><option value="Stripe">Stripe</option></select></div></div>'
+                    );
+                $('#fetch-milestone-date-' + id).prop('required', true);
+                $('#fetch-milestone-mode-' + id).prop('required', true);
+            } else {
+                // $('.fetch-payment-hide-'+id).hide();
+                $('.fetch-payment-hide-' + id).hide('');
+                $('#fetch-milestone-date-' + id).val('');
+                $('#fetch-milestone-mode-' + id).val('');
+                // $('.fetch-payment-hide-'+id).html('');
+                $('#fetch-milestone-date-' + id).prop('required', false);
+                $('#fetch-milestone-mode-' + id).prop('required', false);
+            }
+        });
     </script>
     <script>
         $(document).ready(function() {
@@ -690,11 +761,11 @@
             $('#edit_sale_date').on('change', function() {
                 // Get the selected Sale Date
                 var saleDate = $(this).val();
-    
+
                 // Set the minimum date for Delivery TAT to be one day after the Sale Date
                 $('#edit_delivery_tat').attr('min', incrementDate(saleDate, 1));
             });
-    
+
             // Function to increment date by a specified number of days
             function incrementDate(date, days) {
                 var result = new Date(date);
@@ -710,7 +781,7 @@
             $('.mySelects').select2();
             document.getElementByClass('mySelects').disabled = true;
 
-           
+
         });
     </script>
 @endif

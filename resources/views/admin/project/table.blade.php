@@ -52,19 +52,24 @@
 @endif
 
 <tr>
-    
+
     <td colspan="12">
-        <div class="d-flex justify-content-center">
-            {!! $projects->links() !!}
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="">
+                (Showing {{ $projects->firstItem() }} – {{ $projects->lastItem() }} Projects of
+                {{ $projects->count() }} Projects)
+            </div>
+            <div class="d-flex justify-content-center">
+                {!! $projects->links() !!}
+            </div>
+
+
+            {{-- page no of page --}}
+
         </div>
-        {{-- page no of page --}}
 
-        (Showing {{ $projects->firstItem() }} – {{ $projects->lastItem() }} Projects of
-        {{$projects->count() }} Projects)  
-        
     </td>
-    
-    
-    
-</tr>
 
+
+
+</tr>

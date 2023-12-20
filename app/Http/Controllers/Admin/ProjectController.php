@@ -26,22 +26,25 @@ class ProjectController extends Controller
      */
     public function index(Request $request)
     {
+        // return Session::get('call_status');
+
+        
         $sales_managers = User::Role(['SALES_MANAGER','ACCOUNT_MANAGER','BUSINESS_DEVELOPMENT_MANAGER'])->orderBy('name', 'DESC')->where('status', 1)->get();
         $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE','BUSINESS_DEVELOPMENT_MANAGER','BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
         $account_managers = User::role('ACCOUNT_MANAGER')->orderBy('name', 'DESC')->where('status', 1)->get();
         $project_openers = User::role(['ACCOUNT_MANAGER', 'SALES_EXCUETIVE','BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
         if ($request->sales_manager_id) {
-            $projects = Project::orderBy('sale_date', 'desc')->where('user_id', $request->sales_manager_id)->paginate(10);
+            $projects = Project::orderBy('sale_date', 'desc')->where('user_id', $request->sales_manager_id)->paginate(15);
             return view('admin.project.list')->with(compact('projects','sales_managers','users','account_managers','project_openers'));
         }
 
         if ($request->account_manager_id) {
-            $projects = Project::orderBy('sale_date', 'desc')->where('assigned_to', $request->account_manager_id)->paginate(10);
+            $projects = Project::orderBy('sale_date', 'desc')->where('assigned_to', $request->account_manager_id)->paginate(15);
             return view('admin.project.list')->with(compact('projects','sales_managers','users','account_managers','project_openers'));
         }
 
 
-        $projects = Project::orderBy('sale_date', 'desc')->paginate(10);
+        $projects = Project::orderBy('sale_date', 'desc')->paginate(15);
         return view('admin.project.list')->with(compact('projects','sales_managers','users','account_managers','project_openers'));
     }
 
@@ -370,11 +373,11 @@ class ProjectController extends Controller
             }
         }
 
-        $page_no = Session::get('page_number');
+        Session::put('page_number',$request->page_no);
+        $update_success = Session::put('update_success',true);
         // $url = '/admin/sales-project/?page=' . $page_no;
         // return redirect()->to($url);
-
-
+        
         return redirect()->route('sales-projects.index')->with('message', 'Project updated successfully.');
     }
 
@@ -426,6 +429,7 @@ class ProjectController extends Controller
 
     public function fetchData(Request $request)
     {
+        
         if ($request->ajax()) {
             $sort_by = $request->get('sortby');
             $sort_type = $request->get('sorttype');
@@ -445,9 +449,18 @@ class ProjectController extends Controller
                 ->orWhereHas('salesManager', function ($q) use ($query) {
                     $q->where('name', 'like', '%' . $query . '%');
                 })
-                ->paginate(10);
-                $page = Session::put('page_number',$request->get('page'));
-
+                ->paginate(15);
+                
+                Session::put('call_status',$request->get('call_status'));
+                if($request->get('call_status') == '')
+                {
+                    $page = Session::put('page_number',1); 
+                }
+                if(Session::get('call_status') == 'Yes') {
+                    Session::put('call_status',"");
+                    Session::put('update_success',false);
+                }
+ 
             return response()->json(['data' => view('admin.project.table', compact('projects'))->render()]);
         }
     }

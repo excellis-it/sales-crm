@@ -48,20 +48,22 @@
             <a title="View Project" data-route=""
                 href="{{ route('sales-excecutive.projects.show', $project->id) }}"><i
                     class="fas fa-eye"></i></a>
-        </td>
+            </td>
     </tr>
     @endforeach
 
     <tr>
-        <td colspan="11">
+       
+    <td colspan="11">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="">
+                (Showing {{ $projects->firstItem() }} – {{ $projects->lastItem() }} Projects of
+                {{ $projects->count() }} Projects)
+            </div>
             <div class="d-flex justify-content-center">
                 {!! $projects->links() !!}
             </div>
-
-            (Showing {{ $projects->firstItem() }} – {{ $projects->lastItem() }} Projects of
-            {{$projects->count() }} Projects)
-        </td>
-
-        
+        </div>
+    </td>
     </tr>
 @endif    

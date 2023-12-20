@@ -13,6 +13,8 @@
                 @csrf
                 <div class="row">
 
+                    <input type="hidden" name="page_no" id="edit-page-no" >
+
                     <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label"> Client Name
                             <span style="color: red;">*</span></label>
@@ -287,6 +289,28 @@
                                         </div>
                                     </div>
                                     @else
+                                    <div  style="display:none;">
+                                        <div class="col-md-12 mb-3">
+                                            <div style="display: flex">
+                                                <input type="date" name="milestone_payment_date[]"
+                                                    class="form-control picker" value=""
+                                                     data-parsley-trigger="keyup" id="fetch-milestone-date-{{ $key }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 mb-3">
+                                            <div style="display: flex">
+                                                {{-- <input type="text" name="milestone_payment_mode[]"
+                                                    class="form-control" value="{{ $milestone->payment_mode }}"
+                                                required data-parsley-trigger="keyup"
+                                                    placeholder="Milestone payment mode" id="fetch-milestone-mode-{{ $key }}"> --}}
+                                                    <select name="milestone_payment_mode[]" class="form-control" id="fetch-milestone-mode-{{ $key }}"  data-parsley-trigger="keyup">
+                                                        <option value="">Select Payment Mode</option>
+                                                        <option value="Paypal" >Paypal</option>
+                                                        <option value="Stripe" >Stripe</option>
+                                                    </select>    
+                                            </div>
+                                        </div>
+                                    </div>
                                         
                                     @endif
                                     

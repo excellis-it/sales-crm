@@ -417,6 +417,9 @@
     <script src="https://unpkg.com/popper.js@1"></script>
     <script src="https://unpkg.com/tippy.js@5"></script>
     {{-- trippy --}}
+
+    <script>
+        </script>
     <script>
         tippy('[data-tippy-content]', {
             allowHTML: true,
@@ -427,6 +430,16 @@
     <script>
         $(document).ready(function() {
 
+            @if(Session::get('update_success') == true)
+            
+            var query = $('#search').val();
+            var column_name = $('#hidden_column_name').val();
+            var sort_type = $('#hidden_sort_type').val();
+            var page = @php echo Session::get('page_number') @endphp;
+            
+            fetch_data(page, sort_type, column_name, query,"Yes");
+            @endif
+                
             function clear_icon() {
                 // $('#date_icon').html('');
                 // $('#project_name_icon').html('');
@@ -437,14 +450,15 @@
                 // $('#currency_icon').html('');
             }
 
-            function fetch_data(page, sort_type, sort_by, query) {
+            function fetch_data(page, sort_type, sort_by, query,call_status = "") {
                 $.ajax({
                     url: "{{ route('sales-projects.fetch-data') }}",
                     data: {
                         page: page,
                         sortby: sort_by,
                         sorttype: sort_type,
-                        query: query
+                        query: query,
+                        call_status : call_status
                     },
                     success: function(data) {
                         $('tbody').html(data.data);
@@ -457,7 +471,7 @@
                 var column_name = $('#hidden_column_name').val();
                 var sort_type = $('#hidden_sort_type').val();
                 var page = $('#hidden_page').val();
-                fetch_data(page, sort_type, column_name, query);
+                fetch_data(page, sort_type, column_name, query,call_status = "");
             });
 
             $(document).on('click', '.sorting', function() {
@@ -482,10 +496,11 @@
                 $('#hidden_sort_type').val(reverse_order);
                 var page = $('#hidden_page').val();
                 var query = $('#search').val();
-                fetch_data(page, reverse_order, column_name, query);
+                fetch_data(page, reverse_order, column_name, query,call_status = "");
             });
 
             $(document).on('click', '.pagination a', function(event) {
+                
                 event.preventDefault();
                 var page = $(this).attr('href').split('page=')[1];
                 $('#hidden_page').val(page);
@@ -494,9 +509,11 @@
 
                 var query = $('#search').val();
 
+               
+
                 $('li').removeClass('active');
                 $(this).parent().addClass('active');
-                fetch_data(page, sort_type, column_name, query);
+                fetch_data(page, sort_type, column_name, query,call_status = "");
             });
 
         });
@@ -897,6 +914,9 @@
                 // Make an AJAX request to fetch the priceRequest details
                 $('#loading').addClass('loading');
                 $('#loading-content').addClass('loading-content');
+                var page = $('#hidden_page').val();
+                
+                
                 $.ajax({
                     url: route,
                     type: 'GET',
@@ -906,6 +926,7 @@
                         $('#loading').removeClass('loading');
                         $('#loading-content').removeClass('loading-content');
                         $('#offcanvasEdit').offcanvas('show');
+                        $('#edit-page-no').val(page);
                     },
                     error: function(xhr) {
                         // Handle errors
@@ -1125,4 +1146,6 @@
             $('.mySelect').select2();
         });
     </script>
+
+
 @endpush

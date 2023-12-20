@@ -10,6 +10,7 @@ use App\Models\ProjectDocument;
 use App\Models\ProjectMilestone;
 use App\Models\ProjectType;
 use App\Models\User;
+use Session;
 use App\Traits\ImageTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,7 +26,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects = Project::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->paginate(10);
+        $projects = Project::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->paginate(15);
         $account_managers = User::role('ACCOUNT_MANAGER')->orderBy('name', 'DESC')->where('status', 1)->get();
         $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE', 'BUSINESS_DEVELOPMENT_MANAGER', 'BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
         $project_openers = User::role(['BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where(['bdm_id' => Auth::user()->id, 'status' => 1])->orderBy('id', 'desc')->get();
@@ -52,7 +53,17 @@ class ProjectController extends Controller
                     ->orWhereHas('projectTypes', function ($q) use ($query) {
                         $q->Where('type', 'like', '%' . $query . '%');
                     });
-            })->paginate(10);
+            })->paginate(15);
+
+            Session::put('call_status',$request->get('call_status'));
+            if($request->get('call_status') == '')
+            {
+                $page = Session::put('page_number',1); 
+            }
+            if(Session::get('call_status') == 'Yes') {
+                Session::put('call_status',"");
+                Session::put('update_success',false);
+            }
 
 
 
@@ -332,6 +343,9 @@ class ProjectController extends Controller
                 $project_pdf->save();
             }
         }
+
+        Session::put('page_number',$request->page_no);
+        $update_success = Session::put('update_success',true);
 
         return redirect()->route('bdm.projects.index')->with('message', 'Project updated successfully.');
     }

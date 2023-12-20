@@ -10,6 +10,7 @@ use App\Models\ProjectDocument;
 use App\Models\ProjectMilestone;
 use App\Models\ProjectType;
 use App\Models\User;
+use Session;
 use App\Traits\ImageTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -55,6 +56,17 @@ class ProjectController extends Controller
                     })
                     ->orWhereRaw('project_value - project_upfront like ?', ["%{$query}%"]);
             })->paginate(15);
+
+
+            Session::put('call_status',$request->get('call_status'));
+            if($request->get('call_status') == '')
+            {
+                $page = Session::put('page_number',1); 
+            }
+            if(Session::get('call_status') == 'Yes') {
+                Session::put('call_status',"");
+                Session::put('update_success',false);
+            }
 
             return response()->json(['data' => view('sales_manager.project.table', compact('projects'))->render()]);
         }
@@ -312,6 +324,9 @@ class ProjectController extends Controller
                 $project_pdf->save();
             }
         }
+
+        Session::put('page_number',$request->page_no);
+        $update_success = Session::put('update_success',true);
         // return "d";
         return redirect()->route('projects.index')->with('message', 'Project updated successfully.');
     }
