@@ -72,6 +72,14 @@
                              Prospects </span></a>
                 </li>
 
+                <li class="menu-title">
+                    <span>Payment Management</span>
+                </li>
+
+                <li class="{{ Request::is('admin/payments*') ? 'active' : ' ' }}">
+                    <a href="{{ route('admin.payments.list') }}"><i class="fa fa-money-bill"></i> <span>Payments</span></a>
+                </li>
+
 
 
                 {{-- <li class="{{ Request::is('admin/members*') ? 'active' : ' ' }}">

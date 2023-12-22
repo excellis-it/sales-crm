@@ -26,6 +26,9 @@
                 <li class="{{ Request::is('account-manager/projects*') ? 'active' : ' ' }}">
                     <a href="{{ route('account-manager.projects.index') }}"><i class="la la-credit-card"></i> <span>Projects</span></a>
                 </li>
+                <li class="{{ Request::is('account-manager/payments*') ? 'active' : ' ' }}">
+                    <a href="{{ route('account-manager.payments.list') }}"><i class="fa fa-money-bill"></i> <span>Payments</span></a>
+                </li>
 
 
 

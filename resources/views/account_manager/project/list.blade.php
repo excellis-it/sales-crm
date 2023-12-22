@@ -401,7 +401,8 @@
                     page: page,
                     sortby: sort_by,
                     sorttype: sort_type,
-                    query: query
+                    query: query,
+                    call_status: call_status
                 },
                 success: function(data) {
                     $('tbody').html(data.data);

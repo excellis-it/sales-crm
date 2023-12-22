@@ -4,6 +4,7 @@ use App\Http\Controllers\AccountManager\DashboardController as AccountManagerDas
 use App\Http\Controllers\AccountManager\FollowupController;
 use App\Http\Controllers\AccountManager\ProfileController as AccountManagerProfileController;
 use App\Http\Controllers\AccountManager\ProjectController as AccountManagerProjectController;
+use App\Http\Controllers\AccountManager\PaymentsController as AccountManagerPaymentsController;
 use App\Http\Controllers\Admin\AccountManagerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController;
@@ -19,6 +20,7 @@ use App\Http\Controllers\Admin\FollowupController as AdminFollowupController;
 use App\Http\Controllers\Admin\GoalsController;
 use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
 use App\Http\Controllers\Admin\ProspectController as AdminProspectController;
+use App\Http\Controllers\Admin\PaymentsController as AdminPaymentsController;
 use App\Http\Controllers\Admin\SalesExcecutiveController;
 use App\Http\Controllers\Admin\SellerController;
 use App\Http\Controllers\BDM\BusinessDevelopmentExcecutiveController as BDMBusinessDevelopmentExcecutiveController;
@@ -110,6 +112,8 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('/business-development-managers-search', [BusinessDevelopmentManagerController::class, 'search'])->name('business-development-managers.search');
     Route::get('/business-development-excecutive-search', [BusinessDevelopmentExcecutiveController::class, 'search'])->name('business-development-excecutive.search');
 
+    
+
     // fetch data
     Route::get('/fetch-data', [AdminProjectController::class, 'fetchData'])->name('sales-projects.fetch-data');
 
@@ -172,6 +176,10 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     });
     Route::post('/goals-get-user', [GoalsController::class, 'getUser'])->name('goals.get.user');
     Route::post('/goals-get-user-by-type', [GoalsController::class, 'getUserByType'])->name('goals.get.user-by-type');
+
+    //payment routes
+    Route::get('/payments', [AdminPaymentsController::class, 'adminPayments'])->name('admin.payments.list');
+    Route::get('/payments/invoice-download/{id}',[AdminPaymentsController::class, 'adminInvoicedownload'])->name('admin.payments.download-invoice');
 });
 
 /**---------------------------------------------------------------Sales Manager ---------------------------------------------------------------------------------- */
@@ -243,6 +251,9 @@ Route::group(['middleware' => ['AccountManager'], 'prefix' => 'account-manager']
     });
 
     Route::get('/account-manager-projects-filter', [AccountManagerProjectController::class, 'accountManagerFilterProject'])->name('account-manager.project.filter');
+    Route::get('/payments', [AccountManagerPaymentsController::class, 'accountManagerPayments'])->name('account-manager.payments.list');
+    Route::get('/payments-filter', [AccountManagerPaymentsController::class, 'accountManagerPaymentsFilter'])->name('account-manager.payments.filter');
+    Route::get('/payments/invoice-download/{id}',[AccountManagerPaymentsController::class, 'accountManagerInvoicedownload'])->name('account-manager.payments.download-invoice');
     Route::get('/account-manager-followups-filter', [FollowupController::class, 'accountManagerFollowupProject'])->name('account-manager.followups.filter');
     Route::get('/projects-document_download/{id}', [AccountManagerProjectController::class, 'accountManagerdocumentDownload'])->name('account-manager.projects.document.download');
 });

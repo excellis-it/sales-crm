@@ -78,13 +78,12 @@
                             </select> 
                     </div>
                     <div id="other-value" class="col-md-12 mb-3">
-                        @if (isset($project['projectTypes']['type']) && $project['projectTypes']['type'] == 'Other')
-                            <label for="inputEnterYourName" class="col-form-label">Other
-                                Value <span style="color: red;">*</span></label>
-                            <input type="text" name="other_value" id="other_value" required
-                                data-parsley-trigger="keyup" class="form-control disable-input"
-                                value="{{ $project['projectTypes']['name'] }}" placeholder="Enter Other Value">
+                        @foreach ($project['projectTypes'] as $project_show)
+                        @if ($project_show->type == 'Other')
+                            <label for="inputEnterYourName" class="col-form-label">Other Value <span style="color: red;">*</span></label>
+                            <input type="text" name="other_value" id="other_value" required data-parsley-trigger="keyup" class="form-control" value="{{ $project_show->name }}" placeholder="Enter Other Value">
                         @endif
+                    @endforeach
                     </div>
                     {{-- Project value --}}
                     <div class="col-md-6 mb-3">

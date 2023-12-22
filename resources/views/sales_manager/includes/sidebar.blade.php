@@ -38,6 +38,11 @@
                             Prospects</span></a>
                 </li>
 
+                <li class="{{ Request::is('sales-manager/payments*') ? 'active' : ' ' }}">
+                    <a href="{{ route('sales-manager.payments.index') }}"><i class="la la-book-reader"></i> <span>My
+                            Payments</span></a>
+                </li>
+
 
 
                 {{-- <li class="{{ Request::is('sales-manager/members*') ? 'active' : ' ' }}">
