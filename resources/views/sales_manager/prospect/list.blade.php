@@ -50,7 +50,7 @@
                     <div class="card-title">
                         <div class="row">
                             <div class="col-md-6">
-                                <h4 class="mb-0">Prospects Details</h4>
+                                <h4 class="mb-0">Prospects List</h4>
                             </div>
                             <div class="col-md-6 text-end">
                                 <a href="javascript:void(0);" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"

@@ -17,12 +17,10 @@
        {{ $project_milestone->payment_date ? date('d-m-Y', strtotime($project_milestone->payment_date)) : '' }}
     </td>
     <td >
-        <a href="{{ route('admin.payments.download-invoice', $project_milestone->id) }}" class="btn btn-primary btn-sm"><i class="fas fa-download"></i></a>
+        <a href="{{ route('sales-manager.payments.download-invoice', $project_milestone->id) }}" class="btn btn-primary btn-sm"><i class="fas fa-download"></i></a>
     </td>
 </tr>
 @endforeach
-
-
 
 <tr>
 <td colspan="10">

@@ -1,4 +1,4 @@
-@extends('admin.layouts.master')
+@extends('sales_manager.layouts.master')
 @section('title')
     All Payments List - {{ env('APP_NAME') }}
 @endsection
@@ -23,7 +23,7 @@
                     <div class="col">
                         <h3 class="page-title">Project Payments Information</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('admin.payments.list') }}">Payments</a>
+                            <li class="breadcrumb-item"><a href="{{ route('sales-manager.payments.list') }}">Payments</a>
                             </li>
                             <li class="breadcrumb-item active">List</li>
                         </ul>
@@ -44,20 +44,20 @@
 
                     <hr />
                     <div class="row justify-content-end">
-                        <div class="col-md-6">
-                            <div class="row g-1 justify-content-end">
-                                <div class="col-md-8 pr-0">
-                                    <div class="search-field">
-                                        <input type="text" name="search" id="search" placeholder="search..." required
-                                            class="form-control rounded_search">
-                                        <button class="submit_search" id="search-button"> <span class=""><i
-                                                    class="fa fa-search"></i></span></button>
-                                    </div>
+                    <div class="col-md-6">
+                        <div class="row g-1 justify-content-end">
+                            <div class="col-md-8 pr-0">
+                                <div class="search-field">
+                                    <input type="text" name="search" id="search" placeholder="search..." required
+                                        class="form-control rounded_search">
+                                    <button class="submit_search" id="search-button"> <span class=""><i
+                                                class="fa fa-search"></i></span></button>
                                 </div>
-                                
                             </div>
+                            
                         </div>
                     </div>
+                </div>
 
                     <div class="table-responsive">
                         <table id="myTable" class="dd table table-striped  table-hover" style="width:100%">
@@ -66,8 +66,8 @@
                                     <th>Project Name </th>
                                     <th>Milestone Name </th>
                                     <th>Milestone value</th>
-                                    <th>Payment mode </th>
-                                    <th>Payment date </th>
+                                    <th>Payment mode</th>
+                                    <th>Payment date</th>
                                     <th style="cursor: pointer">
                                         Download Invoice</th>
 
@@ -75,7 +75,7 @@
                             </thead>
                             <tbody>
 
-                                @include('admin.payments.table')
+                                @include('sales_manager.payments.table')
 
                             </tbody>
                         </table>
@@ -90,13 +90,12 @@
 @endsection
 
 @push('scripts')
- 
 <script>
     $(document).ready(function() {
         function fetch_data(page, query) {
             // console.log(status + ' ' + page);
             $.ajax({
-                url: "{{ route('admin.payments.filter') }}",
+                url: "{{ route('sales_manager.payments.filter') }}",
                 data: {
                     page: page,
                     query: query,
@@ -131,4 +130,5 @@
         });
     });
 </script>
+   
 @endpush

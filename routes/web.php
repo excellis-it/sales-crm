@@ -36,6 +36,7 @@ use App\Http\Controllers\SalesManager\DashboardController as SalesManagerDashboa
 use App\Http\Controllers\SalesManager\ProfileController as SalesManagerProfileController;
 use App\Http\Controllers\SalesManager\ProjectController;
 use App\Http\Controllers\SalesManager\ProspectController as SalesManagerProspectController;
+use App\Http\Controllers\SalesManager\PaymentController as SalesManagerPaymentController;
 use App\Http\Controllers\SalesManager\SalesExcecutiveController as SalesManagerSalesExcecutiveController;
 use App\Http\Controllers\BDE\DashboardController as BDEDashboardController;
 use App\Http\Controllers\BDE\ProspectController as BDEProspectController;
@@ -179,6 +180,7 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
 
     //payment routes
     Route::get('/payments', [AdminPaymentsController::class, 'adminPayments'])->name('admin.payments.list');
+    Route::get('/payments-filter', [AdminPaymentsController::class, 'adminPaymentFilter'])->name('admin.payments.filter'); // payment filter
     Route::get('/payments/invoice-download/{id}',[AdminPaymentsController::class, 'adminInvoicedownload'])->name('admin.payments.download-invoice');
 });
 
@@ -207,6 +209,11 @@ Route::group(['middleware' => ['SalesManager'], 'prefix' => 'sales-manager'], fu
 
         ]);
     });
+
+    //payment routes
+    Route::get('/payments', [SalesManagerPaymentController::class, 'salesManagerPayments'])->name('sales-manager.payments.list');
+    Route::get('/payments/invoice-download/{id}',[SalesManagerPaymentController::class, 'salesManagerInvoicedownload'])->name('sales-manager.payments.download-invoice');
+    Route::get('/payments-filter', [SalesManagerPaymentController::class, 'salesManagerPaymentFilter'])->name('sales_manager.payments.filter');
 
     Route::get('/prospect-search', [SalesManagerDashboardController::class, 'dashboardProspectSearch'])->name('sales-manger.dashboard.prospect-search-data');
     Route::get('/sales-executive-search', [SalesManagerSalesExcecutiveController::class, 'salesExecutiveSerach'])->name('sales-manager.sales-excecutive.search');
