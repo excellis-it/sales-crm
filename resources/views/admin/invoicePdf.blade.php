@@ -168,13 +168,13 @@
                         Payment Mode</p>
                 </td>
                 <td style="width:58px;border-top-style:solid;border-top-width:1px;border-top-color:#9E9E9E;border-left-style:solid;border-left-width:1px;border-left-color:#9E9E9E;border-bottom-style:solid;border-bottom-width:1px;border-bottom-color:#9E9E9E;border-right-style:solid;border-right-width:1px;border-right-color:#9E9E9E"
-                    rowspan="1" bgcolor="#F2F2F3">
+                    rowspan="1" bgcolor="#F2F2F3" colspan="2">
                     <p
                         style="font-size: 14px; font-weight: 800; margin: 5px 0px 10px;  text-align: right; padding-right: 10px;">
                         Milestone Date</p>
                 </td>
                 <td style="width:58px;border-top-style:solid;border-top-width:1px;border-top-color:#9E9E9E;border-left-style:solid;border-left-width:1px;border-left-color:#9E9E9E;border-bottom-style:solid;border-bottom-width:1px;border-bottom-color:#9E9E9E;border-right-style:solid;border-right-width:1px;border-right-color:#9E9E9E"
-                rowspan="1" bgcolor="#F2F2F3"  colspan="2">
+                rowspan="1" bgcolor="#F2F2F3">
                 <p
                     style="font-size: 14px; font-weight: 800; margin: 5px 0px 10px;  text-align: right; padding-right: 10px;">
                     Milestone Value</p>
@@ -207,13 +207,13 @@
                         {{ $milestone_detail->payment_mode }}</p>
                 </td>
                 <td
-                    style="width:58px;border-top-style:solid;border-top-width:1px;border-top-color:#9E9E9E;border-left-style:solid;border-left-width:1px;border-left-color:#9E9E9E;border-bottom-style:solid;border-bottom-width:1px;border-bottom-color:#9E9E9E;border-right-style:solid;border-right-width:1px;border-right-color:#9E9E9E">
+                    style="width:58px;border-top-style:solid;border-top-width:1px;border-top-color:#9E9E9E;border-left-style:solid;border-left-width:1px;border-left-color:#9E9E9E;border-bottom-style:solid;border-bottom-width:1px;border-bottom-color:#9E9E9E;border-right-style:solid;border-right-width:1px;border-right-color:#9E9E9E"  colspan="2">
                     <p
                         style="font-size: 14px; font-weight: 400; margin: 5px 0px 10px; text-align: right; padding-right: 10px;">
                         {{ $milestone_detail->payment_date }}</p>
                 </td>
                 <td
-                    style="width:58px;border-top-style:solid;border-top-width:1px;border-top-color:#9E9E9E;border-left-style:solid;border-left-width:1px;border-left-color:#9E9E9E;border-bottom-style:solid;border-bottom-width:1px;border-bottom-color:#9E9E9E;border-right-style:solid;border-right-width:1px;border-right-color:#9E9E9E" colspan="2">
+                    style="width:58px;border-top-style:solid;border-top-width:1px;border-top-color:#9E9E9E;border-left-style:solid;border-left-width:1px;border-left-color:#9E9E9E;border-bottom-style:solid;border-bottom-width:1px;border-bottom-color:#9E9E9E;border-right-style:solid;border-right-width:1px;border-right-color:#9E9E9E">
                     <p
                         style="font-size: 14px; font-weight: 400; margin: 5px 0px 10px; text-align: right; padding-right: 10px;">
                         {{ $milestone_detail->milestone_value }}</p>
