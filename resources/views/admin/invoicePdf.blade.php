@@ -134,13 +134,13 @@
                     colspan="8">
                     <p
                         style="font-size: 18px; font-weight: 800; margin: 5px 0px 10px; text-align: left; padding-left: 10px;">
-                        Carlos Paesano </p>
+                        {{ $milestone_detail->project->salesManager->name }} </p>
                     <p
                         style="font-size: 14px; font-weight: 400; margin: 5px 0px 10px; text-align: left; padding-left: 10px;">
-                        5520 Orduna Drive </p>
+                        {{ $milestone_detail->project->salesManager->email }} </p>
                     <p
                         style="font-size: 14px; font-weight: 400; margin: 5px 0px 10px; text-align: left; padding-left: 10px;">
-                        Coral Gables, FL 33146 </p>
+                        {{ $milestone_detail->project->salesManager->phone }}</p>
                 </td>
             </tr>
 

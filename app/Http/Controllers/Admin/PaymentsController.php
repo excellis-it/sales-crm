@@ -26,7 +26,7 @@ class PaymentsController extends Controller
 
     public function adminInvoicedownload($id)
     {
-        $milestone_detail = ProjectMilestone::where('id', $id)->with('project','user')->first();
+        $milestone_detail = ProjectMilestone::where('id', $id)->with('project','project.salesManager')->first();
         $pdf = PDF::loadView('admin.invoicePdf',array('milestone_detail' => $milestone_detail));
     
         return $pdf->download('admin-invoice.pdf');
