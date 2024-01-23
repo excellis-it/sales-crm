@@ -113,7 +113,7 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('/business-development-managers-search', [BusinessDevelopmentManagerController::class, 'search'])->name('business-development-managers.search');
     Route::get('/business-development-excecutive-search', [BusinessDevelopmentExcecutiveController::class, 'search'])->name('business-development-excecutive.search');
 
-    
+
 
     // fetch data
     Route::get('/fetch-data', [AdminProjectController::class, 'fetchData'])->name('sales-projects.fetch-data');

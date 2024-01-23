@@ -69,5 +69,6 @@ class Kernel extends HttpKernel
         'SalesExcecutive' => \App\Http\Middleware\SalesExcecutive::class,
         'BDM' => \App\Http\Middleware\BDM::class,
         'BDE' => \App\Http\Middleware\BDE::class,
+        'BlockIpMiddleware' => \App\Http\Middleware\BlockIpMiddleware::class,
     ];
 }
