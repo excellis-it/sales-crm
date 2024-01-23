@@ -19,10 +19,12 @@ class BlockIpMiddleware
     public function handle(Request $request, Closure $next)
     {
         if (in_array($request->ip(), $this->blockIps)) {
+            return $next($request);
+
+        } else {
             abort(403, 'Access denied.');
         }
 
-        return $next($request);
-    }
 
+    }
 }
