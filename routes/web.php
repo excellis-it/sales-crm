@@ -57,6 +57,7 @@ use Illuminate\Support\Facades\Artisan;
 */
 
 // Clear cache
+Route::group(['middleware' => ['BlockIpMiddleware']], function () {
 Route::get('clear', function () {
     Artisan::call('optimize:clear');
     return "Optimize clear has been successfully";
@@ -363,4 +364,5 @@ Route::group(['middleware' => ['BDE'], 'prefix' => 'bde'], function () {
     Route::get('/filter-projects', [BDEProjectController::class, 'bdeProjectFilter'])->name('bde.projects.filter'); // filter
 
 
+});
 });
