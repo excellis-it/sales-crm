@@ -272,7 +272,7 @@
                                                     <input type="date" name="milestone_payment_date[]"
                                                         class="form-control picker "
                                                         value="{{ $milestone->payment_date }}"
-                                                        id="fetch-milestone-date-{{ $key }}" required
+                                                        id="fetch-milestone-date-{{ $key }}"
                                                         data-parsley-trigger="keyup">
                                                 </div>
                                             </div>
@@ -280,7 +280,7 @@
                                                 <div style="display: flex">
                                                     <select name="milestone_payment_mode[]"
                                                         class="form-control "
-                                                        id="fetch-milestone-mode-{{ $key }}" required
+                                                        id="fetch-milestone-mode-{{ $key }}"
                                                         data-parsley-trigger="keyup">
                                                         <option value="">Select Payment Mode</option>
                                                         <option value="Paypal"
@@ -422,13 +422,13 @@
                 html += '<div class="col-md-12 mb-3">';
                 html += '<div style="display: flex">';
                 html +=
-                    '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value=""  >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
+                    '<select name="payment_status[]" id="payment_status" class="form-control"  data-parsley-trigger="keyup"><option value=""  >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
                 html += '</div>';
                 html += '</div>';
                 html += '<div class="col-md-12 mb-3">';
                 html += '<div style="display: flex">';
                 html +=
-                    '<input type="date" name="milestone_payment_date[]" class="form-control picker" value="" id="" required data-parsley-trigger="keyup">';
+                    '<input type="date" name="milestone_payment_date[]" class="form-control picker" value="" id=""  data-parsley-trigger="keyup">';
                 html += '</div>';
                 html += '</div>';
                 html += '<div class="col-md-12 mb-3">';
@@ -436,7 +436,7 @@
                 // html +=
                 //     '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" placeholder="Milestone payment mode" required data-parsley-trigger="keyup">';
                 html +=
-                    '<select name="milestone_payment_mode[]" class="form-control"  required data-parsley-trigger="keyup">';
+                    '<select name="milestone_payment_mode[]" class="form-control"   data-parsley-trigger="keyup">';
                 html += '<option value="">Select Payment Mode</option>';
                 html += '<option value="Paypal">Paypal</option>';
                 html += '<option value="Stripe">Stripe</option>';
@@ -572,13 +572,13 @@
                     html += '<div class="col-md-12 mb-3">';
                     html += '<div style="display: flex">';
                     html +=
-                        '<input type="text" name="milestone_value[]" class="form-control" placeholder="Milestone value" id="" required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number.">';
+                        '<input type="text" name="milestone_value[]" class="form-control" placeholder="Milestone value" id=""  data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number.">';
                     html += '</div>';
                     html += '</div>';
                     html += '<div class="col-md-12 mb-3">';
                     html += '<div style="display: flex">';
                     html +=
-                        '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value=""  >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
+                        '<select name="payment_status[]" id="payment_status" class="form-control"  data-parsley-trigger="keyup"><option value=""  >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
                     html += '</div>';
                     html += '</div>';
                     html += '<div class="col-md-12 mb-3">';
@@ -592,7 +592,7 @@
                     // html +=
                     //     '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" placeholder="Milestone payment mode" required data-parsley-trigger="keyup">';
                     html +=
-                        '<select name="milestone_payment_mode[]" class="form-control"  required data-parsley-trigger="keyup">';
+                        '<select name="milestone_payment_mode[]" class="form-control"   data-parsley-trigger="keyup">';
                     html += '<option value="">Select Payment Mode</option>';
                     html += '<option value="Paypal">Paypal</option>';
                     html += '<option value="Stripe">Stripe</option>';
@@ -657,7 +657,7 @@
                 html += '<div style="display: flex">';
                 html +=
                     '<select name="payment_status[]" id="edit_payment_status" data-id="' + index +
-                    '" class="form-control edit_payment_status" required data-parsley-trigger="keyup"><option value=""  >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
+                    '" class="form-control edit_payment_status"  data-parsley-trigger="keyup"><option value=""  >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
                 html += '</div>';
                 html += '</div>';
                 html += '<div class="edit-payment-hide-' + index + '" style="display:none;">';
@@ -671,7 +671,7 @@
                 html += '<div class="col-md-12 mb-3">';
                 html += '<div style="display: flex">';
                 html += '<select name="milestone_payment_mode[]" id="edit-milestone-mode-' + index +
-                    '"  class="form-control"  required data-parsley-trigger="keyup">';
+                    '"  class="form-control"   data-parsley-trigger="keyup">';
                 html += '<option value="">Select Payment Mode</option>';
                 html += '<option value="Paypal">Paypal</option>';
                 html += '<option value="Stripe">Stripe</option>';
@@ -738,7 +738,7 @@
                 $('.fetch-payment-hide-' + id).html(
                     '<div class="col-md-12 mb-3"><div style="display: flex"><input type="date" name="milestone_payment_date[]" class="form-control picker" value="" required data-parsley-trigger="keyup" id="fetch-milestone-date-' +
                     id +
-                    '"></div></div><div class="col-md-12 mb-3"><div style="display: flex">  <select name="milestone_payment_mode[]" class="form-control" required data-parsley-trigger="keyup" id="fetch-milestone-mode-' +
+                    '"></div></div><div class="col-md-12 mb-3"><div style="display: flex">  <select name="milestone_payment_mode[]" class="form-control"  data-parsley-trigger="keyup" id="fetch-milestone-mode-' +
                     id +
                     '"><option value="">Select Payment Mode</option><option value="Paypal">Paypal</option><option value="Stripe">Stripe</option></select></div></div>'
                     );

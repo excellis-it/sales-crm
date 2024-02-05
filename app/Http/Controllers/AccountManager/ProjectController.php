@@ -219,6 +219,22 @@ class ProjectController extends Controller
         // }
 
         // $project_type->save();
+
+        if (isset($data['project_type'])) {
+            ProjectType::where('project_id', $id)->delete();
+            foreach ($data['project_type'] as $key => $project_type) {
+                $update_project_type = new ProjectType();
+                $update_project_type->project_id = $project->id;
+                $update_project_type->type = $project_type;
+                if ($project_type == 'Other') {
+                    $update_project_type->name = $data['other_value'];
+                } else {
+                    $update_project_type->name = $project_type;
+                }
+                $update_project_type->save();
+            }
+        }
+
         $previous_milestone_value = ProjectMilestone::where(['project_id'=> $id, 'payment_status' => 'Paid'])->get();
 
         // $net_goals_t = Goal::where('user_id', Auth::user()->id)->whereMonth('goals_date', date('m', strtotime($data['sale_date'])))->whereYear('goals_date', date('Y', strtotime($data['sale_date'])))->where('goals_type', 2)->first();

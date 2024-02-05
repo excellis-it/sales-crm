@@ -19,7 +19,7 @@ class FollowupController extends Controller
     {
         $followups = Followup::where('user_id', auth()->user()->id)->get()->groupBy('project_id');
         $projects = Project::whereIn('id', $followups->keys())->paginate(10);
-        $data = Project::where('user_id', auth()->user()->id)->get();
+        $data = Project::where('assigned_to', auth()->user()->id)->get();
         return view('account_manager.followup.list', compact('projects', 'followups', 'data'));
     }
 
