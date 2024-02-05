@@ -54,9 +54,16 @@ class PaymentsController extends Controller
         return response()->json(['data' => view('account_manager.payments.table', compact('project_milestones'))->render()]);
     }
 
-    public function accountManagerInvoicedownload()
+    public function accountManagerInvoicedownload($id)
     {
         
-        return view('account_manager.payments.invoice_download', compact('project_milestones'));
+        $milestone_detail = ProjectMilestone::where('id', $id)->with('project','user')->first();
+        $pdf = PDF::loadView('account_manager.payments.invoice_download',array('milestone_detail' => $milestone_detail));
+
+   
+    
+        return $pdf->download('account-manager-invoice.pdf');
+
+        // return view('account_manager.payments.invoice_download', compact('milestone_detail'));
     }
 }
