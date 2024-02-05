@@ -81,7 +81,7 @@ class ProjectController extends Controller
         $project->sale_date = $data['sale_date'];
         $project->assigned_date = date('Y-m-d');
         $project->assigned_to = Auth::user()->id;
-        $project->delivery_tat = $data['delivery_tat'];
+        $project->delivery_tat = $data['delivery_tat'] ?? '';
         $project->comment = $data['comment'];
         $project->save();
 
@@ -204,7 +204,7 @@ class ProjectController extends Controller
         $project->sale_date = $data['sale_date'];
         $project->assigned_date = date('Y-m-d');
         $project->assigned_to = Auth::user()->id;
-        $project->delivery_tat = $data['delivery_tat'];
+        $project->delivery_tat = $data['delivery_tat'] ?? '';
         $project->comment = $data['comment'];
         $project->save();
 
@@ -247,12 +247,12 @@ class ProjectController extends Controller
                     $project_milestone->payment_date = $data['milestone_payment_date'][$key] ?? null;
                     $project_milestone->save();
 
-                    if ($data['payment_status'][$key] == 'Paid' && $project_milestone->payment_date != null) { 
+                    if ($data['payment_status'][$key] == 'Paid' && $project_milestone->payment_date != null) {
                         $net_goals_t = Goal::where('user_id', Auth::user()->id)->whereMonth('goals_date', date('m', strtotime($data['milestone_payment_date'][$key])))->whereYear('goals_date', date('Y', strtotime($data['milestone_payment_date'][$key])))->where('goals_type', 2)->first();
                         if ($net_goals_t) {
                             $net_goals_t->goals_achieve = $net_goals_t->goals_achieve + $data['milestone_value'][$key];
                             $net_goals_t->save();
-                        }  
+                        }
                     }
                 }
             }
@@ -315,14 +315,14 @@ class ProjectController extends Controller
             Session::put('call_status',$request->get('call_status'));
             if($request->get('call_status') == '')
             {
-                $page = Session::put('page_number',1); 
+                $page = Session::put('page_number',1);
             }
             if(Session::get('call_status') == 'Yes') {
                 Session::put('call_status',"");
                 Session::put('update_success',false);
             }
 
-            
+
 
             // ->orWhereHas('projectTypes', function ($q) use ($query) {
             //     $q->orWhere('type', 'like', '%' . $query . '%');

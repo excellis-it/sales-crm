@@ -7,7 +7,7 @@
         .dataTables_filter {
             margin-bottom: 10px !important;
         }
-        
+
     </style>
 @endpush
 
@@ -252,8 +252,8 @@
                                         <div class="col-md-6 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Delivery
                                                 TAT
-                                                <span style="color: red;">*</span></label>
-                                            <input type="date" name="delivery_tat" id="delivery_tat" required
+                                                </label>
+                                            <input type="date" name="delivery_tat" id="delivery_tat" data-parsley-required="false"
                                                 data-parsley-trigger="keyup" min="{{ date('Y-m-d') }}"
                                                 class="form-control picker" value="{{ old('delivery_tat') }}"
                                                 placeholder="Enter Sale Date">
@@ -370,12 +370,12 @@
     $(document).ready(function() {
 
         @if(Session::get('update_success') == true)
-            
+
             var query = $('#search').val();
             var column_name = $('#hidden_column_name').val();
             var sort_type = $('#hidden_sort_type').val();
             var page = @php echo Session::get('page_number') @endphp;
-            
+
             fetch_data(page, sort_type, column_name, query,"Yes");
         @endif
 
@@ -608,7 +608,7 @@
             $('#milestone_name').prop('required', true);
             $('#milestone_value').prop('required', true);
             $('#payment_status').prop('required', true);
-            
+
             //monthly field required false
             $('#start_date').prop('required', false);
             $('#end_date').prop('required', false);
@@ -621,12 +621,12 @@
             $('#milestone_name').prop('required', false);
             $('#milestone_value').prop('required', false);
             $('#payment_status').prop('required', false);
-            
+
         } else {
             $('#milestone_name').prop('required', false);
             $('#milestone_value').prop('required', false);
             $('#payment_status').prop('required', false);
-            
+
             $('#start_date').prop('required', false);
             $('#end_date').prop('required', false);
             $('#milestone_field').hide();
@@ -967,15 +967,15 @@
 </script>
 <script>
      $(document).on('change', '.payment-status', function() {
-           
+
            var id = $(this).data('id');
            var payment_status = $(this).val();
-          
+
            // $('#milestone_payment_date').prop('required', false);
            $('#milestone-date-'+id).prop('required', false);
            $('#milestone-mode-'+id).prop('required', false);
            if (payment_status == 'Paid') {
-               
+
                $('.edit-payment-hide-'+id).show();
                $('#milestone-date-'+id).prop('required', true);
                $('#milestone-mode-'+id).prop('required', true);
@@ -989,7 +989,7 @@
      <script>
         $(document).ready(function() {
             $('.mySelect').select2();
-            
+
 
         });
     </script>

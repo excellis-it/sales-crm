@@ -212,8 +212,8 @@
                                                     <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">Delivery
                                                             TAT
-                                                            <span style="color: red;">*</span></label>
-                                                        <input type="date" name="delivery_tat" id="delivery_tat" required
+                                                           </label>
+                                                        <input type="date" name="delivery_tat" id="delivery_tat" data-parsley-required="false"
                                                             data-parsley-trigger="keyup" min="{{ date('Y-m-d') }}"
                                                             class="form-control picker" value="{{ old('delivery_tat') }}"
                                                             placeholder="Enter Sale Date">

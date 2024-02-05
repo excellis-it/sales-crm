@@ -53,11 +53,12 @@
         <td colspan="10">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="">
-                    (Showing {{ $projects->firstItem() }} – {{ $projects->lastItem() }} Projects of
-                    {{ $projects->count() }} Projects)
+                    {!! $projects->links() !!}
                 </div>
                 <div class="d-flex justify-content-center">
-                    {!! $projects->links() !!}
+                    (Showing {{ $projects->firstItem() }} – {{ $projects->lastItem() }} Projects of
+                    {{ $projects->count() }} Projects)
+
                 </div>
 
 
