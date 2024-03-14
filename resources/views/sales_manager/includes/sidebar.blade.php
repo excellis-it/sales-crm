@@ -38,6 +38,11 @@
                             Prospects</span></a>
                 </li>
 
+                <li class="{{ Request::is('sales-manager/transfer-taken*') ? 'active' : ' ' }}">
+                    <a href="{{ route('sales-manager.transfer-taken.index') }}"><i class="la la-paper-plane"></i> <span>
+                            Prospect Taken</span></a>
+                </li>
+
                 <li class="{{ Request::is('sales-manager/payments*') ? 'active' : ' ' }}">
                     <a href="{{ route('sales-manager.payments.list') }}"><i class="fa fa-money-bill"></i> <span>My
                             Payments</span></a>

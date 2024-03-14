@@ -17,6 +17,7 @@ class ProspectController extends Controller
 {
     public function index(Request $request)
     {
+        $count['total'] = Prospect::where('report_to', Auth::user()->id)->count();
         $count['win'] = Prospect::where('report_to', Auth::user()->id)->where('status', 'Win')->count();
         $count['follow_up'] = Prospect::where('report_to', Auth::user()->id)->where('status', 'Follow Up')->count();
         $count['close'] = Prospect::where('report_to', Auth::user()->id)->where('status', 'Close')->count();
@@ -339,7 +340,7 @@ class ProspectController extends Controller
                      }
                  }
              }
- 
+
 
             $project_type = new ProjectType();
             $project_type->project_id = $project->id;

@@ -26,7 +26,10 @@
                     <a href="{{ route('prospects.index') }}"><i class="la la-users"></i> <span>
                         Prospects</span></a>
                 </li>
-
+                <li class="{{ Request::is('sales-excecutive/transfer-taken*') ? 'active' : ' ' }}">
+                    <a href="{{ route('sales-excecutive.transfer-taken.index') }}"><i class="la la-paper-plane"></i> <span>
+                            Prospect Taken</span></a>
+                </li>
 
                 <li class="{{ Request::is('sales-excecutive/projects*') ? 'active' : ' ' }}">
                     <a href="{{ route('sales-excecutive.projects.index') }}"><i class="la la-book-open"></i> <span>

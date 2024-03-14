@@ -26,7 +26,10 @@
                     <a href="{{ route('bde-prospects.index') }}"><i class="la la-users"></i> <span>
                         Prospects</span></a>
                 </li>
-
+                <li class="{{ Request::is('bde/transfer-taken*') ? 'active' : ' ' }}">
+                    <a href="{{ route('bde.transfer-taken.index') }}"><i class="la la-paper-plane"></i> <span>
+                            Prospect Taken</span></a>
+                </li>
                 <li class="{{ Request::is('bde/bde-projects*') ? 'active' : ' ' }}">
                     <a href="{{ route('bde-projects.index') }}"><i class="la la-book-open"></i> <span>
                              Projects </span></a>

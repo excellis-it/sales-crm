@@ -37,7 +37,10 @@
                     <a href="{{ route('bdm.prospects.index') }}"><i class="la la-book-reader"></i> <span>My
                             Prospects</span></a>
                 </li>
-
+                <li class="{{ Request::is('bdm/transfer-taken*') ? 'active' : ' ' }}">
+                    <a href="{{ route('bdm.transfer-taken.index') }}"><i class="la la-paper-plane"></i> <span>
+                            Prospect Taken</span></a>
+                </li>
 
 
                 {{-- <li class="{{ Request::is('bdm/members*') ? 'active' : ' ' }}">

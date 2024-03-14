@@ -66,7 +66,7 @@
                             <div class="col">
                                 <a href="javascript:void(0);" data-value="All" class="desin-filter active-filter">
                                     <p>All</p>
-                                    <h5>{{ count($prospects) }}</h5>
+                                    <h5>{{  $count['total'] }}</h5>
                                 </a>
                             </div>
                             <div class="col">

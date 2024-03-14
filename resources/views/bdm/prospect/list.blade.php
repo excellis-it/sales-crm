@@ -66,7 +66,7 @@
                             <div class="col">
                                 <a href="javascript:void(0);" data-value="All" class="desin-filter active-filter">
                                     <p>All</p>
-                                    <h5>{{ $count['prospect'] }}</h5>
+                                    <h5>{{ $count['total'] }}</h5>
                                 </a>
                             </div>
                             <div class="col">
@@ -472,7 +472,7 @@
 <script>
     $(document).ready(function() {
         $('#status').on('change', function() {
-            
+
             // get value win show the upfront value
             var status = $(this).val();
             if (status.includes('Win')) {
@@ -516,7 +516,7 @@
 
 <script>
     $(document).on('click', '.milestone-print', function() {
-  
+
     var html = '';
     html += '<div class="row">';
     html += '<div class="col-md-12 mb-3 pb-3">';

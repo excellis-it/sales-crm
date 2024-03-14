@@ -33,6 +33,7 @@ class ProspectController extends Controller
             $sales_executives = User::role('SALES_EXCUETIVE')->where(['status' => 1, 'sales_manager_id' => Auth::user()->id])->orderBy('id', 'desc')->get();
             return view('sales_manager.prospect.list')->with(compact('prospects', 'count', 'users', 'sales_executives'));
         }
+         $count['total'] = Prospect::where('report_to', auth()->user()->id)->count();
         $count['win'] = Prospect::where('report_to', auth()->user()->id)->where('status', 'Win')->count();
         $count['follow_up'] = Prospect::where('report_to', auth()->user()->id)->where('status', 'Follow Up')->count();
         $count['close'] = Prospect::where('report_to', auth()->user()->id)->where('status', 'Close')->count();
@@ -65,7 +66,7 @@ class ProspectController extends Controller
     {
         // try {
         $data = $request->all();
-        
+
 
         $prospect = new Prospect();
         $prospect->user_id = $data['user_id'];
@@ -225,7 +226,7 @@ class ProspectController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
+
         $data = $request->all();
         $prospect = Prospect::findOrfail($id);
         $prospect->user_id = $data['user_id'];
