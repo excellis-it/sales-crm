@@ -77,7 +77,8 @@
                             style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>Sale Date</th>
+                                    <th>Date</th>
+                                    <th>Prospect By</th>
                                     <th>Business Name</th>
                                     <th>Client Name</th>
                                     <th>Email</th>

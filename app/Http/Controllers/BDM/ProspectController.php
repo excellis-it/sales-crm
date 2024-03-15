@@ -23,7 +23,7 @@ class ProspectController extends Controller
         $count['close'] = Prospect::where('report_to', Auth::user()->id)->where('status', 'Close')->count();
         $count['sent_proposal'] = Prospect::where('report_to', Auth::user()->id)->where('status', 'Sent Proposal')->count();
         $count['prospect'] = Prospect::where('report_to', Auth::user()->id)->count();
-        $prospects = Prospect::orderBy('sale_date', 'desc')->where('report_to', Auth::user()->id)->paginate('10');
+        $prospects = Prospect::orderBy('created_at', 'desc')->where('report_to', Auth::user()->id)->paginate('15');
         $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE', 'BUSINESS_DEVELOPMENT_MANAGER', 'BUSINESS_DEVELOPMENT_EXCECUTIVE'])->orderBy('id', 'desc')->get();
         $sales_executives = User::role('BUSINESS_DEVELOPMENT_EXCECUTIVE')->where(['status' => 1])->orderBy('id', 'desc')->get();
         return view('bdm.prospect.list', compact('count','prospects', 'users', 'sales_executives'));
@@ -54,9 +54,9 @@ class ProspectController extends Controller
                 });
             }
             if ($status == 'All') {
-                $prospects = $prospects->orderBy('sale_date', 'desc')->where('report_to', Auth::user()->id)->paginate('10');
+                $prospects = $prospects->orderBy('created_at', 'desc')->where('report_to', Auth::user()->id)->paginate('15');
             } else {
-                $prospects = $prospects->orderBy('sale_date', 'desc')->where(['status' => $status])->where('report_to', Auth::user()->id)->paginate('10');
+                $prospects = $prospects->orderBy('created_at', 'desc')->where(['status' => $status])->where('report_to', Auth::user()->id)->paginate('15');
             }
 
             return response()->json(['data' => view('bdm.prospect.table', compact('prospects'))->render()]);

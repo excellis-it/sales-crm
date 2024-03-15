@@ -18,7 +18,7 @@ class TransferTakenController extends Controller
     public function index(Request $request)
     {
         $total_prospect = Prospect::where('transfer_token_by', Auth::user()->id)->count();
-        $prospects = Prospect::where('transfer_token_by', Auth::user()->id)->orderBy('sale_date', 'desc')->paginate(15);
+        $prospects = Prospect::where('transfer_token_by', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(15);
         return view('bdm.transfer-taken.list')->with(compact('prospects','total_prospect'));
     }
 
@@ -116,7 +116,7 @@ class TransferTakenController extends Controller
                 });
             }
 
-            $prospects = $prospects->orderBy('sale_date', 'desc')->where('transfer_token_by', Auth::user()->id)->paginate('15');
+            $prospects = $prospects->orderBy('created_at', 'desc')->where('transfer_token_by', Auth::user()->id)->paginate('15');
 
             return response()->json(['data' => view('bdm.transfer-taken.table', compact('prospects'))->render()]);
         }

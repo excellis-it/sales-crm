@@ -6,10 +6,10 @@
     @foreach ($prospects as $key => $prospect)
         <tr>
             <td>
-                {{ $prospect->sale_date ? date('d-m-Y', strtotime($prospect->sale_date)) : '' }}
+                {{ $prospect->created_at ? date('d-m-Y', strtotime($prospect->created_at)) : '' }}
             </td>
             <td>
-                {{ $prospect->business_name }}
+                {{ $prospect->user->name ?? 'N/A' }}
             </td>
             <td>
                 {{ $prospect->client_name }}
