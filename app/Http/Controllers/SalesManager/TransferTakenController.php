@@ -108,9 +108,10 @@ class TransferTakenController extends Controller
                         ->orWhere('price_quote', 'like', '%' . $query . '%')
                         ->orWhere('followup_date', 'like', '%' . $query . '%')
                         ->orWhere('offered_for', 'like', '%' . $query . '%')
-                        ->whereHas('user', function ($q) use ($query) {
+                        ->orWhereHas('user', function ($q) use ($query) {
                             $q->where('name', 'like', '%' . $query . '%');
-                        })->whereHas('transferTakenBy', function ($q) use ($query) {
+                        })
+                        ->orWhereHas('transferTakenBy', function ($q) use ($query) {
                             $q->where('name', 'like', '%' . $query . '%');
                         });
                 });

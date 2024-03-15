@@ -6,7 +6,10 @@
     @foreach ($prospects as $key => $prospect)
         <tr>
             <td>
-                {{ $prospect->sale_date ? date('d-m-Y', strtotime($prospect->sale_date)) : '' }}
+                {{ $prospect->created_at ? date('d-m-Y', strtotime($prospect->created_at)) : '' }}
+            </td>
+            <td>
+                {{ $prospect->user->name ?? 'N/A' }}
             </td>
             <td>
                 {{ $prospect->business_name }}
@@ -57,7 +60,7 @@
 
 
 <tr>
-    <td colspan="12">
+    <td colspan="13">
         <div class="d-flex justify-content-center">
             {!! $prospects->links() !!}
         </div>
