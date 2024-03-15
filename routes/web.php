@@ -213,7 +213,7 @@ Route::group(['middleware' => ['BlockIpMiddleware']], function () {
                 'sales-excecutive' => SalesManagerSalesExcecutiveController::class,
                 'transfer-taken' => TransferTakenController::class,
             ]);
-
+            Route::get('/prospect-edit-route/{prospect_id}/{sales_executive_id?}', [SalesManagerProspectController::class, 'editRoute'])->name('prospects.edit-route');
             Route::get('/transfer-taken-filter', [TransferTakenController::class, 'transferTakenFilter'])->name('transfer-taken.filter');
         });
 

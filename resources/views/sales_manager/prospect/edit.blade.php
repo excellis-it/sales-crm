@@ -11,6 +11,7 @@
                 enctype="multipart/form-data">
                 @method('PUT')
                 @csrf
+                <input type="hidden" name="sales_executive_id" value="{{$sales_executive_id}}" />
                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <label for="inputEnterYourName" class="col-form-label"> Sales
@@ -272,7 +273,7 @@
 
 <script>
     $(document).on('click', '.milestone-print-edit', function() {
-  
+
     var html = '';
     html += '<div class="row">';
     html += '<div class="col-md-12 mb-3 pb-3">';

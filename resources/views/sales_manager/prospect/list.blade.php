@@ -124,6 +124,7 @@
                                 <form action="{{ route('sales-manager.prospects.store') }}" method="post"
                                     data-parsley-validate="" enctype="multipart/form-data">
                                     @csrf
+                                    <input type="hidden" name="sales_executive_id" value="{{request()->sales_executive_id}}" />
                                     <div class="row">
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label"> Sales
@@ -298,7 +299,8 @@
                             style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>Sale Date</th>
+                                    <th>Created Date</th>
+                                    <th>Created By</th>
                                     <th>Business Name</th>
                                     <th>Client Name</th>
                                     <th>Email</th>
@@ -386,7 +388,7 @@
         $(document).ready(function() {
             function fetch_data(page, status, query) {
                 console.log(status + ' ' + page);
-                var user_id = "{{ request()->user_id ?? 0 }}";
+                var user_id = "{{ request()->sales_executive_id ?? 0 }}";
                 $.ajax({
                     url: "{{ route('sales-manager.prospects.status-filter') }}",
                     data: {

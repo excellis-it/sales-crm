@@ -25,7 +25,7 @@
                 <td class="edit-route" data-route="{{ route('sales-manager.sales-excecutive.edit', $sales_excecutive->id) }}">{{ $sales_excecutive->employee_id }}</td>
                 <td class="edit-route" data-route="{{ route('sales-manager.sales-excecutive.edit', $sales_excecutive->id) }}">{{ $sales_excecutive->date_of_joining }}</td>
                 <td ><a
-                    href="{{ route('sales-manager.prospects.index', ['user_id' => $sales_excecutive->id]) }}">{{ $sales_excecutive->prospects->count() }}</a></td>
+                    href="{{ route('sales-manager.prospects.index', ['sales_executive_id' => $sales_excecutive->id]) }}">{{ $sales_excecutive->prospects->count() }}</a></td>
                 <td>
                     <div class="button-switch">
                         <input type="checkbox" id="switch-orange" class="switch toggle-class"

@@ -40,7 +40,7 @@ class ProspectController extends Controller
             $count['close'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Close')->count();
             $count['sent_proposal'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Sent Proposal')->count();
         }
-        $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->get();
+         $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE','BUSINESS_DEVELOPMENT_MANAGER','BUSINESS_DEVELOPMENT_EXCECUTIVE'])->get();
         return view('sales_excecutive.prospect.list')->with(compact('prospects', 'count', 'users'));
     }
 
@@ -51,7 +51,7 @@ class ProspectController extends Controller
      */
     public function create()
     {
-        $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->get();
+         $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE','BUSINESS_DEVELOPMENT_MANAGER','BUSINESS_DEVELOPMENT_EXCECUTIVE'])->get();
         return view('sales_excecutive.prospect.create')->with(compact('users'));
     }
 
@@ -206,7 +206,7 @@ class ProspectController extends Controller
     public function edit($id)
     {
         try {
-            $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->get();
+             $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE','BUSINESS_DEVELOPMENT_MANAGER','BUSINESS_DEVELOPMENT_EXCECUTIVE'])->get();
             $prospect = Prospect::find($id);
             $type = true;
             return response()->json(['view' => (string)View::make('sales_excecutive.prospect.edit')->with(compact('prospect', 'users','type'))]);

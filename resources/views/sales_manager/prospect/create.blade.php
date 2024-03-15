@@ -39,6 +39,7 @@
                                         <form action="{{ route('sales-manager.prospects.store') }}" method="post"
                                             data-parsley-validate="" enctype="multipart/form-data">
                                             @csrf
+                                            <input type="hidden" name="sales_executive_id" value="{{request()->sales_executive_id}}" />
                                             <div class="border p-4 rounded">
                                                 <div class="row">
                                                     <div class="col-md-4 mb-3">
