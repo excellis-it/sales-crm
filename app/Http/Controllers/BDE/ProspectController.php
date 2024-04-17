@@ -68,6 +68,11 @@ class ProspectController extends Controller
                         });
                 });
             }
+            if ($request->followup_date) {
+                $followup_date = date('Y-m-d', strtotime($request->followup_date));
+                $prospects = $prospects->where('followup_date', $followup_date);
+            }
+            
             if ($status == 'All') {
                 $prospects = $prospects->orderBy('sale_date', 'desc')->where('user_id', Auth::user()->id)->paginate('15');
             } else {
@@ -146,7 +151,7 @@ class ProspectController extends Controller
             //sales manager goal
             $net_goal = Goal::where(['user_id' => Auth::user()->bdm_id, 'goals_type' => 1])->whereMonth('goals_date', date('m', strtotime($prospect->sale_date)))->whereYear('goals_date', date('Y', strtotime($prospect->sale_date)))->first();
             if ($net_goal) {
-                
+
                 $net_goal->goals_achieve = $net_goal->goals_achieve + $prospect->upfront_value;
                 $net_goal->save();
             }

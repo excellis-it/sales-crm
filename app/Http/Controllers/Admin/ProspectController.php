@@ -393,10 +393,15 @@ class ProspectController extends Controller
                         });
                 });
             }
+            if ($request->followup_date) {
+                $followup_date = date('Y-m-d', strtotime($request->followup_date));
+                $prospects = $prospects->where('followup_date', $followup_date);
+            }
+
             if ($request->user_id) {
                 $prospects = $prospects->where(['user_id' => $request->user_id]);
             }
-            
+
             if ($status == 'All') {
                 $prospects = $prospects->orderBy('sale_date', 'desc')->paginate('10');
             } else {

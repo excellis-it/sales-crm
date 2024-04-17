@@ -7,7 +7,7 @@
     @foreach ($prospects as $key => $prospect)
         <tr>
             <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bde-prospects.edit', $prospect->id) }}" @endif>
-                {{ ($prospect->sale_date) ?  date('d-m-Y', strtotime($prospect->sale_date) ) : '' }}
+                {{ ($prospect->created_at) ?  date('d-m-Y', strtotime($prospect->created_at) ) : '' }}
             </td>
             <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bde-prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->business_name }}
@@ -47,7 +47,7 @@
             <td>
                 {{-- @if ($prospect->status != 'Win')
                     <a title="Edit Prospect"  data-route="" href="{{ route('bde-prospects.edit', $prospect->id) }}"><i
-                            class="fas fa-edit"></i></a> &nbsp;&nbsp;         
+                            class="fas fa-edit"></i></a> &nbsp;&nbsp;
                 @endif --}}
                 {{-- @if ($prospect->status == 'Win' && $prospect->is_project == false)
                 <a title="Assign to project" data-route="" href="{{ route('prospects.assign-project', $prospect->id) }}"><i

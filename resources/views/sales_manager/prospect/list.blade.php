@@ -308,12 +308,13 @@
                                     <th>Transfer Taken By</th>
                                     <th>Status</th>
                                     <th>Service Offered</th>
-                                    <th>Followup Date</th>
+                                    <th>Followup Date  <input type="text" class="datepicker" id="followup_date_filter" style="width: 0; padding:0; border:none"/>
+                                        <label for="followup_date_filter" class="datepik" style="font-size: 22px"><i class="las la-calendar"></i></label></th>
                                     <th>Price Quoted</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="prospect-body">
                                 @include('sales_manager.prospect.table')
                             </tbody>
                         </table>
@@ -386,19 +387,27 @@
     </script>
     <script>
         $(document).ready(function() {
-            function fetch_data(page, status, query) {
-                console.log(status + ' ' + page);
-                var user_id = "{{ request()->sales_executive_id ?? 0 }}";
+            $('.datepicker').datepicker({
+                dateFormat: 'dd-mm-yy',
+
+            });
+
+            function fetch_data(page, status, query, followup_date) {
+                // console.log(status + ' ' + page);
+                var user_id = {{ request()->user_id ?? 0 }};
                 $.ajax({
                     url: "{{ route('sales-manager.prospects.status-filter') }}",
                     data: {
-                        user_id: user_id,
                         status: status,
                         page: page,
-                        query: query
+                        query: query,
+                        user_id: user_id,
+                        followup_date: followup_date
                     },
                     success: function(resp) {
-                        $('tbody').html(resp.data);
+                        $('#loading').removeClass('loading');
+                        $('#loading-content').removeClass('loading-content');
+                        $('#prospect-body').html(resp.data);
                     }
                 });
             }
@@ -411,7 +420,8 @@
                 //add active class to clicked
                 $(this).addClass('active-filter');
                 var query = $('#search').val();
-                fetch_data(1, status, query);
+                var followup_date = $('#followup_date_filter').val();
+                fetch_data(1, status, query, followup_date);
             });
 
             $(document).on('click', '.pagination a', function(e) {
@@ -419,16 +429,73 @@
                 var page = $(this).attr('href').split('page=')[1];
                 var status = $('.active-filter').data('value');
                 var query = $('#search').val();
-                fetch_data(page, status, query);
+                var followup_date = $('#followup_date_filter').val();
+                fetch_data(page, status, query, followup_date);
             });
 
             $(document).on('keyup', '#search', function(e) {
                 e.preventDefault();
                 var query = $(this).val();
                 var status = $('.active-filter').data('value');
-                fetch_data(1, status, query);
+                var followup_date = $('#followup_date_filter').val();
+                fetch_data(1, status, query, followup_date);
+            });
+
+            $(document).on('change', '#followup_date_filter', function(e) {
+                e.preventDefault();
+                $('#loading').addClass('loading');
+                $('#loading-content').addClass('loading-content');
+                var query = $('#search').val();
+                var status = $('.active-filter').data('value');
+                var followup_date = $('#followup_date_filter').val();
+                // alert(followup_date);
+                fetch_data(1, status, query, followup_date);
             });
         });
+        // $(document).ready(function() {
+        //     function fetch_data(page, status, query) {
+        //         console.log(status + ' ' + page);
+        //         var user_id = "{{ request()->sales_executive_id ?? 0 }}";
+        //         $.ajax({
+        //             url: "{{ route('sales-manager.prospects.status-filter') }}",
+        //             data: {
+        //                 user_id: user_id,
+        //                 status: status,
+        //                 page: page,
+        //                 query: query
+        //             },
+        //             success: function(resp) {
+        //                 $('tbody').html(resp.data);
+        //             }
+        //         });
+        //     }
+
+        //     $(document).on('click', '.desin-filter', function(e) {
+        //         e.preventDefault();
+        //         var status = $(this).data('value');
+        //         //remove active class from all
+        //         $('.desin-filter').removeClass('active-filter');
+        //         //add active class to clicked
+        //         $(this).addClass('active-filter');
+        //         var query = $('#search').val();
+        //         fetch_data(1, status, query);
+        //     });
+
+        //     $(document).on('click', '.pagination a', function(e) {
+        //         e.preventDefault();
+        //         var page = $(this).attr('href').split('page=')[1];
+        //         var status = $('.active-filter').data('value');
+        //         var query = $('#search').val();
+        //         fetch_data(page, status, query);
+        //     });
+
+        //     $(document).on('keyup', '#search', function(e) {
+        //         e.preventDefault();
+        //         var query = $(this).val();
+        //         var status = $('.active-filter').data('value');
+        //         fetch_data(1, status, query);
+        //     });
+        // });
     </script>
     <script src="http://parsleyjs.org/dist/parsley.js"></script>
     <!-- PARSLEY -->

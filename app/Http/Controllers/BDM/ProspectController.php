@@ -53,6 +53,11 @@ class ProspectController extends Controller
                         });
                 });
             }
+            if ($request->followup_date) {
+                $followup_date = date('Y-m-d', strtotime($request->followup_date));
+                $prospects = $prospects->where('followup_date', $followup_date);
+            }
+            
             if ($status == 'All') {
                 $prospects = $prospects->orderBy('created_at', 'desc')->where('report_to', Auth::user()->id)->paginate('15');
             } else {
