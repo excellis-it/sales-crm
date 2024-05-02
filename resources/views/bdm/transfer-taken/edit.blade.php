@@ -7,7 +7,7 @@
             <h4 id="offcanvasEditLabel">Edit Prospect Details</h4>
         </div>
         <div class="offcanvas-body">
-            <form action="{{ route('bdm.prospects.update', $prospect->id) }}"
+            <form action="{{ route('bdm.transfer-taken.update', $prospect->id) }}"
                 method="POST" enctype="multipart/form-data">
                 @method('PUT')
                 @csrf

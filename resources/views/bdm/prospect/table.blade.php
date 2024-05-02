@@ -37,7 +37,7 @@
                 @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bdm.prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->status ?? '' }}
             </td>
-            <td>
+            <td    @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bdm.prospects.edit', $prospect->id) }}" @endif>
                 @if ($prospect->status == 'Win')
                     <span>On Board</span>
                 @elseif ($prospect->status == 'Follow Up')
@@ -48,10 +48,10 @@
                     <span>Cancel</span>
                 @endif
             </td>
-            <td>
+            <td    @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bdm.prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->followup_date ? date('d-m-Y', strtotime($prospect->followup_date)) : '' }}
             </td>
-            <td>
+            <td    @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bdm.prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->price_quote ?? '' }}
             </td>
             <td>

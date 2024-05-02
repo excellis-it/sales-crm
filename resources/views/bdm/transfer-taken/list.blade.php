@@ -43,6 +43,9 @@
                     </div>
 
                 </div>
+                <div id="edit-prospect-model">
+                    @include('bdm.transfer-taken.edit')
+                </div>
             </div>
 
             <div class="card">
@@ -151,6 +154,34 @@
                 e.preventDefault();
                 var query = $(this).val();
                 fetch_data(1, query);
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            // Handle the click event for the edit-route button
+            $(document).on('click', '.edit-route', function() {
+                var route = $(this).data('route');
+                // Make an AJAX request to fetch the priceRequest details
+                $('#loading').addClass('loading');
+                $('#loading-content').addClass('loading-content');
+                $.ajax({
+                    url: route,
+                    type: 'GET',
+                    success: function(response) {
+                        console.log(response.view);
+                        $('#edit-prospect-model').html(response.view);
+                        $('#loading').removeClass('loading');
+                        $('#loading-content').removeClass('loading-content');
+                        $('#offcanvasEdit').offcanvas('show');
+                    },
+                    error: function(xhr) {
+                        // Handle errors
+                        $('#loading').removeClass('loading');
+                        $('#loading-content').removeClass('loading-content');
+                        console.log(xhr);
+                    }
+                });
             });
         });
     </script>
