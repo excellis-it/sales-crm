@@ -38,9 +38,9 @@
                             <div class="col-md-6">
                                 <div class="d-flex align-items-center">
                                     <h4 class="mb-0">Projects List</h4>
-                                    
+
                                 </div>
-                                
+
                             </div>
                             <div class="col-md-6 text-end">
                                 <a href="javascrip:void(0);" class="btn px-5 submit-btn" data-bs-toggle="offcanvas"
@@ -228,9 +228,9 @@
                                         {{-- Project closer --}}
                                         <div class="col-md-6 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Project
-                                                Closer <span style="color: red;">*</span></label>
-                                            <select name="project_closer" id="project_closer" required
-                                                class="form-control select2" required>
+                                                Closer <span style="color: red;"></span></label>
+                                            <select name="project_closer" id="project_closer"
+                                                class="form-control select2" data-parsley-required="false">
                                                 <option value="">Select Project
                                                     Closer
                                                 </option>
@@ -261,8 +261,8 @@
                                         <div class="col-md-6 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Delivery
                                                 TAT
-                                                <span style="color: red;">*</span></label>
-                                            <input type="date" name="delivery_tat" id="delivery_tat" required
+                                                <span style="color: red;"></span></label>
+                                            <input type="date" name="delivery_tat" id="delivery_tat" data-parsley-required="false"
                                                 data-parsley-trigger="keyup" class="form-control picker"
                                                 value="{{ old('delivery_tat') }}" placeholder="Enter Sale Date">
                                         </div>
@@ -431,15 +431,15 @@
         $(document).ready(function() {
 
             @if(Session::get('update_success') == true)
-            
+
             var query = $('#search').val();
             var column_name = $('#hidden_column_name').val();
             var sort_type = $('#hidden_sort_type').val();
             var page = @php echo Session::get('page_number') @endphp;
-            
+
             fetch_data(page, sort_type, column_name, query,"Yes");
             @endif
-                
+
             function clear_icon() {
                 // $('#date_icon').html('');
                 // $('#project_name_icon').html('');
@@ -500,7 +500,7 @@
             });
 
             $(document).on('click', '.pagination a', function(event) {
-                
+
                 event.preventDefault();
                 var page = $(this).attr('href').split('page=')[1];
                 $('#hidden_page').val(page);
@@ -509,7 +509,7 @@
 
                 var query = $('#search').val();
 
-               
+
 
                 $('li').removeClass('active');
                 $(this).parent().addClass('active');
@@ -915,8 +915,8 @@
                 $('#loading').addClass('loading');
                 $('#loading-content').addClass('loading-content');
                 var page = $('#hidden_page').val();
-                
-                
+
+
                 $.ajax({
                     url: route,
                     type: 'GET',

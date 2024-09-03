@@ -75,7 +75,7 @@
                                 <option value="SEO" {{ in_array('SEO', $project->projectTypes()->pluck('type')->toArray()) ? 'selected' : '' }}>SEO</option>
                                 <option value="SMO" {{ in_array('SMO', $project->projectTypes()->pluck('type')->toArray()) ? 'selected' : '' }}>SMO</option>
                                 <option value="Other" {{ in_array('Other', $project->projectTypes()->pluck('type')->toArray()) ? 'selected' : '' }}>Other</option>
-                            </select> 
+                            </select>
                     </div>
                     <div id="other-value" class="col-md-12 mb-3">
                         @foreach ($project['projectTypes'] as $project_show)
@@ -154,8 +154,8 @@
                     {{-- Project closer --}}
                     <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Project
-                            Closer <span style="color: red;">*</span></label>
-                        <select name="project_closer" id="project_closer" required
+                            Closer</label>
+                        <select name="project_closer" id="project_closer"
                             class="form-control disable-input select">
                             <option value="">Select Project
                                 Closer
@@ -186,9 +186,8 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Delivery
-                            TAT
-                            <span style="color: red;">*</span></label>
-                        <input type="date" name="delivery_tat" id="delivery_tat" required
+                            TAT</label>
+                        <input type="date" name="delivery_tat" id="delivery_tat"
                             data-parsley-trigger="keyup" data-parsley-type="date"
                             data-parsley-type-message="Please enter a valid date." class="form-control disable-input picker"
                             value="{{ $project->delivery_tat }}" placeholder="Enter Sale Date">
@@ -265,7 +264,7 @@
                                         </div>
                                     </div>
 
-                                    
+
                                     @if($milestone->payment_status=='Paid')
                                     <div class="col-md-12 mb-3">
                                         <div style="display: flex">
@@ -284,7 +283,7 @@
                                                     <option value="">Select Payment Mode</option>
                                                     <option value="Paypal" {{ $milestone->payment_mode == 'Paypal' ? 'selected' : '' }}>Paypal</option>
                                                     <option value="Stripe" {{ $milestone->payment_mode == 'Stripe' ? 'selected' : '' }}>Stripe</option>
-                                                </select>    
+                                                </select>
                                         </div>
                                     </div>
                                     @else
@@ -306,13 +305,13 @@
                                                         <option value="">Select Payment Mode</option>
                                                         <option value="Paypal" >Paypal</option>
                                                         <option value="Stripe" >Stripe</option>
-                                                    </select>    
+                                                    </select>
                                             </div>
                                         </div>
                                     </div>
-                                        
+
                                     @endif
-                                    
+
 
                                     {{-- <div class="col-md-12 mb-3 pb-3">
                                         <div style="display: flex">
@@ -370,7 +369,7 @@
                         {{-- </br> --}}
                     </div>
                     @if ($project->projectDocuments->count() > 0)
-                    <div class="col-lg-12"> 
+                    <div class="col-lg-12">
                         <h4 class="mt-4 text-uppercase">Download Documents</h4>
                         @foreach ($project->projectDocuments as $key => $document)
                             <div class="download-button">
@@ -692,7 +691,7 @@
         $('.mySelects').select2();
         document.getElementByClass('mySelects').disabled = true;
 
-       
+
     });
 </script>
 @endif

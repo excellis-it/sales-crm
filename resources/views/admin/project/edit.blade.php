@@ -187,8 +187,8 @@
                     {{-- Project closer --}}
                     <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Project
-                            Closer <span style="color: red;">*</span></label>
-                        <select name="project_closer" id="project_closer" required class="form-control select2">
+                            Closer </label>
+                        <select name="project_closer" id="project_closer"  class="form-control select2">
                             <option value="">Select Project
                                 Closer
                             </option>
@@ -219,8 +219,8 @@
                     <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Delivery
                             TAT
-                            <span style="color: red;">*</span></label>
-                        <input type="date" name="delivery_tat" id="edit_delivery_tat" required
+                            </label>
+                        <input type="date" name="delivery_tat" id="edit_delivery_tat"
                             data-parsley-trigger="keyup" data-parsley-type="date"
                             data-parsley-type-message="Please enter a valid date." class="form-control picker"
                             value="{{ $project->delivery_tat }}" placeholder="Enter Sale Date">

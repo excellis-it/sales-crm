@@ -221,9 +221,9 @@
                                         {{-- Project closer --}}
                                         <div class="col-md-6 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Project
-                                                Closer <span style="color: red;">*</span></label>
-                                            <select name="project_closer" id="project_closer" required
-                                                class="form-control select2" required>
+                                                Closer </label>
+                                            <select name="project_closer" id="project_closer"
+                                                class="form-control select2" >
                                                 <option value="">Select Project
                                                     Closer
                                                 </option>
@@ -255,8 +255,8 @@
                                         <div class="col-md-6 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Delivery
                                                 TAT
-                                                <span style="color: red;">*</span></label>
-                                            <input type="date" name="delivery_tat" id="delivery_tat" required
+                                               </label>
+                                            <input type="date" name="delivery_tat" id="delivery_tat"
                                                 data-parsley-trigger="keyup" min="{{ date('Y-m-d') }}"
                                                 class="form-control picker" value="{{ old('delivery_tat') }}"
                                                 placeholder="Enter Sale Date">
@@ -402,12 +402,12 @@
         $(document).ready(function() {
 
             @if(Session::get('update_success') == true)
-            
+
             var query = $('#search').val();
             var column_name = $('#hidden_column_name').val();
             var sort_type = $('#hidden_sort_type').val();
             var page = @php echo Session::get('page_number') @endphp;
-            
+
             fetch_data(page, sort_type, column_name, query,"Yes");
             @endif
             function clear_icon() {
@@ -1027,15 +1027,15 @@
 
     <script>
         $(document).on('change', '.payment-status', function() {
-        
+
             var id = $(this).data('id');
             var payment_status = $(this).val();
-        
+
             // $('#milestone_payment_date').prop('required', false);
             $('#milestone-date-'+id).prop('required', false);
             $('#milestone-mode-'+id).prop('required', false);
             if (payment_status == 'Paid') {
-                
+
                 $('.edit-payment-hide-'+id).show();
                 $('#milestone-date-'+id).prop('required', true);
                 $('#milestone-mode-'+id).prop('required', true);
