@@ -14,17 +14,20 @@ class BlockIpMiddleware
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public $blockIps = ['127.0.0.1', '122.176.24.235'];
+    public $not_block_ips = ['127.0.0.1', '122.176.24.235','136.232.78.74','136.232.78.75','136.232.78.76'];
 
     public function handle(Request $request, Closure $next)
     {
-        if (in_array($request->ip(), $this->blockIps)) {
-            return $next($request);
+        // Get real client IP if behind a proxy
+        $requestIp = $request->header('X-Forwarded-For') ?? $request->ip();
 
-        } else {
-            abort(403, 'Access denied.');
+        // Check if the IP is allowed
+        if (in_array($requestIp, $this->not_block_ips)) {
+            return $next($request); // Allow access
         }
 
-
+        // Deny access for all other IPs
+        abort(403, 'Access denied.');
     }
+
 }
