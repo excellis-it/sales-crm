@@ -38,9 +38,9 @@
                     <span>{{ Auth::user()->name }}</span>
                 </a>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="{{ route('sales-manager.profile') }}">My Profile</a>
-                    <a class="dropdown-item" href="{{ route('sales-manager.password') }}">Change Password</a>
-                    <a class="dropdown-item" href="{{ route('sales-manager.logout') }}">Logout</a>
+                    <a class="dropdown-item" href="{{ route('bdm.profile') }}">My Profile</a>
+                    <a class="dropdown-item" href="{{ route('bdm.password') }}">Change Password</a>
+                    <a class="dropdown-item" href="{{ route('bdm.logout') }}">Logout</a>
                 </div>
             </li>
         </ul>
@@ -49,8 +49,8 @@
             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i
                     class="fa fa-ellipsis-v"></i></a>
             <div class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item" href="{{ route('sales-manager.profile') }}">My Profile</a>
-                <a class="dropdown-item" href="{{ route('sales-manager.logout') }}">Logout</a>
+                <a class="dropdown-item" href="{{ route('bdm.profile') }}">My Profile</a>
+                <a class="dropdown-item" href="{{ route('bdm.logout') }}">Logout</a>
             </div>
         </div>
     </div>
