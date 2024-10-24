@@ -20,6 +20,6 @@ class BDM
         if (Auth::check() && auth()->user()->hasRole('BUSINESS_DEVELOPMENT_MANAGER')) {
             return $next($request);
         }
-        return redirect()->route('login');
+        return redirect()->route('admin.login');
     }
 }
