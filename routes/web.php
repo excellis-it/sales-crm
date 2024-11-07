@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\ForgetPasswordController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\IpController;
 use App\Http\Controllers\Admin\BusinessDevelopmentExcecutiveController;
 use App\Http\Controllers\Admin\BusinessDevelopmentManagerController;
 use App\Http\Controllers\Admin\ProfileController;
@@ -97,7 +98,9 @@ Route::group(['middleware' => ['BlockIpMiddleware']], function () {
             'business-development-managers' => BusinessDevelopmentManagerController::class,
             'business-development-excecutive' => BusinessDevelopmentExcecutiveController::class,
             'customers' => UserController::class,
+            'ips'=>IpController::class,
         ]);
+
 
         Route::name('admin.')->group(function () {
             Route::resources([
@@ -148,6 +151,12 @@ Route::group(['middleware' => ['BlockIpMiddleware']], function () {
             Route::get('/customers-delete/{id}', [UserController::class, 'delete'])->name('customers.delete');
         });
         Route::get('/customers-search', [UserController::class, 'search'])->name('customers.search');
+
+        //ip list
+        Route::prefix('ips')->group(function () {
+            Route::get('/ip-delete/{id}', [IpController::class, 'delete'])->name('ips.delete');
+        });
+        Route::get('/ip-search', [IpController::class, 'search'])->name('ips.search');
         //  Sales manager Routes
         Route::prefix('sales_managers')->group(function () {
             Route::get('/sales_manager-delete/{id}', [CustomerController::class, 'delete'])->name('sales_managers.delete');

@@ -20,6 +20,10 @@
 
                     </ul>
                 </li>
+                <li class="{{ Request::is('admin/ip*') ? 'active' : ' ' }}">
+                    <a href="{{ route('ips.index') }}"><i class="la la-globe"></i> <span>
+                        Manage IP</span></a>
+                </li>
                 <li class="menu-title">
                     <span>User Management</span>
                 </li>
