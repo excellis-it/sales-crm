@@ -321,7 +321,12 @@
                                 @include('sales_manager.prospect.table')
                             </tbody>
                         </table>
-                        <input type="hidden" name="hidden_page" id="hidden_page" value="1" />
+                        @if (Session::get('update_success_check') == true)
+                            <input type="hidden" name="hidden_page" id="hidden_page"
+                                value="@php echo Session::get('page_no') ?? '1' @endphp" />
+                        @else
+                            <input type="hidden" name="hidden_page" id="hidden_page" value="1" />
+                        @endif
                         <input type="hidden" name="hidden_column_name" id="hidden_column_name" value="id" />
                         <input type="hidden" name="hidden_sort_type" id="hidden_sort_type" value="desc" />
                     </div>
@@ -396,8 +401,7 @@
                 dateFormat: 'dd-mm-yy',
 
             });
-
-            @if (Session::get('update_success') == true)
+            @if (Session::get('update_success_check') == true)
                 var query = $('#search').val();
                 var followup_date = $('#followup_date_filter').val();
                 var status = $('.active-filter').data('value');
