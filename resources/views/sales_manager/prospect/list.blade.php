@@ -582,7 +582,7 @@
                 $('#loading').addClass('loading');
                 $('#loading-content').addClass('loading-content');
                 var page = $('#hidden_page').val();
-                alert(page);
+                // alert(page);
                 $.ajax({
                     url: route,
                     type: 'GET',
