@@ -67,7 +67,7 @@
                             <div class="col">
                                 <a href="javascript:void(0);" data-value="All" class="desin-filter active-filter">
                                     <p>All</p>
-                                    <h5>{{  $count['total'] }}</h5>
+                                    <h5>{{ $count['total'] }}</h5>
                                 </a>
                             </div>
                             <div class="col">
@@ -124,7 +124,8 @@
                                 <form action="{{ route('sales-manager.prospects.store') }}" method="post"
                                     data-parsley-validate="" enctype="multipart/form-data">
                                     @csrf
-                                    <input type="hidden" name="sales_executive_id" value="{{request()->sales_executive_id}}" />
+                                    <input type="hidden" name="sales_executive_id"
+                                        value="{{ request()->sales_executive_id }}" />
                                     <div class="row">
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label"> Sales
@@ -212,7 +213,7 @@
                                         <div id="other-value" class="col-md-12 mb-3">
 
                                         </div>
-                                        {{--  price_quote --}}
+                                        {{-- price_quote --}}
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Price Quote
                                                 <span style="color: red;">*</span></label>
@@ -229,7 +230,7 @@
                                                 Taken By <span style="color: red;">*</span>
                                             </label>
                                             <select name="transfer_token_by" id="transfer_token_by"
-                                                class="form-control select2" required>
+                                                class="form-control select2" required data-parsley-trigger="keyup">
                                                 <option value="">Select Transfer Token By
                                                 </option>
                                                 @foreach ($users as $user)
@@ -295,8 +296,7 @@
 
 
                     <div class="table-responsive" id="show-prospect">
-                        <table id="myTable" class="dd table table-striped table-hover"
-                            style="width:100%">
+                        <table id="myTable" class="dd table table-striped table-hover" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>Created Date</th>
@@ -308,8 +308,11 @@
                                     <th>Transfer Taken By</th>
                                     <th>Status</th>
                                     <th>Service Offered</th>
-                                    <th>Followup Date  <input type="text" class="datepicker" id="followup_date_filter" style="width: 0; padding:0; border:none"/>
-                                        <label for="followup_date_filter" class="datepik" style="font-size: 22px"><i class="las la-calendar"></i></label></th>
+                                    <th>Followup Date <input type="text" class="datepicker" id="followup_date_filter"
+                                            style="width: 0; padding:0; border:none" />
+                                        <label for="followup_date_filter" class="datepik" style="font-size: 22px"><i
+                                                class="las la-calendar"></i></label>
+                                    </th>
                                     <th>Price Quoted</th>
                                     <th>Action</th>
                                 </tr>
@@ -318,7 +321,9 @@
                                 @include('sales_manager.prospect.table')
                             </tbody>
                         </table>
-
+                        <input type="hidden" name="hidden_page" id="hidden_page" value="1" />
+                        <input type="hidden" name="hidden_column_name" id="hidden_column_name" value="id" />
+                        <input type="hidden" name="hidden_sort_type" id="hidden_sort_type" value="desc" />
                     </div>
                 </div>
             </div>
@@ -392,9 +397,19 @@
 
             });
 
+            @if (Session::get('update_success') == true)
+                var query = $('#search').val();
+                var followup_date = $('#followup_date_filter').val();
+                var status = $('.active-filter').data('value');
+                var page = @php echo Session::get('page_no') ?? '1' @endphp;
+
+                fetch_data(page, status, query, followup_date);
+            @endif
+
             function fetch_data(page, status, query, followup_date) {
                 // console.log(status + ' ' + page);
-                var user_id = {{ request()->user_id ?? 0 }};
+
+                var user_id = {{ request()->sales_executive_id ?? 0 }};
                 $.ajax({
                     url: "{{ route('sales-manager.prospects.status-filter') }}",
                     data: {
@@ -427,6 +442,7 @@
             $(document).on('click', '.pagination a', function(e) {
                 e.preventDefault();
                 var page = $(this).attr('href').split('page=')[1];
+                $('#hidden_page').val(page);
                 var status = $('.active-filter').data('value');
                 var query = $('#search').val();
                 var followup_date = $('#followup_date_filter').val();
@@ -509,7 +525,7 @@
     </script>
     <script>
         $(document).ready(function() {
-              $('.select2').each(function() {
+            $('.select2').each(function() {
                 $(this).select2({
                     dropdownParent: $(this).parent()
                 });
@@ -518,7 +534,7 @@
     </script>
     <script>
         $(document).ready(function() {
-              $('.select2').each(function() {
+            $('.select2').each(function() {
                 $(this).select2({
                     dropdownParent: $(this).parent()
                 });
@@ -565,6 +581,8 @@
                 // Make an AJAX request to fetch the priceRequest details
                 $('#loading').addClass('loading');
                 $('#loading-content').addClass('loading-content');
+                var page = $('#hidden_page').val();
+                alert(page);
                 $.ajax({
                     url: route,
                     type: 'GET',
@@ -574,6 +592,8 @@
                         $('#loading').removeClass('loading');
                         $('#loading-content').removeClass('loading-content');
                         $('#offcanvasEdit').offcanvas('show');
+
+                        $('#edit-page-no').val(page);
                     },
                     error: function(xhr) {
                         // Handle errors
@@ -586,61 +606,61 @@
         });
     </script>
 
-<script>
+    <script>
         $(document).on('click', '.milestone-print', function() {
 
-        var html = '';
-        html += '<div class="row">';
-        html += '<div class="col-md-12 mb-3 pb-3">';
-        html += '<div style="display: flex">';
-        html +=
-            '<input type="text" name="milestone_name[]" class="form-control" value="" placeholder="Milestone name" id="" required data-parsley-trigger="keyup">';
-        html += '</div>';
-        html += '</div>';
-        html += '<div class="col-md-12 mb-3 pb-3">';
-        html += '<div style="display: flex">';
-        html +=
-            '<input type="text" name="milestone_value[]" class="form-control" value="" placeholder="Milestone value" id="" required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number.">';
-        html += '</div>';
-        html += '</div>';
-        // html += '<div class="col-md-12 mb-3 pb-3">';
-        // html += '<div style="display: flex">';
-        // html +=
-        //     '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value="" disabled >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
-        // html += '</div>';
-        // html += '</div>';
-        // html += '<div class="col-md-12 mb-3 pb-3">';
-        // html += '<div style="display: flex">';
-        // html += '<input type="date" name="milestone_payment_date[]" class="form-control picker" value="" id="" required data-parsley-trigger="keyup">';
-        // html += '</div>';
-        // html += '</div>';
-        // html += '<div class="col-md-12 mb-3 pb-3">';
-        // html += '<div style="display: flex">';
-        // html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" placeholder="Milestone payment mode" required data-parsley-trigger="keyup">';
-        // html += '</div>';
-        // html += '</div>';
-        // html += '<div class="col-md-12 mb-3 pb-3">';
-        // html += '<div style="display: flex">';
-        // html +=
-        //     '<input type="date" name="payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
-        // html += '</div>';
-        // html += '</div>';
-        html += '<div class="col-md-12 mb-3 pb-3">';
-        html += '<div style="display: flex">';
-        html +=
-            '<textarea name="milestone_comment[]" class="form-control" placeholder="Milestone Comment" id="" cols="3" rows="2" ></textarea>';
-        html += '</div>';
-        html += '</div>';
-        html += '<div class="col-md-12 mb-3 pb-3">';
-        html +=
-            '<button type="button" class="btn btn-danger remove"><i class="fas fa-minus"></i> Remove</button>';
-        html += '</div>';
-        html += '</div>';
-        $('.add-milestone').append(html);
-    });
+            var html = '';
+            html += '<div class="row">';
+            html += '<div class="col-md-12 mb-3 pb-3">';
+            html += '<div style="display: flex">';
+            html +=
+                '<input type="text" name="milestone_name[]" class="form-control" value="" placeholder="Milestone name" id="" required data-parsley-trigger="keyup">';
+            html += '</div>';
+            html += '</div>';
+            html += '<div class="col-md-12 mb-3 pb-3">';
+            html += '<div style="display: flex">';
+            html +=
+                '<input type="text" name="milestone_value[]" class="form-control" value="" placeholder="Milestone value" id="" required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number.">';
+            html += '</div>';
+            html += '</div>';
+            // html += '<div class="col-md-12 mb-3 pb-3">';
+            // html += '<div style="display: flex">';
+            // html +=
+            //     '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value="" disabled >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
+            // html += '</div>';
+            // html += '</div>';
+            // html += '<div class="col-md-12 mb-3 pb-3">';
+            // html += '<div style="display: flex">';
+            // html += '<input type="date" name="milestone_payment_date[]" class="form-control picker" value="" id="" required data-parsley-trigger="keyup">';
+            // html += '</div>';
+            // html += '</div>';
+            // html += '<div class="col-md-12 mb-3 pb-3">';
+            // html += '<div style="display: flex">';
+            // html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" placeholder="Milestone payment mode" required data-parsley-trigger="keyup">';
+            // html += '</div>';
+            // html += '</div>';
+            // html += '<div class="col-md-12 mb-3 pb-3">';
+            // html += '<div style="display: flex">';
+            // html +=
+            //     '<input type="date" name="payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
+            // html += '</div>';
+            // html += '</div>';
+            html += '<div class="col-md-12 mb-3 pb-3">';
+            html += '<div style="display: flex">';
+            html +=
+                '<textarea name="milestone_comment[]" class="form-control" placeholder="Milestone Comment" id="" cols="3" rows="2" ></textarea>';
+            html += '</div>';
+            html += '</div>';
+            html += '<div class="col-md-12 mb-3 pb-3">';
+            html +=
+                '<button type="button" class="btn btn-danger remove"><i class="fas fa-minus"></i> Remove</button>';
+            html += '</div>';
+            html += '</div>';
+            $('.add-milestone').append(html);
+        });
 
-    $(document).on('click', '.remove', function() {
-        $(this).closest('.row').remove();
-    });
-</script>
+        $(document).on('click', '.remove', function() {
+            $(this).closest('.row').remove();
+        });
+    </script>
 @endpush

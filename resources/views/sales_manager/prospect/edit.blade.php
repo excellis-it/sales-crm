@@ -8,10 +8,11 @@
         </div>
         <div class="offcanvas-body">
             <form action="{{ route('sales-manager.prospects.update', $prospect->id) }}" method="POST"
-                enctype="multipart/form-data">
+                enctype="multipart/form-data" data-parsley-validate="" >
                 @method('PUT')
                 @csrf
                 <input type="hidden" name="sales_executive_id" value="{{$sales_executive_id}}" />
+                <input type="hidden" name="page_no" id="edit-page-no">
                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <label for="inputEnterYourName" class="col-form-label"> Sales
@@ -134,7 +135,8 @@
                             Taken By <span style="color: red;">*</span>
                         </label>
                         <select name="transfer_token_by" id="transfer_token_by" class="form-control select2"
-                            required>
+                        required
+                        data-parsley-trigger="keyup">
                             <option value="">Select Transfer Token By</option>
                             @foreach ($users as $user)
                                 <option value="{{ $user->id }}"

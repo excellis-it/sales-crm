@@ -17,7 +17,7 @@
                     <div class="col-md-12 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Type of customer
                             <span style="color: red;">*</span></label>
-                        <input type="radio" name="customer" id="new_user" value="" class="customer"
+                        <input type="radio" name="customer" id="new_user" value="1" class="customer"
                             data-parsley-trigger="keyup" checked> New user
                         <input type="radio" name="customer" id="existing_user" value="0" class="customer"
                             data-parsley-trigger="keyup"> Existing user

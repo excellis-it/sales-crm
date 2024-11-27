@@ -421,7 +421,6 @@
                 var query = $('#search').val();
                 var status = $('.active-filter').data('value');
                 var followup_date = $('#followup_date_filter').val();
-                // alert(followup_date);
                 fetch_data(1, status, query, followup_date);
             });
         });

@@ -12,7 +12,7 @@ use App\Models\User;
 use App\Models\ProjectMilestone;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
-
+use Session;
 class ProspectController extends Controller
 {
     /**
@@ -23,6 +23,12 @@ class ProspectController extends Controller
     public function index(Request $request)
     {
         if ($request->sales_executive_id) {
+            $sales_executive_id = $request->sales_executive_id;
+        } else {
+            $sales_executive_id = null;
+        }
+
+        if ($request->sales_executive_id) {
             $count['total'] = Prospect::where('report_to', auth()->user()->id)->where('user_id', $request->sales_executive_id)->count();
             $count['win'] = Prospect::where('report_to', auth()->user()->id)->where('user_id', $request->sales_executive_id)->where('status', 'Win')->count();
             $count['follow_up'] = Prospect::where('report_to', auth()->user()->id)->where('user_id', $request->sales_executive_id)->where('status', 'Follow Up')->count();
@@ -31,7 +37,7 @@ class ProspectController extends Controller
             $prospects = Prospect::where('report_to', Auth::user()->id)->where('user_id', $request->sales_executive_id)->orderBy('created_at', 'desc')->paginate(15);
             $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE','BUSINESS_DEVELOPMENT_MANAGER','BUSINESS_DEVELOPMENT_EXCECUTIVE'])->get();
             $sales_executives = User::role('SALES_EXCUETIVE')->where(['status' => 1, 'sales_manager_id' => Auth::user()->id])->orderBy('id', 'desc')->get();
-            return view('sales_manager.prospect.list')->with(compact('prospects', 'count', 'users', 'sales_executives'));
+            return view('sales_manager.prospect.list')->with(compact('prospects', 'count', 'users', 'sales_executives', 'sales_executive_id'));
         }
         $count['total'] = Prospect::where('report_to', auth()->user()->id)->count();
         $count['win'] = Prospect::where('report_to', auth()->user()->id)->where('status', 'Win')->count();
@@ -41,7 +47,7 @@ class ProspectController extends Controller
         $prospects = Prospect::where('report_to', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(15);
         $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE','BUSINESS_DEVELOPMENT_MANAGER','BUSINESS_DEVELOPMENT_EXCECUTIVE'])->get();
         $sales_executives = User::role('SALES_EXCUETIVE')->where(['status' => 1, 'sales_manager_id' => Auth::user()->id])->orderBy('id', 'desc')->get();
-        return view('sales_manager.prospect.list')->with(compact('prospects', 'count', 'users', 'sales_executives'));
+        return view('sales_manager.prospect.list')->with(compact('prospects', 'count', 'users', 'sales_executives', 'sales_executive_id'));
     }
 
     /**
@@ -341,7 +347,9 @@ class ProspectController extends Controller
 
             $project_type->save();
         }
-          $get_user_id_from_url = $request->sales_executive_id;
+           $get_user_id_from_url = $request->sales_executive_id;
+          Session::put('page_no',$request->page_no);
+        $update_success = Session::put('update_success_check',true);
         if ($get_user_id_from_url) {
             return redirect()->route('sales-manager.prospects.index', ['sales_executive_id' => $get_user_id_from_url])->with('message', 'Prospect updated successfully.');
         }
@@ -422,7 +430,7 @@ class ProspectController extends Controller
                         });
                 });
             }
-            
+
             if ($request->followup_date) {
                 $followup_date = date('Y-m-d', strtotime($request->followup_date));
                 $prospects = $prospects->where('followup_date', $followup_date);
@@ -437,7 +445,17 @@ class ProspectController extends Controller
                 $prospects = $prospects->orderBy('created_at', 'desc')->where(['status' => $status])->where('report_to', Auth::user()->id)->paginate('15');
             }
 
-            return response()->json(['data' => view('sales_manager.prospect.table', compact('prospects'))->render()]);
+            if ($request->user_id) {
+                $sales_executive_id = $request->user_id;
+            } else {
+                $sales_executive_id = null;
+            }
+
+            if (Session::has('update_success')) {
+                Session::put('update_success',false);
+            }
+
+            return response()->json(['data' => view('sales_manager.prospect.table', compact('prospects', 'sales_executive_id'))->render()]);
         }
     }
 
