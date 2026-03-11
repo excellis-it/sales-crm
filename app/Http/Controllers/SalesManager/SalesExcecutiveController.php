@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Traits\ImageTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Storage;
@@ -91,8 +92,11 @@ class SalesExcecutiveController extends Controller
             'password' => $request->password,
             'type' => 'Sales excecutive',
         ];
-
-        Mail::to($request->email)->send(new RegistrationMail($maildata));
+        try {
+            Mail::to($request->email)->send(new RegistrationMail($maildata));
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        }
         return response()->json(['success' => 'Sales excecutive created successfully.']);
     }
 

@@ -21,6 +21,10 @@
 
                     </ul>
                 </li>
+                <li class="{{ Request::is('sales-manager/ips*') ? 'active' : ' ' }}">
+                    <a href="{{ route('sales-manager.ips.index') }}"><i class="la la-globe"></i> <span>
+                            Manage IP</span></a>
+                </li>
                 {{-- My sales excecutive --}}
                 <li class="{{ Request::is('sales-manager/sales-excecutive*') ? 'active' : ' ' }}">
                     <a href="{{ route('sales-manager.sales-excecutive.index') }}"><i class="la la-user-tie"></i> <span>

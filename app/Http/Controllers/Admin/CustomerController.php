@@ -10,6 +10,7 @@ use App\Mail\RegistrationMail;
 use App\Traits\ImageTrait;
 use Illuminate\Support\Facades\Storage;
 use File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\View;
 
 use function PHPUnit\Framework\fileExists;
@@ -83,8 +84,12 @@ class CustomerController extends Controller
             'password' => $request->password,
             'type' => 'Sales manager',
         ];
+        try {
+             Mail::to($request->email)->send(new RegistrationMail($maildata));
+        } catch (\Throwable $th) {
+             Log::error($th->getMessage());
+        }
 
-        Mail::to($request->email)->send(new RegistrationMail($maildata));
         return response()->json(['success' => 'Sales manager added successfully.']);
     }
 

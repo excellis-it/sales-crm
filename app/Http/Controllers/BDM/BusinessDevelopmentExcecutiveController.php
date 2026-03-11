@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Storage;
 use File;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class BusinessDevelopmentExcecutiveController extends Controller
 {
@@ -93,7 +94,11 @@ class BusinessDevelopmentExcecutiveController extends Controller
             'type' => 'BDE',
         ];
 
-        Mail::to($request->email)->send(new RegistrationMail($maildata));
+        try {
+            Mail::to($request->email)->send(new RegistrationMail($maildata));
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        }
         return response()->json(['success' => 'BDE created successfully.']);
     }
 

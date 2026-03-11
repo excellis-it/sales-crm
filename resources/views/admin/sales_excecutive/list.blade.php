@@ -376,7 +376,7 @@
                         $('#loading').removeClass('loading');
                         $('#loading-content').removeClass('loading-content');
                         window.location.reload();
-                        toastr.success('Follow-Up details added successfully');
+                        toastr.success('Sales Excecutive added successfully');
                     },
                     error: function(xhr) {
                         // Handle errors (e.g., display validation errors)

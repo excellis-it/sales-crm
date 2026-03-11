@@ -10,6 +10,7 @@ use App\Mail\RegistrationMail;
 use App\Traits\ImageTrait;
 use Illuminate\Support\Facades\Storage;
 use File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\View;
 
 class BusinessDevelopmentManagerController extends Controller
@@ -77,8 +78,12 @@ class BusinessDevelopmentManagerController extends Controller
             'password' => $request->password,
             'type' => 'Business Development Manager',
         ];
+        try {
+             Mail::to($request->email)->send(new RegistrationMail($maildata));
+        } catch (\Throwable $th) {
+             Log::error($th->getMessage());
+        }
 
-        Mail::to($request->email)->send(new RegistrationMail($maildata));
         return response()->json(['success' => 'Business Development Manager created successfully.']);
     }
 

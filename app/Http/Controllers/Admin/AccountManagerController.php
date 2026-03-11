@@ -10,6 +10,7 @@ use App\Mail\RegistrationMail;
 use App\Traits\ImageTrait;
 use Illuminate\Support\Facades\Storage;
 use File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\View;
 
 class AccountManagerController extends Controller
@@ -76,8 +77,11 @@ class AccountManagerController extends Controller
             'password' => $request->password,
             'type' => 'Account manager',
         ];
-
-        Mail::to($request->email)->send(new RegistrationMail($maildata));
+        try {
+            Mail::to($request->email)->send(new RegistrationMail($maildata));
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+        }
         return response()->json(['success' => 'Account manager created successfully.']);
     }
 
@@ -99,7 +103,7 @@ class AccountManagerController extends Controller
      */
     public function edit($id)
     {
-        
+
         $account_manager = User::findOrFail($id);
         return response()->json(['account_manager' => $account_manager]);
     }

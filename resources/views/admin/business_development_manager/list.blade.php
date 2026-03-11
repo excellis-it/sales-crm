@@ -349,7 +349,7 @@
                         $('#loading').removeClass('loading');
                         $('#loading-content').removeClass('loading-content');
                         window.location.reload();
-                        toastr.success('Follow-Up details added successfully');
+                        toastr.success('Business Development Manager Added Successfully');
                     },
                     error: function(xhr) {
                         // Handle errors (e.g., display validation errors)
