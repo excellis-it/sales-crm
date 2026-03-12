@@ -130,7 +130,9 @@
                                         <li>
                                             <div class="title">Project Type:-</div>
                                             <div class="text">
-                                                <span class="badge bg-info">{{ $project->projectTypes->name ?? '' }}</span>
+                                                @foreach ($project->projectTypes as $pt)
+                                                    <span class="badge bg-info mb-1">{{ $pt->name ?? $pt->type }}</span>
+                                                @endforeach
                                             </div>
                                         </li>
                                         <li>

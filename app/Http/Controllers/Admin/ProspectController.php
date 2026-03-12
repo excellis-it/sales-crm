@@ -31,14 +31,14 @@ class ProspectController extends Controller
             $count['close'] = Prospect::where('user_id', $request->user_id)->where('status', 'Close')->count();
             $count['sent_proposal'] = Prospect::where('user_id', $request->user_id)->where('status', 'Sent Proposal')->count();
             $count['prospect'] = Prospect::where('user_id', $request->user_id)->count();
-            $prospects = Prospect::orderBy('sale_date', 'desc')->where('user_id', $request->user_id)->paginate('10');
+            $prospects = Prospect::orderBy('id', 'desc')->where('user_id', $request->user_id)->paginate('10');
         } else {
             $count['win'] = Prospect::where('status', 'Win')->count();
             $count['follow_up'] = Prospect::where('status', 'Follow Up')->count();
             $count['close'] = Prospect::where('status', 'Close')->count();
             $count['sent_proposal'] = Prospect::where('status', 'Sent Proposal')->count();
             $count['prospect'] = Prospect::count();
-            $prospects = Prospect::orderBy('sale_date', 'desc')->paginate('10');
+            $prospects = Prospect::orderBy('id', 'desc')->paginate('10');
         }
 
         return view('admin.prospect.list', compact('count', 'prospects', 'users', 'sales_executives'));
@@ -403,9 +403,9 @@ class ProspectController extends Controller
             }
 
             if ($status == 'All') {
-                $prospects = $prospects->orderBy('sale_date', 'desc')->paginate('10');
+                $prospects = $prospects->orderBy('id', 'desc')->paginate('10');
             } else {
-                $prospects = $prospects->orderBy('sale_date', 'desc')->where(['status' => $status])->paginate('10');
+                $prospects = $prospects->orderBy('id', 'desc')->where(['status' => $status])->paginate('10');
             }
 
             return response()->json(['data' => view('admin.prospect.table', compact('prospects'))->render()]);

@@ -119,7 +119,7 @@ class AccountManagerController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'email' => 'required|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',
+           'email' => 'required|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix|unique:users,email,' . $id,
             'phone' => 'required',
             'status' => 'required',
         ]);

@@ -11,7 +11,7 @@ use App\Models\ProjectMilestone;
 use App\Models\ProjectType;
 use App\Models\ProjectDocument;
 use App\Models\User;
-use Session;
+use Illuminate\Support\Facades\Session;
 use App\Traits\ImageTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,10 +30,10 @@ class ProjectController extends Controller
         // return Session::get('call_status');
 
 
-        $sales_managers = User::Role(['SALES_MANAGER','ACCOUNT_MANAGER','BUSINESS_DEVELOPMENT_MANAGER'])->orderBy('name', 'DESC')->where('status', 1)->get();
-        $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE','BUSINESS_DEVELOPMENT_MANAGER','BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
+        $sales_managers = User::Role(['SALES_MANAGER','ACCOUNT_MANAGER'])->orderBy('name', 'DESC')->where('status', 1)->get();
+        $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
         $account_managers = User::role('ACCOUNT_MANAGER')->orderBy('name', 'DESC')->where('status', 1)->get();
-        $project_openers = User::role(['ACCOUNT_MANAGER', 'SALES_EXCUETIVE','BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
+        $project_openers = User::role(['ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
         if ($request->sales_manager_id) {
             $projects = Project::orderBy('sale_date', 'desc')->where('user_id', $request->sales_manager_id)->paginate(15);
             return view('admin.project.list')->with(compact('projects','sales_managers','users','account_managers','project_openers'));
@@ -58,9 +58,9 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE','BUSINESS_DEVELOPMENT_MANAGER','BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
-        $sales_managers = User::Role(['SALES_MANAGER','ACCOUNT_MANAGER','BUSINESS_DEVELOPMENT_MANAGER'])->orderBy('name', 'DESC')->where('status', 1)->get();
-        $project_openers = User::role(['ACCOUNT_MANAGER', 'SALES_EXCUETIVE','BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
+        $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
+        $sales_managers = User::Role(['SALES_MANAGER','ACCOUNT_MANAGER'])->orderBy('name', 'DESC')->where('status', 1)->get();
+        $project_openers = User::role(['ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
         return view('admin.project.create')->with(compact('sales_managers', 'users', 'project_openers'));
     }
 
@@ -111,13 +111,13 @@ class ProjectController extends Controller
         $project->currency = $data['currency'];
         $project->payment_mode = $data['payment_mode'];
         $project->project_opener = $data['project_opener'];
-        $project->project_closer = $data['project_closer'];
+        $project->project_closer = $data['project_closer'] ?? null;
         $project->project_upfront = $data['project_upfront'];
-        $project->website = $data['website'];
+        $project->website = $data['website'] ?? null;
         $project->sale_date = $data['sale_date'] ?? '';
-        $project->assigned_date = '';
-        $project->delivery_tat = $data['delivery_tat'];
-        $project->comment = $data['comment'];
+        $project->assigned_date = $project->assigned_to ? date('Y-m-d') : null;
+        $project->delivery_tat = $data['delivery_tat'] ?? null;
+        $project->comment = $data['comment'] ?? '';
         $project->save();
 
 
@@ -144,10 +144,11 @@ class ProjectController extends Controller
                     $project_milestone->milestone_name = $milestone;
                     $project_milestone->milestone_value = $data['milestone_value'][$key];
                     $project_milestone->payment_status = $data['payment_status'][$key];
-                    // $project_milestone->payment_date =($data['payment_status'][$key] == 'Paid') ? date('Y-m-d') : '';
                     $project_milestone->milestone_comment = $data['milestone_comment'][$key];
-                    $project_milestone->payment_mode = $data['milestone_payment_mode'][$key];
-                    $project_milestone->payment_date = $data['milestone_payment_date'][$key];
+                    if ($data['payment_status'][$key] == 'Paid') {
+                        $project_milestone->payment_mode = $data['milestone_payment_mode'][$key] ?? null;
+                        $project_milestone->payment_date = $data['milestone_payment_date'][$key] ?? null;
+                    }
                     $project_milestone->save();
                 }
             }
@@ -214,10 +215,10 @@ class ProjectController extends Controller
 
 
         try {
-            $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE','BUSINESS_DEVELOPMENT_MANAGER','BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
-            $sales_managers = User::Role(['SALES_MANAGER','ACCOUNT_MANAGER','BUSINESS_DEVELOPMENT_MANAGER'])->get();
+            $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
+            $sales_managers = User::Role(['SALES_MANAGER','ACCOUNT_MANAGER'])->get();
             $account_managers = User::role('ACCOUNT_MANAGER')->orderBy('name', 'DESC')->where('status', 1)->get();
-            $project_openers = User::role(['ACCOUNT_MANAGER', 'SALES_EXCUETIVE','BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
+            $project_openers = User::role(['ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
             $project = Project::find($id);
             $followups = Followup::where('project_id', $id)->get();
             // return $project->projectTypes()->pluck('type');
@@ -248,6 +249,8 @@ class ProjectController extends Controller
         }
 
         $data = $request->all();
+
+        // dd($data);
         if ($data['customer'] == 0) {  //new customer == 1 and existing customer == 0
             $data['customer'] = $request->customer_id;
         } else {
@@ -275,13 +278,18 @@ class ProjectController extends Controller
         $project->currency = $data['currency'];
         $project->payment_mode = $data['payment_mode'];
         $project->project_opener = $data['project_opener'];
-        $project->project_closer = $data['project_closer'];
+        $project->project_closer = $data['project_closer'] ?? null;
         $project->project_upfront = $data['project_upfront'];
-        $project->website = $data['website'];
+        $project->website = $data['website'] ?? null;
         $project->sale_date = $data['sale_date'] ?? '';
-        $project->assigned_date = '';
-        $project->delivery_tat = $data['delivery_tat'];
-        $project->comment = $data['comment'];
+
+        if ($project->assigned_to != ($data['assigned_to'] ?? null)) {
+            $project->assigned_date = date('Y-m-d');
+        }
+
+        $project->assigned_to = $data['assigned_to'] ?? null;
+        $project->delivery_tat = $data['delivery_tat'] ?? null;
+        $project->comment = $data['comment'] ?? '';
         $project->save();
 
         ProjectType::where('project_id', $id)->delete();
@@ -293,20 +301,18 @@ class ProjectController extends Controller
                 $update_project_type->project_id = $project->id;
                 $update_project_type->type = $project_type;
                 if ($project_type == 'Other') {
-                    $update_project_type->name = $data['other_value'];
+                    $update_project_type->name = $data['other_value'] ?? 'Other';
                 } else {
                     $update_project_type->name = $project_type;
+                }
+
+                if (isset($data['start_date'])) {
+                    $update_project_type->start_date = $data['start_date'];
+                    $update_project_type->end_date = $data['end_date'];
                 }
                 $update_project_type->save();
             }
         }
-
-        if (isset($data['start_date'])) {
-            $update_project_type->start_date = $data['start_date'];
-            $update_project_type->end_date = $data['end_date'];
-        }
-
-        $update_project_type->save();
 
         $previous_milestone_value = ProjectMilestone::where('project_id', $id)->sum('milestone_value');
         ProjectMilestone::where('project_id', $id)->delete();

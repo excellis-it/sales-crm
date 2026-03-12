@@ -26,14 +26,14 @@ class ProspectController extends Controller
 
         if ($type) {
             // return $type;
-            $prospects = Prospect::where(['user_id' => Auth::user()->id, 'status' => $type])->orderBy('sale_date', 'desc')->paginate(15);
+            $prospects = Prospect::where(['user_id' => Auth::user()->id, 'status' => $type])->orderBy('id', 'desc')->paginate(15);
             $count['total'] = Prospect::where('user_id', auth()->user()->id)->count();
             $count['win'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Win')->count();
             $count['follow_up'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Follow Up')->count();
             $count['close'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Close')->count();
             $count['sent_proposal'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Sent Proposal')->count();
         } else {
-            $prospects = Prospect::where('user_id', Auth::user()->id)->orderBy('sale_date', 'desc')->paginate(15);
+            $prospects = Prospect::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->paginate(15);
             $count['total'] = Prospect::where('user_id', auth()->user()->id)->count();
             $count['win'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Win')->count();
             $count['follow_up'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Follow Up')->count();
@@ -392,11 +392,11 @@ class ProspectController extends Controller
                 $prospects = $prospects->where('followup_date', $followup_date);
             }
 
-            
+
             if ($status == 'All') {
-                $prospects = $prospects->orderBy('sale_date', 'desc')->where('user_id', Auth::user()->id)->paginate('15');
+                $prospects = $prospects->orderBy('id', 'desc')->where('user_id', Auth::user()->id)->paginate('15');
             } else {
-                $prospects = $prospects->orderBy('sale_date', 'desc')->where(['status' => $status])->where('user_id', Auth::user()->id)->paginate('15');
+                $prospects = $prospects->orderBy('id', 'desc')->where(['status' => $status])->where('user_id', Auth::user()->id)->paginate('15');
             }
 
             return response()->json(['data' => view('sales_excecutive.prospect.table', compact('prospects'))->render()]);

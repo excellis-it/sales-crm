@@ -21,13 +21,13 @@ class ProjectController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response     
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
         $projects = Project::where('user_id', Auth::user()->id)->orderBy('sale_date', 'desc')->paginate(15);
         $account_managers = User::role('ACCOUNT_MANAGER')->orderBy('name', 'DESC')->where('status', 1)->get();
-        $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE', 'BUSINESS_DEVELOPMENT_MANAGER', 'BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
+        $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
         $project_openers = User::role(['SALES_EXCUETIVE'])->where(['sales_manager_id' => Auth::user()->id, 'status' => 1])->orderBy('id', 'desc')->get();
         return view('sales_manager.project.list')->with(compact('projects', 'users', 'project_openers', 'account_managers'));
     }
@@ -61,7 +61,7 @@ class ProjectController extends Controller
             Session::put('call_status',$request->get('call_status'));
             if($request->get('call_status') == '')
             {
-                $page = Session::put('page_number',1); 
+                $page = Session::put('page_number',1);
             }
             if(Session::get('call_status') == 'Yes') {
                 Session::put('call_status',"");
@@ -220,7 +220,7 @@ class ProjectController extends Controller
     public function edit($id)
     {
         try {
-            $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE', 'BUSINESS_DEVELOPMENT_MANAGER', 'BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
+            $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
             $project_openers = User::role(['SALES_EXCUETIVE'])->where(['sales_manager_id' => Auth::user()->id, 'status' => 1])->orderBy('id', 'desc')->get();
             $account_managers = User::role('ACCOUNT_MANAGER')->orderBy('name', 'DESC')->where('status', 1)->get();
             $project = Project::find($id);

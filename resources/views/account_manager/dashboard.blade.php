@@ -28,7 +28,7 @@
                             <div class="card-body">
                                 <div class="dash-widget-info">
                                     <h3>{{ $count['projects'] }}</h3>
-                                    <span>Total Sales managers</span>
+                                    <span>Total Projects</span>
                                 </div>
                                 <div class="">
                                     <span class="dash-widget-icon"><i class="fa fa-credit-card"></i></span>

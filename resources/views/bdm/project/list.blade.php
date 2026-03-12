@@ -408,12 +408,12 @@
         $(document).ready(function() {
 
             @if(Session::get('update_success') == true)
-            
+
             var query = $('#search').val();
             var column_name = $('#hidden_column_name').val();
             var sort_type = $('#hidden_sort_type').val();
             var page = @php echo Session::get('page_number') @endphp;
-            
+
             fetch_data(page, sort_type, column_name, query,"Yes");
             @endif
 
@@ -798,6 +798,8 @@
                 html += '<option value="">Select Payment Mode</option>';
                 html += '<option value="Paypal">Paypal</option>';
                 html += '<option value="Stripe">Stripe</option>';
+                html += '<option value="Bank Transfer">Bank Transfer</option>';
+                html += '<option value="Payoneer">Payoneer</option>';
                 html += '</select>';
                 html += '</div>';
                 html += '</div>';
@@ -973,15 +975,15 @@
     </script>
     <script>
         $(document).on('change', '.payment-status', function() {
-           
+
             var id = $(this).data('id');
             var payment_status = $(this).val();
-           
+
             // $('#milestone_payment_date').prop('required', false);
             $('#milestone-date-'+id).prop('required', false);
             $('#milestone-mode-'+id).prop('required', false);
             if (payment_status == 'Paid') {
-                
+
                 $('.edit-payment-hide-'+id).show();
                 $('#milestone-date-'+id).prop('required', true);
                 $('#milestone-mode-'+id).prop('required', true);

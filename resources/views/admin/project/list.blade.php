@@ -4,9 +4,30 @@
 @endsection
 @push('styles')
     <style>
-        .dataTables_filter {
-            margin-bottom: 10px !important;
-        }
+        .dataTables_filter { margin-bottom: 20px !important; }
+        .offcanvas { width: 45% !important; background-color: #f8f9fa; border-left: none; box-shadow: -5px 0 15px rgba(0,0,0,0.1); }
+        .offcanvas-header { background: #fff; border-bottom: 1px solid #eee; padding: 20px; }
+        .offcanvas-body { padding: 25px; }
+        .section-header { margin-top: 25px; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid #e9ecef; color: #343a40; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; }
+        .section-header i { margin-right: 10px; color: #ff9b44; }
+        .form-label { font-weight: 600; color: #495057; margin-bottom: 6px; font-size: 14px; }
+        .form-control, .form-select { border-radius: 8px; border: 1px solid #ced4da; padding: 10px 15px; transition: all 0.2s; background-color: #fff; }
+        .form-control:focus { border-color: #ff9b44; box-shadow: 0 0 0 0.2rem rgba(255, 155, 68, 0.25); }
+        .card-custom { border: none; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .milestone-item { background: #fff; border-radius: 10px; padding: 20px; margin-bottom: 15px; border: 1px solid #e9ecef; position: relative; transition: all 0.3s; }
+        .milestone-item:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .remove-btn { color: #dc3545; cursor: pointer; transition: all 0.2s; font-size: 18px; }
+        .remove-btn:hover { color: #a71d2a; transform: scale(1.1); }
+        .submit-btn-modern { background: linear-gradient(135deg, #ff9b44 0%, #fc6075 100%); border: none; color: #fff; padding: 12px 30px; border-radius: 30px; font-weight: 600; box-shadow: 0 4px 15px rgba(255, 155, 68, 0.3); transition: all 0.3s; }
+        .submit-btn-modern:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 155, 68, 0.4); color: #fff; }
+        .btn-process { background-color: #343a40; color: #fff; border-radius: 8px; padding: 8px 20px; transition: all 0.2s; }
+        .btn-process:hover { background-color: #23272b; color: #fff; }
+        .add-more-btn { color: #ff9b44; background: transparent; border: 2px dashed #ff9b44; border-radius: 8px; padding: 10px; width: 100%; font-weight: 600; margin-top: 10px; transition: all 0.2s; }
+        .add-more-btn:hover { background: rgba(255, 155, 68, 0.05); transform: translateY(-1px); }
+        .customer-type-group { display: flex; gap: 20px; background: #fff; padding: 15px; border-radius: 10px; border: 1px solid #e9ecef; margin-bottom: 20px; }
+        .form-check-input:checked { background-color: #ff9b44; border-color: #ff9b44; }
+        @media (max-width: 991px) { .offcanvas { width: 80% !important; } }
+        @media (max-width: 767px) { .offcanvas { width: 100% !important; } }
     </style>
 @endpush
 
@@ -76,85 +97,64 @@
                                     aria-label="Close">
                                     <i class="fa fa-chevron-right" aria-hidden="true"></i>
                                 </button>
-                                <h4 id="offcanvasEditLabel">Add Project Details</h4>
+                                <h4 id="offcanvasEditLabel" class="text-dark">Add Project Details</h4>
                             </div>
                             <div class="offcanvas-body">
                                 <form action="{{ route('sales-projects.store') }}" method="post" id="form-validation"
                                     data-parsley-validate="" enctype="multipart/form-data">
                                     @csrf
                                     <div class="row">
-                                        {{-- new user and existing user radio button --}}
-                                        <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Type of customer
-                                                <span style="color: red;">*</span></label>
-                                            <input type="radio" name="customer" id="new_user" value="1" required
-                                                class="customer" data-parsley-trigger="keyup" checked> New user
-                                            <input type="radio" name="customer" id="existing_user" value="0" required
-                                                class="customer" data-parsley-trigger="keyup"> Existing user
-                                        </div>
-                                        {{-- select user --}}
-                                        <div class="col-md-12 mb-3 select_user" id="select_user">
+                                        <div class="col-md-12">
+                                            <div class="section-header"><i class="fas fa-user-circle"></i> Customer Information</div>
+                                            <div class="customer-type-group mb-3">
+                                                <div class="form-check">
+                                                    <input class="form-check-input customer" type="radio" name="customer" id="new_user" value="1" checked required>
+                                                    <label class="form-check-label" for="new_user">New Customer</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input customer" type="radio" name="customer" id="existing_user" value="0" required>
+                                                    <label class="form-check-label" for="existing_user">Existing Customer</label>
+                                                </div>
+                                            </div>
 
-                                        </div>
-                                        {{-- salemangers select option --}}
-                                        <div class="col-md-6 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label"> Client Name
-                                                <span style="color: red;">*</span></label>
-                                            <input type="text" name="client_name" id="client_name" required
-                                                data-parsley-trigger="keyup" class="form-control client_name"
-                                                value="{{ old('client_name') }}" placeholder="Enter Client Name">
+                                            <div id="select_user" class="mb-3"></div>
                                         </div>
 
                                         <div class="col-md-6 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Client Email
-                                                <span style="color: red;">*</span></label>
-                                            <input type="text" name="client_email" id="client_email"
-                                                class="form-control client_email" value="{{ old('client_email') }}"
-                                                placeholder="Enter Client Email">
+                                            <label class="form-label">Client Name <span class="text-danger">*</span></label>
+                                            <input type="text" name="client_name" id="client_name" required data-parsley-trigger="keyup" class="form-control" placeholder="John Doe">
+                                        </div>
+
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Client Email <span class="text-danger">*</span></label>
+                                            <input type="email" name="client_email" id="client_email" required data-parsley-trigger="keyup" class="form-control" placeholder="john@example.com">
                                             <span class="client_email_error text-danger"></span>
                                         </div>
+
                                         <div class="col-md-6 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Client Phone
-                                                <span style="color: red;">*</span></label>
-                                            <input type="text" name="client_phone" id="client_phone" required
-                                                data-parsley-trigger="keyup" data-parsley-type="number"
-                                                data-parsley-type-message="Please enter a valid phone number."
-                                                class="form-control client_phone" value="{{ old('client_phone') }}"
-                                                placeholder="Enter Client Phone Number">
+                                            <label class="form-label">Client Phone <span class="text-danger">*</span></label>
+                                            <input type="text" name="client_phone" id="client_phone" required data-parsley-trigger="keyup" data-parsley-type="number" class="form-control" placeholder="1234567890">
                                         </div>
 
-                                        {{-- clinent address --}}
                                         <div class="col-md-6 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Client
-                                                Address <span style="color: red;">*</span></label>
-                                            <input type="text" name="client_address" id="client_address" required
-                                                data-parsley-trigger="keyup" class="form-control client_address"
-                                                value="{{ old('client_address') }}" placeholder="Enter Address">
-                                            @if ($errors->has('address'))
-                                                <div class="error" style="color:red;">
-                                                    {{ $errors->first('address') }}</div>
-                                            @endif
+                                            <label class="form-label">Client Address <span class="text-danger">*</span></label>
+                                            <input type="text" name="client_address" id="client_address" required data-parsley-trigger="keyup" class="form-control" placeholder="City, Country">
                                         </div>
+
                                         <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Business Name
-                                                <span style="color: red;">*</span></label>
-                                            <input type="text" name="business_name" id="business_name" required
-                                                data-parsley-trigger="keyup" class="form-control"
-                                                value="{{ old('business_name') }}" placeholder="Enter Business Name">
+                                            <label class="form-label">Business Name <span class="text-danger">*</span></label>
+                                            <input type="text" name="business_name" id="business_name" required data-parsley-trigger="keyup" class="form-control" placeholder="Business Solutions Inc.">
                                         </div>
-                                        <h3 class="mt-4 text-uppercase">Project Details</h3>
-                                        <hr>
-                                        {{-- project type in select2 box --}}
+
+                                        <div class="col-md-12">
+                                            <div class="section-header"><i class="fas fa-briefcase"></i> Project Details</div>
+                                        </div>
+
                                         <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Project
-                                                Type <span style="color: red;">*</span></label>
-                                            <select name="project_type[]" id="project_type" class="form-control mySelect"
-                                                multiple="multiple">
-                                                <option value="">Select Project Type</option>
-                                                <option value="Website Design & Development">Website Design &
-                                                    Development</option>
-                                                <option value="Mobile Application Development">Mobile
-                                                    Application Development</option>
+                                            <label class="form-label">Project Type <span class="text-danger">*</span></label>
+                                            <select name="project_type[]" id="project_type" class="form-control mySelect" multiple="multiple" required>
+                                                <option value="Website Design & Development">Website Design & Development</option>
+                                                <option value="Mobile Application Development">Mobile Application Development</option>
                                                 <option value="Digital Marketing">Digital Marketing</option>
                                                 <option value="Logo Design">Logo Design</option>
                                                 <option value="SEO">SEO</option>
@@ -162,34 +162,24 @@
                                                 <option value="Other">Other</option>
                                             </select>
                                         </div>
-                                        <div id="other-value" class="col-md-12 mb-3">
 
-                                        </div>
-                                        {{-- Project value --}}
+                                        <div id="other-value" class="col-md-12 mb-3"></div>
+
                                         <div class="col-md-6 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Project
-                                                Value <span style="color: red;">*</span></label>
-                                            <input type="text" name="project_value" id="project_value" required
-                                                data-parsley-trigger="keyup" data-parsley-type="number"
-                                                data-parsley-type-message="Please enter a valid number."
-                                                class="form-control" placeholder="Enter Project Value">
+                                            <label class="form-label">Project Value (Total) <span class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <input type="text" name="project_value" id="project_value" required data-parsley-trigger="keyup" data-parsley-type="number" class="form-control" placeholder="0.00">
+                                            </div>
                                         </div>
-                                        {{-- Project project_upfront --}}
+
                                         <div class="col-md-6 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Project
-                                                Upfront <span style="color: red;">*</span></label>
-                                            <input type="text" name="project_upfront" id="project_upfront" required
-                                                data-parsley-trigger="keyup" data-parsley-type="number"
-                                                data-parsley-type-message="Please enter a valid number."
-                                                class="form-control" value="{{ old('project_upfront') }}"
-                                                placeholder="Enter Project Upfront">
+                                            <label class="form-label">Project Upfront <span class="text-danger">*</span></label>
+                                            <input type="text" name="project_upfront" id="project_upfront" required data-parsley-trigger="keyup" data-parsley-type="number" class="form-control" placeholder="0.00">
                                         </div>
-                                        {{-- currency select box --}}
+
                                         <div class="col-md-6 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Currency
-                                                <span style="color: red;">*</span></label>
-                                            <select name="currency" id="currency" class="form-control" required
-                                                data-parsley-trigger="keyup">
+                                            <label class="form-label">Currency <span class="text-danger">*</span></label>
+                                            <select name="currency" id="currency" class="form-select" required>
                                                 <option value="">Select Currency</option>
                                                 <option value="INR">INR</option>
                                                 <option value="USD">USD</option>
@@ -200,142 +190,102 @@
                                             </select>
                                         </div>
 
-                                        {{-- Project payment_mode --}}
                                         <div class="col-md-6 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Project
-                                                Payment Mode <span style="color: red;">*</span></label>
-                                            <input type="text" name="payment_mode" required
-                                                data-parsley-trigger="keyup" id="payment_mode" class="form-control"
-                                                value="{{ old('payment_mode') }}"
-                                                placeholder="Enter Project Payment Mode">
+                                            <label class="form-label">Payment Mode <span class="text-danger">*</span></label>
+                                            <input type="text" name="payment_mode" required data-parsley-trigger="keyup" id="payment_mode" class="form-control" placeholder="e.g. Bank Transfer, Paypal">
                                         </div>
-                                        {{-- Project opener --}}
+
                                         <div class="col-md-6 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Project
-                                                Opener <span style="color: red;">*</span></label>
-                                            <select name="project_opener" id="project_opener" required
-                                                class="form-control select2" required>
-                                                <option value="">Select Project
-                                                    Opener
-                                                </option>
+                                            <label class="form-label">Project Opener <span class="text-danger">*</span></label>
+                                            <select name="project_opener" id="project_opener" required class="form-select select2">
+                                                <option value="">Select Opener</option>
                                                 @foreach ($project_openers as $project_opener)
-                                                    <option value="{{ $project_opener->id }}">{{ $project_opener->name }}
-                                                        ({{ $project_opener->email }})
-                                                    </option>
+                                                    <option value="{{ $project_opener->id }}">{{ $project_opener->name }} ({{ $project_opener->email }})</option>
                                                 @endforeach
                                             </select>
                                         </div>
-                                        {{-- Project closer --}}
+
                                         <div class="col-md-6 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Project
-                                                Closer <span style="color: red;"></span></label>
-                                            <select name="project_closer" id="project_closer"
-                                                class="form-control select2" data-parsley-required="false">
-                                                <option value="">Select Project
-                                                    Closer
-                                                </option>
+                                            <label class="form-label">Project Closer</label>
+                                            <select name="project_closer" id="project_closer" class="form-select select2">
+                                                <option value="">Select Closer</option>
                                                 @foreach ($users as $user)
-                                                    <option value="{{ $user->id }}">{{ $user->name }}
-                                                        ({{ $user->email }})
-                                                    </option>
+                                                    <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->email }})</option>
                                                 @endforeach
                                             </select>
                                         </div>
-                                        {{-- sale date --}}
+
                                         <div class="col-md-6 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Sale Date
-                                                <span style="color: red;">*</span></label>
-                                            <input type="date" name="sale_date" id="sale_date" required
-                                                data-parsley-trigger="keyup" class="form-control picker"
-                                                value="{{ old('sale_date') }}" placeholder="Enter Sale Date">
-                                        </div>
-                                        {{-- website --}}
-                                        <div class="col-md-6 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Website</label>
-                                            <input type="text" name="website" id="website"
-                                                data-parsley-required="false" data-parsley-trigger="keyup"
-                                                data-parsley-type="url"
-                                                data-parsley-type-message="Please enter a valid url." class="form-control"
-                                                value="{{ old('website') }}" placeholder="Enter Website">
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Delivery
-                                                TAT
-                                                <span style="color: red;"></span></label>
-                                            <input type="date" name="delivery_tat" id="delivery_tat" data-parsley-required="false"
-                                                data-parsley-trigger="keyup" class="form-control picker"
-                                                value="{{ old('delivery_tat') }}" placeholder="Enter Sale Date">
+                                            <label class="form-label">Sale Date <span class="text-danger">*</span></label>
+                                            <input type="date" name="sale_date" id="sale_date" required class="form-control picker">
                                         </div>
 
-                                        <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Assigned To <span
-                                                    style="color: red;">*</span></label>
-                                            <select name="assigned_to" id="assigned_to " required
-                                                class="form-control select2" required>
-                                                <option value="">Select user
-                                                </option>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Delivery TAT</label>
+                                            <input type="date" name="delivery_tat" id="delivery_tat" class="form-control picker">
+                                        </div>
+
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Website</label>
+                                            <input type="text" name="website" id="website" data-parsley-type="url" class="form-control" placeholder="https://example.com">
+                                        </div>
+
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Assigned To <span class="text-danger">*</span></label>
+                                            <select name="assigned_to" id="assigned_to" required class="form-select select2">
+                                                <option value="">Select User</option>
                                                 @foreach ($account_managers as $account_manager)
-                                                    <option value="{{ $account_manager->id }}">
-                                                        {{ $account_manager->name }}
-                                                        ({{ $account_manager->email }})
-                                                    </option>
+                                                    <option value="{{ $account_manager->id }}">{{ $account_manager->name }} ({{ $account_manager->email }})</option>
                                                 @endforeach
                                             </select>
                                         </div>
 
-                                        {{-- comment --}}
                                         <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Comment</label>
-                                            <textarea name="comment" id="comment" data-parsley-trigger="keyup" class="form-control"
-                                                placeholder="Enter Comment">{{ old('comment') }}</textarea>
+                                            <label class="form-label">Project Description</label>
+                                            <textarea name="project_description" id="project_description" rows="3" class="form-control" placeholder="Briefly describe the project scope..."></textarea>
                                         </div>
+
                                         <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">No. of
-                                                Milestone</label>
-                                            <input type="number" id="number_of_milestone" required min="0"
-                                                name="number_of_milestone" class="form-control">
+                                            <label class="form-label">Internal Comment</label>
+                                            <textarea name="comment" id="comment" rows="2" class="form-control" placeholder="Additional internal details..."></textarea>
                                         </div>
-                                        <div class="col-md-12 mb-3" style="margin-top:40px;">
-                                            <button type="button"
-                                                class="btn px-5 submit-btn milestone-print">Process</button>
-                                        </div>
-                                        <div id="milestone_field">
-                                            <h3 class="mt-4 text-uppercase">Milestone</h3>
-                                            <hr>
-                                            {{-- add more functionality for milestone --}}
-                                            <div class="add-milestone">
+
+                                        <div class="col-md-12">
+                                            <div class="section-header"><i class="fas fa-tasks"></i> Milestones</div>
+                                            <div class="row align-items-end mb-4">
+                                                <div class="col-md-8">
+                                                    <label class="form-label">Number of Milestones</label>
+                                                    <input type="number" id="number_of_milestone" min="0" name="number_of_milestone" class="form-control" placeholder="0">
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <button type="button" class="btn btn-process w-100 milestone-print">Process</button>
+                                                </div>
+                                            </div>
+
+                                            <div id="milestone_field">
+                                                <div class="add-milestone"></div>
                                             </div>
                                         </div>
 
-
-                                        <h3 class="mt-4 text-uppercase">Upload PDF</h3>
-                                        <hr>
-                                        <div class="add-pdf">
-
-                                            <div class="row">
-                                                <div class="col-md-12 mb-3">
-                                                    <div style="display: flex">
-                                                        <input type="file" name="pdf[]" class="form-control"
-                                                            value="" data-parsley-required="false"
-                                                            data-parsley-trigger="keyup" accept="application/pdf"
-                                                            id="">
+                                        <div class="col-md-12">
+                                            <div class="section-header"><i class="fas fa-file-pdf"></i> Documents</div>
+                                            <div class="add-pdf">
+                                                <div class="row milestone-item mx-0">
+                                                    <div class="col-md-12 mb-3">
+                                                        <label class="form-label">Upload PDF</label>
+                                                        <input type="file" name="pdf[]" class="form-control" accept="application/pdf">
                                                     </div>
-                                                </div>
-                                                <div class="col-md-12 mb-3">
-                                                    <button type="button"
-                                                        class="btn px-5 submit-btn add-pdf-button good-button"><i
-                                                            class="fas fa-plus"></i> Add PDF</button>
+                                                    <div class="col-md-12">
+                                                        <button type="button" class="btn add-more-btn add-pdf-button"><i class="fas fa-plus"></i> Add Another PDF</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="d-flex alin-items-center w-100 text-end">
-                                        <button class="print_btn cancel_btn me-3" type="reset"><i
-                                                class="far fa-times-circle"></i>
-                                            Cancel</button>
-                                        <button class="print_btn check-form" type="submit"><i
-                                                class="far fa-check-circle"></i>
-                                            Create</button>
+
+                                    <div class="mt-4 pt-4 border-top text-end">
+                                        <button class="btn btn-light px-4 me-2" type="reset" data-bs-dismiss="offcanvas">Cancel</button>
+                                        <button class="btn submit-btn-modern check-form" type="submit">Create Project</button>
                                     </div>
                                 </form>
                             </div>
@@ -399,174 +349,8 @@
 
     </div>
 @endsection
-
 @push('scripts')
-    <script>
-        $(document).on('click', '.view-route', function() {
-            window.location.href = $(this).data('route');
-        });
-        $(document).ready(function() {
-            $('.select2').each(function() {
-                $(this).select2({
-                    dropdownParent: $(this).parent()
-                });
-            })
-        });
-    </script>
-    {{-- trippy cdn link --}}
-    <script src="https://unpkg.com/popper.js@1"></script>
-    <script src="https://unpkg.com/tippy.js@5"></script>
-    {{-- trippy --}}
-
-    <script>
-        </script>
-    <script>
-        tippy('[data-tippy-content]', {
-            allowHTML: true,
-            placement: 'bottom',
-            theme: 'light-theme',
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
-
-            @if(Session::get('update_success') == true)
-
-            var query = $('#search').val();
-            var column_name = $('#hidden_column_name').val();
-            var sort_type = $('#hidden_sort_type').val();
-            var page = @php echo Session::get('page_number') @endphp;
-
-            fetch_data(page, sort_type, column_name, query,"Yes");
-            @endif
-
-            function clear_icon() {
-                // $('#date_icon').html('');
-                // $('#project_name_icon').html('');
-                // $('#client_name_icon').html('');
-                // $('#phone_icon').html('');
-                // $('#project_value_icon').html('');
-                // $('#project_upfront_icon').html('');
-                // $('#currency_icon').html('');
-            }
-
-            function fetch_data(page, sort_type, sort_by, query,call_status = "") {
-                $.ajax({
-                    url: "{{ route('sales-projects.fetch-data') }}",
-                    data: {
-                        page: page,
-                        sortby: sort_by,
-                        sorttype: sort_type,
-                        query: query,
-                        call_status : call_status
-                    },
-                    success: function(data) {
-                        $('tbody').html(data.data);
-                    }
-                });
-            }
-
-            $(document).on('keyup', '#search', function() {
-                var query = $('#search').val();
-                var column_name = $('#hidden_column_name').val();
-                var sort_type = $('#hidden_sort_type').val();
-                var page = $('#hidden_page').val();
-                fetch_data(page, sort_type, column_name, query,call_status = "");
-            });
-
-            $(document).on('click', '.sorting', function() {
-                var column_name = $(this).data('column_name');
-                var order_type = $(this).data('sorting_type');
-                var reverse_order = '';
-                if (order_type == 'asc') {
-                    $(this).data('sorting_type', 'desc');
-                    reverse_order = 'desc';
-                    clear_icon();
-                    $('#' + column_name + '_icon').html(
-                        '<span class="fa fa-sort-down"></span>');
-                }
-                if (order_type == 'desc') {
-                    $(this).data('sorting_type', 'asc');
-                    reverse_order = 'asc';
-                    clear_icon();
-                    $('#' + column_name + '_icon').html(
-                        '<span class="fa fa-sort-up"></span>');
-                }
-                $('#hidden_column_name').val(column_name);
-                $('#hidden_sort_type').val(reverse_order);
-                var page = $('#hidden_page').val();
-                var query = $('#search').val();
-                fetch_data(page, reverse_order, column_name, query,call_status = "");
-            });
-
-            $(document).on('click', '.pagination a', function(event) {
-
-                event.preventDefault();
-                var page = $(this).attr('href').split('page=')[1];
-                $('#hidden_page').val(page);
-                var column_name = $('#hidden_column_name').val();
-                var sort_type = $('#hidden_sort_type').val();
-
-                var query = $('#search').val();
-
-
-
-                $('li').removeClass('active');
-                $(this).parent().addClass('active');
-                fetch_data(page, sort_type, column_name, query,call_status = "");
-            });
-
-        });
-    </script>
-    <script>
-        $(document).on('click', '#delete', function(e) {
-            swal({
-                    title: "Are you sure?",
-                    text: "To delete this project.",
-                    type: "warning",
-                    confirmButtonText: "Yes",
-                    showCancelButton: true
-                })
-                .then((result) => {
-                    if (result.value) {
-                        window.location = $(this).data('route');
-                    } else if (result.dismiss === 'cancel') {
-                        swal(
-                            'Cancelled',
-                            'Your stay here :)',
-                            'error'
-                        )
-                    }
-                })
-        });
-    </script>
-    {{-- <script>
-        $('.toggle-class').change(function() {
-            var status = $(this).prop('checked') == true ? 1 : 0;
-            var user_id = $(this).data('id');
-
-            $.ajax({
-                type: "GET",
-                dataType: "json",
-                url: '{{ route('sales-projects.change-status') }}',
-                data: {
-                    'status': status,
-                    'user_id': user_id
-                },
-                success: function(resp) {
-                    console.log(resp.success)
-                }
-            });
-        });
-    </script> --}}
-    <script>
-        $(document).ready(function() {
-            //how to place holder in "jquery datatable" search box
-            $('#myTable_filter input').attr("placeholder", "Search");
-        });
-    </script>
     <script src="http://parsleyjs.org/dist/parsley.js"></script>
-    <!-- PARSLEY -->
     <script>
         window.ParsleyConfig = {
             errorsWrapper: '<div></div>',
@@ -574,578 +358,204 @@
             errorClass: 'has-error',
             successClass: 'has-success'
         };
-    </script>
 
-    <script>
-        // add more functionality for milestone
         $(document).ready(function() {
-            $('.add').click(function() {
-                var html = '';
-                html += '<div class="row">';
-                html += '<div class="col-md-12 mb-3">';
-                html += '<div style="display: flex">';
-                html +=
-                    '<input type="text" name="milestone_name[]" class="form-control" value="" placeholder="Milestone name" id="" required data-parsley-trigger="keyup">';
-                html += '</div>';
-                html += '</div>';
-                html += '<div class="col-md-12 mb-3">';
-                html += '<div style="display: flex">';
-                html +=
-                    '<input type="text" name="milestone_value[]" class="form-control" value="" placeholder="Milestone value" id="" required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number.">';
-                html += '</div>';
-                html += '</div>';
-                html += '<div class="col-md-12 mb-3">';
-                html += '<div style="display: flex">';
-                html +=
-                    '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value=""  >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
-                html += '</div>';
-                html += '</div>';
-                html += '<div class="payment-hide" style="display:none;">';
-                html += '<div class="col-md-12 mb-3">';
-                html += '<div style="display: flex">';
-                html +=
-                    '<input type="date" name="milestone_payment_date[]" class="form-control picker" value="" id="" required data-parsley-trigger="keyup">';
-                html += '</div>';
-                html += '</div>';
-                html += '<div class="col-md-12 mb-3">';
-                html += '<div style="display: flex">';
-                html +=
-                    '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" placeholder="Milestone payment mode" required data-parsley-trigger="keyup">';
-                html += '</div>';
-                html += '</div>';
-                html += '</div>';
-                // html += '<div class="col-md-12 mb-3">';
-                // html += '<div style="display: flex">';
-                // html +=
-                //     '<input type="date" name="payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
-                // html += '</div>';
-                // html += '</div>';
-                html += '<div class="col-md-12 mb-3">';
-                html += '<div style="display: flex">';
-                html +=
-                    '<textarea name="milestone_comment[]" class="form-control" placeholder="Milestone Comment" id="" cols="3" rows="2" ></textarea>';
-                html += '</div>';
-                html += '</div>';
-                html += '<div class="col-md-12 mb-3">';
-                html +=
-                    '<button type="button" class="btn btn-danger remove"><i class="fas fa-minus"></i> Remove</button>';
-                html += '</div>';
-                html += '</div>';
-
-                $('.add-milestone').append(html);
-            });
-            $(document).on('click', '.remove', function() {
-                $(this).closest('.row').remove();
-                var number_of_milestone = $('#number_of_milestone').val();
-                var new_number_of_milestone = number_of_milestone - 1;
-                $('#number_of_milestone').val(new_number_of_milestone);
-            });
-
-            // when select2 other option in project type then show other value
-            $('#project_type').on('change', function() {
-                //    select 2 value get and seo,other value check
-                var project_type = $(this).val();
-                if (project_type.includes('Other')) {
-                    var html = '';
-                    html +=
-                        '<label for="inputEnterYourName" class="col-form-label">Other Value <span style="color: red;">*</span></label>';
-                    html +=
-                        '<input type="text" name="other_value" id="other_value" class="form-control" value="{{ old('other_value') }}" placeholder="Enter Other Value" required data-parsley-trigger="keyup">';
-                    $('#other-value').html(html);
-                } else {
-                    $('#other-value').html('');
-                }
-            });
-        });
-    </script>
-    <script>
-        $('.add-pdf-button').click(function() {
-            var html = '';
-            html += '<div class="row">';
-            html += '<div class="col-md-12 mb-3">';
-            html += '<div style="display: flex">';
-            html +=
-                '<input type="file" name="pdf[]" class="form-control" value="" id="" data-parsley-required="false" data-parsley-trigger="keyup" accept="application/pdf">';
-            html += '</div>';
-            html += '</div>';
-            html += '<div class="col-md-12 mb-3">';
-            html +=
-                '<button type="button" class="btn btn-danger remove-pdf"><i class="fas fa-minus"></i> Remove</button>';
-            html += '</div>';
-            html += '</div>';
-            $('.add-pdf').append(html);
-        });
-        $(document).on('click', '.remove-pdf', function() {
-            $(this).closest('.row').remove();
-        });
-    </script>
-
-    <script>
-        //when payment_type milestone monthly field arenot required
-        $('#payment_type').on('change', function() {
-            var payment_type = $(this).val();
-            if (payment_type.includes('Milestone')) {
-                $('#milestone_field').show();
-                $('#monthly_field').hide();
-                $('#milestone_name').prop('required', true);
-                $('#milestone_value').prop('required', true);
-                $('#payment_status').prop('required', true);
-                // $('#milestone_payment_date').prop('required', true);
-                //monthly field required false
-                // $('#start_date').prop('required', false);
-                $('#end_date').prop('required', false);
-            } else if (payment_type.includes('Monthly')) {
-                $('#monthly_field').show();
-                $('#milestone_field').hide();
-                // $('#start_date').prop('required', true);
-                $('#end_date').prop('required', true);
-                //milestone filed required false
-                $('#milestone_name').prop('required', false);
-                $('#milestone_value').prop('required', false);
-                $('#payment_status').prop('required', false);
-                // $('#milestone_payment_date').prop('required', false);
-            } else {
-                $('#milestone_name').prop('required', false);
-                $('#milestone_value').prop('required', false);
-                $('#payment_status').prop('required', false);
-                // $('#milestone_payment_date').prop('required', false);
-                // $('#start_date').prop('required', false);
-                // $('#end_date').prop('required', false);
-                $('#milestone_field').hide();
-                $('#monthly_field').hide();
-            }
-        });
-    </script>
-
-    <script>
-        $(document).ready(function() {
-
-            $('.calculate_date').on('click', function() {
-
-                $('#fetch_month').html('');
-                //
-                var startDate = new Date($('#start_date').val());
-                var endDate = new Date($('#end_date').val());
-                var project_value = $('#project_value').val();
-                //validation start date and end date
-                $('#end_date').next('span').remove();
-                $('#start_date').next('span').remove();
-                $('#project_value').next('span').remove();
-                //if start_datewiil be blank
-                if (startDate == 'Invalid Date') {
-                    $('#start_date').after(
-                        '<span class="error" style="color:red;">Start date is required</span>');
-                    return false;
-                }
-                if (endDate == 'Invalid Date') {
-                    $('#end_date').after(
-                        '<span class="error" style="color:red;">Start date is required</span>');
-                    return false;
-                }
-                if (startDate > endDate || startDate == endDate) {
-                    $('#end_date').after(
-                        '<span class="error" style="color:red;">End date must be greater than to start date</span>'
-                    );
-                    return false;
-                }
-                if (project_value == '') {
-                    $('#project_value').after(
-                        '<span class="error" style="color:red;">Project value is required</span>');
-                    return false;
-                }
-
-                $('#loading').addClass('loading');
-                $('#loading-content').addClass('loading-content');
-                // count month between two dates
-                var months = (endDate.getFullYear() - startDate.getFullYear()) * 12;
-                months -= startDate.getMonth();
-                months += endDate.getMonth();
-                months = months <= 0 ? 0 : months;
-                var total = months + 1;
-                var new_project_value = project_value / total;
-                console.log(project_value);
-                console.log(new_project_value);
-                //show amount in 2 decimal point
-                var update_project_value = new_project_value.toFixed(2);
-                console.log(total);
-
-                for (let index = 1; index <= total; index++) {
-                    console.log(total);
-                    var html = '';
-                    html += '<div class="row">';
-                    html += '<div class="col-md-12 mb-3">';
-                    html += '<div style="display: flex">';
-                    html +=
-                        '<input type="text" name="milestone_value[]" class="form-control" value="' +
-                        update_project_value +
-                        '" placeholder="Milestone value" id="" required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number.">';
-                    html += '</div>';
-                    html += '</div>';
-                    html += '<div class="col-md-12 mb-3">';
-                    html += '<div style="display: flex">';
-                    html +=
-                        '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value=""  >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
-                    html += '</div>';
-                    html += '</div>';
-                    html += '<div class="payment-hide" style="display:none;">';
-                    html += '<div class="col-md-12 mb-3">';
-                    html += '<div style="display: flex">';
-                    html +=
-                        '<input type="date" name="milestone_payment_date[]" class="form-control picker" value="" id="" required data-parsley-trigger="keyup">';
-                    html += '</div>';
-                    html += '</div>';
-                    html += '<div class="col-md-12 mb-3">';
-                    html += '<div style="display: flex">';
-                    html +=
-                        '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" placeholder="Milestone payment mode" id="" required data-parsley-trigger="keyup">';
-                    html += '</div>';
-                    html += '</div>';
-                    html += '</div>';
-                    // html += '<div class="col-md-12 mb-3">';
-                    // html += '<div style="display: flex">';
-                    // html +=
-                    //     '<input type="date" name="payment_date[]" class="form-control"  id="" required data-parsley-trigger="keyup" >';
-                    // html += '</div>';
-                    // html += '</div>';
-                    html += '<div class="col-md-12 mb-3">';
-                    html += '<div style="display: flex">';
-                    html +=
-                        '<textarea name="milestone_comment[]" class="form-control" placeholder="Milestone Comment" id="" cols="3" rows="2" ></textarea>';
-                    html += '</div>';
-                    html += '</div>';
-                    html += '<div class="col-md-12 mb-3">';
-                    html +=
-                        '<button type="button" class="btn btn-danger remove"><i class="fas fa-minus"></i> Remove</button>';
-                    html += '</div>';
-                    html += '</div>';
-
-                    $('#fetch_month').append(html);
-                }
-
-                $('#loading').removeClass('loading');
-                $('#loading-content').removeClass('loading-content');
-
-            });
-        });
-    </script>
-
-    <script>
-        $('.milestone-print').on('click', function() {
-            var number_of_milestone = $('#number_of_milestone').val();
-            if (number_of_milestone == '') {
-                $('#number_of_milestone').html('');
-                console.log(number_of_milestone);
-                $('#number_of_milestone').after(
-                    '<span class="error" style="color:red;">Number of milestone is required</span>');
-                return false;
-            }
-            $('.add-milestone').html('');
-            // show milestone field as per number of milestone
-            for (let index = 1; index <= number_of_milestone; index++) {
-                console.log(number_of_milestone);
-                var html = '';
-                html += '<div class="row">';
-                html += '<div class="col-md-12 mb-3">';
-                html += '<div style="display: flex">';
-                html +=
-                    '<input type="text" name="milestone_name[]" class="form-control" value="" placeholder="Milestone name" id="" required data-parsley-trigger="keyup">';
-                html += '</div>';
-                html += '</div>';
-                html += '<div class="col-md-12 mb-3">';
-                html += '<div style="display: flex">';
-                html +=
-                    '<input type="text" name="milestone_value[]" class="form-control" value="" placeholder="Milestone value" id="" required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number.">';
-                html += '</div>';
-                html += '</div>';
-
-                html += '<div class="col-md-12 mb-3">';
-                html += '<div style="display: flex">';
-                html +=
-                    '<select name="payment_status[]" id="payment_status" class="form-control payment-status" data-id="' +
-                    index +
-                    '"  required data-parsley-trigger="keyup"><option value="">Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
-                html += '</div>';
-                html += '</div>';
-                html += '<div class="edit-payment-hide-' + index + '" style="display:none;">';
-                html += '<div class="col-md-12 mb-3">';
-                html += '<div style="display: flex">';
-                html +=
-                    '<input type="date" name="milestone_payment_date[]" class="form-control picker" value="" id="milestone-date-' +
-                    index + '"  data-parsley-trigger="keyup">';
-                html += '</div>';
-                html += '</div>';
-                // html += '<div class="col-md-12 mb-3">';
-                // html += '<div style="display: flex">';
-                // html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" placeholder="Milestone payment mode" id="milestone-mode-'+index+'"  data-parsley-trigger="keyup">';
-                // html += '</div>';
-                // html += '</div>';
-                html += '<div class="col-md-12 mb-3">';
-                html += '<div style="display: flex">';
-                html += '<select name="milestone_payment_mode[]" class="form-control" id="milestone-mode-' + index +
-                    '" data-parsley-trigger="keyup">';
-                html += '<option value="">Select Payment Mode</option>';
-                html += '<option value="Paypal">Paypal</option>';
-                html += '<option value="Stripe">Stripe</option>';
-                html += '</select>';
-                html += '</div>';
-                html += '</div>';
-                html += '</div>';
-                html += '<div class="col-md-12 mb-3">';
-                html += '<div style="display: flex">';
-                html +=
-                    '<textarea name="milestone_comment[]" class="form-control" placeholder="Milestone Comment" id="" cols="3" rows="2" ></textarea>';
-                html += '</div>';
-                html += '</div>';
-                html += '<div class="col-md-12 mb-3">';
-                html +=
-                    '<button type="button" class="btn btn-danger remove"><i class="fas fa-minus"></i> Remove</button>';
-                html += '</div>';
-                html += '</div>';
-                console.log(html);
-                $('.add-milestone').append(html);
-            }
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
-            // Handle the click event for the edit-route button
-            $(document).on('click', '.edit-route', function() {
-                var route = $(this).data('route');
-                // Make an AJAX request to fetch the priceRequest details
-                $('#loading').addClass('loading');
-                $('#loading-content').addClass('loading-content');
-                var page = $('#hidden_page').val();
-
-
-                $.ajax({
-                    url: route,
-                    type: 'GET',
-                    success: function(response) {
-                        // console.log(response.view);
-                        $('#edit-project-model').html(response.view);
-                        $('#loading').removeClass('loading');
-                        $('#loading-content').removeClass('loading-content');
-                        $('#offcanvasEdit').offcanvas('show');
-                        $('#edit-page-no').val(page);
-                    },
-                    error: function(xhr) {
-                        // Handle errors
-                        $('#loading').removeClass('loading');
-                        $('#loading-content').removeClass('loading-content');
-                        console.log(xhr);
-                    }
+            // Initialize Select2
+            $('.select2').each(function() {
+                $(this).select2({
+                    dropdownParent: $('#offcanvasRight')
                 });
             });
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
-            $('.customer_id').select2({
-                dropdownParent: $('.customer_id').parent()
+            $('.mySelect').select2({
+                dropdownParent: $('#offcanvasRight')
             });
-            // Handle the click event for the edit-route button
+
+            // Handle Customer Type Toggle
             $(document).on('change', '.customer', function() {
                 var customer = $(this).val();
                 if (customer == 0) {
                     $('#loading').addClass('loading');
-                    $('#loading-content').addClass('loading-content');
                     $.ajax({
                         url: "{{ route('sales-projects.new-customer') }}",
                         type: 'GET',
                         success: function(response) {
-                            // console.log(response.data);
-                            $('.select_user').append(
-                                ' <label for="inputEnterYourName" class="col-form-label"> Select customer <span style="color: red;">*</span></label> <select name="customer_id" id="customer_id" required data-parsley-trigger="keyup" class="form-control customer_id select2"> <option value="">Select a user</option>'
-                            )
+                            var html = '<label class="form-label mt-2">Select Customer <span class="text-danger">*</span></label>';
+                            html += '<select name="customer_id" id="customer_id" required class="form-select select2-customer">';
+                            html += '<option value="">Select a customer</option>';
                             $.each(response, function(key, value) {
-                                $('.customer_id').append('<option value="' + value.id +
-                                    '">' + value.customer_name +
-                                    '(' + value.customer_email + ')' + '</option>');
+                                html += '<option value="' + value.id + '">' + value.customer_name + ' (' + value.customer_email + ')</option>';
                             });
-                            $('.select_user').append('</select>');
-                            $('.customer_id').select2({
-                                // dropdownParent: $('.customer_id').parent()
-                            });
+                            html += '</select>';
+                            $('#select_user').html(html);
+                            $('.select2-customer').select2();
                             $('#loading').removeClass('loading');
-                            $('#loading-content').removeClass('loading-content');
-                        },
-                        error: function(xhr) {
-                            // Handle errors
-                            $('#loading').removeClass('loading');
-                            $('#loading-content').removeClass('loading-content');
-                            console.log(xhr);
                         }
-                    })
+                    });
                 } else {
-                    $('.select_user').html('');
-                    $('.client_email').removeAttr("style");
-                    $('.client_phone').removeAttr("style");
-                    $('.client_address').removeAttr("style");
-                    $('.client_name').removeAttr("style");
-                    $('.client_email').val('');
-                    $('.client_phone').val('');
-                    $('.client_address').val('');
-                    $('.client_name').val('');
+                    $('#select_user').html('');
+                    $('.form-control').prop('readonly', false);
+                    $('#client_name, #client_email, #client_phone, #client_address').val('');
                 }
             });
-        });
-    </script>
 
-    <script>
-        $(document).ready(function() {
+            // Auto-fill Customer Details
             $(document).on('change', '#customer_id', function() {
                 var customer_id = $(this).val();
-
+                if(!customer_id) return;
                 $.ajax({
                     url: "{{ route('sales-projects.customer-details') }}",
                     type: 'GET',
-                    data: {
-                        customer_id: customer_id
-                    },
+                    data: { customer_id: customer_id },
                     success: function(response) {
-                        // console.log(response);
-                        $('.client_email').attr("style", "pointer-events: none;");
-                        $('.client_phone').attr("style", "pointer-events: none;");
-                        $('.client_address').attr("style", "pointer-events: none;");
-                        $('.client_name').attr("style", "pointer-events: none;");
-                        $('.client_email').val(response.customer_email);
-                        $('.client_phone').val(response.customer_phone);
-                        $('.client_address').val(response.customer_address);
-                        $('.client_name').val(response.customer_name);
-                    },
-                    error: function(xhr) {
-                        // Handle errors
-                        console.log(xhr);
+                        $('#client_name').val(response.customer_name).prop('readonly', true);
+                        $('#client_email').val(response.customer_email).prop('readonly', true);
+                        $('#client_phone').val(response.customer_phone).prop('readonly', true);
+                        $('#client_address').val(response.customer_address).prop('readonly', true);
+                        // $('#business_name').val(response.business_name).prop('readonly', true);
                     }
                 });
             });
-        });
-    </script>
-    <script>
-        // email validation
-        $(document).ready(function() {
-            var isFormSubmitted = false;
-            $(document).on('submit', '#form-validation', function(e) {
-                if (isFormSubmitted) {
-                    // If the form is already submitted, do nothing
-                    return;
+
+            // Project Type "Other" Toggle
+            $('#project_type').on('change', function() {
+                if ($(this).val().includes('Other')) {
+                    $('#other-value').html('<label class="form-label">Other Project Type Value <span class="text-danger">*</span></label><input type="text" name="other_value" required class="form-control" placeholder="Specify type">');
+                } else {
+                    $('#other-value').html('');
                 }
+            });
+
+            // Milestone Generation
+            $('.milestone-print').on('click', function() {
+                var count = $('#number_of_milestone').val();
+                if (!count || count < 0) return;
+
+                $('.add-milestone').html('');
+                for (let i = 1; i <= count; i++) {
+                    var html = `
+                        <div class="milestone-item">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="mb-0 text-primary">Milestone #${i}</h6>
+                                <i class="fas fa-times-circle remove-btn remove"></i>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Milestone Name <span class="text-danger">*</span></label>
+                                    <input type="text" name="milestone_name[]" class="form-control" placeholder="Initial Payment" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Value <span class="text-danger">*</span></label>
+                                    <input type="number" name="milestone_value[]" class="form-control" placeholder="0.00" required>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <label class="form-label">Payment Status <span class="text-danger">*</span></label>
+                                    <select name="payment_status[]" class="form-select payment-status-toggle" data-id="${i}" required>
+                                        <option value="Due">Due</option>
+                                        <option value="Paid">Paid</option>
+                                    </select>
+                                </div>
+                                <div class="payment-details-${i}" style="display:none;">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Payment Date</label>
+                                            <input type="date" name="milestone_payment_date[]" class="form-control">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Payment Mode</label>
+                                            <select name="milestone_payment_mode[]" class="form-select">
+                                                <option value="">Select Mode</option>
+                                                <option value="Paypal">Paypal</option>
+                                                <option value="Stripe">Stripe</option>
+                                               <option value="Bank Transfer">Bank Transfer</option>
+                                                            <option value="Payoneer">Payoneer</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="form-label">Comment</label>
+                                    <textarea name="milestone_comment[]" class="form-control" rows="2"></textarea>
+                                </div>
+                            </div>
+                        </div>`;
+                    $('.add-milestone').append(html);
+                }
+            });
+
+            // Toggle Payment Details within Milestone
+            $(document).on('change', '.payment-status-toggle', function() {
+                var id = $(this).data('id');
+                var $details = $('.payment-details-' + id);
+                if ($(this).val() === 'Paid') {
+                    $details.show().find('input, select').prop('required', true);
+                } else {
+                    $details.hide().find('input, select').prop('required', false);
+                }
+            });
+
+            // Remove Milestone/PDF
+            $(document).on('click', '.remove', function() {
+                $(this).closest('.milestone-item, .row').fadeOut(300, function() {
+                    $(this).remove();
+                });
+            });
+
+            // PDF Add More
+            $('.add-pdf-button').click(function() {
+                var html = `
+                    <div class="row milestone-item mx-0 mt-3">
+                        <div class="col-md-10 mb-2">
+                            <input type="file" name="pdf[]" class="form-control" accept="application/pdf">
+                        </div>
+                        <div class="col-md-2 text-end">
+                            <i class="fas fa-trash-alt remove-btn remove"></i>
+                        </div>
+                    </div>`;
+                $('.add-pdf').append(html);
+            });
+
+            // Form Submission with Email Validation
+            $(document).on('submit', '#form-validation', function(e) {
+                var $form = $(this);
+                if ($form.data('valid')) return true;
                 e.preventDefault();
 
-                var client_email = $('#client_email').val();
-                var customer_id = $('#customer_id').val() || 0;
-                // alert(customer_id)
                 $.ajax({
                     url: "{{ route('email-validation') }}",
                     type: 'GET',
                     data: {
-                        client_email: client_email,
-                        customer_id: customer_id
+                        client_email: $('#client_email').val(),
+                        customer_id: $('#customer_id').val() || 0
                     },
                     success: function(response) {
                         if (response.status === false) {
                             $('.client_email_error').html(response.message);
                         } else {
-                            // No validation errors, allow the form to submit
                             $('.client_email_error').html('');
-                            isFormSubmitted = true;
-                            $('#form-validation').submit();
+                            $form.data('valid', true).submit();
                         }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
                     }
                 });
             });
-        });
-    </script>
 
-    <script>
-        // email validation
-        $(document).ready(function() {
-            var isOkFormSubmitted = false;
-
-            $(document).on('submit', '#edit-form-validation', function(e) {
-                if (isOkFormSubmitted) {
-                    // If the form is already submitted, do nothing
-                    return;
-                }
-
-                e.preventDefault();
-
-                var client_email = $('#edit_client_email').val();
-                var customer_id = $('.edit_customer_id').val() || 0;
-                // alert(customer_id)
+            // Edit Modal Loading
+            $(document).on('click', '.edit-route', function() {
+                var route = $(this).data('route');
+                $('#loading').addClass('loading');
                 $.ajax({
-                    url: "{{ route('email-validation') }}",
+                    url: route,
                     type: 'GET',
-                    data: {
-                        client_email: client_email,
-                        customer_id: customer_id
-                    },
                     success: function(response) {
-                        if (response.status === false) {
-                            $('.edit_client_email_error').html(response.message);
-                        } else {
-                            // No validation errors, allow the form to submit
-                            $('.edit_client_email_error').html('');
-                            isOkFormSubmitted = true;
-                            $('#edit-form-validation').submit();
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
+                        $('#edit-project-model').html(response.view);
+                        $('#loading').removeClass('loading');
+                        var offcanvas = new bootstrap.Offcanvas(document.getElementById('offcanvasEdit'));
+                        offcanvas.show();
+                        $('#edit-form-validation').parsley();
                     }
                 });
             });
         });
     </script>
-    <script>
-        $(document).on('change', '.payment-status', function() {
-
-            var id = $(this).data('id');
-            var payment_status = $(this).val();
-
-            // $('#milestone_payment_date').prop('required', false);
-            $('#milestone-date-' + id).prop('required', false);
-            $('#milestone-mode-' + id).prop('required', false);
-            if (payment_status == 'Paid') {
-
-                $('.edit-payment-hide-' + id).show();
-                $('#milestone-date-' + id).prop('required', true);
-                $('#milestone-mode-' + id).prop('required', true);
-            } else {
-                $('.edit-payment-hide-' + id).hide();
-                $('#milestone-date-' + id).prop('required', false);
-                $('#milestone-mode-' + id).prop('required', false);
-            }
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
-            // Attach an event listener to the Sale Date input
-            $('#sale_date').on('change', function() {
-                // Get the selected Sale Date
-                var saleDate = $(this).val();
-
-                // Set the minimum date for Delivery TAT to be one day after the Sale Date
-                $('#delivery_tat').attr('min', incrementDate(saleDate, 1));
-            });
-
-            // Function to increment date by a specified number of days
-            function incrementDate(date, days) {
-                var result = new Date(date);
-                result.setDate(result.getDate() + days);
-                return result.toISOString().split('T')[0];
-            }
-        });
-    </script>
-
-    <script>
-        $(document).ready(function() {
-            $('.mySelect').select2();
-        });
-    </script>
-
-
 @endpush
+
+

@@ -273,17 +273,17 @@
                                                     id="fetch-milestone-date-{{ $key }}" required data-parsley-trigger="keyup">
                                             </div>
                                         </div>
-                                    
+
                                         <div class="col-md-12 mb-3">
                                             <div style="display: flex">
                                                     <select name="milestone_payment_mode[]" class="form-control disable-input" id="fetch-milestone-mode-{{ $key }}" required data-parsley-trigger="keyup">
-                                                            
+
                                                         <option value="Paypal" {{ $milestone->milestone_payment_mode == 'Paypal' ? 'selected' : '' }}>Paypal</option>
                                                         <option value="Stripe" {{ $milestone->milestone_payment_mode == 'Stripe' ? 'selected' : '' }}>Stripe</option>
-                                                    </select>  
+                                                    </select>
                                             </div>
                                         </div>
-                                        @else   
+                                        @else
                                         <div  style="display:none;">
                                             <div class="col-md-12 mb-3">
                                                 <div style="display: flex">
@@ -302,7 +302,7 @@
                                                             <option value="">Select Payment Mode</option>
                                                             <option value="Paypal" >Paypal</option>
                                                             <option value="Stripe" >Stripe</option>
-                                                        </select>    
+                                                        </select>
                                                 </div>
                                             </div>
                                         </div>
@@ -363,7 +363,7 @@
                         {{-- </br> --}}
                     </div>
                     @if ($project->projectDocuments->count() > 0)
-                    <div class="col-lg-12"> 
+                    <div class="col-lg-12">
                         <h4 class="mt-4 text-uppercase">Download Documents</h4>
                         @foreach ($project->projectDocuments as $key => $document)
                             <div class="download-button">
@@ -679,6 +679,8 @@
                 html += '<option value="">Select Payment Mode</option>';
                 html += '<option value="Paypal">Paypal</option>';
                 html += '<option value="Stripe">Stripe</option>';
+                html += '<option value="Bank Transfer">Bank Transfer</option>'; 
+                html += '<option value="Payoneer">Payoneer</option>';
                 html += '</select>';
                 html += '</div>';
                 html += '</div>';
@@ -732,10 +734,10 @@
 
     <script>
         $(document).on('change', '.edit_payment_status', function() {
-        
+
             var id = $(this).data('id');
             var payment_status = $(this).val();
-        
+
             // $('#milestone_payment_date').prop('required', false);
             $('#edit-milestone-date-'+id).prop('required', false);
             $('#edit-milestone-mode-'+id).prop('required', false);
@@ -760,14 +762,14 @@
             $('#fetch-milestone-date-'+id).prop('required', false);
             $('#fetch-milestone-mode-'+id).prop('required', false);
             if (payment_status == 'Paid') {
-                
+
                 console.log(payment_status);
                 $('.fetch-payment-hide-'+id).show();
-                $('.fetch-payment-hide-'+id).html('<div class="col-md-12 mb-3"><div style="display: flex"><input type="date" name="milestone_payment_date[]" class="form-control picker" value="" required data-parsley-trigger="keyup" id="fetch-milestone-date-'+id+'"></div></div><div class="col-md-12 mb-3"><div style="display: flex"> <select name="milestone_payment_mode[]" class="form-control" required data-parsley-trigger="keyup" id="fetch-milestone-mode-'+id+'"><option value="">Select Payment Mode</option><option value="Paypal">Paypal</option><option value="Stripe">Stripe</option></select></div></div>');
+                $('.fetch-payment-hide-'+id).html('<div class="col-md-12 mb-3"><div style="display: flex"><input type="date" name="milestone_payment_date[]" class="form-control picker" value="" required data-parsley-trigger="keyup" id="fetch-milestone-date-'+id+'"></div></div><div class="col-md-12 mb-3"><div style="display: flex"> <select name="milestone_payment_mode[]" class="form-control" required data-parsley-trigger="keyup" id="fetch-milestone-mode-'+id+'"><option value="">Select Payment Mode</option><option value="Paypal">Paypal</option><option value="Stripe">Stripe</option><option value="Bank Transfer">Bank Transfer</option><option value="Payoneer">Payoneer</option></select></div></div>');
                 $('#fetch-milestone-date-'+id).prop('required', true);
                 $('#fetch-milestone-mode-'+id).prop('required', true);
             } else {
-                
+
                 // $('.fetch-payment-hide-'+id).hide();
                 // $('#fetch-milestone-date-'+id).val('');
                 // $('#fetch-milestone-mode-'+id).val('');

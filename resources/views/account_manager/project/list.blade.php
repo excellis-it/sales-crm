@@ -7,7 +7,44 @@
         .dataTables_filter {
             margin-bottom: 10px !important;
         }
-
+        /* Custom styles for the enhanced project form */
+        .premium-card {
+            border: none;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
+            border-radius: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-header {
+            background-color: #f8f9fa;
+            padding: 0.75rem 1.25rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            font-weight: 600;
+            color: #333;
+            border-top-left-radius: 0.75rem;
+            border-top-right-radius: 0.75rem;
+        }
+        .milestone-item {
+            background: #fff;
+            border: 1px solid #edf2f9;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        .remove-milestone, .remove-pdf {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            color: #ff4d4d;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .remove-milestone:hover, .remove-pdf:hover {
+            transform: scale(1.1);
+        }
+        .toggle-paid {
+            cursor: pointer;
+        }
     </style>
 @endpush
 
@@ -68,248 +105,176 @@
                             </div>
                         </div>
                         <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
-                            aria-labelledby="offcanvasRightLabel">
-                            <div class="offcanvas-header">
+                            aria-labelledby="offcanvasRightLabel" style="width: 600px;">
+                            <div class="offcanvas-header bg-light border-bottom">
                                 <button type="button" class="text-reset cls_btn_left" data-bs-dismiss="offcanvas"
                                     aria-label="Close">
                                     <i class="fa fa-chevron-right" aria-hidden="true"></i>
                                 </button>
-                                <h4 id="offcanvasEditLabel">Add Project Details</h4>
+                                <h4 id="offcanvasRightLabel" class="text-dark mb-0">Add Project Details</h4>
                             </div>
-                            <div class="offcanvas-body">
+                            <div class="offcanvas-body p-0">
                                 <form action="{{ route('account-manager.projects.store') }}" method="post" id="form-validation"
-                                            data-parsley-validate="" enctype="multipart/form-data">
-                                            @csrf
-                                    <div class="row">
-                                        {{-- new user and existing user radio button --}}
-                                        <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Type of customer
-                                                <span style="color: red;">*</span></label>
-                                            <input type="radio" name="customer" id="new_user" value="1" required class="customer"
-                                                data-parsley-trigger="keyup" checked> New user
-                                            <input type="radio" name="customer" id="existing_user" value="0" required class="customer"
-                                                data-parsley-trigger="keyup"> Existing user
-                                        </div>
-                                        {{-- select user --}}
-                                        <div class="col-md-12 mb-3" id="select_user">
+                                    data-parsley-validate="" enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="p-4">
+                                        <!-- Section: Customer Information -->
+                                        <div class="premium-card bg-light-soft border mb-4">
+                                            <div class="section-header">Customer Information</div>
+                                            <div class="p-3">
+                                                <div class="row">
+                                                    <div class="col-md-12 mb-3">
+                                                        <label class="form-label">Type of customer <span class="text-danger">*</span></label>
+                                                        <div class="d-flex gap-3">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input customer" type="radio" name="customer" id="new_user" value="1" checked required>
+                                                                <label class="form-check-label" for="new_user">New User</label>
+                                                            </div>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input customer" type="radio" name="customer" id="existing_user" value="0" required>
+                                                                <label class="form-check-label" for="existing_user">Existing User</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 mb-3" id="select_user"></div>
 
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label"> Client Name
-                                                <span style="color: red;">*</span></label>
-                                            <input type="text" name="client_name" id="client_name" required
-                                                data-parsley-trigger="keyup" class="form-control"
-                                                value="{{ old('client_name') }}"
-                                                placeholder="Enter Client Name">
-                                        </div>
-
-                                        <div class="col-md-6 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Client Email
-                                                <span style="color: red;">*</span></label>
-                                            <input type="text" name="client_email" id="client_email" required
-                                                data-parsley-trigger="keyup" data-parsley-type="email"
-                                                data-parsley-type-message="Please enter a valid email address."
-                                                class="form-control" value="{{ old('client_email') }}"
-                                                placeholder="Enter Client Email">
-                                                <span class="client_email_error text-danger"></span>
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Client Phone
-                                                <span style="color: red;">*</span></label>
-                                            <input type="text" name="client_phone" id="client_phone" required
-                                                data-parsley-trigger="keyup" data-parsley-type="number"
-                                                data-parsley-type-message="Please enter a valid phone number."
-                                                class="form-control" value="{{ old('client_phone') }}"
-                                                placeholder="Enter Client Phone Number">
-                                        </div>
-
-                                        {{-- clinent address --}}
-                                        <div class="col-md-6 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Client
-                                                Address <span style="color: red;">*</span></label>
-                                            <input type="text" name="client_address" id="client_address"
-                                                required data-parsley-trigger="keyup" class="form-control"
-                                                value="{{ old('client_address') }}" placeholder="Enter Address">
-                                            @if ($errors->has('address'))
-                                                <div class="error" style="color:red;">
-                                                    {{ $errors->first('address') }}</div>
-                                            @endif
-                                        </div>
-                                        <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Business Name
-                                                <span style="color: red;">*</span></label>
-                                            <input type="text" name="business_name" id="business_name"
-                                                required data-parsley-trigger="keyup" class="form-control"
-                                                value="{{ old('business_name') }}"
-                                                placeholder="Enter Business Name">
-                                        </div>
-                                        <h3 class="mt-4 text-uppercase">Project Details</h3>
-                                        <hr>
-                                        {{-- project type in select2 box --}}
-                                        <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Project
-                                                Type <span style="color: red;">*</span></label>
-                                            <select name="project_type[]" id="project_type" required
-                                                data-parsley-trigger="keyup" class="form-control mySelect" multiple="multiple" >
-                                                <option value="" >Select Project Type</option>
-                                                <option value="Website Design & Development">Website Design &
-                                                    Development</option>
-                                                <option value="Mobile Application Development">Mobile
-                                                    Application Development</option>
-                                                <option value="Digital Marketing">Digital Marketing</option>
-                                                <option value="Logo Design">Logo Design</option>
-                                                <option value="SEO">SEO</option>
-                                                <option value="SMO">SMO</option>
-                                                <option value="Other">Other</option>
-                                            </select>
-                                        </div>
-                                        <div id="other-value" class="col-md-12 mb-3">
-
-                                        </div>
-                                        {{-- Project value --}}
-                                        <div class="col-md-6 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Project
-                                                Value <span style="color: red;">*</span></label>
-                                            <input type="text" name="project_value" id="project_value"
-                                                required data-parsley-trigger="keyup"
-                                                data-parsley-type="number"
-                                                data-parsley-type-message="Please enter a valid number."
-                                                class="form-control" placeholder="Enter Project Value">
-                                        </div>
-                                        {{-- Project project_upfront --}}
-                                        <div class="col-md-6 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Project
-                                                Upfront <span style="color: red;">*</span></label>
-                                            <input type="text" name="project_upfront" id="project_upfront"
-                                                required data-parsley-trigger="keyup"
-                                                data-parsley-type="number"
-                                                data-parsley-type-message="Please enter a valid number."
-                                                class="form-control" value="{{ old('project_upfront') }}"
-                                                placeholder="Enter Project Upfront">
-                                        </div>
-                                        {{-- currency select box --}}
-                                        <div class="col-md-6 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Currency
-                                                <span style="color: red;">*</span></label>
-                                            <select name="currency" id="currency" class="form-control"
-                                                required data-parsley-trigger="keyup">
-                                                <option value="" >Select Currency</option>
-                                                <option value="INR">INR</option>
-                                                <option value="USD">USD</option>
-                                                <option value="EUR">EUR</option>
-                                                <option value="GBP">GBP</option>
-                                                <option value="AUD">AUD</option>
-                                                <option value="CAD">CAD</option>
-                                            </select>
-                                        </div>
-
-                                        {{-- Project payment_mode --}}
-                                        <div class="col-md-6 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Project
-                                                Payment Mode <span style="color: red;">*</span></label>
-                                            <input type="text" name="payment_mode" required
-                                                data-parsley-trigger="keyup" id="payment_mode"
-                                                class="form-control" value="{{ old('payment_mode') }}"
-                                                placeholder="Enter Project Payment Mode">
-                                        </div>
-
-                                        {{-- Project closer --}}
-                                        <div class="col-md-6 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Project
-                                                Closer <span style="color: red;">*</span></label>
-                                            <select name="project_closer" id="project_closer" required
-                                                class="form-control select2" required>
-                                                <option value="" >Select Project
-                                                    Closer
-                                                </option>
-                                                @foreach ($users as $user)
-                                                    <option value="{{ $user->id }}">{{ $user->name }}
-                                                        ({{ $user->email }})
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        {{-- sale date --}}
-                                        <div class="col-md-6 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Sale Date
-                                                <span style="color: red;">*</span></label>
-                                            <input type="date" name="sale_date" id="sale_date" required
-                                                data-parsley-trigger="keyup" max="{{ date('Y-m-d') }}"
-                                                class="form-control picker" value="{{ old('sale_date') }}"
-                                                placeholder="Enter Sale Date">
-                                        </div>
-                                        {{-- website --}}
-                                        <div class="col-md-6 mb-3">
-                                            <label for="inputEnterYourName"
-                                                class="col-form-label">Website</label>
-                                            <input type="text" name="website" id="website"
-                                                data-parsley-required="false" data-parsley-trigger="keyup"
-                                                data-parsley-type="url"
-                                                data-parsley-type-message="Please enter a valid url."
-                                                class="form-control" value="{{ old('website') }}"
-                                                placeholder="Enter Website">
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Delivery
-                                                TAT
-                                                </label>
-                                            <input type="date" name="delivery_tat" id="delivery_tat" data-parsley-required="false"
-                                                data-parsley-trigger="keyup" min="{{ date('Y-m-d') }}"
-                                                class="form-control picker" value="{{ old('delivery_tat') }}"
-                                                placeholder="Enter Sale Date">
-                                        </div>
-                                        {{-- comment --}}
-                                        <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Comment</label>
-                                            <textarea name="comment" id="comment" data-parsley-trigger="keyup" class="form-control"
-                                                placeholder="Enter Comment">{{ old('comment') }}</textarea>
-                                        </div>
-                                        <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">No. of
-                                                Milestone</label>
-                                            <input type="number" id="number_of_milestone" required min="0"
-                                                name="number_of_milestone" class="form-control">
-                                        </div>
-                                        <div class="col-md-12 mb-3" style="margin-top:40px;">
-                                            <button type="button"
-                                                class="btn px-5 submit-btn milestone-print">Process</button>
-                                        </div>
-                                        <div id="milestone_field" >
-                                            <h3 class="mt-4 text-uppercase">Milestone</h3>
-                                            <hr>
-                                            {{-- add more functionality for milestone --}}
-                                            <div class="add-milestone">
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Client Name <span class="text-danger">*</span></label>
+                                                        <input type="text" name="client_name" id="client_name" required data-parsley-trigger="keyup" class="form-control" placeholder="Enter name">
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Client Email <span class="text-danger">*</span></label>
+                                                        <input type="email" name="client_email" id="client_email" required data-parsley-trigger="keyup" class="form-control" placeholder="Enter email">
+                                                        <span class="client_email_error text-danger small"></span>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Client Phone <span class="text-danger">*</span></label>
+                                                        <input type="text" name="client_phone" id="client_phone" required data-parsley-trigger="keyup" data-parsley-type="number" class="form-control" placeholder="Enter phone">
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Business Name <span class="text-danger">*</span></label>
+                                                        <input type="text" name="business_name" id="business_name" required data-parsley-trigger="keyup" class="form-control" placeholder="Enter business name">
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <label class="form-label">Client Address <span class="text-danger">*</span></label>
+                                                        <input type="text" name="client_address" id="client_address" required data-parsley-trigger="keyup" class="form-control" placeholder="Enter address">
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
 
-                                        <h3 class="mt-4 text-uppercase">Upload PDF</h3>
-                                        <hr>
-                                        <div class="add-pdf">
+                                        <!-- Section: Project Details -->
+                                        <div class="premium-card bg-light-soft border mb-4">
+                                            <div class="section-header">Project Details</div>
+                                            <div class="p-3">
+                                                <div class="row">
+                                                    <div class="col-md-12 mb-3">
+                                                        <label class="form-label">Project Type <span class="text-danger">*</span></label>
+                                                        <select name="project_type[]" id="project_type" required class="form-control select2" multiple="multiple">
+                                                            <option value="Website Design & Development">Website Design & Development</option>
+                                                            <option value="Mobile Application Development">Mobile Application Development</option>
+                                                            <option value="Digital Marketing">Digital Marketing</option>
+                                                            <option value="Logo Design">Logo Design</option>
+                                                            <option value="SEO">SEO</option>
+                                                            <option value="SMO">SMO</option>
+                                                            <option value="Other">Other</option>
+                                                        </select>
+                                                    </div>
+                                                    <div id="other-value" class="col-md-12 mb-3"></div>
 
-                                            <div class="row">
-                                                <div class="col-md-12 mb-3">
-                                                    <div style="display: flex">
-                                                        <input type="file" name="pdf[]"
-                                                            class="form-control" value=""
-                                                            data-parsley-required="false"
-                                                            data-parsley-trigger="keyup"
-                                                            accept="application/pdf" id="">
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Project Value <span class="text-danger">*</span></label>
+                                                        <input type="text" name="project_value" id="project_value" required data-parsley-trigger="keyup" data-parsley-type="number" class="form-control" placeholder="0.00">
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Project Upfront <span class="text-danger">*</span></label>
+                                                        <input type="text" name="project_upfront" id="project_upfront" required data-parsley-trigger="keyup" data-parsley-type="number" class="form-control" placeholder="0.00">
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Currency <span class="text-danger">*</span></label>
+                                                        <select name="currency" id="currency" class="form-control" required>
+                                                            <option value="INR">INR</option>
+                                                            <option value="USD">USD</option>
+                                                            <option value="EUR">EUR</option>
+                                                            <option value="GBP">GBP</option>
+                                                            <option value="AUD">AUD</option>
+                                                            <option value="CAD">CAD</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Payment Mode <span class="text-danger">*</span></label>
+                                                        <input type="text" name="payment_mode" required id="payment_mode" class="form-control" placeholder="e.g. PayPal, Stripe">
+                                                    </div>
+                                                    <div class="col-md-12 mb-3">
+                                                        <label class="form-label">Project Closer <span class="text-danger">*</span></label>
+                                                        <select name="project_closer" id="project_closer" required class="form-control select2">
+                                                            <option value="">Select Closer</option>
+                                                            @foreach ($users as $user)
+                                                                <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->email }})</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Sale Date <span class="text-danger">*</span></label>
+                                                        <input type="date" name="sale_date" id="sale_date" required max="{{ date('Y-m-d') }}" class="form-control">
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Delivery TAT</label>
+                                                        <input type="date" name="delivery_tat" id="delivery_tat" min="{{ date('Y-m-d') }}" class="form-control">
+                                                    </div>
+                                                    <div class="col-md-12 mb-3">
+                                                        <label class="form-label">Website (Optional)</label>
+                                                        <input type="text" name="website" id="website" data-parsley-type="url" class="form-control" placeholder="https://example.com">
+                                                    </div>
+                                                    <div class="col-md-12 mb-3">
+                                                        <label class="form-label">Project Description</label>
+                                                        <textarea name="project_description" rows="3" class="form-control" placeholder="Brief project summary..."></textarea>
+                                                    </div>
+                                                    <div class="col-md-12 mb-3">
+                                                        <label class="form-label">Comment</label>
+                                                        <textarea name="comment" rows="2" class="form-control" placeholder="Internal notes..."></textarea>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-12 mb-3">
-                                                    <button type="button"
-                                                        class="btn px-5 submit-btn add-pdf-button good-button"><i
-                                                            class="fas fa-plus"></i> Add PDF</button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Section: Milestones -->
+                                        <div class="premium-card bg-light-soft border mb-4">
+                                            <div class="section-header d-flex justify-content-between align-items-center">
+                                                <span>Project Milestones</span>
+                                                <button type="button" class="btn btn-sm btn-primary add-milestone-btn">
+                                                    <i class="fas fa-plus me-1"></i> Add
+                                                </button>
+                                            </div>
+                                            <div class="p-3">
+                                                <div id="milestone-container">
+                                                    <!-- Milestones will be appended here -->
+                                                </div>
+                                                <div class="text-center mt-2 no-milestones-msg">
+                                                    <p class="text-muted small mb-0">No milestones added yet.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Section: Documents -->
+                                        <div class="premium-card bg-light-soft border mb-4">
+                                            <div class="section-header d-flex justify-content-between align-items-center">
+                                                <span>Project Documents (PDF)</span>
+                                                <button type="button" class="btn btn-sm btn-secondary add-pdf-btn">
+                                                    <i class="fas fa-plus me-1"></i> Add
+                                                </button>
+                                            </div>
+                                            <div class="p-3">
+                                                <div id="pdf-container">
+                                                    <!-- PDF inputs will be appended here -->
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="d-flex alin-items-center w-100 text-end">
-                                        <button class="print_btn cancel_btn me-3" type="reset"><i
-                                                class="far fa-times-circle"></i>
-                                            Cancel</button>
-                                        <button class="print_btn" type="submit"><i class="far fa-check-circle"></i>
-                                            Create</button>
+
+                                    <div class="offcanvas-footer border-top p-3 bg-light text-end">
+                                        <button type="reset" class="btn btn-outline-secondary me-2" data-bs-dismiss="offcanvas">Cancel</button>
+                                        <button type="submit" class="btn btn-primary px-4">Create Project</button>
                                     </div>
                                 </form>
                             </div>
@@ -320,36 +285,24 @@
                     </div>
 
 
-                    <div class="table-responsive">
-                        <table id="myTable" class="dd table table-striped  table-hover" style="width:100%">
-                            <thead>
+                    <div class="table-responsive mt-3" id="project-data">
+                        <table id="myTable" class="table table-hover align-middle" style="width:100%">
+                            <thead class="table-light">
                                 <tr>
-                                    <th class="sorting" data-tippy-content="Sort by Sale Date" data-sorting_type="desc"
-                                    data-column_name="sale_date" style="cursor: pointer">Sale Date <span id="date_icon"><span class="fa fa-sort-down"></span></span></th>
-                                    <th class="sorting" data-tippy-content="Sort by Business Name" data-sorting_type="desc"
-                                    data-column_name="business_name" style="cursor: pointer"> Business Name <span id="business_name_icon"><span class="fa fa-sort-down"></span></span></th>
-                                    <th class="sorting" data-tippy-content="Sort by Customer Name" data-sorting_type="desc"
-                                    data-column_name="customer_name" style="cursor: pointer"> Customer Name <span id="customer_name_icon"><span class="fa fa-sort-down"></span></span></th>
-                                    <th class="sorting" data-tippy-content="Sort by Phone Number" data-sorting_type="desc"
-                                    data-column_name="phone_number" style="cursor: pointer"> Phone Number <span id="phone_number_icon"><span class="fa fa-sort-down"></span></span></th>
-                                    <th class="sorting" data-tippy-content="Sort by Project Type" data-sorting_type="desc"
-                                    data-column_name="project_type" style="cursor: pointer"> Project Type <span id="project_type_icon"><span class="fa fa-sort-down"></span></span></th>
-                                    <th class="sorting" data-tippy-content="Sort by Project value" data-sorting_type="desc"
-                                    data-column_name="project_value" style="cursor: pointer"> Project Value <span id="project_value_icon"><span class="fa fa-sort-down"></span></span></th>
-                                    <th class="sorting" data-tippy-content="Sort by Project Upfront" data-sorting_type="desc"
-                                    data-column_name="project_upfront" style="cursor: pointer"> Project Upfront <span id="project_upfront_icon"><span class="fa fa-sort-down"></span></span></th>
-                                    <th class="sorting" data-tippy-content="Sort by Currency" data-sorting_type="desc"
-                                    data-column_name="currency" style="cursor: pointer"> Currency <span id="currency_icon"><span class="fa fa-sort-down"></span></span></th>
-                                    <th class="sorting" data-tippy-content="Sort by Payment Mode" data-sorting_type="desc"
-                                    data-column_name="payment_mode" style="cursor: pointer"> Payment Mode <span id="payment_mode_icon"><span class="fa fa-sort-down"></span></span></th>
-                                    <th data-tippy-content="Cant't sort by Due Amount" style="cursor: pointer"> Due Amount <span id="due_amount_icon"></span></th>
-                                    {{-- <th> Action</th> --}}
+                                    <th class="sorting" data-column_name="sale_date">Sale Date <i class="fa fa-sort ms-1 text-muted"></i></th>
+                                    <th class="sorting" data-column_name="business_name">Business Name <i class="fa fa-sort ms-1 text-muted"></i></th>
+                                    <th class="sorting" data-column_name="client_name">Customer Name <i class="fa fa-sort ms-1 text-muted"></i></th>
+                                    <th class="sorting" data-column_name="phone_number">Phone <i class="fa fa-sort ms-1 text-muted"></i></th>
+                                    <th class="sorting" data-column_name="project_type">Project Type <i class="fa fa-sort ms-1 text-muted"></i></th>
+                                    <th class="sorting" data-column_name="project_value">Value <i class="fa fa-sort ms-1 text-muted"></i></th>
+                                    <th class="sorting" data-column_name="project_upfront">Upfront <i class="fa fa-sort ms-1 text-muted"></i></th>
+                                    <th class="sorting" data-column_name="currency">CCY <i class="fa fa-sort ms-1 text-muted"></i></th>
+                                    <th class="sorting" data-column_name="payment_mode">Payment Mode <i class="fa fa-sort ms-1 text-muted"></i></th>
+                                    <th>Due Amount</th>
                                 </tr>
                             </thead>
                             <tbody>
-
                                 @include('account_manager.project.table')
-
                             </tbody>
                         </table>
                         <input type="hidden" name="hidden_page" id="hidden_page" value="1" />
@@ -786,6 +739,8 @@
             html += '<option value="">Select Payment Mode</option>';
             html += '<option value="Paypal">Paypal</option>';
             html += '<option value="Stripe">Stripe</option>';
+            html += '<option value="Bank Transfer">Bank Transfer</option>';
+            html += '<option value="Payoneer">Payoneer</option>';
             html += '</select>';
             html += '</div>';
             html += '</div>';

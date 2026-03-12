@@ -17,7 +17,7 @@ class SalesExcecutiveController extends Controller
 {
     use ImageTrait;
 
-     /**
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -32,10 +32,10 @@ class SalesExcecutiveController extends Controller
     {
         if ($request->ajax()) {
             $sales_excecutives = User::query();
-                $columns = ['name','email','phone', 'employee_id', 'date_of_joining'];
-                foreach ($columns as $column) {
-                    $sales_excecutives->orWhere($column, 'LIKE', '%' . $request->text . '%');
-                }
+            $columns = ['name', 'email', 'phone', 'employee_id', 'date_of_joining'];
+            foreach ($columns as $column) {
+                $sales_excecutives->orWhere($column, 'LIKE', '%' . $request->text . '%');
+            }
             $sales_excecutives = $sales_excecutives->Role('SALES_EXCUETIVE')->where('sales_manager_id', Auth::user()->id)->orderBy('name', 'desc')->paginate(15);
             return response()->json(['view' => (string)View::make('sales_manager.sales_excecutive.table')->with(compact('sales_excecutives'))]);
         }
@@ -134,7 +134,7 @@ class SalesExcecutiveController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'email' => 'required|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',
+            'email' => 'required|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix|unique:users,email,' . $id,
             'phone' => 'required',
             'status' => 'required',
         ]);
