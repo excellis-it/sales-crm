@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\BDE;
 
 use App\Http\Controllers\Controller;
-use App\Models\Project;
+use App\Models\BdmProject;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
@@ -16,7 +16,7 @@ class ProjectController extends Controller
     public function index()
     {
         // $prospects = Prospect::where('user_id', Auth::user()->id)->orderBy('sale_date', 'desc')->paginate(10);
-        $projects = Project::where('project_opener', auth()->user()->id)->orderBy('created_at', 'desc')->paginate(15);
+        $projects = BdmProject::where('project_opener', auth()->user()->id)->orderBy('created_at', 'desc')->paginate(15);
         return view('bde.project.list',compact('projects'));
     }
 
@@ -28,7 +28,7 @@ class ProjectController extends Controller
             $query = $request->get('query');
             $query = str_replace(" ", "%", $query);
 
-            $projects = Project::where('project_opener', auth()->user()->id)->orderBy($sort_by, $sort_type)->where(function ($q) use ($query) {
+            $projects = BdmProject::where('project_opener', auth()->user()->id)->orderBy($sort_by, $sort_type)->where(function ($q) use ($query) {
                 $q->orWhere('sale_date', 'like', '%' . $query . '%')
                     ->orWhere('business_name', 'like', '%' . $query . '%')
                     ->orWhere('client_name', 'like', '%' . $query . '%')
@@ -41,7 +41,7 @@ class ProjectController extends Controller
                         $q->Where('type', 'like', '%' . $query . '%');
                     })
                     ->orWhereRaw('project_value - project_upfront like ?', ["%{$query}%"]);
-                    
+
             })->paginate(15);
             return response()->json(['data' => view('bde.project.table', compact('projects'))->render()]);
         }
@@ -77,7 +77,7 @@ class ProjectController extends Controller
      */
     public function show($id)
     {
-        $project = Project::find($id);
+        $project = BdmProject::find($id);
         return view('bde.project.view', compact('project'));
     }
 

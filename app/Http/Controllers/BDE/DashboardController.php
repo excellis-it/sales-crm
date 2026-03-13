@@ -5,7 +5,7 @@ namespace App\Http\Controllers\BDE;
 use App\Http\Controllers\Controller;
 use App\Models\Goal;
 use App\Models\Project;
-use App\Models\Prospect;
+use App\Models\BdmProspect;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -14,11 +14,11 @@ class DashboardController extends Controller
 
     public function index()
     {
-        $count['prospects'] = Prospect::where('user_id', auth()->user()->id)->count();
-        $count['win'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Win')->count();
-        $count['follow_up'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Follow Up')->count();
-        $count['close'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Close')->count();
-        $count['sent_proposal'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Sent Proposal')->count();
+        $count['prospects'] = BdmProspect::where('user_id', auth()->user()->id)->count();
+        $count['win'] = BdmProspect::where('user_id', auth()->user()->id)->where('status', 'Win')->count();
+        $count['follow_up'] = BdmProspect::where('user_id', auth()->user()->id)->where('status', 'Follow Up')->count();
+        $count['close'] = BdmProspect::where('user_id', auth()->user()->id)->where('status', 'Close')->count();
+        $count['sent_proposal'] = BdmProspect::where('user_id', auth()->user()->id)->where('status', 'Sent Proposal')->count();
         $goal['gross_goals'] = Goal::where('user_id', auth()->user()->id)->where('goals_type', 1)->whereMonth('goals_date', date('m'))->first();
         $goal['net_goals'] = Goal::where('user_id', auth()->user()->id)->where('goals_type', 2)->whereMonth('goals_date', date('m'))->first();
 
@@ -49,29 +49,29 @@ class DashboardController extends Controller
         $goal['net_goals_november'] = Goal::where('user_id', auth()->user()->id)->where('goals_type', 2)->whereMonth('goals_date', 11)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
         $goal['net_goals_december'] = Goal::where('user_id', auth()->user()->id)->where('goals_type', 2)->whereMonth('goals_date', 12)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
 
-        $goal['prospect_january'] = Prospect::where('user_id', auth()->user()->id)->whereMonth('sale_date', 1)->whereYear('sale_date', date('Y'))->count();
-        $goal['prospect_febuary'] = Prospect::where('user_id', auth()->user()->id)->whereMonth('sale_date', 2)->whereYear('sale_date', date('Y'))->count();
-        $goal['prospect_march'] = Prospect::where('user_id', auth()->user()->id)->whereMonth('sale_date', 3)->whereYear('sale_date', date('Y'))->count();
-        $goal['prospect_april'] = Prospect::where('user_id', auth()->user()->id)->whereMonth('sale_date', 4)->whereYear('sale_date', date('Y'))->count();
-        $goal['prospect_may'] = Prospect::where('user_id', auth()->user()->id)->whereMonth('sale_date', 5)->whereYear('sale_date', date('Y'))->count();
-        $goal['prospect_june'] = Prospect::where('user_id', auth()->user()->id)->whereMonth('sale_date', 6)->whereYear('sale_date', date('Y'))->count();
-        $goal['prospect_july'] = Prospect::where('user_id', auth()->user()->id)->whereMonth('sale_date', 7)->whereYear('sale_date', date('Y'))->count();
-        $goal['prospect_august'] = Prospect::where('user_id', auth()->user()->id)->whereMonth('sale_date', 8)->whereYear('sale_date', date('Y'))->count();
-        $goal['prospect_september'] = Prospect::where('user_id', auth()->user()->id)->whereMonth('sale_date', 9)->whereYear('sale_date', date('Y'))->count();
-        $goal['prospect_october'] = Prospect::where('user_id', auth()->user()->id)->whereMonth('sale_date', 10)->whereYear('sale_date', date('Y'))->count();
-        $goal['prospect_november'] = Prospect::where('user_id', auth()->user()->id)->whereMonth('sale_date', 11)->whereYear('sale_date', date('Y'))->count();
-        $goal['prospect_december'] = Prospect::where('user_id', auth()->user()->id)->whereMonth('sale_date', 12)->whereYear('sale_date', date('Y'))->count();
-        $prospects = Prospect::where('user_id', auth()->user()->id)->orderBy('sale_date', 'desc')->paginate(15);
+        $goal['prospect_january'] = BdmProspect::where('user_id', auth()->user()->id)->whereMonth('sale_date', 1)->whereYear('sale_date', date('Y'))->count();
+        $goal['prospect_febuary'] = BdmProspect::where('user_id', auth()->user()->id)->whereMonth('sale_date', 2)->whereYear('sale_date', date('Y'))->count();
+        $goal['prospect_march'] = BdmProspect::where('user_id', auth()->user()->id)->whereMonth('sale_date', 3)->whereYear('sale_date', date('Y'))->count();
+        $goal['prospect_april'] = BdmProspect::where('user_id', auth()->user()->id)->whereMonth('sale_date', 4)->whereYear('sale_date', date('Y'))->count();
+        $goal['prospect_may'] = BdmProspect::where('user_id', auth()->user()->id)->whereMonth('sale_date', 5)->whereYear('sale_date', date('Y'))->count();
+        $goal['prospect_june'] = BdmProspect::where('user_id', auth()->user()->id)->whereMonth('sale_date', 6)->whereYear('sale_date', date('Y'))->count();
+        $goal['prospect_july'] = BdmProspect::where('user_id', auth()->user()->id)->whereMonth('sale_date', 7)->whereYear('sale_date', date('Y'))->count();
+        $goal['prospect_august'] = BdmProspect::where('user_id', auth()->user()->id)->whereMonth('sale_date', 8)->whereYear('sale_date', date('Y'))->count();
+        $goal['prospect_september'] = BdmProspect::where('user_id', auth()->user()->id)->whereMonth('sale_date', 9)->whereYear('sale_date', date('Y'))->count();
+        $goal['prospect_october'] = BdmProspect::where('user_id', auth()->user()->id)->whereMonth('sale_date', 10)->whereYear('sale_date', date('Y'))->count();
+        $goal['prospect_november'] = BdmProspect::where('user_id', auth()->user()->id)->whereMonth('sale_date', 11)->whereYear('sale_date', date('Y'))->count();
+        $goal['prospect_december'] = BdmProspect::where('user_id', auth()->user()->id)->whereMonth('sale_date', 12)->whereYear('sale_date', date('Y'))->count();
+        $prospects = BdmProspect::where('user_id', auth()->user()->id)->orderBy('sale_date', 'desc')->paginate(15);
 
         return view('bde.dashboard',compact('count','goal','prospects'));
     }
 
-    public function bdeDashboardProspectSearch(Request $request)
+    public function bdeDashboardBdmProspectSearch(Request $request)
     {
         if ($request->ajax()) {
             $query = str_replace(" ", "%", $request->get('query'));
-        
-            $prospects = Prospect::where('user_id', auth()->user()->id)
+
+            $prospects = BdmProspect::where('user_id', auth()->user()->id)
                 ->where(function ($q) use ($query) {
                     $q->where('id', 'like', '%' . $query . '%')
                         ->orWhere('sale_date', 'like', '%' . $query . '%')
@@ -85,7 +85,7 @@ class DashboardController extends Controller
                         ->orWhere('price_quote', 'like', '%' . $query . '%');
                 })
                 ->paginate(15);
-        
+
             return response()->json(['data' => view('bde.dashboard_prospect_table', compact('prospects'))->render()]);
         }
     }

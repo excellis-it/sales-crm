@@ -4,10 +4,10 @@ namespace App\Http\Controllers\BDE;
 
 use App\Http\Controllers\Controller;
 use App\Models\Goal;
-use App\Models\Project;
-use App\Models\ProjectType;
+use App\Models\BdmProject;
+use App\Models\BdmProjectType;
 use Illuminate\Http\Request;
-use App\Models\Prospect;
+use App\Models\BdmProspect;
 use App\Models\User;
 use App\Models\ProjectMilestone;
 use Illuminate\Support\Facades\Auth;
@@ -26,19 +26,19 @@ class ProspectController extends Controller
 
         if ($type) {
             // return $type;
-            $prospects = Prospect::where(['user_id' => Auth::user()->id, 'status' => $type])->orderBy('id', 'desc')->paginate(15);
-            $count['win'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Win')->count();
-            $count['follow_up'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Follow Up')->count();
-            $count['close'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Close')->count();
-            $count['sent_proposal'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Sent Proposal')->count();
-            $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE','BUSINESS_DEVELOPMENT_EXCECUTIVE'])->get();
+            $prospects = BdmProspect::where(['user_id' => Auth::user()->id, 'status' => $type])->orderBy('id', 'desc')->paginate(15);
+            $count['win'] = BdmProspect::where('user_id', auth()->user()->id)->where('status', 'Win')->count();
+            $count['follow_up'] = BdmProspect::where('user_id', auth()->user()->id)->where('status', 'Follow Up')->count();
+            $count['close'] = BdmProspect::where('user_id', auth()->user()->id)->where('status', 'Close')->count();
+            $count['sent_proposal'] = BdmProspect::where('user_id', auth()->user()->id)->where('status', 'Sent Proposal')->count();
+            $users = User::role(['BUSINESS_DEVELOPMENT_EXCECUTIVE'])->get();
         } else {
-            $prospects = Prospect::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->paginate(10);
-            $count['win'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Win')->count();
-            $count['follow_up'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Follow Up')->count();
-            $count['close'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Close')->count();
-            $count['sent_proposal'] = Prospect::where('user_id', auth()->user()->id)->where('status', 'Sent Proposal')->count();
-            $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE','BUSINESS_DEVELOPMENT_EXCECUTIVE'])->get();
+            $prospects = BdmProspect::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->paginate(10);
+            $count['win'] = BdmProspect::where('user_id', auth()->user()->id)->where('status', 'Win')->count();
+            $count['follow_up'] = BdmProspect::where('user_id', auth()->user()->id)->where('status', 'Follow Up')->count();
+            $count['close'] = BdmProspect::where('user_id', auth()->user()->id)->where('status', 'Close')->count();
+            $count['sent_proposal'] = BdmProspect::where('user_id', auth()->user()->id)->where('status', 'Sent Proposal')->count();
+            $users = User::role(['BUSINESS_DEVELOPMENT_EXCECUTIVE'])->get();
         }
 
         return view('bde.prospect.list')->with(compact('prospects', 'count','users'));
@@ -50,7 +50,7 @@ class ProspectController extends Controller
             $status = $request->status;
             $query = $request->get('query');
             $query = str_replace(" ", "%", $query);
-            $prospects = Prospect::query();
+            $prospects = BdmProspect::query();
             if ($query != '') {
                 $prospects = $prospects->where(function ($q) use ($query) {
                     $q->orWhere('client_name', 'like', '%' . $query . '%')
@@ -106,7 +106,7 @@ class ProspectController extends Controller
         // try {
         $data = $request->all();
 
-        $prospect = new Prospect();
+        $prospect = new BdmProspect();
         $prospect->user_id = Auth::user()->id;
         $prospect->report_to = Auth::user()->bdm_id;
         $prospect->client_name = $data['client_name'];
@@ -132,7 +132,7 @@ class ProspectController extends Controller
         $prospect->save();
 
         if ($data['status'] == 'Win') {
-            $prospect = Prospect::findOrFail($prospect->id);
+            $prospect = BdmProspect::findOrFail($prospect->id);
             $prospect->is_project = true;
             $prospect->save();
 
@@ -162,7 +162,7 @@ class ProspectController extends Controller
                 $gross_goal->save();
             }
 
-            $project = new Project();
+            $project = new BdmProject();
             $project->user_id = Auth::user()->bdm_id;
             $project->client_name = $prospect->client_name;
             $project->business_name = $prospect->business_name;
@@ -186,7 +186,7 @@ class ProspectController extends Controller
                     //check if data is null
                     if ($data['milestone_name'][$key] != null) {
                         $project_milestone = new ProjectMilestone();
-                        $project_milestone->project_id = $project->id;
+                        $project_milestone->bdm_project_id = $project->id;
                         $project_milestone->milestone_name = $milestone;
                         $project_milestone->milestone_value = $data['milestone_value'][$key];
                         $project_milestone->payment_status ='Due';
@@ -199,8 +199,8 @@ class ProspectController extends Controller
                 }
             }
 
-            $project_type = new ProjectType();
-            $project_type->project_id = $project->id;
+            $project_type = new BdmProjectType();
+            $project_type->bdm_project_id = $project->id;
             $project_type->type = $prospect->offered_for;
             if (
                 $prospect->offered_for != 'SMO' &&
@@ -218,7 +218,7 @@ class ProspectController extends Controller
             $project_type->save();
         }
 
-        return redirect()->route('bde-prospects.index')->with('message', 'Prospect created successfully.');
+        return redirect()->route('bde-prospects.index')->with('message', 'BdmProspect created successfully.');
     }
 
     /**
@@ -230,7 +230,7 @@ class ProspectController extends Controller
     public function show($id)
     {
         try {
-            $prospect = Prospect::find($id);
+            $prospect = BdmProspect::find($id);
             $isThat = 'view';
             return response()->json(['view' => (string)View::make('bde.prospect.show-details')->with(compact('prospect', 'isThat'))]);
         } catch (\Throwable $th) {
@@ -247,8 +247,8 @@ class ProspectController extends Controller
     public function edit($id)
     {
         try {
-            $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE','BUSINESS_DEVELOPMENT_EXCECUTIVE'])->get();
-            $prospect = Prospect::find($id);
+            $users = User::role(['BUSINESS_DEVELOPMENT_EXCECUTIVE'])->get();
+            $prospect = BdmProspect::find($id);
             $type = true;
             return response()->json(['view' => view('bde.prospect.edit', compact('prospect', 'users','type'))->render()]);
         } catch (\Throwable $th) {
@@ -266,7 +266,7 @@ class ProspectController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->all();
-        $prospect = Prospect::findOrfail($id);
+        $prospect = BdmProspect::findOrfail($id);
         $prospect->user_id = Auth::user()->id;
         $prospect->report_to = Auth::user()->bdm_id;
         $prospect->client_name = $data['client_name'];
@@ -292,7 +292,7 @@ class ProspectController extends Controller
         $prospect->save();
 
         if ($data['status'] == 'Win') {
-            $prospect = Prospect::findOrFail($prospect->id);
+            $prospect = BdmProspect::findOrFail($prospect->id);
             $prospect->is_project = true;
             $prospect->save();
 
@@ -321,7 +321,7 @@ class ProspectController extends Controller
                 $gross_goal->save();
             }
 
-            $project = new Project();
+            $project = new BdmProject();
             $project->user_id = Auth::user()->bdm_id;
             $project->client_name = $prospect->client_name;
             $project->business_name = $prospect->business_name;
@@ -340,15 +340,15 @@ class ProspectController extends Controller
             $project->save();
 
              //prospect project milestone
-             $previous_milestone_value = ProjectMilestone::where('project_id', $id)->sum('milestone_value');
+             $previous_milestone_value = ProjectMilestone::where('bdm_project_id', $id)->sum('milestone_value');
 
-             ProjectMilestone::where('project_id', $id)->delete();
+             ProjectMilestone::where('bdm_project_id', $id)->delete();
              if (isset($data['milestone_name'])) {
                  foreach ($data['milestone_name'] as $key => $milestone) {
                      //check if data is null
                      if ($data['milestone_name'][$key] != null) {
                          $project_milestone = new ProjectMilestone();
-                         $project_milestone->project_id = $project->id;
+                         $project_milestone->bdm_project_id = $project->id;
                          $project_milestone->milestone_name = $milestone;
                          $project_milestone->milestone_value = $data['milestone_value'][$key];
                          $project_milestone->payment_status = 'Due';
@@ -361,8 +361,8 @@ class ProspectController extends Controller
                  }
              }
 
-            $project_type = new ProjectType();
-            $project_type->project_id = $project->id;
+            $project_type = new BdmProjectType();
+            $project_type->bdm_project_id = $project->id;
             $project_type->type = $prospect->offered_for;
             if (
                 $prospect->offered_for != 'SMO' &&
@@ -381,7 +381,7 @@ class ProspectController extends Controller
         }
 
 
-        return redirect()->route('bde-prospects.index')->with('message', 'Prospect updated successfully.');
+        return redirect()->route('bde-prospects.index')->with('message', 'BdmProspect updated successfully.');
     }
 
     /**
@@ -397,9 +397,9 @@ class ProspectController extends Controller
 
     public function delete($id)
     {
-        $prospect = Prospect::find($id);
+        $prospect = BdmProspect::find($id);
         $prospect->delete();
-        return redirect()->back()->with('message', 'Prospect deleted successfully.');
+        return redirect()->back()->with('message', 'BdmProspect deleted successfully.');
     }
 
     public function filter(Request $request)
@@ -408,7 +408,7 @@ class ProspectController extends Controller
             $status = $request->status;
             $query = $request->get('query');
             $query = str_replace(" ", "%", $query);
-            $prospects = Prospect::query();
+            $prospects = BdmProspect::query();
             if ($query != '') {
                 $prospects = $prospects->where(function ($q) use ($query) {
                     $q->orWhere('client_name', 'like', '%' . $query . '%')
