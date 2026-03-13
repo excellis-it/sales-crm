@@ -209,9 +209,9 @@
                                         {{-- Project opener --}}
                                         <div class="col-md-6 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Project
-                                                Opener <span style="color: red;">*</span></label>
-                                            <select name="project_opener" id="project_opener" required
-                                                class="form-control select2" required>
+                                                Opener</label>
+                                            <select name="project_opener" id="project_opener"
+                                                class="form-control select2" >
                                                 <option value="">Select Project
                                                     Opener
                                                 </option>

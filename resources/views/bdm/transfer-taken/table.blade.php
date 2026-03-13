@@ -43,7 +43,6 @@
             <td    @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bdm.transfer-taken.edit', $prospect->id) }}" @endif>
                 {{ $prospect->price_quote }}
             </td>
-
             <td>
 
                 <a title="View Prospect" class="view-details-btn"

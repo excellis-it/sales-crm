@@ -23,6 +23,8 @@ use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
 use App\Http\Controllers\Admin\ProspectController as AdminProspectController;
 use App\Http\Controllers\Admin\PaymentsController as AdminPaymentsController;
 use App\Http\Controllers\Admin\SalesExcecutiveController;
+use App\Http\Controllers\Admin\BdmProjectController as AdminBdmProjectController;
+use App\Http\Controllers\Admin\BdmProspectController as AdminBdmProspectController;
 use App\Http\Controllers\Admin\TenderUserController;
 use App\Http\Controllers\Admin\SellerController;
 use App\Http\Controllers\BDM\BusinessDevelopmentExcecutiveController as BDMBusinessDevelopmentExcecutiveController;
@@ -144,6 +146,19 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
         Route::get('/prospects-delete/{id}', [AdminProspectController::class, 'delete'])->name('prospects.delete');
         Route::get('/filter', [AdminProspectController::class, 'filter'])->name('prospects.filter'); // filter
         Route::get('/assign-to-project/{id}', [AdminProspectController::class, 'assignToProject'])->name('prospects.assign-project'); // assign project
+        // admin.bdm-prospects
+        Route::resources([
+            'bdm-prospects' => AdminBdmProspectController::class,
+            'bdm-projects' => AdminBdmProjectController::class,
+        ]);
+        Route::get('/bdm-prospects-delete/{id}', [AdminBdmProspectController::class, 'delete'])->name('bdm-prospects.delete');
+        Route::get('/bdm-prospects-filter', [AdminBdmProspectController::class, 'filter'])->name('bdm-prospects.filter');
+
+        Route::get('/bdm-projects-delete/{id}', [AdminBdmProjectController::class, 'delete'])->name('bdm-projects.delete');
+        Route::get('/bdm-projects-filter', [AdminBdmProjectController::class, 'bdmProjectFilter'])->name('bdm-projects.filter');
+        Route::get('/bdm-projects-download/{id}', [AdminBdmProjectController::class, 'documentDownload'])->name('bdm-projects.download');
+        Route::get('/bdm-projects-new-customer', [AdminBdmProjectController::class, 'newCustomer'])->name('bdm-projects.new-customer');
+        Route::get('/bdm-projects-customer-details', [AdminBdmProjectController::class, 'customerDetails'])->name('bdm-projects.customer-details');
     });
     //list goals
     Route::get('/goals-list', [GoalsController::class, 'goalsList'])->name('goals.ajax-list');

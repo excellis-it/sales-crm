@@ -12,6 +12,7 @@ class ProjectMilestone extends Model
     protected $fillable = [
         'project_id',
         'tender_project_id',
+        'bdm_project_id',
         'milestone_name',
         'milestone_value',
         'payment_status',
@@ -23,6 +24,11 @@ class ProjectMilestone extends Model
     public function project()
     {
         return $this->belongsTo(Project::class);
+    }
+
+    public function bdmProject()
+    {
+        return $this->belongsTo(BdmProject::class, 'bdm_project_id');
     }
 
     public function tenderProject()

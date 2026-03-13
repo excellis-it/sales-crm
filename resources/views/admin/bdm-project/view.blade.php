@@ -1,8 +1,13 @@
-@extends('bdm.layouts.master')
+@extends('admin.layouts.master')
 @section('title')
     {{ env('APP_NAME') }} | View Project Details
 @endsection
 @push('styles')
+<style>
+    .dataTables_filter {
+        margin-bottom: 10px !important;
+    }
+</style>
 @endpush
 
 @section('content')
@@ -15,7 +20,7 @@
                     <div class="col">
                         <h3 class="page-title">#{{ $project->client_name }}</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('bdm.projects.index') }}">Project</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('admin.bdm-projects.index') }}">Project</a></li>
                             <li class="breadcrumb-item active">View Project Details</li>
                         </ul>
                     </div>
@@ -72,16 +77,47 @@
                                                 {{ $project->business_name }}
                                             </div>
                                         </li>
+                                        <li class="">
+                                            <div class="title  ">Sale Date:-</div>
+                                            <div class="text">
+                                                {{ ($project->sale_date) ?  date('d M, Y', strtotime($project->sale_date)) : '' }}
+                                            </div>
+                                        </li>
+                                        <li class="">
+                                            <div class="title  ">Sale By:-</div>
+                                            <div class="text">
+                                                {{ $project->salesManager->name ?? '' }}
+                                            </div>
+                                        </li>
+                                        <li class="">
+                                            <div class="title  ">Sales Manager Email:-</div>
+                                            <div class="text">
+                                                {{ $project->salesManager->email ?? '' }}
+                                            </div>
+                                        </li>
+                                        <li class="">
+                                            <div class="title">Assigned To</div>
+                                            <div class="text">
+                                                {{-- select box  --}}
+                                                <select name="assigned_to" id="assigned_to" class="form-control">
+                                                    <option value="">Select a account manager</option>
+                                                    @foreach ($account_managers as $account_manager)
+                                                        <option value="{{ $account_manager->id }}"
+                                                            @if ($project->assigned_to == $account_manager->id) selected @endif>
+                                                            {{ $account_manager->name }} ({{ $account_manager->email }})
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </li>
                                     </ul>
                                     @if ($documents->count() > 0)
                                         <h4>Documents Details :</h4>
-
                                         @foreach ($documents as $key => $document)
-                                            <a href="{{ route('bdm.projects.document.download', $document->id) }}">
+                                            <a href="{{ route('admin.bdm-projects.document.download', $document->id) }}">
                                                 <i class="fas fa-download"></i></a>&nbsp;&nbsp;
                                         @endforeach
                                     @endif
-
                                 </div>
                             </div>
                         </div>
@@ -94,13 +130,15 @@
                                         <li>
                                             <div class="title">Project Type:-</div>
                                             <div class="text">
-                                                <span class="">{{ $project->projectTypes->name ?? '' }}</span>
+                                                @foreach ($project->projectTypes as $pt)
+                                                    <span class="badge bg-info mb-1">{{ $pt->name ?? $pt->type }}</span>
+                                                @endforeach
                                             </div>
                                         </li>
                                         <li>
                                             <div class="title">Project Value:-</div>
                                             <div class="text">
-                                                {{ $project->project_value }}
+                                                {{ $project->project_value ?? '' }}
                                             </div>
                                         </li>
                                         <li>
@@ -128,12 +166,7 @@
                                             </div>
                                         </li>
 
-                                        <li class="">
-                                            <div class="title  ">Sale Date:-</div>
-                                            <div class="text">
-                                                {{ ($project->sale_date) ?  date('d M, Y', strtotime($project->sale_date)) : '' }}
-                                            </div>
-                                        </li>
+
                                         <li class="">
                                             <div class="title  ">Project Opener:-</div>
                                             <div class="text">
@@ -243,4 +276,44 @@
     @endsection
 
     @push('scripts')
+        <script>
+            $(document).ready(function() {
+                $('#myTable').DataTable();
+            });
+            $(document).on('change', '#assigned_to', function() {
+                // loader show
+                $('#loading').addClass('loading');
+                $('#loading-content').addClass('loading-content');
+
+                var assigned_to = $(this).val();
+                var project_id = "{{ $project->id }}";
+                $.ajax({
+                    url: "{{ route('admin.bdm-projects.updateAssignedTo') }}",
+                    type: "GET",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        "assigned_to": assigned_to,
+                        "project_id": project_id
+                    },
+                    success: function(response) {
+                        if (response.status) {
+                            // loader hide
+                            $('#loading').removeClass('loading');
+                            $('#loading-content').removeClass('loading-content');
+                            toastr.success(response.message);
+                        } else {
+                            toastr.error(response.message);
+                        }
+                    }
+                });
+            });
+        </script>
+        <script>
+            $(document).ready(function() {
+               //how to place holder in "jquery datatable" search box
+                $('#myTable_filter input').attr("placeholder", "Search");
+            });
+
+
+        </script>
     @endpush

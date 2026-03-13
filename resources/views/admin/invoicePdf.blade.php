@@ -204,7 +204,7 @@
                     colspan="2">
                     <p
                         style="font-size: 14px; font-weight: 400; margin: 5px 0px 10px; text-align: left; padding: 0px 5px;">
-                        {{ $milestone_detail->project->business_name ?? ($milestone_detail->tenderProject->tender_name ?? '') }}
+                        {{ $milestone_detail->project->business_name ?? ($milestone_detail->tenderProject->tender_name ?? $milestone_detail->bdmProject->business_name ??'') }}
                     </p>
                 </td>
                 <td

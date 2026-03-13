@@ -107,6 +107,21 @@
                     </ul>
                 </li>
 
+                <li class="submenu">
+                    <a href="#"
+                        class="{{ Request::is('admin/bdm-projects*') || Request::is('admin/bdm-prospects*') ? 'active' : ' ' }}"><i
+                            class="la la-rocket"></i> <span> BDM Pipeline </span> <span
+                            class="menu-arrow"></span></a>
+                    <ul style="display: none;">
+                        <li class="{{ Request::is('admin/bdm-projects*') ? 'active' : ' ' }}">
+                            <a href="{{ route('admin.bdm-projects.index') }}">BDM Projects</a>
+                        </li>
+                        <li class="{{ Request::is('admin/bdm-prospects*') ? 'active' : ' ' }}">
+                            <a href="{{ route('admin.bdm-prospects.index') }}">BDM Prospects</a>
+                        </li>
+                    </ul>
+                </li>
+
                 <li class="menu-title">
                     <span>Payment Management</span>
                 </li>

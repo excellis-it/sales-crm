@@ -19,7 +19,7 @@
                         <label for="inputEnterYourName" class="col-form-label"> Client Name
                             <span style="color: red;">*</span></label>
                         <input type="text" name="client_name" id="client_name" required data-parsley-trigger="keyup"
-                            value="{{ $project->client_name }}" class="form-control disable-input"
+                            value="{{ $project->client_name }}" class="form-control "
                             placeholder="Enter Client Name">
                     </div>
                     <div class="col-md-6 mb-3">
@@ -28,7 +28,7 @@
                         <input type="text" name="client_email" id="client_email" required
                             data-parsley-trigger="keyup" data-parsley-type="email"
                             data-parsley-type-message="Please enter a valid email address."
-                            class="form-control disable-input" value="{{ $project->client_email }}"
+                            class="form-control " value="{{ $project->client_email }}"
                             placeholder="Enter Client Email">
                     </div>
                     <div class="col-md-6 mb-3">
@@ -37,7 +37,7 @@
                         <input type="text" name="client_phone" id="client_phone" required
                             data-parsley-trigger="keyup" data-parsley-type="number"
                             data-parsley-type-message="Please enter a valid phone number."
-                            value="{{ $project->client_phone }}" class="form-control disable-input"
+                            value="{{ $project->client_phone }}" class="form-control "
                             placeholder="Enter Client Phone Number">
                     </div>
 
@@ -46,7 +46,7 @@
                         <label for="inputEnterYourName" class="col-form-label">Client
                             Address <span style="color: red;">*</span></label>
                         <input type="text" name="client_address" id="client_address" required
-                            data-parsley-trigger="keyup" class="form-control disable-input"
+                            data-parsley-trigger="keyup" class="form-control "
                             value=" {{ $project->client_address }}" placeholder="Enter Address">
                         @if ($errors->has('address'))
                             <div class="error" style="color:red;">
@@ -58,7 +58,7 @@
                             <span style="color: red;">*</span></label>
                         <input type="text" name="business_name" id="business_name" required
                             data-parsley-trigger="keyup" value="{{ $project->business_name }}"
-                            class="form-control disable-input" placeholder="Enter Business Name">
+                            class="form-control " placeholder="Enter Business Name">
                     </div>
                     <h3 class="mt-4 text-uppercase">Project Details</h3>
                     <hr>
@@ -92,7 +92,7 @@
                         <input type="text" name="project_value" id="project_value" required
                             data-parsley-trigger="keyup" data-parsley-type="number"
                             data-parsley-type-message="Please enter a valid number."
-                            class="form-control disable-input" value="{{ $project->project_value }}"
+                            class="form-control " value="{{ $project->project_value }}"
                             placeholder="Enter Project Value">
                     </div>
                     {{-- Project project_upfront --}}
@@ -102,14 +102,14 @@
                         <input type="text" name="project_upfront" id="project_upfront" required
                             data-parsley-trigger="keyup" data-parsley-type="number"
                             data-parsley-type-message="Please enter a valid number."
-                            class="form-control disable-input" value="{{ $project->project_upfront }}"
+                            class="form-control " value="{{ $project->project_upfront }}"
                             placeholder="Enter Project Upfront">
                     </div>
                     {{-- currency select box --}}
                     <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Currency
                             <span style="color: red;">*</span></label>
-                        <select name="currency" id="currency" class="form-control disable-input" required
+                        <select name="currency" id="currency" class="form-control " required
                             data-parsley-trigger="keyup">
                             <option value="" disabled>Select Currency</option>
                             <option value="INR" {{ $project->currency == 'INR' ? 'selected' : '' }}>
@@ -132,15 +132,15 @@
                         <label for="inputEnterYourName" class="col-form-label">Project
                             Payment Mode <span style="color: red;">*</span></label>
                         <input type="text" name="payment_mode" required data-parsley-trigger="keyup"
-                            id="payment_mode" class="form-control disable-input"
+                            id="payment_mode" class="form-control "
                             value="{{ $project->payment_mode }}" placeholder="Enter Project Payment Mode">
                     </div>
                     {{-- Project opener --}}
                     <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Project
-                            Opener <span style="color: red;">*</span></label>
-                        <select name="project_opener" id="project_opener" required
-                            class="form-control disable-input select">
+                            Opener </label>
+                        <select name="project_opener" id="project_opener"
+                            class="form-control  select">
                             <option value="">Select Project
                                 Opener
                             </option>
@@ -154,9 +154,9 @@
                     {{-- Project closer --}}
                     <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Project
-                            Closer <span style="color: red;">*</span></label>
-                        <select name="project_closer" id="project_closer" required
-                            class="form-control disable-input select">
+                            Closer </label>
+                        <select name="project_closer" id="project_closer"
+                            class="form-control  select">
                             <option value="">Select Project
                                 Closer
                             </option>
@@ -173,7 +173,7 @@
                             <span style="color: red;">*</span></label>
                         <input type="date" name="sale_date" id="edit_sale_date" required data-parsley-trigger="keyup"
                             data-parsley-type="date" data-parsley-type-message="Please enter a valid date."
-                            class="form-control disable-input picker" value="{{ $project->sale_date }}"
+                            class="form-control  picker" value="{{ $project->sale_date }}"
                             placeholder="Enter Sale Date">
                     </div>
                     {{-- website --}}
@@ -181,16 +181,16 @@
                         <label for="inputEnterYourName" class="col-form-label">Website</label>
                         <input type="text" name="website" id="website" data-parsley-required="false"
                             data-parsley-trigger="keyup" data-parsley-type="url"
-                            data-parsley-type-message="Please enter a valid url." class="form-control disable-input"
+                            data-parsley-type-message="Please enter a valid url." class="form-control "
                             value="{{ $project->website }}" placeholder="Enter Website">
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Delivery
                             TAT
-                            <span style="color: red;">*</span></label>
-                        <input type="date" name="delivery_tat" id="edit_delivery_tat" required
+                            </label>
+                        <input type="date" name="delivery_tat" id="edit_delivery_tat"
                             data-parsley-trigger="keyup" data-parsley-type="date"
-                            data-parsley-type-message="Please enter a valid date." class="form-control disable-input picker"
+                            data-parsley-type-message="Please enter a valid date." class="form-control  picker"
                             value="{{ $project->delivery_tat }}" placeholder="Enter Sale Date">
                     </div>
                     {{-- comment --}}
@@ -240,7 +240,7 @@
                                     <div class="col-md-12 mb-3 pb-3">
                                         <div style="display: flex">
                                             @if ($milestone->payment_status == 'Paid')
-                                            <select name="payment_status[]" id="payment" class="form-control disable-input"
+                                            <select name="payment_status[]" id="payment" class="form-control "
                                                 data-parsley-trigger="keyup">
                                                 <option value="Paid"
                                                     {{ $milestone->payment_status == 'Paid' ? 'selected' : '' }}>
@@ -269,14 +269,14 @@
                                         <div class="col-md-12 mb-3">
                                             <div style="display: flex">
                                                 <input type="date" name="milestone_payment_date[]"
-                                                    class="form-control {{ $milestone->payment_status == 'Paid' ? 'disable-input' : '' }} picker" value="{{ $milestone->payment_date }}"
+                                                    class="form-control {{ $milestone->payment_status == 'Paid' ? '' : '' }} picker" value="{{ $milestone->payment_date }}"
                                                     id="fetch-milestone-date-{{ $key }}" required data-parsley-trigger="keyup">
                                             </div>
                                         </div>
 
                                         <div class="col-md-12 mb-3">
                                             <div style="display: flex">
-                                                    <select name="milestone_payment_mode[]" class="form-control disable-input" id="fetch-milestone-mode-{{ $key }}" required data-parsley-trigger="keyup">
+                                                    <select name="milestone_payment_mode[]" class="form-control " id="fetch-milestone-mode-{{ $key }}" required data-parsley-trigger="keyup">
 
                                                         <option value="Paypal" {{ $milestone->milestone_payment_mode == 'Paypal' ? 'selected' : '' }}>Paypal</option>
                                                         <option value="Stripe" {{ $milestone->milestone_payment_mode == 'Stripe' ? 'selected' : '' }}>Stripe</option>
@@ -367,7 +367,7 @@
                         <h4 class="mt-4 text-uppercase">Download Documents</h4>
                         @foreach ($project->projectDocuments as $key => $document)
                             <div class="download-button">
-                                <a href="{{ route('sales-projects.document.download', $document->id) }}"
+                                <a href="{{ route('bdm.projects.document.download', $document->id) }}"
                                     download="downloaded_project_documents.pdf" class="btn submit-btn add-pdf-button good-button">
                                         <i class="fas fa-download"></i>
                                 </a>
@@ -679,7 +679,7 @@
                 html += '<option value="">Select Payment Mode</option>';
                 html += '<option value="Paypal">Paypal</option>';
                 html += '<option value="Stripe">Stripe</option>';
-                html += '<option value="Bank Transfer">Bank Transfer</option>'; 
+                html += '<option value="Bank Transfer">Bank Transfer</option>';
                 html += '<option value="Payoneer">Payoneer</option>';
                 html += '</select>';
                 html += '</div>';

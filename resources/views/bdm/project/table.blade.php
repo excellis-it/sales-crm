@@ -4,7 +4,7 @@
     </tr>
 @else
     @foreach ($projects as $key => $project)
-        <tr class="view-route" data-route="{{ route('sales-projects.show', $project->id) }}">
+        <tr class="view-route" data-route="{{ route('bdm.projects.show', $project->id) }}">
             <td class="edit-route" data-route="{{ route('bdm.projects.edit', $project->id) }}">
                 {{ $project->sale_date ? date('d-m-Y', strtotime($project->sale_date)) : '' }}
             </td>

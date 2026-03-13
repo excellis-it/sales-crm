@@ -82,7 +82,7 @@
                                 <tr>
                                     <th>Date</th>
                                     <th>Prospect By</th>
-                                    <th>Business Name</th>
+                                    {{-- <th>Business Name</th> --}}
                                     <th>Client Name</th>
                                     <th>Email</th>
                                     <th>Phone</th>

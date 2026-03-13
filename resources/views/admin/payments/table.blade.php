@@ -2,7 +2,7 @@
 @foreach ($project_milestones as $key => $project_milestone)
 <tr>
     <td >
-        {{ $project_milestone->project->business_name ?? $project_milestone->tenderProject->tender_name }}
+        {{ $project_milestone->project->business_name ?? $project_milestone->tenderProject->tender_name ?? $project_milestone->bdmProject->business_name }}
     </td>
     <td >
         {{ $project_milestone->milestone_name }}

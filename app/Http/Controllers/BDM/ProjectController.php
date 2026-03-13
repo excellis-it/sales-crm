@@ -5,10 +5,10 @@ namespace App\Http\Controllers\BDM;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\Goal;
-use App\Models\Project;
-use App\Models\ProjectDocument;
+use App\Models\BdmProject;
+use App\Models\BdmProjectDocument;
 use App\Models\ProjectMilestone;
-use App\Models\ProjectType;
+use App\Models\BdmProjectType;
 use App\Models\User;
 use Session;
 use App\Traits\ImageTrait;
@@ -26,10 +26,10 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects = Project::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->paginate(15);
+        $projects = BdmProject::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->paginate(15);
         $account_managers = User::role('ACCOUNT_MANAGER')->orderBy('name', 'DESC')->where('status', 1)->get();
-        $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE', 'BUSINESS_DEVELOPMENT_MANAGER', 'BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
-        $project_openers = User::role(['BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where(['bdm_id' => Auth::user()->id, 'status' => 1])->orderBy('id', 'desc')->get();
+        $users = User::role(['BUSINESS_DEVELOPMENT_MANAGER', 'BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
+        $project_openers = User::role(['BUSINESS_DEVELOPMENT_MANAGER', 'BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where(['bdm_id' => Auth::user()->id, 'status' => 1])->orderBy('id', 'desc')->get();
         return view('bdm.project.list', compact('projects', 'users', 'account_managers', 'project_openers'));
     }
 
@@ -41,7 +41,7 @@ class ProjectController extends Controller
             $sort_type = $request->get('sorttype');
             $query = $request->get('query');
             $query = str_replace(" ", "%", $query);
-            $projects = Project::where('user_id', Auth::user()->id)->orderBy($sort_by, $sort_type)->where(function ($q) use ($query) {
+            $projects = BdmProject::where('user_id', Auth::user()->id)->orderBy($sort_by, $sort_type)->where(function ($q) use ($query) {
                 $q->orWhere('sale_date', 'like', '%' . $query . '%')
                     ->orWhere('business_name', 'like', '%' . $query . '%')
                     ->orWhere('client_name', 'like', '%' . $query . '%')
@@ -58,7 +58,7 @@ class ProjectController extends Controller
             Session::put('call_status',$request->get('call_status'));
             if($request->get('call_status') == '')
             {
-                $page = Session::put('page_number',1); 
+                $page = Session::put('page_number',1);
             }
             if(Session::get('call_status') == 'Yes') {
                 Session::put('call_status',"");
@@ -78,7 +78,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE', 'BUSINESS_DEVELOPMENT_MANAGER', 'BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
+        $users = User::role([ 'BUSINESS_DEVELOPMENT_MANAGER', 'BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
         return view('bdm.project.create')->with(compact('users'));
     }
 
@@ -103,7 +103,7 @@ class ProjectController extends Controller
             $customer->save();
             $data['customer'] = $customer->id;
         }
-        $project = new Project();
+        $project = new BdmProject();
         $project->user_id = Auth::user()->id;
         $project->client_name = $data['client_name'];
         $project->customer_id = $data['customer'];
@@ -143,8 +143,8 @@ class ProjectController extends Controller
 
         if (isset($data['project_type'])) {
             foreach ($data['project_type'] as $key => $project_type) {
-                $add_project_type = new ProjectType();
-                $add_project_type->project_id = $project->id;
+                $add_project_type = new BdmProjectType();
+                $add_project_type->bdm_project_id = $project->id;
                 $add_project_type->type = $project_type;
                 if ($project_type == 'Other') {
                     $add_project_type->name = $data['other_value'];
@@ -161,7 +161,7 @@ class ProjectController extends Controller
                 //check if data is null
                 if ($data['milestone_name'][$key] != null) {
                     $project_milestone = new ProjectMilestone();
-                    $project_milestone->project_id = $project->id;
+                    $project_milestone->bdm_project_id = $project->id;
                     $project_milestone->milestone_name = $milestone;
                     $project_milestone->milestone_value = $data['milestone_value'][$key];
                     $project_milestone->payment_status = $data['payment_status'][$key];
@@ -177,15 +177,15 @@ class ProjectController extends Controller
                             $net_goals_t->save();
                         }
                     }
-                }         
+                }
             }
         }
 
 
         if (isset($data['pdf'])) {
             foreach ($data['pdf'] as $key => $pdfFile) {
-                $project_pdf = new ProjectDocument();
-                $project_pdf->project_id = $project->id;
+                $project_pdf = new BdmProjectDocument();
+                $project_pdf->bdm_project_id = $project->id;
                 $project_pdf->document_file = $this->imageUpload($pdfFile, 'project_pdf');
                 $project_pdf->save();
             }
@@ -205,8 +205,8 @@ class ProjectController extends Controller
     public function show($id)
     {
         try {
-            $project = Project::find($id);
-            $documents = ProjectDocument::where('project_id', $id)->orderBy('id', 'desc')->get();
+            $project = BdmProject::find($id);
+            $documents = BdmProjectDocument::where('bdm_project_id', $id)->orderBy('id', 'desc')->get();
             return view('bdm.project.view')->with(compact('project', 'documents'));
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
@@ -222,10 +222,10 @@ class ProjectController extends Controller
     public function edit($id)
     {
         try {
-            $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE', 'BUSINESS_DEVELOPMENT_MANAGER', 'BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
+            $users = User::role(['BUSINESS_DEVELOPMENT_MANAGER', 'BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
             $project_openers = User::role(['BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where(['bdm_id' => Auth::user()->id, 'status' => 1])->orderBy('id', 'desc')->get();
             $account_managers = User::role('ACCOUNT_MANAGER')->orderBy('name', 'DESC')->where('status', 1)->get();
-            $project = Project::find($id);
+            $project = BdmProject::find($id);
             $type = true;
             return response()->json(['view' => view('bdm.project.edit', compact('project', 'users', 'type', 'project_openers', 'account_managers'))->render()]);
         } catch (\Throwable $th) {
@@ -243,7 +243,7 @@ class ProjectController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->all();
-        $project = Project::findOrfail($id);
+        $project = BdmProject::findOrfail($id);
         $project_value = $project->project_value;
         $project_upfront = $project->project_upfront;
 
@@ -281,13 +281,13 @@ class ProjectController extends Controller
             $goals->save();
         }
 
-        ProjectType::where('project_id', $id)->delete();
+        BdmProjectType::where('bdm_project_id', $id)->delete();
 
 
         if (isset($data['project_type'])) {
             foreach ($data['project_type'] as $key => $project_type) {
-                $update_project_type = new ProjectType();
-                $update_project_type->project_id = $project->id;
+                $update_project_type = new BdmProjectType();
+                $update_project_type->bdm_project_id = $project->id;
                 $update_project_type->type = $project_type;
                 if ($project_type == 'Other') {
                     $update_project_type->name = $data['other_value'];
@@ -298,17 +298,17 @@ class ProjectController extends Controller
             }
         }
 
-        $previous_milestone_value = ProjectMilestone::where(['project_id' => $id, 'payment_status' => 'Paid'])->sum('milestone_value');
+        $previous_milestone_value = ProjectMilestone::where(['bdm_project_id' => $id, 'payment_status' => 'Paid'])->sum('milestone_value');
 
-        ProjectMilestone::where('project_id', $id)->delete();
+        ProjectMilestone::where('bdm_project_id', $id)->delete();
         if (isset($data['milestone_name'])) {
             $paid_amount = 0;
             foreach ($data['milestone_name'] as $key => $milestone) {
-                
+
                 //check if data is null
                 if ($data['milestone_name'][$key]) {
                     $project_milestone = new ProjectMilestone();
-                    $project_milestone->project_id = $project->id;
+                    $project_milestone->bdm_project_id = $project->id;
                     $project_milestone->milestone_name = $milestone;
                     $project_milestone->milestone_value = $data['milestone_value'][$key];
                     $project_milestone->payment_status = $data['payment_status'][$key];
@@ -337,8 +337,8 @@ class ProjectController extends Controller
 
         if (isset($data['pdf'])) {
             foreach ($data['pdf'] as $key => $pdfFile) {
-                $project_pdf = new ProjectDocument();
-                $project_pdf->project_id = $project->id;
+                $project_pdf = new BdmProjectDocument();
+                $project_pdf->bdm_project_id = $project->id;
                 $project_pdf->document_file = $this->imageUpload($pdfFile, 'project_pdf');
                 $project_pdf->save();
             }
@@ -352,7 +352,7 @@ class ProjectController extends Controller
 
     public function projectDocumentDownload($id)
     {
-        $project_document = ProjectDocument::find($id);
+        $project_document = BdmProjectDocument::find($id);
         $file_path = $project_document->document_file;
 
         return response()->download(storage_path('app/public/' . $file_path));
@@ -371,7 +371,7 @@ class ProjectController extends Controller
 
     public function delete($id)
     {
-        $project = Project::find($id);
+        $project = BdmProject::find($id);
         $project->delete();
         return redirect()->back()->with('message', 'Project deleted successfully.');
     }

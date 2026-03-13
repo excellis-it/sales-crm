@@ -12,7 +12,7 @@
                 @method('PUT')
                 @csrf
                 <div class="row">
-                    <div class="col-md-12 mb-3">
+                    {{-- <div class="col-md-12 mb-3">
                         <label for="inputEnterYourName" class="col-form-label"> Sales
                             Executive
                             <span style="color: red;">*</span></label>
@@ -25,7 +25,7 @@
                                     {{ $sales_executive->name }}</option>
                             @endforeach
                         </select>
-                    </div>
+                    </div> --}}
                     <div class="col-md-12 mb-3">
                         <label for="inputEnterYourName" class="col-form-label"> Client Name
                             <span style="color: red;">*</span></label>
