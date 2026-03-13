@@ -15,28 +15,32 @@ class assignRoleSeeder extends Seeder
     public function run()
     {
         $roles = [
+            // [
+            //     'name' => 'ADMIN',
+            //     'guard_name' => 'web',
+            // ],
+            // [
+            //     'name' => 'SALES_MANAGER',
+            //     'guard_name' => 'web',
+            // ],
+            // [
+            //     'name' => 'ACCOUNT_MANAGER',
+            //     'guard_name' => 'web',
+            // ],
+            // [
+            //     'name' => 'SALES_EXCUETIVE',
+            //     'guard_name' => 'web',
+            // ],
+            // [
+            //     'name' => 'BUSINESS_DEVELOPMENT_MANAGER',
+            //     'guard_name' => 'web',
+            // ],
+            // [
+            //     'name' => 'BUSINESS_DEVELOPMENT_EXCECUTIVE',
+            //     'guard_name' => 'web',
+            // ],
             [
-                'name' => 'ADMIN',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'SALES_MANAGER',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'ACCOUNT_MANAGER',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'SALES_EXCUETIVE',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'BUSINESS_DEVELOPMENT_MANAGER',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'BUSINESS_DEVELOPMENT_EXCECUTIVE',
+                'name' => 'TENDER_USER',
                 'guard_name' => 'web',
             ]
         ];

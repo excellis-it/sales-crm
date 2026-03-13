@@ -9,9 +9,25 @@ class ProjectMilestone extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'project_id',
+        'tender_project_id',
+        'milestone_name',
+        'milestone_value',
+        'payment_status',
+        'payment_date',
+        'milestone_comment',
+        'payment_mode',
+    ];
+
     public function project()
     {
         return $this->belongsTo(Project::class);
+    }
+
+    public function tenderProject()
+    {
+        return $this->belongsTo(TenderProject::class, 'tender_project_id');
     }
 
     public function user()

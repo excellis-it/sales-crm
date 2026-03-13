@@ -23,8 +23,16 @@ use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
 use App\Http\Controllers\Admin\ProspectController as AdminProspectController;
 use App\Http\Controllers\Admin\PaymentsController as AdminPaymentsController;
 use App\Http\Controllers\Admin\SalesExcecutiveController;
+use App\Http\Controllers\Admin\TenderUserController;
 use App\Http\Controllers\Admin\SellerController;
 use App\Http\Controllers\BDM\BusinessDevelopmentExcecutiveController as BDMBusinessDevelopmentExcecutiveController;
+use App\Http\Controllers\TenderUser\DashboardController as TenderUserDashboardController;
+use App\Http\Controllers\TenderUser\ProfileController as TenderUserProfileController;
+use App\Http\Controllers\TenderUser\TenderStatusController as TenderUserTenderStatusController;
+use App\Http\Controllers\Admin\TenderProjectController as AdminTenderProjectController;
+use App\Http\Controllers\TenderUser\TenderProjectController as TenderUserTenderProjectController;
+use App\Http\Controllers\TenderUser\PaymentController as TenderUserPaymentController;
+use App\Http\Controllers\Admin\TenderStatusController as AdminTenderStatusController;
 use App\Http\Controllers\BDM\DashboardController as BDMDashboardController;
 use App\Http\Controllers\BDM\ProfileController as BDMProfileController;
 use App\Http\Controllers\BDM\ProjectController as BDMProjectController;
@@ -49,6 +57,7 @@ use App\Http\Controllers\BDM\TransferTakenController as BDMTransferTakenControll
 use App\Http\Controllers\DefaultController;
 use App\Http\Controllers\SalesExcecutive\TransferTakenController as SalesExcecutiveTransferTakenController;
 use App\Http\Controllers\SalesManager\TransferTakenController;
+use App\Http\Controllers\TenderUser\TenderProjectController;
 use Illuminate\Support\Facades\Artisan;
 
 /*
@@ -100,6 +109,7 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
         'business-development-excecutive' => BusinessDevelopmentExcecutiveController::class,
         'customers' => UserController::class,
         'ips' => IpController::class,
+        'tender-users' => TenderUserController::class,
     ]);
 
 
@@ -197,6 +207,25 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('/payments', [AdminPaymentsController::class, 'adminPayments'])->name('admin.payments.list');
     Route::get('/payments-filter', [AdminPaymentsController::class, 'adminPaymentFilter'])->name('admin.payments.filter'); // payment filter
     Route::get('/payments/invoice-download/{id}', [AdminPaymentsController::class, 'adminInvoicedownload'])->name('admin.payments.download-invoice');
+
+    Route::get('/tender-users-search', [TenderUserController::class, 'search'])->name('tender-users.search');
+    Route::get('/changeTenderUserStatus', [TenderUserController::class, 'changeTenderUserStatus'])->name('tender-users.change-status');
+    Route::prefix('tender-users')->group(function () {
+        Route::get('/tender-user-delete/{id}', [TenderUserController::class, 'delete'])->name('tender-users.delete');
+    });
+
+    Route::name('admin.')->group(function () {
+        Route::resources([
+            'tender-statuses' => AdminTenderStatusController::class,
+            'tender-projects' => AdminTenderProjectController::class,
+        ]);
+        Route::get('/tender-statuses-search', [AdminTenderStatusController::class, 'search'])->name('tender-statuses.search');
+        Route::get('/changeTenderStatusStatus', [AdminTenderStatusController::class, 'changeStatus'])->name('tender-statuses.change-status');
+        Route::get('tender-statuses/tender-status-delete/{id}', [AdminTenderStatusController::class, 'destroy'])->name('tender-statuses.delete');
+
+        Route::get('tender-projects/followups/{id}', [AdminTenderProjectController::class, 'getFollowups'])->name('tender-projects.followups');
+        Route::post('tender-projects/add-followup', [AdminTenderProjectController::class, 'addFollowup'])->name('tender-projects.add-followup');
+    });
 });
 
 /**---------------------------------------------------------------Sales Manager ---------------------------------------------------------------------------------- */
@@ -399,5 +428,33 @@ Route::group(['middleware' => ['BlockIpMiddleware']], function () {
         Route::get('/filter-projects', [BDEProjectController::class, 'bdeProjectFilter'])->name('bde.projects.filter'); // filter
 
 
+    });
+
+    /**---------------------------------------------------------------Tender User ---------------------------------------------------------------------------------- */
+    Route::group(['middleware' => ['TenderUser'], 'prefix' => 'tender-user'], function () {
+        Route::get('dashboard', [TenderUserDashboardController::class, 'index'])->name('tender-user.dashboard');
+        Route::get('profile', [TenderUserProfileController::class, 'index'])->name('tender-user.profile');
+        Route::post('profile/update', [TenderUserProfileController::class, 'profileUpdate'])->name('tender-user.profile.update');
+        Route::get('logout', [AuthController::class, 'logout'])->name('tender-user.logout');
+
+        Route::prefix('password')->group(function () {
+            Route::get('/', [TenderUserProfileController::class, 'password'])->name('tender-user.password'); // password change
+            Route::post('/update', [TenderUserProfileController::class, 'passwordUpdate'])->name('tender-user.password.update'); // password update
+        });
+
+        Route::name('tender-user.')->group(function () {
+            Route::resources([
+                'tender-statuses' => TenderUserTenderStatusController::class,
+                'tender-projects' => TenderUserTenderProjectController::class,
+                'payments' => TenderUserPaymentController::class,
+            ]);
+            Route::get('payments/download-invoice/{id}', [TenderUserPaymentController::class, 'downloadInvoice'])->name('payments.download-invoice');
+            Route::get('/tender-statuses-search', [TenderUserTenderStatusController::class, 'search'])->name('tender-statuses-search');
+            Route::get('/changeTenderStatusStatus', [TenderUserTenderStatusController::class, 'changeStatus'])->name('changeTenderStatusStatus');
+            Route::get('tender-statuses/tender-status-delete/{id}', [TenderUserTenderStatusController::class, 'destroy'])->name('tender-statuses.delete');
+
+            Route::get('tender-projects/followups/{id}', [TenderUserTenderProjectController::class, 'getFollowups'])->name('tender-projects.followups');
+            Route::post('tender-projects/add-followup', [TenderUserTenderProjectController::class, 'addFollowup'])->name('tender-projects.add-followup');
+        });
     });
 });

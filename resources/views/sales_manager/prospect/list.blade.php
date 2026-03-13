@@ -362,7 +362,7 @@
         });
     </script>
     {{-- <script>
-    $('.toggle-class').change(function() {
+    $(document).on('change', '.toggle-class', function() {
         var status = $(this).prop('checked') == true ? 1 : 0;
         var user_id = $(this).data('id');
 

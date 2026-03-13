@@ -22,7 +22,7 @@
                 </li>
                 <li class="{{ Request::is('admin/ip*') ? 'active' : ' ' }}">
                     <a href="{{ route('ips.index') }}"><i class="la la-globe"></i> <span>
-                        Manage IP</span></a>
+                            Manage IP</span></a>
                 </li>
                 <li class="menu-title">
                     <span>User Management</span>
@@ -34,46 +34,77 @@
 
                 <li class="{{ Request::is('admin/goals*') ? 'active' : ' ' }}">
                     <a href="{{ route('goals.index') }}"><i class="la la-bullseye"></i> <span>
-                             Users Goals </span></a>
+                            Users Goals </span></a>
                 </li>
-                <li class="{{ Request::is('admin/sales_managers*') ? 'active' : ' ' }}">
-                    <a href="{{ route('sales_managers.index') }}"><i class="la la-users"></i> <span>
-                            Sales managers</span></a>
+                <li class="submenu">
+                    <a href="#"
+                        class="{{ Request::is('admin/tender-users*') || Request::is('admin/tender-projects*') || Request::is('admin/tender-statuses*') ? 'active' : ' ' }}"><i
+                            class="la la-user-tag"></i> <span> Tender Management </span> <span
+                            class="menu-arrow"></span></a>
+                    <ul style="display: none;">
+                        <li class="{{ Request::is('admin/tender-users*') ? 'active' : ' ' }}">
+                            <a href="{{ route('tender-users.index') }}">Tender Manager</a>
+                        </li>
+                        <li class="{{ Request::is('admin/tender-projects*') ? 'active' : ' ' }}">
+                            <a href="{{ route('admin.tender-projects.index') }}">Tender Project</a>
+                        </li>
+                        <li class="{{ Request::is('admin/tender-statuses*') ? 'active' : ' ' }}">
+                            <a href="{{ route('admin.tender-statuses.index') }}">Tender Status</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="submenu">
+                    <a href="#"
+                        class="{{ Request::is('admin/sales_managers*') || Request::is('admin/account_managers*') || Request::is('admin/sales-excecutive*') ? 'active' : ' ' }}"><i
+                            class="la la-users"></i> <span> Telecaller </span> <span class="menu-arrow"></span></a>
+                    <ul style="display: none;">
+                        <li class="{{ Request::is('admin/sales_managers*') ? 'active' : ' ' }}">
+                            <a href="{{ route('sales_managers.index') }}">Sales managers</a>
+                        </li>
+                        <li class="{{ Request::is('admin/account_managers*') ? 'active' : ' ' }}">
+                            <a href="{{ route('account_managers.index') }}">Account managers</a>
+                        </li>
+                        <li class="{{ Request::is('admin/sales-excecutive*') ? 'active' : ' ' }}">
+                            <a href="{{ route('sales-excecutive.index') }}">Sales Excecutive</a>
+                        </li>
+                    </ul>
                 </li>
 
-                <li class="{{ Request::is('admin/account_managers*') ? 'active' : ' ' }}">
-                    <a href="{{ route('account_managers.index') }}"><i class="la la-user-tie"></i> <span>
-                            Account managers</span></a>
+                <li class="submenu">
+                    <a href="#"
+                        class="{{ Request::is('admin/business-development-managers*') || Request::is('admin/business-development-excecutive*') ? 'active' : ' ' }}"><i
+                            class="la la-briefcase"></i> <span> Business Development </span> <span
+                            class="menu-arrow"></span></a>
+                    <ul style="display: none;">
+                        <li class="{{ Request::is('admin/business-development-managers*') ? 'active' : ' ' }}">
+                            <a href="{{ route('business-development-managers.index') }}">BDM</a>
+                        </li>
+                        <li class="{{ Request::is('admin/business-development-excecutive*') ? 'active' : ' ' }}">
+                            <a href="{{ route('business-development-excecutive.index') }}">BDE</a>
+                        </li>
+                    </ul>
                 </li>
-
-                <li class="{{ Request::is('admin/sales-excecutive*') ? 'active' : ' ' }}">
-                    <a href="{{ route('sales-excecutive.index') }}"><i class="la la-user-friends"></i> <span>
-                        Sales Excecutive</span></a>
-                </li>
-                <li class="{{ Request::is('admin/business-development-managers*') ? 'active' : ' ' }}">
-                    <a href="{{ route('business-development-managers.index') }}"><i class="la la-briefcase"></i> <span>
-                            BDM  </span></a>
-                </li>
-                <li class="{{ Request::is('admin/business-development-excecutive*') ? 'active' : ' ' }}">
-                    <a href="{{ route('business-development-excecutive.index') }}"><i class="la la-user-graduate"></i> <span>
-                            BDE  </span></a>
-                </li>
-                    <li class="menu-title">
+                <li class="menu-title">
                     <span>Project Management</span>
                 </li>
 
-                <li class="{{ Request::is('admin/followups*') ? 'active' : ' ' }}">
+                {{-- <li class="{{ Request::is('admin/followups*') ? 'active' : ' ' }}">
                     <a href="{{ route('admin.followups.index') }}"><i class="la la-arrow-up"></i> <span>Follow-Up</span></a>
-                </li>
+                </li> --}}
 
-                <li class="{{ Request::is('admin/sales-projects*') ? 'active' : ' ' }}">
-                    <a href="{{ route('sales-projects.index') }}"><i class="la la-book-open"></i> <span>
-                             Projects </span></a>
-                </li>
-
-                <li class="{{ Request::is('admin/prospects*') ? 'active' : ' ' }}">
-                    <a href="{{ route('admin.prospects.index') }}"><i class="la la-book-reader"></i> <span>
-                             Prospects </span></a>
+                <li class="submenu">
+                    <a href="#"
+                        class="{{ Request::is('admin/sales-projects*') || Request::is('admin/prospects*') ? 'active' : ' ' }}"><i
+                            class="la la-book-open"></i> <span> Telecaller Pipeline </span> <span
+                            class="menu-arrow"></span></a>
+                    <ul style="display: none;">
+                        <li class="{{ Request::is('admin/sales-projects*') ? 'active' : ' ' }}">
+                            <a href="{{ route('sales-projects.index') }}">Projects</a>
+                        </li>
+                        <li class="{{ Request::is('admin/prospects*') ? 'active' : ' ' }}">
+                            <a href="{{ route('admin.prospects.index') }}">Prospects</a>
+                        </li>
+                    </ul>
                 </li>
 
                 <li class="menu-title">
@@ -81,7 +112,8 @@
                 </li>
 
                 <li class="{{ Request::is('admin/payments*') ? 'active' : ' ' }}">
-                    <a href="{{ route('admin.payments.list') }}"><i class="fa fa-money-bill"></i> <span>Payments</span></a>
+                    <a href="{{ route('admin.payments.list') }}"><i class="fa fa-money-bill"></i>
+                        <span>Payments</span></a>
                 </li>
 
 

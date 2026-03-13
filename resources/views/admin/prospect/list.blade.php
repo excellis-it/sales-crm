@@ -293,8 +293,7 @@
                     </div>
                     <div class="table-responsive" id="show-prospect">
 
-                        <table id="myTable" class="dd table table-striped  table-hover"
-                            style="width:100%">
+                        <table id="myTable" class="dd table table-striped  table-hover" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>Date</th>
@@ -307,8 +306,10 @@
                                     <th>Status</th>
                                     <th>Service Offered</th>
                                     <th>Followup Date
-                                        <input type="text" class="datepicker" id="followup_date_filter" style="width: 0; padding:0; border:none"/>
-                                        <label for="followup_date_filter" class="datepik" style="font-size: 22px"><i class="las la-calendar"></i></label>
+                                        <input type="text" class="datepicker" id="followup_date_filter"
+                                            style="width: 0; padding:0; border:none" />
+                                        <label for="followup_date_filter" class="datepik" style="font-size: 22px"><i
+                                                class="las la-calendar"></i></label>
                                     </th>
                                     <th>Price Quoted</th>
                                     <th>Action</th>
@@ -353,7 +354,7 @@
         });
     </script>
     {{-- <script>
-        $('.toggle-class').change(function() {
+        $(document).on('change', '.toggle-class', function() {
             var status = $(this).prop('checked') == true ? 1 : 0;
             var user_id = $(this).data('id');
 
@@ -395,7 +396,7 @@
 
             function fetch_data(page, status, query, followup_date) {
                 // console.log(status + ' ' + page);
-                var user_id = {{request()->user_id ?? 0}};
+                var user_id = {{ request()->user_id ?? 0 }};
                 $.ajax({
                     url: "{{ route('admin.prospects.filter') }}",
                     data: {
@@ -472,7 +473,7 @@
     </script>
     <script>
         $(document).ready(function() {
-              $('.select2').each(function() {
+            $('.select2').each(function() {
                 $(this).select2({
                     dropdownParent: $(this).parent()
                 });
@@ -544,61 +545,61 @@
         });
     </script>
 
-<script>
-    $(document).on('click', '.milestone-print', function() {
+    <script>
+        $(document).on('click', '.milestone-print', function() {
 
-    var html = '';
-    html += '<div class="row">';
-    html += '<div class="col-md-12 mb-3 pb-3">';
-    html += '<div style="display: flex">';
-    html +=
-        '<input type="text" name="milestone_name[]" class="form-control" value="" placeholder="Milestone name" id="" required data-parsley-trigger="keyup">';
-    html += '</div>';
-    html += '</div>';
-    html += '<div class="col-md-12 mb-3 pb-3">';
-    html += '<div style="display: flex">';
-    html +=
-        '<input type="text" name="milestone_value[]" class="form-control" value="" placeholder="Milestone value" id="" required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number.">';
-    html += '</div>';
-    html += '</div>';
-    // html += '<div class="col-md-12 mb-3 pb-3">';
-    // html += '<div style="display: flex">';
-    // html +=
-    //     '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value="" disabled >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
-    // html += '</div>';
-    // html += '</div>';
-    // html += '<div class="col-md-12 mb-3 pb-3">';
-    // html += '<div style="display: flex">';
-    // html += '<input type="date" name="milestone_payment_date[]" class="form-control picker" value="" id="" required data-parsley-trigger="keyup">';
-    // html += '</div>';
-    // html += '</div>';
-    // html += '<div class="col-md-12 mb-3 pb-3">';
-    // html += '<div style="display: flex">';
-    // html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" placeholder="Milestone payment mode" required data-parsley-trigger="keyup">';
-    // html += '</div>';
-    // html += '</div>';
-    // html += '<div class="col-md-12 mb-3 pb-3">';
-    // html += '<div style="display: flex">';
-    // html +=
-    //     '<input type="date" name="payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
-    // html += '</div>';
-    // html += '</div>';
-    html += '<div class="col-md-12 mb-3 pb-3">';
-    html += '<div style="display: flex">';
-    html +=
-        '<textarea name="milestone_comment[]" class="form-control" placeholder="Milestone Comment" id="" cols="3" rows="2" ></textarea>';
-    html += '</div>';
-    html += '</div>';
-    html += '<div class="col-md-12 mb-3 pb-3">';
-    html +=
-        '<button type="button" class="btn btn-danger remove"><i class="fas fa-minus"></i> Remove</button>';
-    html += '</div>';
-    html += '</div>';
-    $('.add-milestone').append(html);
-});
+            var html = '';
+            html += '<div class="row">';
+            html += '<div class="col-md-12 mb-3 pb-3">';
+            html += '<div style="display: flex">';
+            html +=
+                '<input type="text" name="milestone_name[]" class="form-control" value="" placeholder="Milestone name" id="" required data-parsley-trigger="keyup">';
+            html += '</div>';
+            html += '</div>';
+            html += '<div class="col-md-12 mb-3 pb-3">';
+            html += '<div style="display: flex">';
+            html +=
+                '<input type="text" name="milestone_value[]" class="form-control" value="" placeholder="Milestone value" id="" required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number.">';
+            html += '</div>';
+            html += '</div>';
+            // html += '<div class="col-md-12 mb-3 pb-3">';
+            // html += '<div style="display: flex">';
+            // html +=
+            //     '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value="" disabled >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
+            // html += '</div>';
+            // html += '</div>';
+            // html += '<div class="col-md-12 mb-3 pb-3">';
+            // html += '<div style="display: flex">';
+            // html += '<input type="date" name="milestone_payment_date[]" class="form-control picker" value="" id="" required data-parsley-trigger="keyup">';
+            // html += '</div>';
+            // html += '</div>';
+            // html += '<div class="col-md-12 mb-3 pb-3">';
+            // html += '<div style="display: flex">';
+            // html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" placeholder="Milestone payment mode" required data-parsley-trigger="keyup">';
+            // html += '</div>';
+            // html += '</div>';
+            // html += '<div class="col-md-12 mb-3 pb-3">';
+            // html += '<div style="display: flex">';
+            // html +=
+            //     '<input type="date" name="payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
+            // html += '</div>';
+            // html += '</div>';
+            html += '<div class="col-md-12 mb-3 pb-3">';
+            html += '<div style="display: flex">';
+            html +=
+                '<textarea name="milestone_comment[]" class="form-control" placeholder="Milestone Comment" id="" cols="3" rows="2" ></textarea>';
+            html += '</div>';
+            html += '</div>';
+            html += '<div class="col-md-12 mb-3 pb-3">';
+            html +=
+                '<button type="button" class="btn btn-danger remove"><i class="fas fa-minus"></i> Remove</button>';
+            html += '</div>';
+            html += '</div>';
+            $('.add-milestone').append(html);
+        });
 
-$(document).on('click', '.remove', function() {
-    $(this).closest('.row').remove();
-});
-</script>
+        $(document).on('click', '.remove', function() {
+            $(this).closest('.row').remove();
+        });
+    </script>
 @endpush

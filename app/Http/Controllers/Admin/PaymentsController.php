@@ -14,11 +14,7 @@ class PaymentsController extends Controller
 
     public function adminPayments()
     {
-        $project_milestones = ProjectMilestone::where('payment_status', 'Paid')
-                ->whereHas('project', function ($query) {
-                    // Add a condition to check if the project's user_id matches the authenticated user's ID
-                    $query->orderBy('id', 'DESC');
-                })
+        $project_milestones = ProjectMilestone::where('payment_status', 'Paid')->orderBy('id', 'DESC')
                 ->with('project')
                 ->paginate(10);
         return view('admin.payments.list',compact('project_milestones'));
@@ -28,7 +24,7 @@ class PaymentsController extends Controller
     {
         $milestone_detail = ProjectMilestone::where('id', $id)->with('project','project.salesManager')->first();
         $pdf = PDF::loadView('admin.invoicePdf',array('milestone_detail' => $milestone_detail));
-    
+
         return $pdf->download('admin-invoice.pdf');
     }
 
@@ -38,7 +34,7 @@ class PaymentsController extends Controller
             $query = $request->get('query');
             $query = str_replace(" ", "%", $query);
             $project_milestones = ProjectMilestone::query();
-            
+
             $project_milestones = $project_milestones->where('payment_status', 'Paid')->where(function ($q) use ($query) {
                 $q->orWhere('milestone_name', 'like', '%' . $query . '%')
                     ->orWhere('milestone_value', 'like', '%' . $query . '%')
@@ -50,7 +46,7 @@ class PaymentsController extends Controller
                     });
             })
             ->paginate(10);
-            
+
             return response()->json(['data' => view('admin.payments.table', compact('project_milestones'))->render()]);
         }
     }

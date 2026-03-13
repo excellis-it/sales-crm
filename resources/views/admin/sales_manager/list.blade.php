@@ -81,35 +81,34 @@
                                     <div class="col-md-12 mb-3">
                                         <label for="inputEnterYourName" class="col-form-label"> Name <span
                                                 style="color: red;">*</span></label>
-                                        <input type="text" name="name"  class="form-control"
+                                        <input type="text" name="name" class="form-control"
                                             value="{{ old('name') }}" placeholder="Enter Sales manager Name">
                                         <span class="text-danger name_error"></span>
 
                                     </div>
                                     <div class="col-md-12 mb-3">
                                         <label for="inputEnterYourName" class="col-form-label"> Employee Id </label>
-                                        <input type="text" name="employee_id"  class="form-control"
+                                        <input type="text" name="employee_id" class="form-control"
                                             value="{{ old('employee_id') }}" placeholder="Enter Employee Id">
                                         <span class="text-danger employee_id_error"></span>
                                     </div>
                                     <div class="col-md-12 mb-3">
                                         <label for="inputEnterYourName" class="col-form-label"> Date Of Joining </label>
-                                        <input type="date" name="date_of_joining"
-                                            max="{{ date('Y-m-d') }}" class="form-control picker"
-                                            value="{{ old('date_of_joining') }}">
+                                        <input type="date" name="date_of_joining" max="{{ date('Y-m-d') }}"
+                                            class="form-control picker" value="{{ old('date_of_joining') }}">
                                         <span class="text-danger date_of_joining_error"></span>
                                     </div>
                                     <div class="col-md-12 mb-3">
                                         <label for="inputEnterYourName" class="col-form-label"> Email <span
                                                 style="color: red;">*</span></label>
-                                        <input type="text" name="email"  class="form-control"
+                                        <input type="text" name="email" class="form-control"
                                             value="{{ old('email') }}" placeholder="Enter Sales manager Email">
                                         <span class="text-danger email_error"></span>
                                     </div>
                                     <div class="col-md-12 mb-3">
                                         <label for="inputEnterYourName" class="col-form-label"> Phone <span
                                                 style="color: red;">*</span></label>
-                                        <input type="text" name="phone"  class="form-control"
+                                        <input type="text" name="phone" class="form-control"
                                             value="{{ old('phone') }}" placeholder="Enter Phone Number">
                                         <span class="text-danger phone_error"></span>
                                     </div>
@@ -118,21 +117,21 @@
                                     <div class="col-md-12 mb-3">
                                         <label for="inputEnterYourName" class="col-form-label"> Password
                                             <span style="color: red;">*</span></label>
-                                        <input type="password" name="password"  class="form-control"
+                                        <input type="password" name="password" class="form-control"
                                             value="{{ old('password') }}" placeholder="Enter pasword">
                                         <span class="text-danger password_error"></span>
                                     </div>
                                     <div class="col-md-12 mb-3">
                                         <label for="inputEnterYourName" class="col-form-label"> Confirm
                                             Password <span style="color: red;">*</span></label>
-                                        <input type="password" name="confirm_password"
-                                            class="form-control" value="{{ old('confirm_password') }}">
+                                        <input type="password" name="confirm_password" class="form-control"
+                                            value="{{ old('confirm_password') }}">
                                         <span class="text-danger confirm_password_error"></span>
                                     </div>
                                     <div class="col-md-12 mb-3">
                                         <label for="inputEnterYourName" class="col-form-label"> Status
                                             <span style="color: red;">*</span></label>
-                                        <select name="status"  class="form-control">
+                                        <select name="status" class="form-control">
                                             <option value="">Select a Status</option>
                                             <option value="1">Active</option>
                                             <option value="0">Inactive</option>
@@ -142,7 +141,7 @@
                                     <div class="col-md-12 mb-3">
                                         <label for="inputEnterYourName" class="col-form-label"> Profile
                                             Picture </label>
-                                        <input type="file" name="profile_picture"  class="form-control"
+                                        <input type="file" name="profile_picture" class="form-control"
                                             value="{{ old('profile_picture') }}">
                                         <span class="text-danger profile_picture_error"></span>
                                     </div>
@@ -168,42 +167,43 @@
                             <h4 id="offcanvasEditLabel">Edit Sales managers Details</h4>
                         </div>
                         <div class="offcanvas-body">
-                            <form action="" method="POST" enctype="multipart/form-data" id="sales-manager-edit-form">
+                            <form action="" method="POST" enctype="multipart/form-data"
+                                id="sales-manager-edit-form">
                                 @method('PUT')
                                 @csrf
                                 <div class="row">
                                     <div class="col-md-12 mb-3">
                                         <label for="inputEnterYourName" class="col-form-label"> Name <span
                                                 style="color: red;">*</span></label>
-                                        <input type="text" name="name"  class="form-control" id="name"
+                                        <input type="text" name="name" class="form-control" id="name"
                                             value="{{ old('name') }}" placeholder="Enter Sales manager Name">
                                         <span class="text-danger name_msg_error"></span>
 
                                     </div>
                                     <div class="col-md-12 mb-3">
                                         <label for="inputEnterYourName" class="col-form-label"> Employee Id </label>
-                                        <input type="text" name="employee_id"  class="form-control" id="employee_id"
+                                        <input type="text" name="employee_id" class="form-control" id="employee_id"
                                             value="{{ old('employee_id') }}" placeholder="Enter Employee Id">
                                         <span class="text-danger employee_id_msg_error"></span>
                                     </div>
                                     <div class="col-md-12 mb-3">
                                         <label for="inputEnterYourName" class="col-form-label"> Date Of Joining </label>
-                                        <input type="date" name="date_of_joining"
-                                            max="{{ date('Y-m-d') }}" class="form-control picker" id="date_of_joining"
+                                        <input type="date" name="date_of_joining" max="{{ date('Y-m-d') }}"
+                                            class="form-control picker" id="date_of_joining"
                                             value="{{ old('date_of_joining') }}">
                                         <span class="text-danger date_of_joining_msg_error"></span>
                                     </div>
                                     <div class="col-md-12 mb-3">
                                         <label for="inputEnterYourName" class="col-form-label"> Email <span
                                                 style="color: red;">*</span></label>
-                                        <input type="text" name="email"  class="form-control" id="email"
+                                        <input type="text" name="email" class="form-control" id="email"
                                             value="{{ old('email') }}" placeholder="Enter Sales manager Email">
                                         <span class="text-danger email_msg_error"></span>
                                     </div>
                                     <div class="col-md-12 mb-3">
                                         <label for="inputEnterYourName" class="col-form-label"> Phone <span
                                                 style="color: red;">*</span></label>
-                                        <input type="text" name="phone"  class="form-control" id="phone"
+                                        <input type="text" name="phone" class="form-control" id="phone"
                                             value="{{ old('phone') }}" placeholder="Enter Phone Number">
                                         <span class="text-danger phone_msg_error"></span>
                                     </div>
@@ -212,7 +212,7 @@
                                     <div class="col-md-12 mb-3">
                                         <label for="inputEnterYourName" class="col-form-label"> Password
                                             <span style="color: red;">*</span></label>
-                                        <input type="password" name="password"  class="form-control" id="password"
+                                        <input type="password" name="password" class="form-control" id="password"
                                             value="{{ old('password') }}" placeholder="Enter pasword">
                                         <span class="text-danger password_msg_error"></span>
                                     </div>
@@ -226,7 +226,7 @@
                                     <div class="col-md-12 mb-3">
                                         <label for="inputEnterYourName" class="col-form-label"> Status
                                             <span style="color: red;">*</span></label>
-                                        <select name="status"  class="form-control" id="status">
+                                        <select name="status" class="form-control" id="status">
                                             <option value="">Select a Status</option>
                                             <option value="1">Active</option>
                                             <option value="0">Inactive</option>
@@ -236,7 +236,7 @@
                                     <div class="col-md-12 mb-3">
                                         <label for="inputEnterYourName" class="col-form-label"> Profile
                                             Picture </label>
-                                        <input type="file" name="profile_picture"  class="form-control"
+                                        <input type="file" name="profile_picture" class="form-control"
                                             value="{{ old('profile_picture') }}">
                                         <span class="text-danger profile_picture_msg_error"></span>
                                     </div>
@@ -310,7 +310,7 @@
             });
         </script>
         <script>
-            $('.toggle-class').change(function() {
+            $(document).on('change', '.toggle-class', function() {
                 var status = $(this).prop('checked') == true ? 1 : 0;
                 var user_id = $(this).data('id');
 
@@ -323,7 +323,7 @@
                         'user_id': user_id
                     },
                     success: function(resp) {
-                        console.log(resp.success)
+                        toastr.success(resp.success);
                     }
                 });
             });
@@ -370,71 +370,69 @@
                 });
             });
         </script>
-          @if (count($sales_managers) > 0)
-        <script>
-            $(document).ready(function() {
-                $(document).on('click', '.edit-route', function() {
-                    var route = $(this).data('route');
-                    $('#loading').addClass('loading');
-                    $('#loading-content').addClass('loading-content');
-                    $.ajax({
-                        url: route,
-                        type: 'GET',
-                        success: function(response) {
-                            var sales_manager = response.sales_manager;
+        @if (count($sales_managers) > 0)
+            <script>
+                $(document).ready(function() {
+                    $(document).on('click', '.edit-route', function() {
+                        var route = $(this).data('route');
+                        $('#loading').addClass('loading');
+                        $('#loading-content').addClass('loading-content');
+                        $.ajax({
+                            url: route,
+                            type: 'GET',
+                            success: function(response) {
+                                var sales_manager = response.sales_manager;
 
-                            $('#name').val(sales_manager.name);
-                            $('#employee_id').val(sales_manager.employee_id);
-                            $('#date_of_joining').val(sales_manager.date_of_joining);
-                            $('#email').val(sales_manager.email);
-                            $('#phone').val(sales_manager.phone);
-                            $('#status').val(sales_manager.status);
-                            var updateRoute =
-                                "{{ route('sales_managers.update', ['sales_manager' => ':id']) }}";
-                            updateRoute = updateRoute.replace(':id', sales_manager.id);
-                            $('#sales-manager-edit-form').attr('action', updateRoute);
-                            $('#loading').removeClass('loading');
-                            $('#loading-content').removeClass('loading-content');
-                            $('#offcanvasEdit').offcanvas('show');
-                        },
-                        error: function(xhr) {
-                            // Handle errors
-                            $('#loading').removeClass('loading');
-                            $('#loading-content').removeClass('loading-content');
-                            console.log(xhr);
-                        }
+                                $('#name').val(sales_manager.name);
+                                $('#employee_id').val(sales_manager.employee_id);
+                                $('#date_of_joining').val(sales_manager.date_of_joining);
+                                $('#email').val(sales_manager.email);
+                                $('#phone').val(sales_manager.phone);
+                                $('#status').val(sales_manager.status);
+                                var updateRoute =
+                                    "{{ route('sales_managers.update', ['sales_manager' => ':id']) }}";
+                                updateRoute = updateRoute.replace(':id', sales_manager.id);
+                                $('#sales-manager-edit-form').attr('action', updateRoute);
+                                $('#loading').removeClass('loading');
+                                $('#loading-content').removeClass('loading-content');
+                                $('#offcanvasEdit').offcanvas('show');
+                            },
+                            error: function(xhr) {
+                                // Handle errors
+                                $('#loading').removeClass('loading');
+                                $('#loading-content').removeClass('loading-content');
+                                console.log(xhr);
+                            }
+                        });
+                    });
+
+                    // Handle the form submission
+                    $('#sales-manager-edit-form').submit(function(e) {
+                        e.preventDefault();
+
+                        var formData = $(this).serialize();
+
+                        $.ajax({
+                            url: $(this).attr('action'),
+                            type: $(this).attr('method'),
+                            data: formData,
+                            success: function(response) {
+                                window.location.reload();
+                                toastr.success('Sales manager details updated successfully');
+                            },
+                            error: function(xhr) {
+                                // Handle errors (e.g., display validation errors)
+                                var errors = xhr.responseJSON.errors;
+                                $.each(errors, function(key, value) {
+                                    // Assuming you have a span with class "text-danger" next to each input
+                                    $('.' + key + '_msg_error').html(value[0]);
+                                });
+                                $('#loading').removeClass('loading');
+                                $('#loading-content').removeClass('loading-content');
+                            }
+                        });
                     });
                 });
-
-                // Handle the form submission
-                $('#sales-manager-edit-form').submit(function(e) {
-                    e.preventDefault();
-
-                    var formData = $(this).serialize();
-
-                    $.ajax({
-                        url: $(this).attr('action'),
-                        type: $(this).attr('method'),
-                        data: formData,
-                        success: function(response) {
-                            window.location.reload();
-                            toastr.success('Sales manager details updated successfully');
-                        },
-                        error: function(xhr) {
-                            // Handle errors (e.g., display validation errors)
-                            var errors = xhr.responseJSON.errors;
-                            $.each(errors, function(key, value) {
-                                // Assuming you have a span with class "text-danger" next to each input
-                                $('.' + key + '_msg_error').html(value[0]);
-                            });
-                            $('#loading').removeClass('loading');
-                            $('#loading-content').removeClass('loading-content');
-                        }
-                    });
-                });
-            });
-
-
-        </script>
-          @endif
+            </script>
+        @endif
     @endpush

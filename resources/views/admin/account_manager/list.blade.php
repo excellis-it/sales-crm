@@ -51,7 +51,7 @@
                             </div>
                             <div class="col-md-6 text-end">
                                 <a href="javascript:void(0);" class="btn px-5 submit-btn" data-bs-toggle="offcanvas"
-                                data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"><i
+                                    data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"><i
                                         class="fas fa-plus"></i> Add New
                                     account manager</a>
                             </div>
@@ -319,7 +319,7 @@
         });
     </script>
     <script>
-        $('.toggle-class').change(function() {
+        $(document).on('change', '.toggle-class', function() {
             var status = $(this).prop('checked') == true ? 1 : 0;
             var user_id = $(this).data('id');
 
@@ -332,7 +332,7 @@
                     'user_id': user_id
                 },
                 success: function(resp) {
-                    console.log(resp.success)
+                     toastr.success(resp.success);
                 }
             });
         });
@@ -373,71 +373,69 @@
             });
         });
     </script>
-      @if (count($account_managers) > 0)
-    <script>
-        $(document).ready(function() {
-            $(document).on('click', '.edit-route', function() {
-                var route = $(this).data('route');
-                $('#loading').addClass('loading');
-                $('#loading-content').addClass('loading-content');
-                $.ajax({
-                    url: route,
-                    type: 'GET',
-                    success: function(response) {
-                        var account_manager = response.account_manager;
+    @if (count($account_managers) > 0)
+        <script>
+            $(document).ready(function() {
+                $(document).on('click', '.edit-route', function() {
+                    var route = $(this).data('route');
+                    $('#loading').addClass('loading');
+                    $('#loading-content').addClass('loading-content');
+                    $.ajax({
+                        url: route,
+                        type: 'GET',
+                        success: function(response) {
+                            var account_manager = response.account_manager;
 
-                        $('#name').val(account_manager.name);
-                        $('#employee_id').val(account_manager.employee_id);
-                        $('#date_of_joining').val(account_manager.date_of_joining);
-                        $('#email').val(account_manager.email);
-                        $('#phone').val(account_manager.phone);
-                        $('#status').val(account_manager.status);
-                        var updateRoute =
-                            "{{ route('account_managers.update', ['account_manager' => ':id']) }}";
-                        updateRoute = updateRoute.replace(':id', account_manager.id);
-                        $('#account-manager-edit-form').attr('action', updateRoute);
-                        $('#loading').removeClass('loading');
-                        $('#loading-content').removeClass('loading-content');
-                        $('#offcanvasEdit').offcanvas('show');
-                    },
-                    error: function(xhr) {
-                        // Handle errors
-                        $('#loading').removeClass('loading');
-                        $('#loading-content').removeClass('loading-content');
-                        console.log(xhr);
-                    }
+                            $('#name').val(account_manager.name);
+                            $('#employee_id').val(account_manager.employee_id);
+                            $('#date_of_joining').val(account_manager.date_of_joining);
+                            $('#email').val(account_manager.email);
+                            $('#phone').val(account_manager.phone);
+                            $('#status').val(account_manager.status);
+                            var updateRoute =
+                                "{{ route('account_managers.update', ['account_manager' => ':id']) }}";
+                            updateRoute = updateRoute.replace(':id', account_manager.id);
+                            $('#account-manager-edit-form').attr('action', updateRoute);
+                            $('#loading').removeClass('loading');
+                            $('#loading-content').removeClass('loading-content');
+                            $('#offcanvasEdit').offcanvas('show');
+                        },
+                        error: function(xhr) {
+                            // Handle errors
+                            $('#loading').removeClass('loading');
+                            $('#loading-content').removeClass('loading-content');
+                            console.log(xhr);
+                        }
+                    });
+                });
+
+                // Handle the form submission
+                $('#account-manager-edit-form').submit(function(e) {
+                    e.preventDefault();
+
+                    var formData = $(this).serialize();
+
+                    $.ajax({
+                        url: $(this).attr('action'),
+                        type: $(this).attr('method'),
+                        data: formData,
+                        success: function(response) {
+                            window.location.reload();
+                            toastr.success('Account Manager details updated successfully');
+                        },
+                        error: function(xhr) {
+                            // Handle errors (e.g., display validation errors)
+                            var errors = xhr.responseJSON.errors;
+                            $.each(errors, function(key, value) {
+                                // Assuming you have a span with class "text-danger" next to each input
+                                $('.' + key + '_msg_error').html(value[0]);
+                            });
+                            $('#loading').removeClass('loading');
+                            $('#loading-content').removeClass('loading-content');
+                        }
+                    });
                 });
             });
-
-            // Handle the form submission
-            $('#account-manager-edit-form').submit(function(e) {
-                e.preventDefault();
-
-                var formData = $(this).serialize();
-
-                $.ajax({
-                    url: $(this).attr('action'),
-                    type: $(this).attr('method'),
-                    data: formData,
-                    success: function(response) {
-                        window.location.reload();
-                        toastr.success('Account Manager details updated successfully');
-                    },
-                    error: function(xhr) {
-                        // Handle errors (e.g., display validation errors)
-                        var errors = xhr.responseJSON.errors;
-                        $.each(errors, function(key, value) {
-                            // Assuming you have a span with class "text-danger" next to each input
-                            $('.' + key + '_msg_error').html(value[0]);
-                        });
-                        $('#loading').removeClass('loading');
-                        $('#loading-content').removeClass('loading-content');
-                    }
-                });
-            });
-        });
-
-
-    </script>
-      @endif
+        </script>
+    @endif
 @endpush

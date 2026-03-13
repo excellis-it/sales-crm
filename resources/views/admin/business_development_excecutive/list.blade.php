@@ -339,7 +339,7 @@
         });
     </script>
     <script>
-        $('.toggle-class').change(function() {
+        $(document).on('change', '.toggle-class', function() {
             var status = $(this).prop('checked') == true ? 1 : 0;
             var user_id = $(this).data('id');
 
@@ -352,7 +352,7 @@
                     'user_id': user_id
                 },
                 success: function(resp) {
-                    console.log(resp.success)
+                     toastr.success(resp.success);
                 }
             });
         });

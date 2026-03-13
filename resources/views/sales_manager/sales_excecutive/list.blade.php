@@ -23,7 +23,8 @@
                     <div class="col">
                         <h3 class="page-title">Sales Executive Information</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('sales-manager.sales-excecutive.index') }}">Sales Executive</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('sales-manager.sales-excecutive.index') }}">Sales
+                                    Executive</a></li>
                             <li class="breadcrumb-item active">List</li>
                         </ul>
                     </div>
@@ -39,8 +40,9 @@
                                 <h4 class="mb-0">Sales Executive List</h4>
                             </div>
                             <div class="col-md-6 text-end">
-                                <a href="javascript:void(0);" data-bs-toggle="offcanvas"
-                                data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" class="btn px-5 submit-btn"><i class="fa fa-plus"></i> Add a
+                                <a href="javascript:void(0);" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
+                                    aria-controls="offcanvasRight" class="btn px-5 submit-btn"><i class="fa fa-plus"></i>
+                                    Add a
                                     sales excecutive</a>
                             </div>
                         </div>
@@ -135,7 +137,7 @@
                                                 value="{{ old('confirm_password') }}">
                                             <span class="text-danger confirm_password_error"></span>
                                         </div>
-                                        
+
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label"> Profile
                                                 Picture </label>
@@ -233,7 +235,7 @@
                                                 class="form-control" value="{{ old('confirm_password') }}">
                                             <span class="text-danger confirm_password_msg_error"></span>
                                         </div>
-                                        
+
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label"> Profile
                                                 Picture </label>
@@ -289,144 +291,81 @@
         });
     </script>
     <script>
-        $('.toggle-class').change(function() {
+        $(document).on('change', '.toggle-class', function() {
             var status = $(this).prop('checked') == true ? 1 : 0;
             var user_id = $(this).data('id');
 
             $.ajax({
                 type: "GET",
                 dataType: "json",
-                url: '{{ route("sales-manager.sales-excecutive.change-status") }}',
+                url: '{{ route('sales-manager.sales-excecutive.change-status') }}',
                 data: {
                     'status': status,
                     'user_id': user_id
                 },
                 success: function(resp) {
-                    console.log(resp.success)
+                    toastr.success(resp.success);
                 }
             });
         });
     </script>
 
-<script>
-    $(document).ready(function() {
-        $('#search-button').on('click', function() {
-            var text = $('#search').val();
-            if (text == '') {
-                alert('Please type something for search!');
-                return false;
-            }
-            url = "{{ route('sales-manager.sales-excecutive.search') }}"
-            $('#loading').addClass('loading');
-            $('#loading-content').addClass('loading-content');
-            $.ajax({
-                url: url,
-                type: 'GET',
-                data: {
-                    text: text,
-                },
-                success: function(response) {
-
-                    $('#sale_executive_data').html(response.view);
-                    $('#search').val('');
-                    $('#loading').removeClass('loading');
-                    $('#loading-content').removeClass('loading-content');
-                }
-            });
-        });
-    });
-</script>
-<script>
-    $(document).ready(function() {
-        $('#sales-excecutive-form-create').submit(function(e) {
-            e.preventDefault();
-
-            var formData = $(this).serialize();
-            $('#loading').addClass('loading');
-            $('#loading-content').addClass('loading-content');
-            $.ajax({
-                url: $(this).attr('action'),
-                type: $(this).attr('method'),
-                data: formData,
-                success: function(response) {
-                    //windows load with toastr message
-                    $('#loading').removeClass('loading');
-                    $('#loading-content').removeClass('loading-content');
-                    window.location.reload();
-                    toastr.success('Sales Executive details added successfully');
-                },
-                error: function(xhr) {
-                    // Handle errors (e.g., display validation errors)
-                    //clear any old errors
-                    $('.text-danger').html('');
-                    // Handle errors (e.g., display validation errors)
-                    var errors = xhr.responseJSON.errors;
-                    $.each(errors, function(key, value) {
-                        // Assuming you have a span with class "text-danger" next to each input
-                        $('.' + key + '_error').html(value[0]);
-                    });
-                    $('#loading').removeClass('loading');
-                    $('#loading-content').removeClass('loading-content');
-                }
-            });
-        });
-    });
-</script>
-@if (count($sales_excecutives) > 0)
     <script>
         $(document).ready(function() {
-            $(document).on('click', '.edit-route', function() {
-                var route = $(this).data('route');
+            $('#search-button').on('click', function() {
+                var text = $('#search').val();
+                if (text == '') {
+                    alert('Please type something for search!');
+                    return false;
+                }
+                url = "{{ route('sales-manager.sales-excecutive.search') }}"
                 $('#loading').addClass('loading');
                 $('#loading-content').addClass('loading-content');
                 $.ajax({
-                    url: route,
+                    url: url,
                     type: 'GET',
-                    success: function(response) {
-                        var sales_excecutive = response.sales_excecutive;
-                        $('#name').val(sales_excecutive.name);
-                        $('#employee_id').val(sales_excecutive.employee_id);
-                        $('#date_of_joining').val(sales_excecutive.date_of_joining);
-                        $('#email').val(sales_excecutive.email);
-                        $('#phone').val(sales_excecutive.phone);
-                        $('#status').val(sales_excecutive.status);
-                        var updateRoute =
-                            "{{ route('sales-excecutive.update', ['sales_excecutive' => ':id']) }}";
-                        updateRoute = updateRoute.replace(':id', sales_excecutive.id);
-                        $('#sales-excecutive-edit-form').attr('action', updateRoute);
-                        $('#loading').removeClass('loading');
-                        $('#loading-content').removeClass('loading-content');
-                        $('#offcanvasEdit').offcanvas('show');
+                    data: {
+                        text: text,
                     },
-                    error: function(xhr) {
-                        // Handle errors
+                    success: function(response) {
+
+                        $('#sale_executive_data').html(response.view);
+                        $('#search').val('');
                         $('#loading').removeClass('loading');
                         $('#loading-content').removeClass('loading-content');
-                        console.log(xhr);
                     }
                 });
             });
-
-            // Handle the form submission
-            $('#sales-excecutive-edit-form').submit(function(e) {
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#sales-excecutive-form-create').submit(function(e) {
                 e.preventDefault();
 
                 var formData = $(this).serialize();
-
+                $('#loading').addClass('loading');
+                $('#loading-content').addClass('loading-content');
                 $.ajax({
                     url: $(this).attr('action'),
                     type: $(this).attr('method'),
                     data: formData,
                     success: function(response) {
+                        //windows load with toastr message
+                        $('#loading').removeClass('loading');
+                        $('#loading-content').removeClass('loading-content');
                         window.location.reload();
-                        toastr.success('Sales Executive details updated successfully');
+                        toastr.success('Sales Executive details added successfully');
                     },
                     error: function(xhr) {
+                        // Handle errors (e.g., display validation errors)
+                        //clear any old errors
+                        $('.text-danger').html('');
                         // Handle errors (e.g., display validation errors)
                         var errors = xhr.responseJSON.errors;
                         $.each(errors, function(key, value) {
                             // Assuming you have a span with class "text-danger" next to each input
-                            $('.' + key + '_msg_error').html(value[0]);
+                            $('.' + key + '_error').html(value[0]);
                         });
                         $('#loading').removeClass('loading');
                         $('#loading-content').removeClass('loading-content');
@@ -435,5 +374,68 @@
             });
         });
     </script>
-@endif
+    @if (count($sales_excecutives) > 0)
+        <script>
+            $(document).ready(function() {
+                $(document).on('click', '.edit-route', function() {
+                    var route = $(this).data('route');
+                    $('#loading').addClass('loading');
+                    $('#loading-content').addClass('loading-content');
+                    $.ajax({
+                        url: route,
+                        type: 'GET',
+                        success: function(response) {
+                            var sales_excecutive = response.sales_excecutive;
+                            $('#name').val(sales_excecutive.name);
+                            $('#employee_id').val(sales_excecutive.employee_id);
+                            $('#date_of_joining').val(sales_excecutive.date_of_joining);
+                            $('#email').val(sales_excecutive.email);
+                            $('#phone').val(sales_excecutive.phone);
+                            $('#status').val(sales_excecutive.status);
+                            var updateRoute =
+                                "{{ route('sales-excecutive.update', ['sales_excecutive' => ':id']) }}";
+                            updateRoute = updateRoute.replace(':id', sales_excecutive.id);
+                            $('#sales-excecutive-edit-form').attr('action', updateRoute);
+                            $('#loading').removeClass('loading');
+                            $('#loading-content').removeClass('loading-content');
+                            $('#offcanvasEdit').offcanvas('show');
+                        },
+                        error: function(xhr) {
+                            // Handle errors
+                            $('#loading').removeClass('loading');
+                            $('#loading-content').removeClass('loading-content');
+                            console.log(xhr);
+                        }
+                    });
+                });
+
+                // Handle the form submission
+                $('#sales-excecutive-edit-form').submit(function(e) {
+                    e.preventDefault();
+
+                    var formData = $(this).serialize();
+
+                    $.ajax({
+                        url: $(this).attr('action'),
+                        type: $(this).attr('method'),
+                        data: formData,
+                        success: function(response) {
+                            window.location.reload();
+                            toastr.success('Sales Executive details updated successfully');
+                        },
+                        error: function(xhr) {
+                            // Handle errors (e.g., display validation errors)
+                            var errors = xhr.responseJSON.errors;
+                            $.each(errors, function(key, value) {
+                                // Assuming you have a span with class "text-danger" next to each input
+                                $('.' + key + '_msg_error').html(value[0]);
+                            });
+                            $('#loading').removeClass('loading');
+                            $('#loading-content').removeClass('loading-content');
+                        }
+                    });
+                });
+            });
+        </script>
+    @endif
 @endpush

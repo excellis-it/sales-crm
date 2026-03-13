@@ -79,11 +79,12 @@
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label"> Report To <span
                                                     style="color: red;">*</span></label>
-                                            <select name="sales_manager_id"  class="form-control select2">
+                                            <select name="sales_manager_id" class="form-control select2">
                                                 <option value="">Select report to</option>
                                                 @foreach ($sales_managers as $sales_manager)
                                                     <option value="{{ $sales_manager->id }}"> {{ $sales_manager->name }}
-                                                        ({{ $sales_manager->email }})</option>
+                                                        ({{ $sales_manager->email }})
+                                                    </option>
                                                 @endforeach
                                             </select>
                                             <span class="text-danger sales_manager_id_error"></span>
@@ -185,11 +186,13 @@
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label"> Report To <span
                                                     style="color: red;">*</span></label>
-                                            <select name="sales_manager_id"  class="form-control select2" id="sales_manager_id">
+                                            <select name="sales_manager_id" class="form-control select2"
+                                                id="sales_manager_id">
                                                 <option value="">Select report to</option>
                                                 @foreach ($sales_managers as $sales_manager)
                                                     <option value="{{ $sales_manager->id }}"> {{ $sales_manager->name }}
-                                                        ({{ $sales_manager->email }})</option>
+                                                        ({{ $sales_manager->email }})
+                                                    </option>
                                                 @endforeach
                                             </select>
                                             <span class="text-danger sales_manager_id_msg_error"></span>
@@ -335,7 +338,7 @@
         });
     </script>
     <script>
-        $('.toggle-class').change(function() {
+        $(document).on('change', '.toggle-class', function() {
             var status = $(this).prop('checked') == true ? 1 : 0;
             var user_id = $(this).data('id');
 
@@ -348,7 +351,7 @@
                     'user_id': user_id
                 },
                 success: function(resp) {
-                    console.log(resp.success)
+                     toastr.success(resp.success);
                 }
             });
         });
