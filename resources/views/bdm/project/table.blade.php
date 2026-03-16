@@ -41,10 +41,9 @@
             <td class="edit-route" data-route="{{ route('bdm.projects.edit', $project->id) }}">
                 {{ (int) $project->project_value - (int) $project->project_upfront }}
             </td>
-            {{-- <td>
-                <a title="Delete Project" class="btn btn-sm btn-danger" data-route="{{ route('bdm.projects.delete', $project->id) }}"
-                    href="javascipt:void(0);" id="delete"><i class="fas fa-trash"></i></a>
-            </td> --}}
+            <td>
+                <a title="View Follow-ups" class="view-followups btn btn-sm " data-id="{{ $project->id }}" href="javascript:void(0);"><i class="fas fa-comments" style="color: #ff9b44;"></i></a>
+            </td>
         </tr>
     @endforeach
 @endif

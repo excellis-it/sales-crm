@@ -46,6 +46,7 @@
                 <a title="View Project" data-route=""
                     href="{{ route('bde-projects.show', $project->id) }}"><i
                         class="fas fa-eye"></i></a>
+                <a title="View Follow-ups" class="view-followups" data-id="{{ $project->id }}" href="javascript:void(0);"><i class="fas fa-comments" style="color: #ff9b44;  margin-left: 10px;"></i></a>
             </td>
     </tr>
     @endforeach

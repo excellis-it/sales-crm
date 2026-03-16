@@ -142,9 +142,11 @@
         </div>
 
     </div>
+
 @endsection
 
 @push('scripts')
+ @include('bdm.includes.followup_modal')
     <script>
     $(document).ready(function() {
         function clear_icon() {
@@ -161,7 +163,7 @@
         }
 
         function fetch_data(page, sort_type, sort_by, query) {
-            
+
             $.ajax({
                 url: "{{ route('bde.projects.filter') }}",
                 data: {

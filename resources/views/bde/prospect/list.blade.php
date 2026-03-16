@@ -55,9 +55,9 @@
                                 {{-- <a href="{{ route('bde-prospects.create') }}" class="btn px-5 submit-btn"><i
                                         class="fa fa-plus"></i> Add a
                                     Prospect</a> --}}
-                                    <a href="javascript:void(0);" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
-                                    aria-controls="offcanvasRight" class="btn px-5 submit-btn"><i
-                                        class="fa fa-plus"></i> Add a Prospect</a>
+                                <a href="javascript:void(0);" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
+                                    aria-controls="offcanvasRight" class="btn px-5 submit-btn"><i class="fa fa-plus"></i>
+                                    Add a Prospect</a>
                             </div>
                         </div>
                     </div>
@@ -104,8 +104,8 @@
                             <div class="row g-1 justify-content-end">
                                 <div class="col-md-8 pr-0">
                                     <div class="search-field prod-search">
-                                        <input type="text" name="search" id="search" placeholder="search..."
-                                            required class="form-control rounded_search">
+                                        <input type="text" name="search" id="search" placeholder="search..." required
+                                            class="form-control rounded_search">
                                         <a href="javascript:void(0)" class="prod-search-icon submit_search"><i
                                                 class="fa fa-search"></i></a>
                                     </div>
@@ -295,10 +295,10 @@
                                     <th>Status</th>
                                     <th>Service Offered</th>
                                     <th>Followup Date <input type="text" class="datepicker" id="followup_date_filter"
-                                        style="width: 0; padding:0; border:none" />
-                                    <label for="followup_date_filter" class="datepik" style="font-size: 22px"><i
-                                            class="las la-calendar"></i></label>
-                                </th>
+                                            style="width: 0; padding:0; border:none" />
+                                        <label for="followup_date_filter" class="datepik" style="font-size: 22px"><i
+                                                class="las la-calendar"></i></label>
+                                    </th>
                                     <th>Price Quoted</th>
                                     <th>Action</th>
                                 </tr>
@@ -315,49 +315,51 @@
         </div>
 
     </div>
+
 @endsection
 
 @push('scripts')
-<script>
-    $(document).on('click', '#delete', function(e) {
-        swal({
-                title: "Are you sure?",
-                text: "To delete this prospect.",
-                type: "warning",
-                confirmButtonText: "Yes",
-                showCancelButton: true
-            })
-            .then((result) => {
-                if (result.value) {
-                    window.location = $(this).data('route');
-                } else if (result.dismiss === 'cancel') {
-                    swal(
-                        'Cancelled',
-                        'Your stay here :)',
-                        'error'
-                    )
-                }
-            })
-    });
-</script>
-
-<script>
-    $(document).on('click', '.view-details-btn', function(e) {
-        e.preventDefault();
-        var route = $(this).data('route');
-        $.ajax({
-            type: "GET",
-            dataType: "json",
-            url: route,
-            success: function(resp) {
-                $('#show-details').html(resp.view);
-            }
+    @include('bdm.includes.followup_modal')
+    <script>
+        $(document).on('click', '#delete', function(e) {
+            swal({
+                    title: "Are you sure?",
+                    text: "To delete this prospect.",
+                    type: "warning",
+                    confirmButtonText: "Yes",
+                    showCancelButton: true
+                })
+                .then((result) => {
+                    if (result.value) {
+                        window.location = $(this).data('route');
+                    } else if (result.dismiss === 'cancel') {
+                        swal(
+                            'Cancelled',
+                            'Your stay here :)',
+                            'error'
+                        )
+                    }
+                })
         });
-    });
-</script>
+    </script>
 
-<script>
-      $(document).ready(function() {
+    <script>
+        $(document).on('click', '.view-details-btn', function(e) {
+            e.preventDefault();
+            var route = $(this).data('route');
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: route,
+                success: function(resp) {
+                    $('#show-details').html(resp.view);
+                }
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
             $('.datepicker').datepicker({
                 dateFormat: 'dd-mm-yy',
 
@@ -423,162 +425,159 @@
                 fetch_data(1, status, query, followup_date);
             });
         });
-    // $(document).ready(function() {
-    //     function fetch_data(page, status, query) {
-    //         console.log(status + ' ' + page);
-    //         $.ajax({
-    //             url: "{{ route('bde.prospects.filter') }}",
-    //             data: {
-    //                 status: status,
-    //                 page: page,
-    //                 query: query
-    //             },
-    //             success: function(resp) {
-    //                 $('tbody').html(resp.data);
-    //             }
-    //         });
-    //     }
+        // $(document).ready(function() {
+        //     function fetch_data(page, status, query) {
+        //         console.log(status + ' ' + page);
+        //         $.ajax({
+        //             url: "{{ route('bde.prospects.filter') }}",
+        //             data: {
+        //                 status: status,
+        //                 page: page,
+        //                 query: query
+        //             },
+        //             success: function(resp) {
+        //                 $('tbody').html(resp.data);
+        //             }
+        //         });
+        //     }
 
-    //     $(document).on('click', '.desin-filter', function(e) {
-    //         e.preventDefault();
-    //         var status = $(this).data('value');
-    //         //remove active class from all
-    //         $('.desin-filter').removeClass('active-filter');
-    //         //add active class to clicked
-    //         $(this).addClass('active-filter');
-    //         var query = $('#search').val();
-    //         fetch_data(1, status, query);
-    //         });
+        //     $(document).on('click', '.desin-filter', function(e) {
+        //         e.preventDefault();
+        //         var status = $(this).data('value');
+        //         //remove active class from all
+        //         $('.desin-filter').removeClass('active-filter');
+        //         //add active class to clicked
+        //         $(this).addClass('active-filter');
+        //         var query = $('#search').val();
+        //         fetch_data(1, status, query);
+        //         });
 
-    //     $(document).on('click', '.pagination a', function(e) {
-    //         e.preventDefault();
-    //         var page = $(this).attr('href').split('page=')[1];
-    //         var status = $('.active-filter').data('value');
-    //         var query = $('#search').val();
-    //         fetch_data(page, status, query);
-    //     });
+        //     $(document).on('click', '.pagination a', function(e) {
+        //         e.preventDefault();
+        //         var page = $(this).attr('href').split('page=')[1];
+        //         var status = $('.active-filter').data('value');
+        //         var query = $('#search').val();
+        //         fetch_data(page, status, query);
+        //     });
 
-    //     $(document).on('keyup', '#search', function(e) {
-    //         e.preventDefault();
-    //         var query = $(this).val();
-    //         var status = $('.active-filter').data('value');
-    //         fetch_data(1, status, query);
-    //     });
-    // });
-</script>
-<script>
-$(document).ready(function() {
-   //how to place holder in "jquery datatable" search box
-    $('#myTable_filter input').attr("placeholder", "Search");
-});
+        //     $(document).on('keyup', '#search', function(e) {
+        //         e.preventDefault();
+        //         var query = $(this).val();
+        //         var status = $('.active-filter').data('value');
+        //         fetch_data(1, status, query);
+        //     });
+        // });
+    </script>
+    <script>
+        $(document).ready(function() {
+            //how to place holder in "jquery datatable" search box
+            $('#myTable_filter input').attr("placeholder", "Search");
+        });
+    </script>
 
+    <script>
+        $(document).ready(function() {
+            // Handle the click event for the edit-route button
+            $(document).on('click', '.edit-route', function() {
 
-</script>
+                var route = $(this).data('route');
 
-<script>
-    $(document).ready(function() {
-        // Handle the click event for the edit-route button
-        $(document).on('click', '.edit-route', function() {
+                // Make an AJAX request to fetch the priceRequest details
+                $('#loading').addClass('loading');
+                $('#loading-content').addClass('loading-content');
+                $.ajax({
+                    url: route,
+                    type: 'GET',
+                    success: function(response) {
+                        // console.log(response.view);
+                        $('#edit-prospect-model').html(response.view);
+                        $('#loading').removeClass('loading');
+                        $('#loading-content').removeClass('loading-content');
+                        $('#offcanvasEdit').offcanvas('show');
+                    },
+                    error: function(xhr) {
+                        // Handle errors
+                        $('#loading').removeClass('loading');
+                        $('#loading-content').removeClass('loading-content');
+                        // console.log(xhr);
+                    }
+                });
+            });
+        });
+    </script>
 
-            var route = $(this).data('route');
+    <script>
+        $(document).ready(function() {
+            $('#status').on('change', function() {
 
-            // Make an AJAX request to fetch the priceRequest details
-            $('#loading').addClass('loading');
-            $('#loading-content').addClass('loading-content');
-            $.ajax({
-                url: route,
-                type: 'GET',
-                success: function(response) {
-                    console.log(response.view);
-                    $('#edit-prospect-model').html(response.view);
-                    $('#loading').removeClass('loading');
-                    $('#loading-content').removeClass('loading-content');
-                    $('#offcanvasEdit').offcanvas('show');
-                },
-                error: function(xhr) {
-                    // Handle errors
-                    $('#loading').removeClass('loading');
-                    $('#loading-content').removeClass('loading-content');
-                    console.log(xhr);
+                // get value win show the upfront value
+                var status = $(this).val();
+                if (status.includes('Win')) {
+                    $('#upfront_value_show').html(
+                        '<div class="col-md-12 mb-3"><label for="inputEnterYourName" data-parsley-type="number" class="col-form-label">Upfront Value <span style="color: red;">*</span></label><input type="text" name="upfront_value" id="upfront_value"  required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number." class="form-control" value="{{ old('upfront_value') }}" placeholder="Enter Upfront Value"></div><div class="col-md-12 mb-3"> <label for = "inputEnterYourName" class="col-form-label"> Sale Date <span style="color: red;">*</span></label></label> <input type="date" name ="sale_date" id ="sale_date" class ="form-control picker"></div><h3 class="mt-4 text-uppercase">Milestone</h3><hr><div class="row"><div class="col-md-12 mb-3 pb-3"><div style="display: flex"><input type="text" name="milestone_name[]" class="form-control" value="" placeholder="Milestone name" id="" required data-parsley-trigger="keyup"></div></div><div class="col-md-12 mb-3 pb-3"><div style="display: flex"><input type="text" name="milestone_value[]" class="form-control" value="" placeholder="Milestone value" id="" required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number."></div></div><div class="col-md-12 mb-3 pb-3"><div style="display: flex"><textarea name="milestone_comment[]" class="form-control" placeholder="Milestone Comment" id="" cols="3" rows="2" ></textarea></div></div></div><div class="col-md-12 mb-3"><button type="button" class="btn btn-primary milestone-print"><i class="fas fa-plus"></i> Add Milestone</button></div><div class="add-milestone"></div></div>'
+                    );
+                } else {
+                    $('#upfront_value_show').html('');
                 }
             });
         });
-    });
-</script>
+    </script>
 
-<script>
-    $(document).ready(function() {
-        $('#status').on('change', function() {
+    <script>
+        $(document).on('click', '.milestone-print', function() {
 
-            // get value win show the upfront value
-            var status = $(this).val();
-            if (status.includes('Win')) {
-                $('#upfront_value_show').html(
-                    '<div class="col-md-12 mb-3"><label for="inputEnterYourName" data-parsley-type="number" class="col-form-label">Upfront Value <span style="color: red;">*</span></label><input type="text" name="upfront_value" id="upfront_value"  required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number." class="form-control" value="{{ old('upfront_value') }}" placeholder="Enter Upfront Value"></div><div class="col-md-12 mb-3"> <label for = "inputEnterYourName" class="col-form-label"> Sale Date <span style="color: red;">*</span></label></label> <input type="date" name ="sale_date" id ="sale_date" class ="form-control picker"></div><h3 class="mt-4 text-uppercase">Milestone</h3><hr><div class="row"><div class="col-md-12 mb-3 pb-3"><div style="display: flex"><input type="text" name="milestone_name[]" class="form-control" value="" placeholder="Milestone name" id="" required data-parsley-trigger="keyup"></div></div><div class="col-md-12 mb-3 pb-3"><div style="display: flex"><input type="text" name="milestone_value[]" class="form-control" value="" placeholder="Milestone value" id="" required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number."></div></div><div class="col-md-12 mb-3 pb-3"><div style="display: flex"><textarea name="milestone_comment[]" class="form-control" placeholder="Milestone Comment" id="" cols="3" rows="2" ></textarea></div></div></div><div class="col-md-12 mb-3"><button type="button" class="btn btn-primary milestone-print"><i class="fas fa-plus"></i> Add Milestone</button></div><div class="add-milestone"></div></div>'
-                );
-            } else {
-                $('#upfront_value_show').html('');
-            }
+            var html = '';
+            html += '<div class="row">';
+            html += '<div class="col-md-12 mb-3 pb-3">';
+            html += '<div style="display: flex">';
+            html +=
+                '<input type="text" name="milestone_name[]" class="form-control" value="" placeholder="Milestone name" id="" required data-parsley-trigger="keyup">';
+            html += '</div>';
+            html += '</div>';
+            html += '<div class="col-md-12 mb-3 pb-3">';
+            html += '<div style="display: flex">';
+            html +=
+                '<input type="text" name="milestone_value[]" class="form-control" value="" placeholder="Milestone value" id="" required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number.">';
+            html += '</div>';
+            html += '</div>';
+            // html += '<div class="col-md-12 mb-3 pb-3">';
+            // html += '<div style="display: flex">';
+            // html +=
+            //     '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value="" disabled >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
+            // html += '</div>';
+            // html += '</div>';
+            // html += '<div class="col-md-12 mb-3 pb-3">';
+            // html += '<div style="display: flex">';
+            // html += '<input type="date" name="milestone_payment_date[]" class="form-control picker" value="" id="" required data-parsley-trigger="keyup">';
+            // html += '</div>';
+            // html += '</div>';
+            // html += '<div class="col-md-12 mb-3 pb-3">';
+            // html += '<div style="display: flex">';
+            // html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" placeholder="Milestone payment mode" required data-parsley-trigger="keyup">';
+            // html += '</div>';
+            // html += '</div>';
+            // html += '<div class="col-md-12 mb-3 pb-3">';
+            // html += '<div style="display: flex">';
+            // html +=
+            //     '<input type="date" name="payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
+            // html += '</div>';
+            // html += '</div>';
+            html += '<div class="col-md-12 mb-3 pb-3">';
+            html += '<div style="display: flex">';
+            html +=
+                '<textarea name="milestone_comment[]" class="form-control" placeholder="Milestone Comment" id="" cols="3" rows="2" ></textarea>';
+            html += '</div>';
+            html += '</div>';
+            html += '<div class="col-md-12 mb-3 pb-3">';
+            html +=
+                '<button type="button" class="btn btn-danger remove"><i class="fas fa-minus"></i> Remove</button>';
+            html += '</div>';
+            html += '</div>';
+            $('.add-milestone').append(html);
         });
-    });
-</script>
 
-<script>
-    $(document).on('click', '.milestone-print', function() {
-
-    var html = '';
-    html += '<div class="row">';
-    html += '<div class="col-md-12 mb-3 pb-3">';
-    html += '<div style="display: flex">';
-    html +=
-        '<input type="text" name="milestone_name[]" class="form-control" value="" placeholder="Milestone name" id="" required data-parsley-trigger="keyup">';
-    html += '</div>';
-    html += '</div>';
-    html += '<div class="col-md-12 mb-3 pb-3">';
-    html += '<div style="display: flex">';
-    html +=
-        '<input type="text" name="milestone_value[]" class="form-control" value="" placeholder="Milestone value" id="" required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number.">';
-    html += '</div>';
-    html += '</div>';
-    // html += '<div class="col-md-12 mb-3 pb-3">';
-    // html += '<div style="display: flex">';
-    // html +=
-    //     '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value="" disabled >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
-    // html += '</div>';
-    // html += '</div>';
-    // html += '<div class="col-md-12 mb-3 pb-3">';
-    // html += '<div style="display: flex">';
-    // html += '<input type="date" name="milestone_payment_date[]" class="form-control picker" value="" id="" required data-parsley-trigger="keyup">';
-    // html += '</div>';
-    // html += '</div>';
-    // html += '<div class="col-md-12 mb-3 pb-3">';
-    // html += '<div style="display: flex">';
-    // html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" placeholder="Milestone payment mode" required data-parsley-trigger="keyup">';
-    // html += '</div>';
-    // html += '</div>';
-    // html += '<div class="col-md-12 mb-3 pb-3">';
-    // html += '<div style="display: flex">';
-    // html +=
-    //     '<input type="date" name="payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
-    // html += '</div>';
-    // html += '</div>';
-    html += '<div class="col-md-12 mb-3 pb-3">';
-    html += '<div style="display: flex">';
-    html +=
-        '<textarea name="milestone_comment[]" class="form-control" placeholder="Milestone Comment" id="" cols="3" rows="2" ></textarea>';
-    html += '</div>';
-    html += '</div>';
-    html += '<div class="col-md-12 mb-3 pb-3">';
-    html +=
-        '<button type="button" class="btn btn-danger remove"><i class="fas fa-minus"></i> Remove</button>';
-    html += '</div>';
-    html += '</div>';
-    $('.add-milestone').append(html);
-});
-
-$(document).on('click', '.remove', function() {
-    $(this).closest('.row').remove();
-});
-</script>
-
+        $(document).on('click', '.remove', function() {
+            $(this).closest('.row').remove();
+        });
+    </script>
 @endpush

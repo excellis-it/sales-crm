@@ -361,7 +361,7 @@
                                         Mode</th>
                                     <th data-tippy-content="Cant't sort by Due Amount" style="cursor: pointer"> Due Amount
                                     </th>
-
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -378,9 +378,11 @@
         </div>
 
     </div>
+
 @endsection
 
 @push('scripts')
+    @include('bdm.includes.followup_modal')
     <script>
         $(document).on('click', '#delete', function(e) {
             swal({

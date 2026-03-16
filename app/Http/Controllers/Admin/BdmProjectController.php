@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\BdmFollowup;
 use App\Models\Customer;
 use App\Models\Followup;
 use App\Models\Goal;
@@ -65,7 +66,7 @@ class BdmProjectController extends Controller
     public function store(Request $request)
     {
 
-       
+
         $data = $request->all();
         if ($data['customer'] == 0) {  //new customer == 1 and existing customer == 0
             $data['customer'] = $request->customer_id;
@@ -102,6 +103,14 @@ class BdmProjectController extends Controller
         $project->delivery_tat = $data['delivery_tat'] ?? null;
         $project->comment = $data['comment'] ?? '';
         $project->save();
+
+            if (isset($data['comment']) && $data['comment'] != null) {
+            $followup = new BdmFollowup();
+            $followup->user_id = auth()->id();
+            $followup->bdm_project_id = $project->id;
+            $followup->remark = $data['comment'];
+            $followup->save();
+        }
 
 
         if (isset($data['project_type'])) {

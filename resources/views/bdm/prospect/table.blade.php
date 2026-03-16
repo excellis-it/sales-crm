@@ -55,6 +55,7 @@
                 {{ $prospect->price_quote ?? '' }}
             </td>
             <td>
+                <a title="View Follow-ups" class="view-followups btn btn-sm " data-id="{{ $prospect->id }}" href="javascript:void(0);"><i class="fas fa-comments" style="color: #ff9b44;"></i></a>
                 <a title="View Prospect" class="view-details-btn btn btn-sm "
                     data-route="{{ route('bdm.prospects.show', $prospect->id) }}" data-bs-toggle="modal"
                     data-bs-target="#exampleModal" href="javascript:void(0);"><i class="fas fa-eye"></i></a>

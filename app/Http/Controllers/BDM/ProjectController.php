@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\BDM;
 
 use App\Http\Controllers\Controller;
+use App\Models\BdmFollowup;
 use App\Models\Customer;
 use App\Models\Goal;
 use App\Models\BdmProject;
@@ -126,6 +127,15 @@ class ProjectController extends Controller
         $project->delivery_tat = $data['delivery_tat'];
         $project->comment = $data['comment'];
         $project->save();
+
+        // if comment store at BdmFollowup
+        if (isset($data['comment']) && $data['comment'] != null) {
+            $followup = new BdmFollowup();
+            $followup->user_id = auth()->id();
+            $followup->bdm_project_id = $project->id;
+            $followup->remark = $data['comment'];
+            $followup->save();
+        }
 
         $countGross = Goal::where('user_id', Auth::user()->id)->whereMonth('goals_date', date('m', strtotime($data['sale_date'])))->whereYear('goals_date', date('Y', strtotime($data['sale_date'])))->where('goals_type', 1)->count();
         if ($countGross > 0) {

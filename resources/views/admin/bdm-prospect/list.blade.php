@@ -335,9 +335,11 @@
         </div>
 
     </div>
+
 @endsection
 
 @push('scripts')
+@include('bdm.includes.followup_modal')
     <script>
         $(document).on('click', '#delete', function(e) {
             swal({

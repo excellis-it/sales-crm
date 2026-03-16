@@ -12,7 +12,7 @@
                 @method('PUT')
                 @csrf
                 <div class="row">
-                   
+
                     <div class="col-md-12 mb-3">
                         <label for="inputEnterYourName" class="col-form-label"> Client Name
                             <span style="color: red;">*</span></label>
@@ -136,7 +136,7 @@
                         <select name="transfer_token_by" id="transfer_token_by"
                             class="form-control select2" required>
                             <option value="">Select Transfer Token By</option>
-                           
+
                             @foreach ($users as $user)
                                 <option value="{{ $user->id }}"
                                     {{ $prospect->transfer_token_by == $user->id ? 'selected' : '' }}>
@@ -205,12 +205,12 @@
                         @endif
                     </div>
                     {{-- comments --}}
-                    <div class="col-md-12 mb-3">
+                    {{-- <div class="col-md-12 mb-3">
                         <label for="inputEnterYourName"
                             class="col-form-label">Comments</label>
                         <textarea name="comments" id="comments" cols="30" rows="5" class="form-control"
                             placeholder="Enter Comments"> {{ $prospect['comments'] }} </textarea>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="d-flex alin-items-center w-100 text-end">
                     <button class="print_btn cancel_btn me-3" type="reset"><i class="far fa-times-circle"></i>
@@ -276,7 +276,7 @@
 
 <script>
     $(document).on('click', '.milestone-print-edit', function() {
-  
+
     var html = '';
     html += '<div class="row">';
     html += '<div class="col-md-12 mb-3 pb-3">';

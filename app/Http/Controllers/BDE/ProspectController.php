@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\BDE;
 
 use App\Http\Controllers\Controller;
+use App\Models\BdmFollowup;
 use App\Models\Goal;
 use App\Models\BdmProject;
 use App\Models\BdmProjectType;
@@ -179,6 +180,15 @@ class ProspectController extends Controller
             $project->sale_date = $prospect->sale_date ?? '';
             $project->comment = $prospect->comments;
             $project->save();
+
+             // if comments store at BdmFollowup
+        if (isset($data['comments']) && $data['comments'] != null) {
+            $followup = new BdmFollowup();
+            $followup->user_id = auth()->id();
+            $followup->bdm_prospect_id = $prospect->id;
+            $followup->remark = $data['comments'];
+            $followup->save();
+        }
 
             //prospect milestone
             if (isset($data['milestone_name'])) {

@@ -37,7 +37,7 @@
                 {{ (int) $project->project_value - (int) $project->project_upfront }}
             </td>
             <td>
-                @if ($project->assigned_to == null)
+                @if ($project->user_id == null)
                     <span class="badge bg-danger">Not Assigned</span>
                 @else
                     <span class="badge bg-success">Assigned</span>
@@ -46,6 +46,7 @@
             <td>
                 <a title="Delete Project" data-route="{{ route('admin.bdm-projects.delete', $project->id) }}"
                     href="javascipt:void(0);" id="delete"><i class="fas fa-trash"></i></a>
+                <a title="View Follow-ups" class="view-followups" data-id="{{ $project->id }}" href="javascript:void(0);"><i class="fas fa-comments" style="color: #ff9b44; margin-left:10px;"></i></a>
             </td>
         </tr>
     @endforeach

@@ -159,6 +159,11 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
         Route::get('/bdm-projects-download/{id}', [AdminBdmProjectController::class, 'documentDownload'])->name('bdm-projects.download');
         Route::get('/bdm-projects-new-customer', [AdminBdmProjectController::class, 'newCustomer'])->name('bdm-projects.new-customer');
         Route::get('/bdm-projects-customer-details', [AdminBdmProjectController::class, 'customerDetails'])->name('bdm-projects.customer-details');
+        
+        Route::get('bdm-projects/followups/{id}', [\App\Http\Controllers\BdmFollowupController::class, 'getProjectFollowups'])->name('bdm-projects.followups');
+        Route::post('bdm-projects/add-followup', [\App\Http\Controllers\BdmFollowupController::class, 'addProjectFollowup'])->name('bdm-projects.add-followup');
+        Route::get('bdm-prospects/followups/{id}', [\App\Http\Controllers\BdmFollowupController::class, 'getProspectFollowups'])->name('bdm-prospects.followups');
+        Route::post('bdm-prospects/add-followup', [\App\Http\Controllers\BdmFollowupController::class, 'addProspectFollowup'])->name('bdm-prospects.add-followup');
     });
     //list goals
     Route::get('/goals-list', [GoalsController::class, 'goalsList'])->name('goals.ajax-list');
@@ -392,6 +397,11 @@ Route::group(['middleware' => ['BlockIpMiddleware']], function () {
             // delete prospect
             // filter prospects
             Route::get('/prospect-delete/{id}', [BDMProspectController::class, 'delete'])->name('prospects.delete');
+
+            Route::get('bdm-projects/followups/{id}', [\App\Http\Controllers\BdmFollowupController::class, 'getProjectFollowups'])->name('projects.followups');
+            Route::post('bdm-projects/add-followup', [\App\Http\Controllers\BdmFollowupController::class, 'addProjectFollowup'])->name('projects.add-followup');
+            Route::get('bdm-prospects/followups/{id}', [\App\Http\Controllers\BdmFollowupController::class, 'getProspectFollowups'])->name('prospects.followups');
+            Route::post('bdm-prospects/add-followup', [\App\Http\Controllers\BdmFollowupController::class, 'addProspectFollowup'])->name('prospects.add-followup');
         });
 
         Route::resources([
@@ -437,6 +447,11 @@ Route::group(['middleware' => ['BlockIpMiddleware']], function () {
                 'transfer-taken' => BDETransferTakenController::class,
             ]);
             Route::get('/transfer-taken-filter', [BDETransferTakenController::class, 'transferTakenFilter'])->name('transfer-taken.filter');
+
+            Route::get('bde-projects/followups/{id}', [\App\Http\Controllers\BdmFollowupController::class, 'getProjectFollowups'])->name('bde-projects.followups');
+            Route::post('bde-projects/add-followup', [\App\Http\Controllers\BdmFollowupController::class, 'addProjectFollowup'])->name('bde-projects.add-followup');
+            Route::get('bde-prospects/followups/{id}', [\App\Http\Controllers\BdmFollowupController::class, 'getProspectFollowups'])->name('bde-prospects.followups');
+            Route::post('bde-prospects/add-followup', [\App\Http\Controllers\BdmFollowupController::class, 'addProspectFollowup'])->name('bde-prospects.add-followup');
         });
         Route::get('/bde-prospects-search', [BDEDashboardController::class, 'bdeDashboardProspectSearch'])->name('bde.dashboard.prospect-search-data');
         Route::get('/filter-prospects', [BDEProspectController::class, 'bdeProspectFilter'])->name('bde.prospects.filter'); // prospect filter

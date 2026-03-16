@@ -225,12 +225,12 @@
                         @endif
                     </div>
                     {{-- comments --}}
-                    <div class="col-md-12 mb-3">
+                    {{-- <div class="col-md-12 mb-3">
                         <label for="inputEnterYourName"
                             class="col-form-label">Comments</label>
                         <textarea name="comments" id="comments" cols="30" rows="10" class="form-control"
                             placeholder="Enter Comments"> {{ $prospect['comments'] }} </textarea>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="d-flex alin-items-center w-100 text-end">
                     <button class="print_btn cancel_btn me-3" type="reset"><i class="far fa-times-circle"></i>

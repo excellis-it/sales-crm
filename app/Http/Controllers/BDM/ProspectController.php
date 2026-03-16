@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\BDM;
 
 use App\Http\Controllers\Controller;
+use App\Models\BdmFollowup;
 use App\Models\Goal;
 use App\Models\BdmProject;
 use App\Models\BdmProjectType;
@@ -116,6 +117,15 @@ class ProspectController extends Controller
         }
         $prospect->transfer_token_by = $data['transfer_token_by'];
         $prospect->save();
+
+        // if comments store at BdmFollowup
+        if (isset($data['comments']) && $data['comments'] != null) {
+            $followup = new BdmFollowup();
+            $followup->user_id = auth()->id();
+            $followup->bdm_prospect_id = $prospect->id;
+            $followup->remark = $data['comments'];
+            $followup->save();
+        }
 
         if ($request->status == 'Win') {
             $prospect = BdmProspect::findOrFail($prospect->id);
