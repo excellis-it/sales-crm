@@ -470,6 +470,7 @@
                                     <th class="sorting" data-column_name="payment_mode">Payment Mode <i
                                             class="fa fa-sort ms-1 text-muted"></i></th>
                                     <th>Due Amount</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -484,9 +485,11 @@
             </div>
         </div>
     </div>
+
 @endsection
 
 @push('scripts')
+ @include('bdm.includes.followup_modal')
     <script src="http://parsleyjs.org/dist/parsley.js"></script>
     <script>
         window.ParsleyConfig = {

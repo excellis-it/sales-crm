@@ -120,6 +120,15 @@ class ProjectController extends Controller
         $project->comment = $data['comment'] ?? '';
         $project->save();
 
+         if ($data['comment'] && $data['comment'] != null) {
+            $follow_up = new Followup();
+            $follow_up->user_id = Auth::user()->id;
+            $follow_up->project_id = $project->id;
+            $follow_up->followup_type = 'other';
+            $follow_up->followup_description = $data['comment'];
+            $follow_up->save();
+        }
+
 
         if (isset($data['project_type'])) {
             foreach ($data['project_type'] as $key => $project_type) {

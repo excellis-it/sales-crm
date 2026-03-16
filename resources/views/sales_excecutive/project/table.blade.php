@@ -45,9 +45,12 @@
             </td>
 
             <td>
-            <a title="View Project" data-route=""
-                href="{{ route('sales-excecutive.projects.show', $project->id) }}"><i
-                    class="fas fa-eye"></i></a>
+                <a title="View Project" data-route=""
+                    href="{{ route('sales-excecutive.projects.show', $project->id) }}"><i
+                        class="fas fa-eye text-info"></i></a>
+                &nbsp;&nbsp;
+                <a title="View Follow-ups" class="view-followups" data-id="{{ $project->id }}"
+                    href="javascript:void(0);"><i class="fas fa-comments text-primary"></i></a>
             </td>
     </tr>
     @endforeach

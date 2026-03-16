@@ -1,6 +1,6 @@
 @if (count($projects) == 0)
     <tr>
-        <td colspan="10" class="text-center">No Projects Found</td>
+        <td colspan="11" class="text-center">No Projects Found</td>
     </tr>
 @else
     @foreach ($projects as $key => $project)
@@ -41,23 +41,15 @@
             <td class="edit-route" data-route="{{ route('projects.edit', $project->id) }}">
                 {{ (int) $project->project_value - (int) $project->project_upfront }}
             </td>
-
-            {{-- <td>
-
-        <a title="View Project" data-route=""
-            href="{{ route('projects.show', $project->id) }}"><i
-                class="fas fa-eye"></i></a> &nbsp;&nbsp;
-
-
-        <a title="Delete Project"
-            data-route="{{ route('projects.delete', $project->id) }}"
-            href="javascipt:void(0);" id="delete"><i class="fas fa-trash"></i></a>
-    </td> --}}
+            <td>
+                <a title="View Follow-ups" class="view-followups" data-id="{{ $project->id }}"
+                    href="javascript:void(0);"><i class="fas fa-comments text-primary"></i></a>
+            </td>
         </tr>
     @endforeach
     <tr>
         
-    <td colspan="10">
+    <td colspan="11">
         <div class="d-flex justify-content-between align-items-center">
             <div class="">
                 (Showing {{ $projects->firstItem() }} – {{ $projects->lastItem() }} Projects of
@@ -70,6 +62,3 @@
     </td>
     </tr>
 @endif
-
-
-

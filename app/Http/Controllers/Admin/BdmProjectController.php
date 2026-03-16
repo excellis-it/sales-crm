@@ -36,7 +36,10 @@ class BdmProjectController extends Controller
         $account_managers = User::role('ACCOUNT_MANAGER')->orderBy('name', 'DESC')->where('status', 1)->get();
         $project_openers = User::role(['BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
 
-
+        if ($request->bdm_id) {
+            $projects = BdmProject::orderBy('sale_date', 'desc')->where('user_id', $request->bdm_id)->paginate(15);
+            return view('admin.bdm-project.list')->with(compact('projects','sales_managers','users','account_managers','project_openers'));
+        }
 
         $projects = BdmProject::orderBy('sale_date', 'desc')->paginate(15);
         return view('admin.bdm-project.list')->with(compact('projects','sales_managers','users','account_managers','project_openers'));

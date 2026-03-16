@@ -4,6 +4,7 @@ namespace App\Http\Controllers\SalesManager;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
+use App\Models\Followup;
 use App\Models\Goal;
 use App\Models\Project;
 use App\Models\ProjectDocument;
@@ -131,6 +132,16 @@ class ProjectController extends Controller
         $project->delivery_tat = $data['delivery_tat'];
         $project->comment = $data['comment'];
         $project->save();
+
+        // if comment add follow up
+        if ($data['comment'] && $data['comment'] != null) {
+            $follow_up = new Followup();
+            $follow_up->user_id = Auth::user()->id;
+            $follow_up->project_id = $project->id;
+            $follow_up->followup_type = 'other';
+            $follow_up->followup_description = $data['comment'];
+            $follow_up->save();
+        }
 
         $countGross = Goal::where('user_id', Auth::user()->id)->whereMonth('goals_date', date('m', strtotime($data['sale_date'])))->whereYear('goals_date', date('Y', strtotime($data['sale_date'])))->where('goals_type', 1)->count();
         if ($countGross > 0) {

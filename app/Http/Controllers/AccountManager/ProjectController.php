@@ -4,6 +4,7 @@ namespace App\Http\Controllers\AccountManager;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
+use App\Models\Followup;
 use App\Models\Goal;
 use App\Models\Project;
 use App\Models\ProjectMilestone;
@@ -84,6 +85,15 @@ class ProjectController extends Controller
         $project->delivery_tat = $data['delivery_tat'] ?? '';
         $project->comment = $data['comment'];
         $project->save();
+
+         if ($data['comment'] && $data['comment'] != null) {
+            $follow_up = new Followup();
+            $follow_up->user_id = Auth::user()->id;
+            $follow_up->project_id = $project->id;
+            $follow_up->followup_type = 'other';
+            $follow_up->followup_description = $data['comment'];
+            $follow_up->save();
+        }
 
         if (isset($data['project_type'])) {
             foreach ($data['project_type'] as $key => $project_type) {

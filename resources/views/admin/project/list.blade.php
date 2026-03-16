@@ -348,8 +348,10 @@
         </div>
 
     </div>
+
 @endsection
 @push('scripts')
+ @include('bdm.includes.followup_modal')
     <script src="http://parsleyjs.org/dist/parsley.js"></script>
     <script>
         window.ParsleyConfig = {

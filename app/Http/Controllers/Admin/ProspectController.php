@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Followup;
 use App\Models\Goal;
 use App\Models\Project;
 use App\Models\ProjectType;
@@ -95,6 +96,15 @@ class ProspectController extends Controller
         }
         $prospect->transfer_token_by = $data['transfer_token_by'];
         $prospect->save();
+
+        if ($data['comments']) {
+            $follow_up = new Followup();
+            $follow_up->user_id = Auth::user()->id;
+            $follow_up->prospect_id = $prospect->id;
+            $follow_up->followup_type = 'other';
+            $follow_up->followup_description = $data['comments'];
+            $follow_up->save();
+        }
 
         if ($request->status == 'Win') {
             $prospect = Prospect::findOrFail($prospect->id);

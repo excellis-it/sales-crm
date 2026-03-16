@@ -299,6 +299,7 @@
                                     <th class="sorting" data-column_name="currency">CCY <i class="fa fa-sort ms-1 text-muted"></i></th>
                                     <th class="sorting" data-column_name="payment_mode">Payment Mode <i class="fa fa-sort ms-1 text-muted"></i></th>
                                     <th>Due Amount</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -315,10 +316,11 @@
         </div>
 
     </div>
+
 @endsection
 
 @push('scripts')
-
+  @include('bdm.includes.followup_modal')
 <script>
     $(document).ready(function() {
 

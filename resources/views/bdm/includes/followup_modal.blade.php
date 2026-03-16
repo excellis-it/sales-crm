@@ -44,37 +44,82 @@
  <script>
         $(document).ready(function() {
             // Mapping of named routes by prefix and type.
-            // Using a '__ID__' placeholder ensures Laravel's route helper won't throw missing parameter exceptions,
-            // and allows us to simply .replace('__ID__', id) in Javascript.
             var followupRoutes = {
                 'bde': {
                     'projects': {
                         get: "{{ route('bde.bde-projects.followups', '__ID__') }}",
-                        add: "{{ route('bde.bde-projects.add-followup') }}"
+                        add: "{{ route('bde.bde-projects.add-followup') }}",
+                        id_field: 'bdm_project_id'
                     },
                     'prospects': {
                         get: "{{ route('bde.bde-prospects.followups', '__ID__') }}",
-                        add: "{{ route('bde.bde-prospects.add-followup') }}"
+                        add: "{{ route('bde.bde-prospects.add-followup') }}",
+                        id_field: 'bdm_prospect_id'
                     }
                 },
                 'bdm': {
                     'projects': {
                         get: "{{ route('bdm.projects.followups', '__ID__') }}",
-                        add: "{{ route('bdm.projects.add-followup') }}"
+                        add: "{{ route('bdm.projects.add-followup') }}",
+                        id_field: 'bdm_project_id'
                     },
                     'prospects': {
                         get: "{{ route('bdm.prospects.followups', '__ID__') }}",
-                        add: "{{ route('bdm.prospects.add-followup') }}"
+                        add: "{{ route('bdm.prospects.add-followup') }}",
+                        id_field: 'bdm_prospect_id'
                     }
                 },
                 'admin': {
-                    'projects': {
+                    'bdm-projects': {
                         get: "{{ route('admin.bdm-projects.followups', '__ID__') }}",
-                        add: "{{ route('admin.bdm-projects.add-followup') }}"
+                        add: "{{ route('admin.bdm-projects.add-followup') }}",
+                        id_field: 'bdm_project_id'
+                    },
+                    'bdm-prospects': {
+                        get: "{{ route('admin.bdm-prospects.followups', '__ID__') }}",
+                        add: "{{ route('admin.bdm-prospects.add-followup') }}",
+                        id_field: 'bdm_prospect_id'
+                    },
+                    'sales-projects': {
+                        get: "{{ route('admin.sales-projects.followups', '__ID__') }}",
+                        add: "{{ route('admin.sales-projects.add-followup') }}",
+                        id_field: 'project_id'
                     },
                     'prospects': {
-                        get: "{{ route('admin.bdm-prospects.followups', '__ID__') }}",
-                        add: "{{ route('admin.bdm-prospects.add-followup') }}"
+                        get: "{{ route('admin.prospects.followups', '__ID__') }}",
+                        add: "{{ route('admin.prospects.add-followup') }}",
+                        id_field: 'prospect_id'
+                    }
+                },
+                'sales-manager': {
+                    'projects': {
+                        get: "{{ route('sales-manager.projects.followups', '__ID__') }}",
+                        add: "{{ route('sales-manager.projects.add-followup') }}",
+                        id_field: 'project_id'
+                    },
+                    'prospects': {
+                        get: "{{ route('sales-manager.prospects.followups', '__ID__') }}",
+                        add: "{{ route('sales-manager.prospects.add-followup') }}",
+                        id_field: 'prospect_id'
+                    }
+                },
+                'account-manager': {
+                    'projects': {
+                        get: "{{ route('account-manager.projects.followups', '__ID__') }}",
+                        add: "{{ route('account-manager.projects.add-followup') }}",
+                        id_field: 'project_id'
+                    }
+                },
+                'sales-excecutive': {
+                    'projects': {
+                        get: "{{ route('sales-excecutive.projects.followups', '__ID__') }}",
+                        add: "{{ route('sales-excecutive.projects.add-followup') }}",
+                        id_field: 'project_id'
+                    },
+                    'prospects': {
+                        get: "{{ route('sales-excecutive.prospects.followups', '__ID__') }}",
+                        add: "{{ route('sales-excecutive.prospects.add-followup') }}",
+                        id_field: 'prospect_id'
                     }
                 }
             };
@@ -82,22 +127,37 @@
             // View Follow-ups
             $(document).on('click', '.view-followups', function() {
                 var id = $(this).data('id');
+                var currentUrl = window.location.href;
 
-                // Determine if project or prospect based on page URL
-                var type = window.location.href.includes('prospects') ? 'prospects' : 'projects';
+                // Determine prefix
+                var prefix = 'admin';
+                if (currentUrl.includes('/bde/')) prefix = 'bde';
+                else if (currentUrl.includes('/bdm/')) prefix = 'bdm';
+                else if (currentUrl.includes('/sales-manager/')) prefix = 'sales-manager';
+                else if (currentUrl.includes('/account-manager/')) prefix = 'account-manager';
+                else if (currentUrl.includes('/sales-excecutive/')) prefix = 'sales-excecutive';
 
-                var prefix = window.location.href.includes('/bde/') ? 'bde' :
-                    window.location.href.includes('/bdm/') ? 'bdm' : 'admin';
+                // Determine type
+                var type = 'projects';
+                if (prefix === 'admin') {
+                    if (currentUrl.includes('bdm-prospects')) type = 'bdm-prospects';
+                    else if (currentUrl.includes('bdm-projects')) type = 'bdm-projects';
+                    else if (currentUrl.includes('prospects')) type = 'prospects';
+                    else type = 'sales-projects';
+                } else {
+                    type = currentUrl.includes('prospect') ? 'prospects' : 'projects';
+                }
 
                 var routeData = followupRoutes[prefix][type];
+                if (!routeData) return;
+
                 var get_url = routeData.get.replace('__ID__', id);
 
                 $('#followup_item_id').val(id);
                 $('#followup_item_type').val(type);
-
-                // Temporarily store dynamic urls for the form submission
                 $('#followup_prefix').val(get_url);
                 $('#followup_item_id').attr('data-add-url', routeData.add);
+                $('#followup_item_id').attr('data-id-field', routeData.id_field);
 
                 loadFollowups(get_url);
                 $('#followup_modal').modal('show');
@@ -117,24 +177,15 @@
             $('#add_followup_form').submit(function(e) {
                 e.preventDefault();
                 var id = $('#followup_item_id').val();
-                var type = $('#followup_item_type').val();
                 var get_url = $('#followup_prefix').val();
                 var add_url = $('#followup_item_id').attr('data-add-url');
+                var id_field = $('#followup_item_id').attr('data-id-field');
 
                 var formData = $(this).serializeArray();
-
-                // Add correct ID parameter based on type
-                if (type === 'projects') {
-                    formData.push({
-                        name: 'bdm_project_id',
-                        value: id
-                    });
-                } else {
-                    formData.push({
-                        name: 'bdm_prospect_id',
-                        value: id
-                    });
-                }
+                formData.push({
+                    name: id_field,
+                    value: id
+                });
 
                 $.ajax({
                     url: add_url,
@@ -164,3 +215,4 @@
             });
         });
     </script>
+

@@ -59,7 +59,8 @@ use App\Http\Controllers\BDM\TransferTakenController as BDMTransferTakenControll
 use App\Http\Controllers\DefaultController;
 use App\Http\Controllers\SalesExcecutive\TransferTakenController as SalesExcecutiveTransferTakenController;
 use App\Http\Controllers\SalesManager\TransferTakenController;
-use App\Http\Controllers\TenderUser\TenderProjectController;
+use App\Http\Controllers\CommonFollowupController;
+use App\Http\Controllers\TenderUser\TenderProjectController as CommonTenderProjectController;
 use Illuminate\Support\Facades\Artisan;
 
 /*
@@ -164,6 +165,11 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
         Route::post('bdm-projects/add-followup', [\App\Http\Controllers\BdmFollowupController::class, 'addProjectFollowup'])->name('bdm-projects.add-followup');
         Route::get('bdm-prospects/followups/{id}', [\App\Http\Controllers\BdmFollowupController::class, 'getProspectFollowups'])->name('bdm-prospects.followups');
         Route::post('bdm-prospects/add-followup', [\App\Http\Controllers\BdmFollowupController::class, 'addProspectFollowup'])->name('bdm-prospects.add-followup');
+
+        Route::get('prospects/followups/{id}', [CommonFollowupController::class, 'getProspectFollowups'])->name('prospects.followups');
+        Route::post('prospects/add-followup', [CommonFollowupController::class, 'addProspectFollowup'])->name('prospects.add-followup');
+        Route::get('sales-projects/followups/{id}', [CommonFollowupController::class, 'getProjectFollowups'])->name('sales-projects.followups');
+        Route::post('sales-projects/add-followup', [CommonFollowupController::class, 'addProjectFollowup'])->name('sales-projects.add-followup');
     });
     //list goals
     Route::get('/goals-list', [GoalsController::class, 'goalsList'])->name('goals.ajax-list');
@@ -307,6 +313,11 @@ Route::group(['middleware' => ['SalesManager'], 'prefix' => 'sales-manager'], fu
         Route::get('/ip-delete/{id}', [SalesManagerIpController::class, 'delete'])->name('sales-manager.ips.delete');
     });
     Route::get('/ip-search', [SalesManagerIpController::class, 'search'])->name('sales-manager.ips.search');
+
+    Route::get('prospects/followups/{id}', [CommonFollowupController::class, 'getProspectFollowups'])->name('sales-manager.prospects.followups');
+    Route::post('prospects/add-followup', [CommonFollowupController::class, 'addProspectFollowup'])->name('sales-manager.prospects.add-followup');
+    Route::get('projects/followups/{id}', [CommonFollowupController::class, 'getProjectFollowups'])->name('sales-manager.projects.followups');
+    Route::post('projects/add-followup', [CommonFollowupController::class, 'addProjectFollowup'])->name('sales-manager.projects.add-followup');
 });
 
 /**---------------------------------------------------------------Account Manager ---------------------------------------------------------------------------------- */
@@ -336,6 +347,9 @@ Route::group(['middleware' => ['AccountManager'], 'prefix' => 'account-manager']
     Route::get('/payments/invoice-download/{id}', [AccountManagerPaymentsController::class, 'accountManagerInvoicedownload'])->name('account-manager.payments.download-invoice');
     Route::get('/account-manager-followups-filter', [FollowupController::class, 'accountManagerFollowupProject'])->name('account-manager.followups.filter');
     Route::get('/projects-document_download/{id}', [AccountManagerProjectController::class, 'accountManagerdocumentDownload'])->name('account-manager.projects.document.download');
+
+    Route::get('projects/followups/{id}', [CommonFollowupController::class, 'getProjectFollowups'])->name('account-manager.projects.followups');
+    Route::post('projects/add-followup', [CommonFollowupController::class, 'addProjectFollowup'])->name('account-manager.projects.add-followup');
 });
 Route::group(['middleware' => ['BlockIpMiddleware']], function () {
     /**---------------------------------------------------------------Sales Excecutive ---------------------------------------------------------------------------------- */
@@ -370,6 +384,11 @@ Route::group(['middleware' => ['BlockIpMiddleware']], function () {
 
         Route::get('/filter', [ProspectController::class, 'filter'])->name('prospects.filter'); // filter
         Route::get('/assign-to-project/{id}', [ProspectController::class, 'assignToProject'])->name('prospects.assign-project'); // assign project
+
+        Route::get('prospects/followups/{id}', [CommonFollowupController::class, 'getProspectFollowups'])->name('sales-excecutive.prospects.followups');
+        Route::post('prospects/add-followup', [CommonFollowupController::class, 'addProspectFollowup'])->name('sales-excecutive.prospects.add-followup');
+        Route::get('projects/followups/{id}', [CommonFollowupController::class, 'getProjectFollowups'])->name('sales-excecutive.projects.followups');
+        Route::post('projects/add-followup', [CommonFollowupController::class, 'addProjectFollowup'])->name('sales-excecutive.projects.add-followup');
 
     });
 

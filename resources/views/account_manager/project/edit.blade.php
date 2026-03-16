@@ -192,11 +192,11 @@
                             value="{{ $project->delivery_tat }}" placeholder="Enter Sale Date">
                     </div>
                     {{-- comment --}}
-                    <div class="col-md-12 mb-3">
+                    {{-- <div class="col-md-12 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Comment</label>
                         <textarea name="comment" id="comment" data-parsley-trigger="keyup" class="form-control"
                             placeholder="Enter Comment">{{ $project->comment }}</textarea>
-                    </div>
+                    </div> --}}
                     <div class="col-md-12 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">No. of
                             Milestone</label>

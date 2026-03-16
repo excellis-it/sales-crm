@@ -49,9 +49,10 @@
             <td>
                 <a title="View Prospect" class="view-details-btn"
                     data-route="{{ route('admin.prospects.show', $prospect->id) }}" data-bs-toggle="modal"
-                    data-bs-target="#exampleModal" href="javascript:void(0);"><i class="fas fa-eye"></i></a>
+                    data-bs-target="#exampleModal" href="javascript:void(0);"><i class="fas fa-eye text-info"></i></a>
                 &nbsp;&nbsp;
-
+                <a title="View Follow-ups" class="view-followups" data-id="{{ $prospect->id }}"
+                    href="javascript:void(0);"><i class="fas fa-comments text-primary"></i></a>
             </td>
         </tr>
     @endforeach

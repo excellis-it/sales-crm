@@ -102,9 +102,11 @@
         </div>
 
     </div>
+
 @endsection
 
 @push('scripts')
+ @include('bdm.includes.followup_modal')
     <script>
     $(document).ready(function() {
         function clear_icon() {
