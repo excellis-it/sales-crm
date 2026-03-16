@@ -297,12 +297,13 @@
                             <thead>
                                 <tr>
                                     <th>Date</th>
-                                    <th>Prospect By</th>
+                                    <th>Tele Caller / Prospect By</th>
                                     <th>Client Name</th>
                                     <th>Business Name</th>
                                     <th>Email</th>
                                     <th>Phone</th>
                                     <th>Transfer Taken By</th>
+                                    <th>BDM / Manager</th>
                                     <th>Status</th>
                                     <th>Service Offered</th>
                                     <th>Followup Date

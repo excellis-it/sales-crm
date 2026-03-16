@@ -7,6 +7,7 @@ use App\Models\Customer;
 use App\Models\Goal;
 use App\Models\Project;
 use App\Models\ProjectMilestone;
+use App\Models\TenderProject;
 use App\Models\User;
 use App\Models\Prospect;
 use Illuminate\Http\Request;
@@ -21,8 +22,13 @@ class DashboardController extends Controller
         $count['sales_managers'] = User::Role('SALES_MANAGER')->count();
         $count['account_managers'] = User::Role('ACCOUNT_MANAGER')->count();
         $count['sales_excecutive'] = User::Role('SALES_EXCUETIVE')->count();
-        $count['projects'] = Project::orderBy('created_at', 'desc')->count();
         $count['bdm'] = User::Role('BUSINESS_DEVELOPMENT_MANAGER')->count();
+        // Tender Manager (TENDER_USER role) stats
+        $count['tender_managers'] = User::Role('TENDER_USER')->count();
+        $count['tender_projects'] = TenderProject::count();
+        $count['tender_projects_value'] = TenderProject::sum('tender_value_lakhs');
+        // Sales pipeline projects
+        $count['projects'] = Project::orderBy('created_at', 'desc')->count();
         // $prospects = Prospect::orderBy('sale_date', 'desc')->get();
         $prospects = Prospect::orderBy('sale_date', 'desc')->take(10)->get();
         $count['prospects'] = Prospect::count();
@@ -48,7 +54,7 @@ class DashboardController extends Controller
         $goal['net_goals'] = Goal::where('goals_type', 2)->whereIn('user_id', $sales_manager_id)->whereMonth('goals_date', date('m'))->sum('goals_amount');
 
         $goal['gross_goals_january'] = Goal::where('goals_type', 1)->whereMonth('goals_date', 1)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-        $goal['gross_goals_febuary'] = Goal::where('goals_type', 1)->whereMonth('goals_date', 2)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
+        $goal['gross_goals_february'] = Goal::where('goals_type', 1)->whereMonth('goals_date', 2)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
         $goal['gross_goals_march'] = Goal::where('goals_type', 1)->whereMonth('goals_date', 3)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
         $goal['gross_goals_april'] = Goal::where('goals_type', 1)->whereMonth('goals_date', 4)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
         $goal['gross_goals_may'] = Goal::where('goals_type', 1)->whereMonth('goals_date', 5)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
@@ -61,7 +67,7 @@ class DashboardController extends Controller
         $goal['gross_goals_december'] = Goal::where('goals_type', 1)->whereMonth('goals_date', 12)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
 
         $goal['net_goals_january'] = Goal::where('goals_type', 2)->whereMonth('goals_date', 1)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-        $goal['net_goals_febuary'] = Goal::where('goals_type', 2)->whereMonth('goals_date', 2)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
+        $goal['net_goals_february'] = Goal::where('goals_type', 2)->whereMonth('goals_date', 2)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
         $goal['net_goals_march'] = Goal::where('goals_type', 2)->whereMonth('goals_date', 3)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
         $goal['net_goals_april'] = Goal::where('goals_type', 2)->whereMonth('goals_date', 4)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
         $goal['net_goals_may'] = Goal::where('goals_type', 2)->whereMonth('goals_date', 5)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
@@ -75,7 +81,7 @@ class DashboardController extends Controller
         $goal['net_goals_december'] = Goal::where('goals_type', 2)->whereMonth('goals_date', 12)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
 
         $goal['prospect_january'] = Prospect::whereMonth('sale_date', 1)->whereYear('sale_date', date('Y'))->count();
-        $goal['prospect_febuary'] = Prospect::whereMonth('sale_date', 2)->whereYear('sale_date', date('Y'))->count();
+        $goal['prospect_february'] = Prospect::whereMonth('sale_date', 2)->whereYear('sale_date', date('Y'))->count();
         $goal['prospect_march'] = Prospect::whereMonth('sale_date', 3)->whereYear('sale_date', date('Y'))->count();
         $goal['prospect_april'] = Prospect::whereMonth('sale_date', 4)->whereYear('sale_date', date('Y'))->count();
         $goal['prospect_may'] = Prospect::whereMonth('sale_date', 5)->whereYear('sale_date', date('Y'))->count();
@@ -86,7 +92,7 @@ class DashboardController extends Controller
         $goal['prospect_october'] = Prospect::whereMonth('sale_date', 10)->whereYear('sale_date', date('Y'))->count();
         $goal['prospect_november'] = Prospect::whereMonth('sale_date', 11)->whereYear('sale_date', date('Y'))->count();
         $goal['prospect_december'] = Prospect::whereMonth('sale_date', 12)->whereYear('sale_date', date('Y'))->count();
-        $labels = ['Jan', 'Febr', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+        $labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
         $type = 'YearEarn';
         // top 6 customers
         $top_customers = Customer::with('projects')->get();
@@ -133,7 +139,7 @@ class DashboardController extends Controller
         {
 
             $goal['gross_goals_january'] = Goal::where('goals_type', 1)->whereMonth('goals_date', 1)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-            $goal['gross_goals_febuary'] = Goal::where('goals_type', 1)->whereMonth('goals_date', 2)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
+            $goal['gross_goals_february'] = Goal::where('goals_type', 1)->whereMonth('goals_date', 2)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
             $goal['gross_goals_march'] = Goal::where('goals_type', 1)->whereMonth('goals_date', 3)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
             $goal['gross_goals_april'] = Goal::where('goals_type', 1)->whereMonth('goals_date', 4)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
             $goal['gross_goals_may'] = Goal::where('goals_type', 1)->whereMonth('goals_date', 5)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
@@ -146,7 +152,7 @@ class DashboardController extends Controller
             $goal['gross_goals_december'] = Goal::where('goals_type', 1)->whereMonth('goals_date', 12)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
 
             $goal['net_goals_january'] = Goal::where('goals_type', 2)->whereMonth('goals_date', 1)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-            $goal['net_goals_febuary'] = Goal::where('goals_type', 2)->whereMonth('goals_date', 2)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
+            $goal['net_goals_february'] = Goal::where('goals_type', 2)->whereMonth('goals_date', 2)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
             $goal['net_goals_march'] = Goal::where('goals_type', 2)->whereMonth('goals_date', 3)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
             $goal['net_goals_april'] = Goal::where('goals_type', 2)->whereMonth('goals_date', 4)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
             $goal['net_goals_may'] = Goal::where('goals_type', 2)->whereMonth('goals_date', 5)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
@@ -159,7 +165,7 @@ class DashboardController extends Controller
             $goal['net_goals_december'] = Goal::where('goals_type', 2)->whereMonth('goals_date', 12)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
 
             $goal['prospect_january'] = Prospect::whereMonth('sale_date', 1)->whereYear('sale_date', date('Y'))->count();
-            $goal['prospect_febuary'] = Prospect::whereMonth('sale_date', 2)->whereYear('sale_date', date('Y'))->count();
+            $goal['prospect_february'] = Prospect::whereMonth('sale_date', 2)->whereYear('sale_date', date('Y'))->count();
             $goal['prospect_march'] = Prospect::whereMonth('sale_date', 3)->whereYear('sale_date', date('Y'))->count();
             $goal['prospect_april'] = Prospect::whereMonth('sale_date', 4)->whereYear('sale_date', date('Y'))->count();
             $goal['prospect_may'] = Prospect::whereMonth('sale_date', 5)->whereYear('sale_date', date('Y'))->count();
@@ -170,7 +176,7 @@ class DashboardController extends Controller
             $goal['prospect_october'] = Prospect::whereMonth('sale_date', 10)->whereYear('sale_date', date('Y'))->count();
             $goal['prospect_november'] = Prospect::whereMonth('sale_date', 11)->whereYear('sale_date', date('Y'))->count();
             $goal['prospect_december'] = Prospect::whereMonth('sale_date', 12)->whereYear('sale_date', date('Y'))->count();
-            $labels = ['Jan', 'Febr', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+            $labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
             $type = 'YearEarn';
 
 

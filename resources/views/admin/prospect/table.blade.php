@@ -1,32 +1,35 @@
 @if (count($prospects) == 0)
     <tr>
-        <td colspan="12" class="text-center">No Prospect Found</td>
+        <td colspan="13" class="text-center">No Prospect Found</td>
     </tr>
 @else
     @foreach ($prospects as $prospect)
-        <tr >
-            <td  @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.prospects.edit', $prospect->id) }}" @endif>
+        <tr>
+            <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->created_at ? date('d-m-Y', strtotime($prospect->created_at)) : '' }}
             </td>
-            <td  @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.prospects.edit', $prospect->id) }}" @endif>
+            <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->user->name ?? '' }}
             </td>
-            <td  @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.prospects.edit', $prospect->id) }}" @endif>
+            <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->client_name ?? '' }}
             </td>
-            <td  @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.prospects.edit', $prospect->id) }}" @endif>
+            <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->business_name ?? '' }}
             </td>
-            <td  @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.prospects.edit', $prospect->id) }}" @endif>
+            <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->client_email ?? '' }}
             </td>
-            <td  @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.prospects.edit', $prospect->id) }}" @endif>
+            <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->client_phone ?? '' }}
             </td>
             <td>
                 {{ $prospect->transferTakenBy->name ?? '' }}
             </td>
-            <td  @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.prospects.edit', $prospect->id) }}" @endif>
+            <td>
+                {{ $prospect->reportTo->name ?? '-' }}
+            </td>
+            <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->status ?? '' }}
             </td>
             <td>
@@ -60,9 +63,10 @@
 @endif
 
 <tr>
-    <td colspan="12">
+    <td colspan="13">
         <div class="d-flex justify-content-center">
             {!! $prospects->links() !!}
         </div>
     </td>
 </tr>
+

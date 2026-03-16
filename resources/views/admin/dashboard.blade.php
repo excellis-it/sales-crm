@@ -222,24 +222,36 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="col-lg-3">
+                            <div class="card mb-30">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <span>Tender Manager</span>
+                                        </div>
+                                        <span class="fw-600">{{ $count['tender_managers'] ?? 0 }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="row">
-                        @if ($goal['gross_goals'])
+                        @if ($goal['gross_goals'] > 0)
                             <div class="col-lg-3 col-sm-6">
                                 <div class="stats-card-one mb-30">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div>
                                             <p class="mb-10 line-height-1">Gross Sales</p>
                                             <h3 class="fs-25">
-                                                {{ $goal['gross_goals'] ? '$' . $goal['gross_goals'] : 'N/A' }} /
+                                                ${{ $goal['gross_goals'] ?? 0 }} /
                                                 ${{ $goal['gross_goals_achieve'] ?? 0 }} </h3>
                                         </div>
-                                        <?php
-                                        $target = $goal['gross_goals'] ?? 0;
-                                        $achieve = $goal['gross_goals_achieve'] ?? 0;
-                                        // round percentage
-                                        $percentage['gross_goals_achieve'] = round(($achieve / $target) * 100, 0);
-                                        ?>
+                                        @php
+                                            $target = $goal['gross_goals'] ?? 0;
+                                            $achieve = $goal['gross_goals_achieve'] ?? 0;
+                                            $percentage['gross_goals_achieve'] = $target > 0 ? round(($achieve / $target) * 100, 0) : 0;
+                                        @endphp
                                         <span class="badge badge-cyan fs-12">
                                             <i class="icofont-swoosh-up"></i>
                                             <span class="fw-600 m-l-5">{{ $percentage['gross_goals_achieve'] ?? 0 }}%</span>
@@ -256,7 +268,7 @@
 
                                         <div class="progress progress-sm mt-1">
                                             <div class="progress-bar bg-primary"
-                                                style="width: {{ $percentage['gross_goals_achieve'] ?? 0 }}%">
+                                                style="width: {{ min($percentage['gross_goals_achieve'] ?? 0, 100) }}%">
                                             </div>
                                         </div>
                                     </div>
@@ -293,22 +305,21 @@
                             </div>
                         @endif
 
-                        @if ($goal['net_goals'])
+                        @if ($goal['net_goals'] > 0)
                             <div class="col-lg-3 col-sm-6">
                                 <div class="stats-card-one mb-30">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div>
-                                            <p class="mb-10 line-height-1">Revenue</p>
-                                            <h3 class="fs-25"> {{ $goal['net_goals'] ? '$' . $goal['net_goals'] : 'N/A' }}
+                                            <p class="mb-10 line-height-1">Revenue (Net)</p>
+                                            <h3 class="fs-25">${{ $goal['net_goals'] ?? 0 }}
                                                 /
                                                 ${{ $goal['net_goals_achieve'] ?? 0 }} </h3>
                                         </div>
-                                        <?php
-                                        $target = $goal['net_goals'] ?? 0;
-                                        $achieve = $goal['net_goals_achieve'] ?? 0;
-                                        // round percentage
-                                        $percentage['net_goals_achieve'] = round(($achieve / $target) * 100, 0);
-                                        ?>
+                                        @php
+                                            $target = $goal['net_goals'] ?? 0;
+                                            $achieve = $goal['net_goals_achieve'] ?? 0;
+                                            $percentage['net_goals_achieve'] = $target > 0 ? round(($achieve / $target) * 100, 0) : 0;
+                                        @endphp
                                         <span class="badge badge-cyan font-size-12">
                                             <i class="icofont-swoosh-up"></i>
                                             <span class="fw-600 m-l-5">{{ $percentage['net_goals_achieve'] ?? 0 }}%</span>
@@ -326,7 +337,7 @@
 
                                         <div class="progress progress-sm mt-1">
                                             <div class="progress-bar bg-danger"
-                                                style="width: {{ $percentage['net_goals_achieve'] ?? 0 }}%">
+                                                style="width: {{ min($percentage['net_goals_achieve'] ?? 0, 100) }}%">
                                             </div>
                                         </div>
                                     </div>
@@ -337,7 +348,7 @@
                                 <div class="stats-card-one mb-30">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div>
-                                            <p class="mb-10 line-height-1">Revenue</p>
+                                            <p class="mb-10 line-height-1">Revenue (Net)</p>
                                             <h3 class="fs-25"> No Goals Set </h3>
                                         </div>
                                         <span class="badge badge-cyan font-size-12">
@@ -373,7 +384,7 @@
 
                                     <span class="badge badge-red font-size-12">
                                         <i class="icofont-swoosh-down"></i>
-                                        <span class="fw-600 m-l-5"></span>
+                                        <span class="fw-600 m-l-5">{{ $count['account_manager_percentage'] }}%</span>
                                     </span>
                                 </div>
 
@@ -388,7 +399,7 @@
 
                                     <div class="progress progress-sm mt-1">
                                         <div class="progress-bar bg-purple"
-                                            style="width: {{ $count['account_manager_percentage'] }}%">
+                                            style="width: {{ min($count['account_manager_percentage'], 100) }}%">
                                         </div>
                                     </div>
                                 </div>
@@ -418,7 +429,33 @@
 
                                     <div class="progress progress-sm mt-1">
                                         <div class="progress-bar bg-black"
-                                            style="width: {{ $count['bdm_percentage'] }}%"></div>
+                                            style="width: {{ min($count['bdm_percentage'], 100) }}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="stats-card-one mb-30">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <p class="mb-10 line-height-1">Tender Pipeline</p>
+                                        <h3 class="fs-25">{{ $count['tender_projects'] ?? 0 }} Projects</h3>
+                                    </div>
+                                    <span class="badge badge-cyan font-size-12">
+                                        <i class="icofont-swoosh-up"></i>
+                                        <span class="fw-600 m-l-5">₹{{ number_format($count['tender_projects_value'] ?? 0, 2) }}L</span>
+                                    </span>
+                                </div>
+
+                                <div class="mt-15">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <span class="monthly_goal">Total Tender Value (Lakhs)</span>
+                                        </div>
+                                    </div>
+                                    <div class="progress progress-sm mt-1">
+                                        <div class="progress-bar bg-info" style="width: 100%"></div>
                                     </div>
                                 </div>
                             </div>
@@ -459,7 +496,7 @@
                                         <div class="d-flex align-items-center">
                                             <span>No of Customers</span>
                                         </div>
-                                        <span class="fw-600">{{ $count['projects'] }}</span>
+                                        <span class="fw-600">{{ $top_customers->count() }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -470,7 +507,7 @@
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between">
                                         <div class="d-flex align-items-center">
-                                            <span>No of Project</span>
+                                            <span>No of Projects</span>
                                         </div>
                                         <span class="fw-600">{{ $count['projects'] }}</span>
                                     </div>

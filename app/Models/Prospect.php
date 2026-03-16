@@ -20,4 +20,9 @@ class Prospect extends Model
     {
         return $this->belongsTo(User::class, 'transfer_token_by');
     }
+
+    public function reportTo()
+    {
+        return $this->belongsTo(User::class, 'report_to');
+    }
 }
