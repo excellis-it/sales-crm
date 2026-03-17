@@ -249,7 +249,7 @@ class ProspectController extends Controller
         $prospect->followup_date = $data['followup_date'];
         $prospect->upfront_value = $data['upfront_value'] ?? '';
         $prospect->sale_date = $data['sale_date'] ?? '';
-        $prospect->comments = $data['comments'];
+        // $prospect->comments = $data['comments'];
         $prospect->price_quote = $data['price_quote'];
         if ($data['offered_for'] == 'Other') {
             $prospect->offered_for = $data['other_value'];

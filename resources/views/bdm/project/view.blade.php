@@ -91,10 +91,12 @@
                                     {{-- <h3 class="card-title"><u>Billing Information</u> </h3> --}}
 
                                     <ul class="personal-info">
-                                        <li>
+                                       <li>
                                             <div class="title">Project Type:-</div>
                                             <div class="text">
-                                                <span class="">{{ $project->projectTypes->name ?? '' }}</span>
+                                                @foreach($project->projectTypes as $type)
+                                                    <span class="badge bg-info">{{ $type->name }}</span>@if(!$loop->last), @endif
+                                                @endforeach
                                             </div>
                                         </li>
                                         <li>

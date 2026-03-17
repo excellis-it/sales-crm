@@ -60,6 +60,7 @@ use App\Http\Controllers\DefaultController;
 use App\Http\Controllers\SalesExcecutive\TransferTakenController as SalesExcecutiveTransferTakenController;
 use App\Http\Controllers\SalesManager\TransferTakenController;
 use App\Http\Controllers\CommonFollowupController;
+use App\Http\Controllers\SalesManager\GoalsController as SalesManagerGoalsController;
 use App\Http\Controllers\TenderUser\TenderProjectController as CommonTenderProjectController;
 use Illuminate\Support\Facades\Artisan;
 
@@ -160,7 +161,7 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
         Route::get('/bdm-projects-download/{id}', [AdminBdmProjectController::class, 'documentDownload'])->name('bdm-projects.download');
         Route::get('/bdm-projects-new-customer', [AdminBdmProjectController::class, 'newCustomer'])->name('bdm-projects.new-customer');
         Route::get('/bdm-projects-customer-details', [AdminBdmProjectController::class, 'customerDetails'])->name('bdm-projects.customer-details');
-        
+
         Route::get('bdm-projects/followups/{id}', [\App\Http\Controllers\BdmFollowupController::class, 'getProjectFollowups'])->name('bdm-projects.followups');
         Route::post('bdm-projects/add-followup', [\App\Http\Controllers\BdmFollowupController::class, 'addProjectFollowup'])->name('bdm-projects.add-followup');
         Route::get('bdm-prospects/followups/{id}', [\App\Http\Controllers\BdmFollowupController::class, 'getProspectFollowups'])->name('bdm-prospects.followups');
@@ -282,6 +283,10 @@ Route::group(['middleware' => ['SalesManager'], 'prefix' => 'sales-manager'], fu
         Route::get('/prospect-edit-route/{prospect_id}/{sales_executive_id?}', [SalesManagerProspectController::class, 'editRoute'])->name('prospects.edit-route');
         Route::get('/transfer-taken-filter', [TransferTakenController::class, 'transferTakenFilter'])->name('transfer-taken.filter');
     });
+
+    Route::resource('goals', \App\Http\Controllers\SalesManager\GoalsController::class)->names('sales-manager.goals');
+    Route::get('/goals-search', [\App\Http\Controllers\SalesManager\GoalsController::class, 'search'])->name('sales-manager.goals.search');
+    Route::post('/goals-distribution', [\App\Http\Controllers\SalesManager\GoalsController::class, 'getDistribution'])->name('sales-manager.goals.get-distribution');
 
     //payment routes
     Route::get('/payments', [SalesManagerPaymentController::class, 'salesManagerPayments'])->name('sales-manager.payments.list');

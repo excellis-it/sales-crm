@@ -215,7 +215,7 @@ class ProjectController extends Controller
         $project->assigned_date = date('Y-m-d');
         $project->assigned_to = Auth::user()->id;
         $project->delivery_tat = $data['delivery_tat'] ?? '';
-        $project->comment = $data['comment'];
+        // $project->comment = $data['comment'];
         $project->save();
 
         // ProjectType::where('project_id', $id)->delete();

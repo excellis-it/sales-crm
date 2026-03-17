@@ -80,10 +80,13 @@
                                     {{-- <h3 class="card-title"><u>Billing Information</u> </h3> --}}
 
                                     <ul class="personal-info">
+                                       
                                         <li>
                                             <div class="title">Project Type:-</div>
                                             <div class="text">
-                                                <span class="">{{ $project->projectTypes->name ?? '' }}</span>
+                                                @foreach($project->projectTypes as $type)
+                                                    <span class="badge bg-info">{{ $type->name }}</span>@if(!$loop->last), @endif
+                                                @endforeach
                                             </div>
                                         </li>
                                         <li>
@@ -120,7 +123,7 @@
                                         <li class="">
                                             <div class="title  ">Project Opener:-</div>
                                             <div class="text">
-                                                {{ $project->projectOpener->name ?? '' }}
+                                                {{ ($project->projectOpener->name) ?? '' }}
                                             </div>
                                         </li>
                                     </ul>

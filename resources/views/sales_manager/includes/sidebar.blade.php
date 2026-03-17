@@ -42,6 +42,12 @@
                             Prospects</span></a>
                 </li>
 
+                {{-- My goals --}}
+                <li class="{{ Request::is('sales-manager/goals*') ? 'active' : ' ' }}">
+                    <a href="{{ route('sales-manager.goals.index') }}"><i class="la la-bullseye"></i> <span>
+                            Create Goals</span></a>
+                </li>
+
                 <li class="{{ Request::is('sales-manager/transfer-taken*') ? 'active' : ' ' }}">
                     <a href="{{ route('sales-manager.transfer-taken.index') }}"><i class="la la-paper-plane"></i> <span>
                             Prospect Taken</span></a>

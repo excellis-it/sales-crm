@@ -91,10 +91,12 @@
                                     {{-- <h3 class="card-title"><u>Billing Information</u> </h3> --}}
 
                                     <ul class="personal-info">
-                                        <li>
+                                       <li>
                                             <div class="title">Project Type:-</div>
                                             <div class="text">
-                                                <span class="badge bg-info">{{ $project->projectTypes->name ?? '' }}</span>
+                                                @foreach($project->projectTypes as $type)
+                                                    <span class="badge bg-info">{{ $type->name }}</span>@if(!$loop->last), @endif
+                                                @endforeach
                                             </div>
                                         </li>
                                         <li>
@@ -112,7 +114,7 @@
                                         <li class="">
                                             <div class="title  ">Due Amount:-</div>
                                             <div class="text">
-                                                {{ (int)$project->project_value - (int)$project->project_upfront }}
+                                                {{ (int) $project->project_value - (int) $project->project_upfront }}
                                             </div>
                                         </li>
                                         <li>
@@ -131,7 +133,7 @@
                                         <li class="">
                                             <div class="title  ">Sale Date:-</div>
                                             <div class="text">
-                                                {{ ($project->sale_date) ?  date('d M, Y', strtotime($project->sale_date)) : '' }}
+                                                {{ $project->sale_date ? date('d M, Y', strtotime($project->sale_date)) : '' }}
                                             </div>
                                         </li>
                                         <li class="">
@@ -143,7 +145,7 @@
                                         <li class="">
                                             <div class="title  ">Project Closer:-</div>
                                             <div class="text">
-                                                {{ $project->projectCloser->name ?? ''}}
+                                                {{ $project->projectCloser->name ?? '' }}
                                             </div>
                                         </li>
                                     </ul>

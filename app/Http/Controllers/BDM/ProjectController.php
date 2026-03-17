@@ -274,7 +274,7 @@ class ProjectController extends Controller
         $project->sale_date = $data['sale_date'];
         $project->assigned_date = '';
         $project->delivery_tat = $data['delivery_tat'];
-        $project->comment = $data['comment'];
+        // $project->comment = $data['comment'];
         $project->save();
 
         $countGross = Goal::where('user_id', Auth::user()->id)->whereMonth('goals_date', date('m', strtotime($data['sale_date'])))->whereYear('goals_date', date('Y', strtotime($data['sale_date'])))->where('goals_type', 1)->count();

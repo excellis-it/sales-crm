@@ -253,7 +253,7 @@ class BdmProspectController extends Controller
         $prospect->followup_time = $data['followup_time'];
         $prospect->sale_date = $data['sale_date'] ?? '';
         $prospect->upfront_value = $data['upfront_value'] ?? '';
-        $prospect->comments = $data['comments'];
+        // $prospect->comments = $data['comments'];
         $prospect->price_quote = $data['price_quote'];
         if ($data['offered_for'] == 'Other') {
             $prospect->offered_for = $data['other_value'];

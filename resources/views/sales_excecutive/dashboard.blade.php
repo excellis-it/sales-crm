@@ -73,38 +73,36 @@
                             </div>
                         </div>
                     </div>
-                </div>
                 @else
-                <div class="col-lg-3 col-sm-6">
-                    <div class="stats-card-one mb-30">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <p class="mb-10 line-height-1">Gross Sales</p>
-                                <h3 class="fs-25"> No Gross Sales Set</h3>
-                            </div>
-                            <span class="badge badge-cyan fs-12">
-                                <i class="icofont-swoosh-up"></i>
-                                <span class="fw-600 m-l-5">0%</span>
-                            </span>
-                        </div>
-
-                        <div class="mt-15">
-                            <div class="d-flex justify-content-between">
-                                <div class="d-flex align-items-center">
-                                    <span class="monthly_goal">Monthly Goal</span>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="stats-card-one mb-30">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <p class="mb-10 line-height-1">Gross Sales</p>
+                                    <h3 class="fs-25"> No Gross Sales Set</h3>
                                 </div>
-                                <span class="fw-600 monthly_goal">0%</span>
+                                <span class="badge badge-cyan fs-12">
+                                    <i class="icofont-swoosh-up"></i>
+                                    <span class="fw-600 m-l-5">0%</span>
+                                </span>
                             </div>
 
-                            <div class="progress progress-sm mt-1">
-                                <div class="progress-bar bg-primary"
-                                    style="width: 0%">
+                            <div class="mt-15">
+                                <div class="d-flex justify-content-between">
+                                    <div class="d-flex align-items-center">
+                                        <span class="monthly_goal">Monthly Goal</span>
+                                    </div>
+                                    <span class="fw-600 monthly_goal">0%</span>
+                                </div>
+
+                                <div class="progress progress-sm mt-1">
+                                    <div class="progress-bar bg-primary" style="width: 0%">
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            @endif
+                @endif
 
                 @if ($goal['net_goals'])
                     <div class="col-lg-3 col-sm-6">
@@ -144,226 +142,224 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                @else
-                <div class="col-lg-3 col-sm-6">
-                    <div class="stats-card-one mb-30">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <p class="mb-10 line-height-1">Revenue</p>
-                                <h3 class="fs-25"> No Goals Set </h3>
+           
+        @else
+            <div class="col-lg-3 col-sm-6">
+                <div class="stats-card-one mb-30">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="mb-10 line-height-1">Revenue</p>
+                            <h3 class="fs-25"> No Goals Set </h3>
+                        </div>
+                        <span class="badge badge-cyan font-size-12">
+                            <i class="icofont-swoosh-up"></i>
+                            <span class="fw-600 m-l-5">0%</span>
+                        </span>
+                    </div>
+
+                    <div class="mt-15">
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <span class="monthly_goal">Monthly Goal</span>
                             </div>
-                            <span class="badge badge-cyan font-size-12">
-                                <i class="icofont-swoosh-up"></i>
-                                <span class="fw-600 m-l-5">0%</span>
-                            </span>
+                            <span class="fw-600 monthly_goal">0%</span>
                         </div>
 
-                        <div class="mt-15">
-                            <div class="d-flex justify-content-between">
-                                <div class="d-flex align-items-center">
-                                    <span class="monthly_goal">Monthly Goal</span>
-                                </div>
-                                <span class="fw-600 monthly_goal">0%</span>
-                            </div>
-
-                            <div class="progress progress-sm mt-1">
-                                <div class="progress-bar bg-danger"
-                                    style="width:0%">
-                                </div>
+                        <div class="progress progress-sm mt-1">
+                            <div class="progress-bar bg-danger" style="width:0%">
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
             @endif
 
-                <div class="col-lg-3 col-sm-6">
-                    <div class="stats-card-one mb-30">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <p class="mb-10 line-height-1">On Board Prospect</p>
-                                <h3 class="mb-0 fs-25">{{ $count['win'] }}</h3>
-                            </div>
-
-                            <span class="badge badge-red font-size-12">
-                                <i class="icofont-swoosh-down"></i>
-                                <span class="fw-600 m-l-5">{{ $percentage['win'] }}%</span>
-                            </span>
+            <div class="col-lg-3 col-sm-6">
+                <div class="stats-card-one mb-30">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="mb-10 line-height-1">On Board Prospect</p>
+                            <h3 class="mb-0 fs-25">{{ $count['win'] }}</h3>
                         </div>
 
-                        <div class="mt-15">
-                            <div class="d-flex justify-content-between">
-                                <div class="d-flex align-items-center">
-                                    <span>Prospect Percentage</span>
-                                </div>
-                                <span class="fw-600">{{ $percentage['win'] }}%</span>
-                            </div>
-
-                            <div class="progress progress-sm mt-1">
-                                <div class="progress-bar bg-purple" style="width: {{ $percentage['win'] }}%"></div>
-                            </div>
-                        </div>
+                        <span class="badge badge-red font-size-12">
+                            <i class="icofont-swoosh-down"></i>
+                            <span class="fw-600 m-l-5">{{ $percentage['win'] }}%</span>
+                        </span>
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="card mb-30">
-                        <div class="card-body" style="position: relative;">
-                            <div class="card-header">
-                                <h5 class="card-title">Monthly Revenue</h5>
+
+                    <div class="mt-15">
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <span>Prospect Percentage</span>
                             </div>
-
-
-                            <div class="resize-triggers">
-                                <div class="expand-trigger">
-                                    <canvas id="canvas"></canvas>
-                                </div>
-                                <div class="contract-trigger"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="card mb-30">
-                        <div class="card-body" style="position: relative;">
-                            <div class="card-header">
-                                <h5 class="card-title">Prospects Statistics</h5>
-                            </div>
-
-
-                            <div class="resize-triggers">
-                                <div class="expand-trigger">
-                                    <canvas id="oilChart"></canvas>
-
-                                </div>
-                                <div class="contract-trigger"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="card mb-30">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <div class="d-flex align-items-center">
-                                    <span>Total Prospects</span>
-                                </div>
-
-                                <span class="fw-600">{{ $count['prospects'] }}</span>
-                            </div>
-
-                            <div class="progress progress-sm mt-2">
-                                <div class="progress-bar bg-primary" style="width: 100%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-3">
-                    <div class="card mb-30">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <div class="d-flex align-items-center">
-                                    <span>Follow Up Prospects</span>
-                                </div>
-                                <span class="fw-600">{{ $count['follow_up'] }}</span>
-                            </div>
-
-                            <div class="progress progress-sm mt-2">
-                                <div class="progress-bar bg-danger" style="width: {{ $percentage['follow_up'] }}%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-3">
-                    <div class="card mb-30">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <div class="d-flex align-items-center">
-                                    <span>Sent Proposal Prospects</span>
-                                </div>
-                                <span class="fw-600">{{ $count['sent_proposal'] }}</span>
-                            </div>
-
-                            <div class="progress progress-sm mt-2">
-                                <div class="progress-bar bg-danger" style="width: {{ $percentage['sent_proposal'] }}%">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-3">
-                    <div class="card mb-30">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <div class="d-flex align-items-center">
-                                    <span>Close Prospects</span>
-                                </div>
-                                <span class="fw-600">{{ $count['close'] }}</span>
-                            </div>
-
-                            <div class="progress progress-sm mt-2">
-                                <div class="progress-bar bg-danger" style="width: {{ $percentage['close'] }}%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-12">
-                <div class="card mb-30">
-                    <div class="card-body" style="position: relative;">
-                        <div class="">
-                            <h5 class="card-title">Prospects Statistics</h5>
-                        </div>
-                        <div class="row justify-content-end">
-                            <div class="col-md-6">
-                                <div class="row g-1 justify-content-end">
-                                    <div class="col-md-8 pr-0">
-                                        <div class="search-field prod-search">
-                                            <input type="text" name="search" id="search" placeholder="search..."
-                                                required class="form-control rounded_search">
-                                            <a href="javascript:void(0)" class="prod-search-icon submit_search"><i
-                                                    class="fa fa-search"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <span class="fw-600">{{ $percentage['win'] }}%</span>
                         </div>
 
-                        <div class="table-responsive" id="dashboard-prospect">
-                            <table id="myTable" class="dd table table-striped  table-hover"
-                                style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Business Name</th>
-                                        <th>Client Name</th>
-                                        <th>Email</th>
-                                        <th>Phone</th>
-                                        <th>Transfer Taken By</th>
-                                        <th>Status</th>
-                                        <th>Service Offered</th>
-                                        <th>Followup Date</th>
-                                        <th>Price Quoted</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="prospect-filter">
-                                    @include('sales_excecutive.dashboard_prospect_table')
-
-                                </tbody>
-                            </table>
+                        <div class="progress progress-sm mt-1">
+                            <div class="progress-bar bg-purple" style="width: {{ $percentage['win'] }}%"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    @endsection
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card mb-30">
+                    <div class="card-body" style="position: relative;">
+                        <div class="card-header">
+                            <h5 class="card-title">Monthly Revenue</h5>
+                        </div>
+
+
+                        <div class="resize-triggers">
+                            <div class="expand-trigger">
+                                <canvas id="canvas"></canvas>
+                            </div>
+                            <div class="contract-trigger"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card mb-30">
+                    <div class="card-body" style="position: relative;">
+                        <div class="card-header">
+                            <h5 class="card-title">Prospects Statistics</h5>
+                        </div>
+
+
+                        <div class="resize-triggers">
+                            <div class="expand-trigger">
+                                <canvas id="oilChart"></canvas>
+
+                            </div>
+                            <div class="contract-trigger"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="card mb-30">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <span>Total Prospects</span>
+                            </div>
+
+                            <span class="fw-600">{{ $count['prospects'] }}</span>
+                        </div>
+
+                        <div class="progress progress-sm mt-2">
+                            <div class="progress-bar bg-primary" style="width: 100%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3">
+                <div class="card mb-30">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <span>Follow Up Prospects</span>
+                            </div>
+                            <span class="fw-600">{{ $count['follow_up'] }}</span>
+                        </div>
+
+                        <div class="progress progress-sm mt-2">
+                            <div class="progress-bar bg-danger" style="width: {{ $percentage['follow_up'] }}%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3">
+                <div class="card mb-30">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <span>Sent Proposal Prospects</span>
+                            </div>
+                            <span class="fw-600">{{ $count['sent_proposal'] }}</span>
+                        </div>
+
+                        <div class="progress progress-sm mt-2">
+                            <div class="progress-bar bg-danger" style="width: {{ $percentage['sent_proposal'] }}%">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3">
+                <div class="card mb-30">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <span>Close Prospects</span>
+                            </div>
+                            <span class="fw-600">{{ $count['close'] }}</span>
+                        </div>
+
+                        <div class="progress progress-sm mt-2">
+                            <div class="progress-bar bg-danger" style="width: {{ $percentage['close'] }}%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-12">
+            <div class="card mb-30">
+                <div class="card-body" style="position: relative;">
+                    <div class="">
+                        <h5 class="card-title">Prospects Statistics</h5>
+                    </div>
+                    <div class="row justify-content-end">
+                        <div class="col-md-6">
+                            <div class="row g-1 justify-content-end">
+                                <div class="col-md-8 pr-0">
+                                    <div class="search-field prod-search">
+                                        <input type="text" name="search" id="search" placeholder="search..."
+                                            required class="form-control rounded_search">
+                                        <a href="javascript:void(0)" class="prod-search-icon submit_search"><i
+                                                class="fa fa-search"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive" id="dashboard-prospect">
+                        <table id="myTable" class="dd table table-striped  table-hover" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Business Name</th>
+                                    <th>Client Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Transfer Taken By</th>
+                                    <th>Status</th>
+                                    <th>Service Offered</th>
+                                    <th>Followup Date</th>
+                                    <th>Price Quoted</th>
+                                </tr>
+                            </thead>
+                            <tbody class="prospect-filter">
+                                @include('sales_excecutive.dashboard_prospect_table')
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
 
 
 
@@ -457,25 +453,25 @@
     <script>
         var oilCanvas = document.getElementById("oilChart");
 
-            var oilData = {
-                labels: [
-                    "On Board",
-                    "Follow Up",
-                    "Sent Proposal",
-                    "Close",
+        var oilData = {
+            labels: [
+                "On Board",
+                "Follow Up",
+                "Sent Proposal",
+                "Close",
+            ],
+            datasets: [{
+                data: [{{ $count['win'] }}, {{ $count['follow_up'] }}, {{ $count['sent_proposal'] }},
+                    {{ $count['close'] }}
                 ],
-                datasets: [{
-                    data: [{{ $count['win'] }}, {{ $count['follow_up'] }}, {{ $count['sent_proposal'] }},
-                        {{ $count['close'] }}
-                    ],
-                    backgroundColor: [
-                        "#ad1e23",
-                        "#fa8d35",
-                        "#297dd7",
-                        "#6c757d",
-                    ]
-                }]
-            };
+                backgroundColor: [
+                    "#ad1e23",
+                    "#fa8d35",
+                    "#297dd7",
+                    "#6c757d",
+                ]
+            }]
+        };
 
         var pieChart = new Chart(oilCanvas, {
             type: 'pie',
@@ -483,82 +479,81 @@
         });
     </script>
 
-<script>
-    $(document).ready(function() {
-        function clear_icon() {
-            $('#date_icon').html('');
-            $('#business_name_icon').html('');
-            $('#client_name_icon').html('');
-            $('#email_icon').html('');
-            $('#phone_icon').html('');
-            $('#follow_icon').html('');
-            $('#price_quoted_icon').html('');
-            // $('#currency_icon').html('');
-        }
+    <script>
+        $(document).ready(function() {
+            function clear_icon() {
+                $('#date_icon').html('');
+                $('#business_name_icon').html('');
+                $('#client_name_icon').html('');
+                $('#email_icon').html('');
+                $('#phone_icon').html('');
+                $('#follow_icon').html('');
+                $('#price_quoted_icon').html('');
+                // $('#currency_icon').html('');
+            }
 
-        function fetch_data(page, sort_type, sort_by, query) {
-            $.ajax({
-                url: "{{ route('sales-executive.dashboard.prospect-search-data') }}",
-                data: {
-                    page: page,
-                    sortby: sort_by,
-                    sorttype: sort_type,
-                    query: query
-                },
-                success: function(data) {
-                    $('.prospect-filter').html(data.data);
-                }
+            function fetch_data(page, sort_type, sort_by, query) {
+                $.ajax({
+                    url: "{{ route('sales-executive.dashboard.prospect-search-data') }}",
+                    data: {
+                        page: page,
+                        sortby: sort_by,
+                        sorttype: sort_type,
+                        query: query
+                    },
+                    success: function(data) {
+                        $('.prospect-filter').html(data.data);
+                    }
+                });
+            }
+
+            $(document).on('keyup', '#search', function() {
+                var query = $('#search').val();
+                var column_name = $('#hidden_column_name').val();
+                var sort_type = $('#hidden_sort_type').val();
+                var page = $('#hidden_page').val();
+                fetch_data(page, sort_type, column_name, query);
             });
-        }
 
-        $(document).on('keyup', '#search', function() {
-            var query = $('#search').val();
-            var column_name = $('#hidden_column_name').val();
-            var sort_type = $('#hidden_sort_type').val();
-            var page = $('#hidden_page').val();
-            fetch_data(page, sort_type, column_name, query);
-        });
+            $(document).on('click', '.sorting', function() {
+                var column_name = $(this).data('column_name');
+                var order_type = $(this).data('sorting_type');
+                var reverse_order = '';
+                if (order_type == 'asc') {
+                    $(this).data('sorting_type', 'desc');
+                    reverse_order = 'desc';
+                    clear_icon();
+                    $('#' + column_name + '_icon').html(
+                        '<span class="fa fa-sort-down"></span>');
+                }
+                if (order_type == 'desc') {
+                    $(this).data('sorting_type', 'asc');
+                    reverse_order = 'asc';
+                    clear_icon();
+                    $('#' + column_name + '_icon').html(
+                        '<span class="fa fa-sort-up"></span>');
+                }
+                $('#hidden_column_name').val(column_name);
+                $('#hidden_sort_type').val(reverse_order);
+                var page = $('#hidden_page').val();
+                var query = $('#search').val();
+                fetch_data(page, reverse_order, column_name, query);
+            });
 
-        $(document).on('click', '.sorting', function() {
-            var column_name = $(this).data('column_name');
-            var order_type = $(this).data('sorting_type');
-            var reverse_order = '';
-            if (order_type == 'asc') {
-                $(this).data('sorting_type', 'desc');
-                reverse_order = 'desc';
-                clear_icon();
-                $('#' + column_name + '_icon').html(
-                    '<span class="fa fa-sort-down"></span>');
-            }
-            if (order_type == 'desc') {
-                $(this).data('sorting_type', 'asc');
-                reverse_order = 'asc';
-                clear_icon();
-                $('#' + column_name + '_icon').html(
-                    '<span class="fa fa-sort-up"></span>');
-            }
-            $('#hidden_column_name').val(column_name);
-            $('#hidden_sort_type').val(reverse_order);
-            var page = $('#hidden_page').val();
-            var query = $('#search').val();
-            fetch_data(page, reverse_order, column_name, query);
-        });
+            $(document).on('click', '.pagination a', function(event) {
+                event.preventDefault();
+                var page = $(this).attr('href').split('page=')[1];
+                $('#hidden_page').val(page);
+                var column_name = $('#hidden_column_name').val();
+                var sort_type = $('#hidden_sort_type').val();
 
-        $(document).on('click', '.pagination a', function(event) {
-            event.preventDefault();
-            var page = $(this).attr('href').split('page=')[1];
-            $('#hidden_page').val(page);
-            var column_name = $('#hidden_column_name').val();
-            var sort_type = $('#hidden_sort_type').val();
+                var query = $('#search').val();
 
-            var query = $('#search').val();
-
-            $('li').removeClass('active');
-            $(this).parent().addClass('active');
-            fetch_data(page, sort_type, column_name, query);
-        });
+                $('li').removeClass('active');
+                $(this).parent().addClass('active');
+                fetch_data(page, sort_type, column_name, query);
+            });
 
         });
-</script>
-
+    </script>
 @endpush
