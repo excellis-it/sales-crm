@@ -229,6 +229,9 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     });
     Route::post('/goals-get-user', [GoalsController::class, 'getUser'])->name('goals.get.user');
     Route::post('/goals-get-user-by-type', [GoalsController::class, 'getUserByType'])->name('goals.get.user-by-type');
+    Route::get('/goals-get-sales-managers', [GoalsController::class, 'getSalesManagers'])->name('goals.get.sales-managers');
+    Route::post('/goals-get-distribution', [GoalsController::class, 'getDistribution'])->name('goals.get.distribution');
+    Route::post('/goals-store-distribution', [GoalsController::class, 'storeDistribution'])->name('goals.store.distribution');
 
     //payment routes
     Route::get('/payments', [AdminPaymentsController::class, 'adminPayments'])->name('admin.payments.list');

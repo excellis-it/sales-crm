@@ -77,6 +77,12 @@ class GoalsController extends Controller
         }
         //  check role by user id
         $user = User::find($request->user_id);
+
+        // Block admin from directly creating goals for Sales Executives
+        // Sales Executive goals are only distributed by their Sales Manager
+        if ($user->hasRole('SALES_EXCUETIVE')) {
+            return redirect()->route('goals.index')->with('error', 'Sales Executive goals can only be set by their Sales Manager through goal distribution.');
+        }
         if ($user->hasRole('SALES_MANAGER') || $user->hasRole('BUSINESS_DEVELOPMENT_MANAGER')) {
             $projects = Project::where('user_id', $request->user_id)->whereMonth('sale_date', date('m', strtotime($request->goals_date)))->whereYear('sale_date', date('Y', strtotime($request->goals_date)))->get();
             if (count($projects) > 0) {
@@ -264,5 +270,160 @@ class GoalsController extends Controller
                 return response()->json(['status' => false, 'message' => 'User not found.']);
             }
         }
+    }
+
+    /**
+     * Get all Sales Managers who have goals set by admin
+     */
+    public function getSalesManagers(Request $request)
+    {
+        $salesManagers = User::role('SALES_MANAGER')->where('status', 1)->orderBy('name', 'asc')->get(['id', 'name']);
+        return response()->json(['status' => true, 'sales_managers' => $salesManagers]);
+    }
+
+    /**
+     * Get available months for a Sales Manager and distribution data
+     */
+    public function getDistribution(Request $request)
+    {
+        $salesManagerId = $request->sales_manager_id;
+        $goalsDate = $request->goals_date;
+        $month = date('m', strtotime($goalsDate));
+        $year = date('Y', strtotime($goalsDate));
+
+        $smGoal = Goal::where('user_id', $salesManagerId)
+            ->whereMonth('goals_date', $month)
+            ->whereYear('goals_date', $year)
+            ->where('goals_type', 1)
+            ->first();
+
+        if (!$smGoal) {
+            return response()->json(['status' => false, 'message' => 'No goal set for this Sales Manager for this month.']);
+        }
+
+        $salesExecs = User::role('SALES_EXCUETIVE')
+            ->where('sales_manager_id', $salesManagerId)
+            ->where('status', 1)
+            ->get();
+
+        if ($salesExecs->count() == 0) {
+            return response()->json(['status' => false, 'message' => 'No Sales Executives found under this Sales Manager.']);
+        }
+
+        // Find already allocated amounts
+        $alreadyAllocated = [];
+        foreach ($salesExecs as $exec) {
+            $execGoal = Goal::where('user_id', $exec->id)
+                ->whereMonth('goals_date', $month)
+                ->whereYear('goals_date', $year)
+                ->where('goals_type', 1)
+                ->first();
+            if ($execGoal) {
+                $alreadyAllocated[$exec->id] = $execGoal->goals_amount;
+            }
+        }
+
+        $defaultAmount = 0;
+        if (count($alreadyAllocated) == 0) {
+            $defaultAmount = round($smGoal->goals_amount / $salesExecs->count(), 2);
+        }
+
+        $execData = [];
+        foreach ($salesExecs as $exec) {
+            $execData[] = [
+                'id' => $exec->id,
+                'name' => $exec->name,
+                'amount' => isset($alreadyAllocated[$exec->id]) ? $alreadyAllocated[$exec->id] : $defaultAmount,
+            ];
+        }
+
+        return response()->json([
+            'status' => true,
+            'total_amount' => $smGoal->goals_amount,
+            'executives' => $execData,
+        ]);
+    }
+
+    /**
+     * Store distributed goals for Sales Executives from admin panel
+     */
+    public function storeDistribution(Request $request)
+    {
+        $request->validate([
+            'sales_manager_id' => 'required',
+            'goals_date' => 'required',
+            'amount' => 'required|array',
+        ]);
+
+        $salesManagerId = $request->sales_manager_id;
+        $goalsDate = $request->goals_date;
+        $month = date('m', strtotime($goalsDate));
+        $year = date('Y', strtotime($goalsDate));
+
+        $smGoal = Goal::where('user_id', $salesManagerId)
+            ->whereMonth('goals_date', $month)
+            ->whereYear('goals_date', $year)
+            ->where('goals_type', 1)
+            ->first();
+
+        if (!$smGoal) {
+            return redirect()->route('goals.index')->with('error', 'No goal set for this Sales Manager for this month.');
+        }
+
+        $amounts = $request->amount;
+        $totalInput = array_sum($amounts);
+
+        if ($totalInput > ($smGoal->goals_amount + 0.5)) {
+            return redirect()->route('goals.index')->with('error', 'Distributed amount exceeds the Sales Manager total goal.');
+        }
+
+        foreach ($amounts as $userId => $amount) {
+            $exec = User::role('SALES_EXCUETIVE')->where('sales_manager_id', $salesManagerId)->where('id', $userId)->first();
+            if (!$exec) continue;
+
+            $prospects = Prospect::where(['user_id' => $exec->id, 'status' => 'Win'])
+                ->whereMonth('sale_date', $month)
+                ->whereYear('sale_date', $year)
+                ->get();
+
+            $goals_achieve = $prospects->count() > 0 ? $prospects->sum('price_quote') : 0;
+            $goals_achieve_net = $prospects->count() > 0 ? $prospects->sum('upfront_value') : 0;
+
+            // Gross goal
+            $execGrossGoal = Goal::where('user_id', $exec->id)
+                ->whereMonth('goals_date', $month)
+                ->whereYear('goals_date', $year)
+                ->where('goals_type', 1)
+                ->first();
+
+            if (!$execGrossGoal) {
+                $execGrossGoal = new Goal();
+                $execGrossGoal->user_id = $exec->id;
+                $execGrossGoal->goals_date = $goalsDate;
+                $execGrossGoal->goals_type = 1;
+            }
+            $execGrossGoal->goals_achieve = $goals_achieve;
+            $execGrossGoal->goals_amount = $amount;
+            $execGrossGoal->save();
+
+            // Net goal
+            $execNetGoal = Goal::where('user_id', $exec->id)
+                ->whereMonth('goals_date', $month)
+                ->whereYear('goals_date', $year)
+                ->where('goals_type', 2)
+                ->first();
+
+            if (!$execNetGoal) {
+                $execNetGoal = new Goal();
+                $execNetGoal->user_id = $exec->id;
+                $execNetGoal->goals_date = $goalsDate;
+                $execNetGoal->goals_type = 2;
+            }
+            $execNetGoal->goals_achieve = $goals_achieve_net;
+            $execNetGoal->goals_amount = $amount * 0.25;
+            $execNetGoal->save();
+        }
+
+        return redirect()->route('goals.index')->with('message', 'Goals distributed successfully to Sales Executives.');
     }
 }

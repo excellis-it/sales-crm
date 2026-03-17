@@ -7,6 +7,48 @@
         .dataTables_filter {
             margin-bottom: 10px !important;
         }
+        #goal-create .card {
+            transition: all 0.3s ease;
+        }
+        #goal-create .card:hover {
+            box-shadow: 0 8px 25px rgba(243, 126, 32, 0.15) !important;
+        }
+        #goal-create .form-select.border-primary,
+        #goal-create .form-control.border-primary {
+            border-color: #f37e20 !important;
+        }
+        #goal-create .form-select.border-primary:focus,
+        #goal-create .form-control.border-primary:focus {
+            border-color: #f37e20 !important;
+            box-shadow: 0 0 0 0.2rem rgba(243, 126, 32, 0.25);
+        }
+        #se-distribution .card {
+            transition: all 0.3s ease;
+        }
+        #se-distribution .card:hover {
+            box-shadow: 0 8px 25px rgba(173, 30, 35, 0.12) !important;
+        }
+        .exec-amount {
+            font-size: 14px;
+            font-weight: 600;
+            background-color: #fff9e6;
+            border: 1px solid #f37e20;
+            border-radius: 5px;
+            padding: 8px;
+            height: 42px;
+        }
+        .exec-amount:focus {
+            border-color: #f37e20 !important;
+            box-shadow: 0 0 0 0.2rem rgba(243, 126, 32, 0.25);
+        }
+        #remaining_goal {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        #total_sm_goal {
+            font-size: 18px;
+            font-weight: bold;
+        }
     </style>
 @endpush
 
@@ -32,67 +74,109 @@
             </div>
             <div class="row">
                 <div class="col-xl-12 mx-auto" id="goal-create">
-                    <h6 class="mb-0 text-uppercase">Goals Create</h6>
-                    <hr>
-                    <div class="border-0 border-4">
-                        <div class="card-body">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-body p-4">
+                            <h5 class="mb-4 text-uppercase">Project Goals Create</h5>
+                            <hr class="mb-4">
                             <form action="{{ route('goals.store') }}" method="post" id="createGoals"
                                 enctype="multipart/form-data">
                                 @csrf
                                 <input type="hidden" name="id" id="id">
-                                <div class="border p-4 rounded">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <label for="inputEnterYourName" class="col-form-label"> User Type
-                                                <span style="color: red;">*</span></label>
-                                            <select name="user_type" id="user_type" class="form-control">
-                                                <option value="">Select a User</option>
-                                                <option value="SALES_MANAGER">Sales Manager</option>
-                                                <option value="ACCOUNT_MANAGER">Account Manager</option>
-                                                <option value="SALES_EXCUETIVE">Sales Exceutive</option>
-                                                <option value="BUSINESS_DEVELOPMENT_MANAGER">BDM</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="inputEnterYourName" class="col-form-label"> Goal Assign For
-                                                <span style="color: red;">*</span></label>
-                                            <select name="user_id" id="user_id" class="form-control">
-                                                <option value="">Select a User</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="inputEnterYourName" class="col-form-label"> Target Amount </label>
-                                            <input type="text" name="goals_amount" id="goals_amount" class="form-control"
-                                                placeholder="Enter Target Amount">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="inputEnterYourName" class="col-form-label"> Goal Month
-                                                <span style="color: red;">*</span></label>
-                                            <select name="goals_date" id="goals_date" class="form-control">
-                                                <option value="">Select a month</option>
-                                                <option value="{{ date('Y') }}-01-01">January</option>
-                                                <option value="{{ date('Y') }}-02-01">February</option>
-                                                <option value="{{ date('Y') }}-03-01">March</option>
-                                                <option value="{{ date('Y') }}-04-01">April</option>
-                                                <option value="{{ date('Y') }}-05-01">May</option>
-                                                <option value="{{ date('Y') }}-06-01">June</option>
-                                                <option value="{{ date('Y') }}-07-01">July</option>
-                                                <option value="{{ date('Y') }}-08-01">August</option>
-                                                <option value="{{ date('Y') }}-09-01">September</option>
-                                                <option value="{{ date('Y') }}-10-01">October</option>
-                                                <option value="{{ date('Y') }}-11-01">November</option>
-                                                <option value="{{ date('Y') }}-12-01">December</option>
-                                            </select>
-                                        </div>
-
-                                        <div class="row" style="margin-top: 20px; float: left;">
-                                            <div class="col-sm-9">
-                                                <button type="submit"
-                                                    class="btn px-5 submit-btn form-button">Create</button>
-                                            </div>
-                                        </div>
+                                <div class="row align-items-end mb-4">
+                                    <div class="col-md-3">
+                                        <label for="inputEnterYourName" class="form-label fw-bold"> User Type
+                                            <span style="color: red;">*</span></label>
+                                        <select name="user_type" id="user_type" class="form-select border-primary" style="height: 45px; border-radius: 5px;">
+                                            <option value="">Select a User Type</option>
+                                            <option value="BUSINESS_DEVELOPMENT_MANAGER">BDM</option>
+                                            <option value="SALES_MANAGER">Sales Manager</option>
+                                            <option value="ACCOUNT_MANAGER">Account Manager</option>
+                                        </select>
                                     </div>
+                                    <div class="col-md-3">
+                                        <label for="inputEnterYourName" class="form-label fw-bold"> Goal Assign For
+                                            <span style="color: red;">*</span></label>
+                                        <select name="user_id" id="user_id" class="form-select border-primary" style="height: 45px; border-radius: 5px;">
+                                            <option value="">Select a User</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="inputEnterYourName" class="form-label fw-bold"> Target Amount </label>
+                                        <input type="text" name="goals_amount" id="goals_amount" class="form-control border-primary"
+                                            style="height: 45px; border-radius: 5px;" placeholder="Enter Target Amount">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="inputEnterYourName" class="form-label fw-bold"> Goal Month
+                                            <span style="color: red;">*</span></label>
+                                        <select name="goals_date" id="goals_date" class="form-select border-primary" style="height: 45px; border-radius: 5px;">
+                                            <option value="">Select a month</option>
+                                            <option value="{{ date('Y') }}-01-01">January</option>
+                                            <option value="{{ date('Y') }}-02-01">February</option>
+                                            <option value="{{ date('Y') }}-03-01">March</option>
+                                            <option value="{{ date('Y') }}-04-01">April</option>
+                                            <option value="{{ date('Y') }}-05-01">May</option>
+                                            <option value="{{ date('Y') }}-06-01">June</option>
+                                            <option value="{{ date('Y') }}-07-01">July</option>
+                                            <option value="{{ date('Y') }}-08-01">August</option>
+                                            <option value="{{ date('Y') }}-09-01">September</option>
+                                            <option value="{{ date('Y') }}-10-01">October</option>
+                                            <option value="{{ date('Y') }}-11-01">November</option>
+                                            <option value="{{ date('Y') }}-12-01">December</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="d-flex w-100 justify-content-end">
+                                    <button type="submit"
+                                        class="btn px-5 submit-btn form-button" style="height: 45px; font-weight: 500;">Create</button>
+                                </div>
                             </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Sales Executive Distribution Section --}}
+            <div class="row mt-3" id="se-distribution">
+                <div class="col-xl-12 mx-auto">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-body p-4">
+                            <h5 class="mb-4 text-uppercase">Distribute Goals to Sales Executives</h5>
+                            <hr class="mb-4">
+                            <div class="row align-items-end mb-4">
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold">Select Sales Manager <span style="color: red;">*</span></label>
+                                    <select id="dist_sales_manager" class="form-select border-primary" style="height: 45px; border-radius: 5px;">
+                                        <option value="">-- Select a Sales Manager --</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold">Goal Month <span style="color: red;">*</span></label>
+                                    <select id="dist_goals_date" class="form-select border-primary" style="height: 45px; border-radius: 5px;">
+                                        <option value="">Select a month</option>
+                                        <option value="{{ date('Y') }}-01-01">January {{ date('Y') }}</option>
+                                        <option value="{{ date('Y') }}-02-01">February {{ date('Y') }}</option>
+                                        <option value="{{ date('Y') }}-03-01">March {{ date('Y') }}</option>
+                                        <option value="{{ date('Y') }}-04-01">April {{ date('Y') }}</option>
+                                        <option value="{{ date('Y') }}-05-01">May {{ date('Y') }}</option>
+                                        <option value="{{ date('Y') }}-06-01">June {{ date('Y') }}</option>
+                                        <option value="{{ date('Y') }}-07-01">July {{ date('Y') }}</option>
+                                        <option value="{{ date('Y') }}-08-01">August {{ date('Y') }}</option>
+                                        <option value="{{ date('Y') }}-09-01">September {{ date('Y') }}</option>
+                                        <option value="{{ date('Y') }}-10-01">October {{ date('Y') }}</option>
+                                        <option value="{{ date('Y') }}-11-01">November {{ date('Y') }}</option>
+                                        <option value="{{ date('Y') }}-12-01">December {{ date('Y') }}</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <button type="button" class="btn px-5 submit-btn" id="fetchDistributionBtn" style="height: 45px; font-weight: 500;">
+                                        <i class="fa fa-sitemap me-2"></i> Fetch Distribution
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div id="distribution-section" style="display:none;">
+                                <!-- AJAX loaded distribution form will appear here -->
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -108,7 +192,9 @@
                                         <h4 class="mb-0">Goals</h4>
                                     </div>
                                     <div class="col-md-6 text-end">
-                                        <a href="javascript:void(0);" class="btn px-5 submit-btn" id="add-btn"><i
+                                        <a href="javascript:void(0);" class="btn px-4 submit-btn me-2" id="se-dist-btn"><i
+                                                class="fa fa-sitemap"></i> Distribute SE Goals</a>
+                                        <a href="javascript:void(0);" class="btn px-4 submit-btn" id="add-btn"><i
                                                 class="fa fa-plus"></i> Add a
                                             Project Goals</a>
                                     </div>
@@ -204,6 +290,7 @@
                     });
 
                     $('#user_id').html(html);
+                    $('#se-distribution').hide();
                     $('#goal-create').show();
                     $('#id').val(resp.data.id);
                     $('#user_id').val(resp.data.user_id);
@@ -224,11 +311,13 @@
             // toogle create goal
             $('#add-btn').click(function() {
                 $('#id').val('');
+                $('#user_type').val('');
                 $('#user_id').val('');
                 $('#goals_type').val('');
                 $('#goals_amount').val('');
                 $('#goals_date').val('');
                 $('.form-button').html('Create');
+                $('#se-distribution').hide(); // Hide distribution when opening create
                 $('#goal-create').toggle();
             });
         });
@@ -384,6 +473,134 @@
                         $('#loading-content').removeClass('loading-content');
                     }
                 });
+            });
+        });
+    </script>
+
+    {{-- SE Distribution Scripts --}}
+    <script>
+        $(document).ready(function() {
+            // Hide distribution section by default
+            $('#se-distribution').hide();
+
+            // Load Sales Managers
+            $.ajax({
+                url: "{{ route('goals.get.sales-managers') }}",
+                type: "GET",
+                success: function(data) {
+                    if (data.status) {
+                        var html = '<option value="">-- Select a Sales Manager --</option>';
+                        $.each(data.sales_managers, function(key, value) {
+                            html += '<option value="' + value.id + '">' + value.name + '</option>';
+                        });
+                        $('#dist_sales_manager').html(html);
+                    }
+                }
+            });
+
+            // Toggle SE Distribution Section
+            $('#se-dist-btn').click(function() {
+                $('#dist_sales_manager').val('');
+                $('#dist_goals_date').val('');
+                $('#distribution-section').hide();
+                $('#goal-create').hide(); // Hide create when opening distribution
+                $('#se-distribution').toggle();
+            });
+
+            // Calculate remaining amount
+            function calculateRemaining() {
+                let totalStr = $('#total_sm_goal').text().replace(/,/g, '');
+                let total = parseFloat(totalStr) || 0;
+                let current = 0;
+                $('.exec-amount').each(function() {
+                    current += parseFloat($(this).val()) || 0;
+                });
+                let remaining = total - current;
+                $('#remaining_goal').text(remaining.toFixed(2));
+
+                if (remaining < -0.5) {
+                    $('#remaining_goal').css('color', '#dc3545');
+                    $('#submitDistribution').prop('disabled', true);
+                } else if (remaining > 0.5) {
+                    $('#remaining_goal').css('color', '#f37e20');
+                    $('#submitDistribution').prop('disabled', false);
+                } else {
+                    $('#remaining_goal').css('color', '#28a745');
+                    $('#submitDistribution').prop('disabled', false);
+                }
+            }
+
+            // Fetch Distribution
+            $('#fetchDistributionBtn').on('click', function() {
+                var salesManagerId = $('#dist_sales_manager').val();
+                var goalsDate = $('#dist_goals_date').val();
+
+                if (!salesManagerId) {
+                    toastr.error('Please select a Sales Manager.');
+                    return;
+                }
+                if (!goalsDate) {
+                    toastr.error('Please select a Goal Month.');
+                    return;
+                }
+
+                $('#loading').addClass('loading');
+                $('#loading-content').addClass('loading-content');
+
+                $.ajax({
+                    url: "{{ route('goals.get.distribution') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        sales_manager_id: salesManagerId,
+                        goals_date: goalsDate
+                    },
+                    success: function(response) {
+                        $('#loading').removeClass('loading');
+                        $('#loading-content').removeClass('loading-content');
+
+                        if (response.status) {
+                            var html = '<form action="{{ route('goals.store.distribution') }}" method="post" id="distributionForm">';
+                            html += '@csrf';
+                            html += '<input type="hidden" name="sales_manager_id" value="' + salesManagerId + '">';
+                            html += '<input type="hidden" name="goals_date" value="' + goalsDate + '">';
+                            html += '<div class="d-flex justify-content-between p-3 mb-3 align-items-center rounded" style="background: linear-gradient(135deg, #ffdfc5, #fff3e8); border: 1px solid #f37e20;">';
+                            html += '<div style="font-weight: bold; font-size: 16px; color: #ad1e23;">Total Goal: $<span id="total_sm_goal">' + response.total_amount + '</span></div>';
+                            html += '<div style="font-weight: bold; font-size: 16px;">Remaining: $<span id="remaining_goal">0.00</span></div>';
+                            html += '</div>';
+                            html += '<div class="table-responsive"><table class="table table-hover table-center mb-4">';
+                            html += '<thead><tr style="background: #ffdfc5; color: #ac1e23;"><th>Sales Executive</th><th>Allocated Target Amount ($)</th></tr></thead>';
+                            html += '<tbody>';
+
+                            $.each(response.executives, function(key, exec) {
+                                html += '<tr>';
+                                html += '<td class="align-middle" style="font-weight: 500;">' + exec.name + '</td>';
+                                html += '<td><input type="number" step="0.01" name="amount[' + exec.id + ']" class="form-control exec-amount" value="' + exec.amount + '" required></td>';
+                                html += '</tr>';
+                            });
+
+                            html += '</tbody></table></div>';
+                            html += '<div class="text-end"><button type="submit" class="btn px-5 submit-btn" id="submitDistribution" style="height: 45px; font-weight: 500;"><i class="fa fa-check-circle me-2"></i>Save Distribution</button></div>';
+                            html += '</form>';
+
+                            $('#distribution-section').hide().html(html).slideDown();
+                            calculateRemaining();
+                        } else {
+                            $('#distribution-section').hide();
+                            toastr.error(response.message);
+                        }
+                    },
+                    error: function() {
+                        $('#loading').removeClass('loading');
+                        $('#loading-content').removeClass('loading-content');
+                        toastr.error('Failed to fetch distribution data.');
+                    }
+                });
+            });
+
+            // On amount input change
+            $(document).on('input', '.exec-amount', function() {
+                calculateRemaining();
             });
         });
     </script>
