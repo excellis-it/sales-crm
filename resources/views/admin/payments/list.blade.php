@@ -33,20 +33,32 @@
 
             <div class="card">
                 <div class="card-body">
-                    <div class="card-title">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h4 class="mb-0">Payments List</h4>
-                            </div>
-
+                    <div class="row g-2 align-items-center mb-3">
+                        <div class="col-md-4">
+                            <h4 class="mb-0">Payments List</h4>
                         </div>
-                    </div>
-
-                    <hr />
-                    <div class="row justify-content-end">
-                        <div class="col-md-6">
-                            <div class="row g-1 justify-content-end">
-                                <div class="col-md-8 pr-0">
+                        <div class="col-md-8">
+                            <div class="row g-2 justify-content-end">
+                                <div class="col-md-3">
+                                    <select name="year" id="year" class="form-control rounded_search">
+                                        <option value="">All Years</option>
+                                        @for ($i = 2023; $i <= date('Y') + 1; $i++)
+                                            <option value="{{ $i }}" {{ date('Y') == $i ? 'selected' : '' }}>
+                                                {{ $i }}</option>
+                                        @endfor
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <select name="month" id="month" class="form-control rounded_search">
+                                        <option value="">All Months</option>
+                                        @foreach (range(1, 12) as $m)
+                                            <option value="{{ sprintf('%02d', $m) }}"
+                                                {{ date('m') == $m ? 'selected' : '' }}>
+                                                {{ date('F', mktime(0, 0, 0, $m, 1)) }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
                                     <div class="search-field">
                                         <input type="text" name="search" id="search" placeholder="search..." required
                                             class="form-control rounded_search">
@@ -54,7 +66,6 @@
                                                     class="fa fa-search"></i></span></button>
                                     </div>
                                 </div>
-                                
                             </div>
                         </div>
                     </div>
@@ -64,6 +75,7 @@
                             <thead>
                                 <tr>
                                     <th>Project Name </th>
+                                    <th>Source</th>
                                     <th>Milestone Name </th>
                                     <th>Milestone value</th>
                                     <th>Payment mode </th>
@@ -93,42 +105,54 @@
  
 <script>
     $(document).ready(function() {
-        function fetch_data(page, query) {
-            // console.log(status + ' ' + page);
+        function fetch_data(page, query, year, month) {
             $.ajax({
                 url: "{{ route('admin.payments.filter') }}",
                 data: {
                     page: page,
                     query: query,
-                   
+                    year: year,
+                    month: month
+                },
+                beforeSend: function() {
+                    $('#project-data').css('opacity', '0.5');
                 },
                 success: function(resp) {
+                    $('#project-data').css('opacity', '1');
                     $('tbody').html(resp.data);
                 }
             });
         }
 
-        $(document).on('click', '.desin-filter', function(e) {
-            e.preventDefault();
-            //add active class to clicked
-            $(this).addClass('active-filter');
+        $(document).on('change', '#year, #month', function() {
             var query = $('#search').val();
-            fetch_data(1, query);
+            var year = $('#year').val();
+            var month = $('#month').val();
+            fetch_data(1, query, year, month);
         });
 
         $(document).on('click', '.pagination a', function(e) {
             e.preventDefault();
             var page = $(this).attr('href').split('page=')[1];
             var query = $('#search').val();
-            fetch_data(page,query);
+            var year = $('#year').val();
+            var month = $('#month').val();
+            fetch_data(page, query, year, month);
         });
 
         $(document).on('keyup', '#search', function(e) {
-            
             e.preventDefault();
             var query = $(this).val();
-            fetch_data(1, query);
+            var year = $('#year').val();
+            var month = $('#month').val();
+            fetch_data(1, query, year, month);
         });
+        
+        // Initial fetch with default selected year/month
+        var query = $('#search').val();
+        var year = $('#year').val();
+        var month = $('#month').val();
+        fetch_data(1, query, year, month);
     });
 </script>
 @endpush

@@ -29,22 +29,35 @@ class GoalsController extends Controller
     {
         if ($request->ajax()) {
             $goals = Goal::query();
-                $columns = ['goals_date','goals_type','user_id','goals_amount', 'goals_achieve'];
-                foreach ($columns as $column) {
-                    $goals->orWhere($column, 'LIKE', '%' . $request->text . '%');
-                }
 
-            $goals->orwhereHas('user', function ($query) use ($request) {
-                $query->where('name', 'LIKE', '%' . $request->text . '%');
-            });
+            // Text Search
+            if ($request->filled('text')) {
+                $text = $request->text;
+                $goals->where(function ($q) use ($text) {
+                    $q->where('goals_amount', 'LIKE', '%' . $text . '%')
+                        ->orWhere('goals_achieve', 'LIKE', '%' . $text . '%')
+                        ->orWhere('goals_date', 'LIKE', '%' . $text . '%')
+                        ->orWhereHas('user', function ($query) use ($text) {
+                            $query->where('name', 'LIKE', '%' . $text . '%');
+                        });
 
-
-            if ($request->text == 'Gross') {
-                $goals->orWhere('goals_type', 1);
-            } else if ($request->text == 'Net') {
-                $goals->orWhere('goals_type', 2);
+                    if (strcasecmp($text, 'Gross') == 0) {
+                        $q->orWhere('goals_type', 1);
+                    } else if (strcasecmp($text, 'Net') == 0) {
+                        $q->orWhere('goals_type', 2);
+                    }
+                });
             }
 
+            // Month Filter
+            if ($request->filled('month')) {
+                $goals->whereMonth('goals_date', $request->month);
+            }
+
+            // Year Filter
+            if ($request->filled('year')) {
+                $goals->whereYear('goals_date', $request->year);
+            }
 
             $goals = $goals->orderBy('goals_date', 'desc')->paginate(15);
             return response()->json(['view' => (string)View::make('admin.goals.table')->with(compact('goals'))]);

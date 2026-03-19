@@ -390,7 +390,8 @@
                                                 <option value="">Select Project Opener</option>
                                                 @foreach ($project_openers as $project_opener)
                                                     <option value="{{ $project_opener->id }}">{{ $project_opener->name }}
-                                                        ({{ $project_opener->email }})</option>
+                                                        ({{ $project_opener->email }})
+                                                    </option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -402,7 +403,8 @@
                                                 <option value="">Select Closer</option>
                                                 @foreach ($users as $user)
                                                     <option value="{{ $user->id }}">{{ $user->name }}
-                                                        ({{ $user->email }})</option>
+                                                        ({{ $user->email }})
+                                                    </option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -502,7 +504,7 @@
                         </div>
 
                     </div>
-                    <div class="table-responsive" id="project-data">
+                    <div class="table-responsive">
                         <table class="dd table table-striped  table-hover" style="width:100%">
                             <thead>
                                 <tr>
@@ -538,9 +540,9 @@
                                     </th>
                                     <th> Status</th>
                                     <th> Action </th>
-                                </tr>
+                                </tr>   
                             </thead>
-                            <tbody>
+                            <tbody id="project-data">
                                 @include('admin.bdm-project.table')
 
                             </tbody>
@@ -555,10 +557,9 @@
         </div>
 
     </div>
-
 @endsection
 @push('scripts')
-   @include('bdm.includes.followup_modal')
+    @include('bdm.includes.followup_modal')
     <script src="http://parsleyjs.org/dist/parsley.js"></script>
     <script>
         window.ParsleyConfig = {
@@ -637,7 +638,7 @@
                 if ($(this).val().includes('Other')) {
                     $('#other-value').html(
                         '<label class="form-label">Other Project Type Value <span class="text-danger">*</span></label><input type="text" name="other_value" required class="form-control" placeholder="Specify type">'
-                        );
+                    );
                 } else {
                     $('#other-value').html('');
                 }
@@ -773,6 +774,83 @@
                         $('#edit-form-validation').parsley();
                     }
                 });
+            });
+
+            // Delete Project
+            $(document).on('click', '.delete', function(e) {
+                var route = $(this).data('route');
+                swal({
+                    title: "Are you sure?",
+                    text: "You want to delete this project?",
+                    type: "warning",
+                    confirmButtonText: "Yes, delete it!",
+                    showCancelButton: true
+                }).then((result) => {
+                    if (result.value) {
+                        window.location.href = route;
+                    } else if (result.dismiss === 'cancel') {
+                        swal(
+                            'Cancelled',
+                            'Your project is safe :)',
+                            'error'
+                        )
+                    }
+                });
+            });
+
+            // AJAX Searching, Sorting and Pagination
+            function fetch_data(page, sort_type, sort_by, query) {
+                $('#loading').addClass('loading');
+                $.ajax({
+                    url: "{{ route('admin.bdm-projects.filter') }}?page=" + page + "&sortby=" + sort_by +
+                        "&sorttype=" + sort_type + "&query=" + query,
+                    success: function(data) {
+                        $('#project-data').html(data.data);
+                        $('#loading').removeClass('loading');
+                    }
+                });
+            }
+
+            $(document).on('keyup', '#search', function() {
+                var query = $('#search').val();
+                var column_name = $('#hidden_column_name').val();
+                var sort_type = $('#hidden_sort_type').val();
+                var page = $('#hidden_page').val();
+                fetch_data(page, sort_type, column_name, query);
+            });
+
+            $(document).on('click', '.sorting', function() {
+                var column_name = $(this).data('column_name');
+                var order_type = $(this).data('sorting_type');
+                var reverse_order = '';
+                if (order_type == 'asc') {
+                    $(this).data('sorting_type', 'desc');
+                    reverse_order = 'desc';
+                    $('.sorting').find('.fa').removeClass('fa-sort-up fa-sort-down').addClass('fa-sort');
+                    $(this).find('.fa').removeClass('fa-sort').addClass('fa-sort-down');
+                } else {
+                    $(this).data('sorting_type', 'asc');
+                    reverse_order = 'asc';
+                    $('.sorting').find('.fa').removeClass('fa-sort-up fa-sort-down').addClass('fa-sort');
+                    $(this).find('.fa').removeClass('fa-sort').addClass('fa-sort-up');
+                }
+                $('#hidden_column_name').val(column_name);
+                $('#hidden_sort_type').val(reverse_order);
+                var page = $('#hidden_page').val();
+                var query = $('#search').val();
+                fetch_data(page, reverse_order, column_name, query);
+            });
+
+            $(document).on('click', '.pagination a', function(event) {
+                event.preventDefault();
+                var page = $(this).attr('href').split('page=')[1];
+                $('#hidden_page').val(page);
+                var column_name = $('#hidden_column_name').val();
+                var sort_type = $('#hidden_sort_type').val();
+                var query = $('#search').val();
+                $('li').removeClass('active');
+                $(this).parent().addClass('active');
+                fetch_data(page, sort_type, column_name, query);
             });
         });
     </script>

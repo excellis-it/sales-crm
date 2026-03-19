@@ -12,6 +12,16 @@
 <body style="background: #f2f2f2">
     <table width="450" border="0" cellpadding="0" cellspacing="0" bgcolor="#ffffff"
         style="border-radius: 0px; margin: 0 auto">
+        @php
+            $currency = '$';
+            if ($milestone_detail->project_id) {
+                $currency = $milestone_detail->project->currency ?? '$';
+            } elseif ($milestone_detail->bdm_project_id) {
+                $currency = $milestone_detail->bdmProject->currency ?? '$';
+            } elseif ($milestone_detail->tender_project_id) {
+                $currency = 'INR';
+            }
+        @endphp
         <tbody>
             <tr>
                 <td style="padding: 0 30px">
@@ -229,7 +239,7 @@
                     style="width:58px;border-top-style:solid;border-top-width:1px;border-top-color:#9E9E9E;border-left-style:solid;border-left-width:1px;border-left-color:#9E9E9E;border-bottom-style:solid;border-bottom-width:1px;border-bottom-color:#9E9E9E;border-right-style:solid;border-right-width:1px;border-right-color:#9E9E9E">
                     <p
                         style="font-size: 14px; font-weight: 400; margin: 5px 0px 10px; text-align: right; padding-right: 10px;">
-                        {{ $milestone_detail->milestone_value }}</p>
+                        {{ $currency }} {{ number_format($milestone_detail->milestone_value, 2) }}</p>
                 </td>
 
             </tr>
@@ -261,13 +271,13 @@
                     style="width:69px;border-top-style:solid;border-top-width:1px;border-top-color:#9E9E9E;border-right-style:solid;border-right-width:1px;border-right-color:#9E9E9E">
                     <p
                         style="font-size: 14px; font-weight: 400; margin: 5px 0px 10px; text-align: right; padding-right: 10px;">
-                        {{ $milestone_detail->milestone_value }}</p>
+                        {{ $currency }} {{ number_format($milestone_detail->milestone_value, 2) }}</p>
                     <p
                         style="font-size: 14px; font-weight: 400; margin: 5px 0px 10px; text-align: right; padding-right: 10px;">
                         0.00</p>
                     <p
                         style="font-size: 14px; font-weight: 800; margin: 5px 0px 10px; text-align: right; padding-right: 10px;">
-                        {!! (isset($milestone_detail->tenderProject) && $milestone_detail->tenderProject->tender_name) ? 'Rs.' : '$' !!} {{ $milestone_detail->milestone_value }}
+                        {{ $currency }} {{ number_format($milestone_detail->milestone_value, 2) }}
                     </p>
                 </td>
             </tr>
@@ -294,7 +304,7 @@
                     <p
                         style="font-size: 14px; font-weight: 800; margin: 5px 0px 10px; text-align: right; padding-right: 10px;">
 
-                        {!! (isset($milestone_detail->tenderProject) && $milestone_detail->tenderProject->tender_name) ? 'Rs.' : '$' !!} {{ $milestone_detail->milestone_value }}
+                        {{ $currency }} {{ number_format($milestone_detail->milestone_value, 2) }}
                     </p>
                 </td>
             </tr>

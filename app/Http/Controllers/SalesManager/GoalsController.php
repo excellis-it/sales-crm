@@ -41,29 +41,40 @@ class GoalsController extends Controller
     {
         if ($request->ajax()) {
             $salesManagerId = Auth::user()->id;
-            $goals = Goal::whereHas('user', function ($query) use ($salesManagerId, $request) {
-                $query->where('sales_manager_id', $salesManagerId)->whereHas('roles', function($q2){
+            $goals = Goal::whereHas('user', function ($query) use ($salesManagerId) {
+                $query->where('sales_manager_id', $salesManagerId)->whereHas('roles', function ($q2) {
                     $q2->where('name', 'SALES_EXCUETIVE');
                 });
-                $query->where('name', 'LIKE', '%' . $request->text . '%');
             });
 
-            $columns = ['goals_date', 'goals_type', 'goals_amount', 'goals_achieve'];
-            $goals->orWhere(function($q) use ($columns, $request, $salesManagerId) {
-                $q->whereHas('user', function ($query) use ($salesManagerId) {
-                    $query->where('sales_manager_id', $salesManagerId)->whereHas('roles', function($q2){
-                        $q2->where('name', 'SALES_EXCUETIVE');
-                    });
+            // Text Search
+            if ($request->filled('text')) {
+                $text = $request->text;
+                $goals->where(function ($q) use ($text) {
+                    $q->where('goals_amount', 'LIKE', '%' . $text . '%')
+                        ->orWhere('goals_achieve', 'LIKE', '%' . $text . '%')
+                        ->orWhere('goals_date', 'LIKE', '%' . $text . '%')
+                        ->orWhereHas('user', function ($query) use ($text) {
+                            $query->where('name', 'LIKE', '%' . $text . '%');
+                        });
+
+                    if (strcasecmp($text, 'Gross') == 0) {
+                        $q->orWhere('goals_type', 1);
+                    } else if (strcasecmp($text, 'Net') == 0) {
+                        $q->orWhere('goals_type', 2);
+                    }
                 });
-                foreach ($columns as $column) {
-                    $q->orWhere($column, 'LIKE', '%' . $request->text . '%');
-                }
-                if ($request->text == 'Gross') {
-                    $q->orWhere('goals_type', 1);
-                } else if ($request->text == 'Net') {
-                    $q->orWhere('goals_type', 2);
-                }
-            });
+            }
+
+            // Month Filter
+            if ($request->filled('month')) {
+                $goals->whereMonth('goals_date', $request->month);
+            }
+
+            // Year Filter
+            if ($request->filled('year')) {
+                $goals->whereYear('goals_date', $request->year);
+            }
 
             $goals = $goals->orderBy('goals_date', 'desc')->paginate(15);
             return response()->json(['view' => (string)View::make('sales_manager.goals.table')->with(compact('goals'))]);

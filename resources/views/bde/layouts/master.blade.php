@@ -129,6 +129,7 @@
         });
     </script>
 
+    <script src="{{ asset('admin_assets/js/custom-offcanvas.js') }}"></script>
 @stack('scripts')
 
 </html>

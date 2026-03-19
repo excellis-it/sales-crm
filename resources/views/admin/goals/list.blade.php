@@ -202,17 +202,29 @@
                             </div>
 
                             <hr />
-                            <div class="row justify-content-end">
-                                <div class="col-md-6">
-                                    <div class="row g-1 justify-content-end">
-                                        <div class="col-md-8 pr-0">
-                                            <div class="search-field">
-                                                <input type="text" name="search" id="search"
-                                                    placeholder="search..." required class="form-control rounded_search">
-                                                <button class="submit_search" id="search-button"> <span class=""><i
-                                                            class="fa fa-search"></i></span></button>
-                                            </div>
-                                        </div>
+                            <div class="row justify-content-end align-items-center">
+                                <div class="col-md-2 mb-2">
+                                    <select id="filter_year" class="form-select border-primary" style="height: 45px; border-radius: 5px;">
+                                        <option value="">Select Year</option>
+                                        @for ($i = date('Y'); $i >= 2025; $i--)
+                                            <option value="{{ $i }}">{{ $i }}</option>
+                                        @endfor
+                                    </select>
+                                </div>
+                                <div class="col-md-2 mb-2">
+                                    <select id="filter_month" class="form-select border-primary" style="height: 45px; border-radius: 5px;">
+                                        <option value="">Select Month</option>
+                                        @for ($m = 1; $m <= 12; $m++)
+                                            <option value="{{ sprintf('%02d', $m) }}">{{ date('F', mktime(0, 0, 0, $m, 1)) }}</option>
+                                        @endfor
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <div class="search-field">
+                                        <input type="text" name="search" id="search"
+                                            placeholder="search..." required class="form-control rounded_search">
+                                        <button class="submit_search" id="search-button"> <span class=""><i
+                                                    class="fa fa-search"></i></span></button>
                                     </div>
                                 </div>
                             </div>
@@ -450,29 +462,41 @@
 
     <script>
         $(document).ready(function() {
-            $('#search').on('keyup', function() {
-                var text = $(this).val();
-                // if (text == '') {
-                //     alert('Please type something for search!');
-                //     return false;
-                // }
-                url = "{{ route('project-goals.search') }}"
+            function fetch_goals() {
+                var text = $('#search').val();
+                var month = $('#filter_month').val();
+                var year = $('#filter_year').val();
+                var url = "{{ route('project-goals.search') }}";
+
                 $('#loading').addClass('loading');
                 $('#loading-content').addClass('loading-content');
+
                 $.ajax({
                     url: url,
                     type: 'GET',
                     data: {
                         text: text,
+                        month: month,
+                        year: year
                     },
                     success: function(response) {
-
                         $('#project_goals_data').html(response.view);
-                        // $('#search').val('');
+                        $('#loading').removeClass('loading');
+                        $('#loading-content').removeClass('loading-content');
+                    },
+                    error: function() {
                         $('#loading').removeClass('loading');
                         $('#loading-content').removeClass('loading-content');
                     }
                 });
+            }
+
+            $('#search').on('keyup', function() {
+                fetch_goals();
+            });
+
+            $('#filter_year, #filter_month').on('change', function() {
+                fetch_goals();
             });
         });
     </script>

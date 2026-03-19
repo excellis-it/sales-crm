@@ -56,6 +56,9 @@
                 &nbsp;&nbsp;
                 <a title="View Follow-ups" class="view-followups" data-id="{{ $prospect->id }}"
                     href="javascript:void(0);"><i class="fas fa-comments text-primary"></i></a>
+                &nbsp;&nbsp;
+                <a title="Delete Prospect" data-route="{{ route('admin.prospects.delete', $prospect->id) }}"
+                    href="javascript:void(0);" class="delete"><i class="fas fa-trash text-danger"></i></a>
             </td>
         </tr>
     @endforeach

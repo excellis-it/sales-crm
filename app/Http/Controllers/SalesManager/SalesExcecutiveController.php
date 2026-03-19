@@ -20,11 +20,15 @@ class SalesExcecutiveController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
-        $sales_excecutives = User::role('SALES_EXCUETIVE')->where('sales_manager_id', Auth::user()->id)->paginate(15);
+        $sales_excecutives = User::role('SALES_EXCUETIVE')->where('sales_manager_id', Auth::user()->id)->orderBy('id', 'desc')->paginate(15);
+        if ($request->ajax()) {
+            return response()->json(['view' => (string)View::make('sales_manager.sales_excecutive.table')->with(compact('sales_excecutives'))]);
+        }
         return view('sales_manager.sales_excecutive.list')->with(compact('sales_excecutives'));
     }
 
@@ -32,11 +36,24 @@ class SalesExcecutiveController extends Controller
     {
         if ($request->ajax()) {
             $sales_excecutives = User::query();
-            $columns = ['name', 'email', 'phone', 'employee_id', 'date_of_joining'];
-            foreach ($columns as $column) {
-                $sales_excecutives->orWhere($column, 'LIKE', '%' . $request->text . '%');
+            $text = $request->text;
+            if ($text) {
+                $sales_excecutives->where(function($query) use ($text) {
+                    $query->where('name', 'LIKE', '%' . $text . '%')
+                          ->orWhere('email', 'LIKE', '%' . $text . '%')
+                          ->orWhere('phone', 'LIKE', '%' . $text . '%')
+                          ->orWhere('employee_id', 'LIKE', '%' . $text . '%')
+                          ->orWhere('date_of_joining', 'LIKE', '%' . $text . '%');
+                });
             }
-            $sales_excecutives = $sales_excecutives->Role('SALES_EXCUETIVE')->where('sales_manager_id', Auth::user()->id)->orderBy('name', 'desc')->paginate(15);
+            $sales_excecutives = $sales_excecutives->Role('SALES_EXCUETIVE')
+                ->where('sales_manager_id', Auth::user()->id)
+                ->orderBy('name', 'desc')
+                ->paginate(15);
+
+            // Append search text to pagination links
+            $sales_excecutives->appends(['text' => $text]);
+
             return response()->json(['view' => (string)View::make('sales_manager.sales_excecutive.table')->with(compact('sales_excecutives'))]);
         }
     }
@@ -132,6 +149,7 @@ class SalesExcecutiveController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // dd($request->all());
         $request->validate([
             'name' => 'required',
             'email' => 'required|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix|unique:users,email,' . $id,
@@ -163,6 +181,7 @@ class SalesExcecutiveController extends Controller
             $data->profile_picture = $this->imageUpload($request->file('profile_picture'), 'sales_excecutive');
         }
         $data->save();
+        session()->flash('message', 'Sales excecutive updated successfully.');
         return response()->json(['success' => 'Sales excecutive updated successfully.']);
     }
 

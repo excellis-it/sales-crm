@@ -335,10 +335,10 @@
 @push('scripts')
  @include('bdm.includes.followup_modal')
     <script>
-        $(document).on('click', '#delete', function(e) {
+        $(document).on('click', '.delete', function(e) {
             swal({
                     title: "Are you sure?",
-                    text: "To delete this prospect.",
+                    text: "You want to delete this prospect?",
                     type: "warning",
                     confirmButtonText: "Yes",
                     showCancelButton: true
@@ -349,7 +349,7 @@
                     } else if (result.dismiss === 'cancel') {
                         swal(
                             'Cancelled',
-                            'Your stay here :)',
+                            'Your prospect is safe :)',
                             'error'
                         )
                     }

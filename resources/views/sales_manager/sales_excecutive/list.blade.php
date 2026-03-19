@@ -312,13 +312,7 @@
 
     <script>
         $(document).ready(function() {
-            $('#search-button').on('click', function() {
-                var text = $('#search').val();
-                if (text == '') {
-                    alert('Please type something for search!');
-                    return false;
-                }
-                url = "{{ route('sales-manager.sales-excecutive.search') }}"
+            function fetchData(url, text) {
                 $('#loading').addClass('loading');
                 $('#loading-content').addClass('loading-content');
                 $.ajax({
@@ -328,13 +322,35 @@
                         text: text,
                     },
                     success: function(response) {
-
                         $('#sale_executive_data').html(response.view);
-                        $('#search').val('');
                         $('#loading').removeClass('loading');
                         $('#loading-content').removeClass('loading-content');
                     }
                 });
+            }
+
+            let timeout = null;
+            $('#search').on('keyup', function() {
+                var text = $(this).val();
+                url = "{{ route('sales-manager.sales-excecutive.search') }}";
+                
+                clearTimeout(timeout);
+                timeout = setTimeout(function () {
+                    fetchData(url, text);
+                }, 500);
+            });
+
+            $(document).on('click', '#sale_executive_data .pagination a', function(e) {
+                e.preventDefault();
+                var url = $(this).attr('href');
+                var text = $('#search').val();
+                fetchData(url, text);
+            });
+
+            $('#search-button').on('click', function() {
+                var text = $('#search').val();
+                url = "{{ route('sales-manager.sales-excecutive.search') }}";
+                fetchData(url, text);
             });
         });
     </script>
@@ -393,7 +409,7 @@
                             $('#phone').val(sales_excecutive.phone);
                             $('#status').val(sales_excecutive.status);
                             var updateRoute =
-                                "{{ route('sales-excecutive.update', ['sales_excecutive' => ':id']) }}";
+                                "{{ route('sales-manager.sales-excecutive.update', ['sales_excecutive' => ':id']) }}";
                             updateRoute = updateRoute.replace(':id', sales_excecutive.id);
                             $('#sales-excecutive-edit-form').attr('action', updateRoute);
                             $('#loading').removeClass('loading');

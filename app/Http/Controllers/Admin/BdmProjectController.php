@@ -423,7 +423,7 @@ class BdmProjectController extends Controller
         }
     }
 
-    public function fetchData(Request $request)
+    public function bdmProjectFilter(Request $request)
     {
 
         if ($request->ajax()) {

@@ -50,11 +50,10 @@
                 <div class="col-xl-12 mx-auto" id="goal-create">
                     <div class="card shadow-sm border-0">
                         <div class="card-body p-4">
-                            <h5 class="mb-4 text-uppercase">DISTRIBUTE GOALS</h5>
-                            <hr class="mb-4">
-                            <div class="row align-items-end mb-4">
-                                <div class="col-md-5">
-                                    <label for="goals_date" class="form-label fw-bold">Goal Month <span class="text-danger">*</span></label>
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h5 class="text-uppercase mb-0">Distribute Goals</h5>
+                                <div class="d-flex align-items-center" style="width: 50%;">
+                                    <label for="goals_date" class="form-label fw-bold mb-0 me-2" style="white-space: nowrap;">Select Goal Month <span class="text-danger">*</span></label>
                                     <select name="goals_date" id="goals_date" class="form-select border-primary" style="height: 45px; border-radius: 5px;">
                                         <option value="">-- Select a month with assigned goals --</option>
                                         @foreach($available_months as $month)
@@ -63,12 +62,6 @@
                                             </option>
                                         @endforeach
                                     </select>
-                                </div>
-                                <div class="col-md-3">
-                                    <button type="button" class="btn px-5 submit-btn" id="fetchDistributionBtn" style="height: 45px; border-radius: 5px; font-weight: 500;">Fetch Distribution</button>
-                                </div>
-                                <div class="col-md-4">
-                                    <!-- Empty space for layout balance if needed -->
                                 </div>
                             </div>
 
@@ -97,16 +90,28 @@
                             </div>
 
                             <hr />
-                            <div class="row justify-content-end mb-3">
-                                <div class="col-md-6">
-                                    <div class="row g-1 justify-content-end">
-                                        <div class="col-md-8 pr-0">
-                                            <div class="input-group">
-                                                <input type="text" name="search" id="search"
-                                                    placeholder="Search execs, amounts..." class="form-control rounded_search border-primary">
-                                                <span class="input-group-text bg-primary text-white" id="search-button"><i class="fa fa-search"></i></span>
-                                            </div>
-                                        </div>
+                            <div class="row justify-content-end align-items-center mb-3">
+                                <div class="col-md-2 mb-2">
+                                    <select id="filter_year" class="form-select border-primary" style="height: 45px; border-radius: 5px;">
+                                        <option value="">Select Year</option>
+                                        @for ($i = date('Y'); $i >= 2025; $i--)
+                                            <option value="{{ $i }}">{{ $i }}</option>
+                                        @endfor
+                                    </select>
+                                </div>
+                                <div class="col-md-2 mb-2">
+                                    <select id="filter_month" class="form-select border-primary" style="height: 45px; border-radius: 5px;">
+                                        <option value="">Select Month</option>
+                                        @for ($m = 1; $m <= 12; $m++)
+                                            <option value="{{ sprintf('%02d', $m) }}">{{ date('F', mktime(0, 0, 0, $m, 1)) }}</option>
+                                        @endfor
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <div class="input-group">
+                                        <input type="text" name="search" id="search"
+                                            placeholder="Search execs, amounts..." class="form-control rounded_search border-primary" style="height: 45px;">
+                                        <span class="input-group-text bg-primary text-white" id="search-button"><i class="fa fa-search"></i></span>
                                     </div>
                                 </div>
                             </div>
@@ -160,8 +165,7 @@
             }
 
             // Fetch distribution
-            $('#fetchDistributionBtn, #goals_date').on('change click', function(e) {
-                if (e.type === 'click' && e.target.id !== 'fetchDistributionBtn') return;
+            $('#goals_date').on('change', function(e) {
 
                 var goals_date = $('#goals_date').val();
                 if (!goals_date) {
@@ -207,23 +211,41 @@
     </script>
     <script>
         $(document).ready(function() {
-            $('#search').on('keyup', function() {
-                var text = $(this).val();
-                url = "{{ route('sales-manager.goals.search') }}"
+            function fetch_goals() {
+                var text = $('#search').val();
+                var month = $('#filter_month').val();
+                var year = $('#filter_year').val();
+                var url = "{{ route('sales-manager.goals.search') }}";
+
                 $('#loading').addClass('loading');
                 $('#loading-content').addClass('loading-content');
+
                 $.ajax({
                     url: url,
                     type: 'GET',
                     data: {
                         text: text,
+                        month: month,
+                        year: year
                     },
                     success: function(response) {
                         $('#project_goals_data').html(response.view);
                         $('#loading').removeClass('loading');
                         $('#loading-content').removeClass('loading-content');
+                    },
+                    error: function() {
+                        $('#loading').removeClass('loading');
+                        $('#loading-content').removeClass('loading-content');
                     }
                 });
+            }
+
+            $('#search').on('keyup', function() {
+                fetch_goals();
+            });
+
+            $('#filter_year, #filter_month').on('change', function() {
+                fetch_goals();
             });
         });
     </script>

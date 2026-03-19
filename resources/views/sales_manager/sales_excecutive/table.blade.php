@@ -49,3 +49,7 @@
     @endif
     </tbody>
 </table>
+{{-- pagination --}}
+<div class="d-flex justify-content-center">
+    {!! $sales_excecutives->links() !!}
+</div>

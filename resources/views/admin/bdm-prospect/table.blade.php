@@ -52,6 +52,9 @@
                     data-bs-target="#exampleModal" href="javascript:void(0);"><i class="fas fa-eye"></i></a>
                 &nbsp;&nbsp;
                 <a title="View Follow-ups" class="view-followups" data-id="{{ $prospect->id }}" href="javascript:void(0);"><i class="fas fa-comments" style="color: #ff9b44;"></i></a>
+                &nbsp;&nbsp;
+                <a title="Delete Prospect" data-route="{{ route('admin.bdm-prospects.delete', $prospect->id) }}"
+                    href="javascript:void(0);" class="delete"><i class="fas fa-trash text-danger"></i></a>
             </td>
         </tr>
     @endforeach

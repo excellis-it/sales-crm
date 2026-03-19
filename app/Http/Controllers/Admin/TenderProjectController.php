@@ -117,6 +117,8 @@ class TenderProjectController extends Controller
                 }
             }
 
+            session()->flash('message', 'Tender Project created successfully.');
+
             DB::commit();
             return response()->json(['success' => 'Tender Project created successfully.']);
         } catch (\Exception $e) {
@@ -198,6 +200,7 @@ class TenderProjectController extends Controller
             }
 
             DB::commit();
+            session()->flash('message', 'Tender Project updated successfully.');
             return response()->json(['success' => 'Tender Project updated successfully.']);
         } catch (\Exception $e) {
             DB::rollback();
@@ -209,7 +212,7 @@ class TenderProjectController extends Controller
     {
         $tender = TenderProject::findOrFail($id);
         $tender->delete();
-        return redirect()->back()->with('success', 'Tender Project deleted successfully.');
+        return redirect()->back()->with('message', 'Tender Project deleted successfully.');
     }
 
     public function getFollowups($id)

@@ -19,10 +19,10 @@
             </td>
             <td class="edit-route" data-route="{{ route('sales-projects.edit', $project->id) }}">
                 {{ $project->client_phone ?? '' }}
-            </td class="edit-route" data-route="{{ route('sales-projects.edit', $project->id) }}">
+            </td>
             <td class="edit-route" data-route="{{ route('sales-projects.edit', $project->id) }}">
                 {{ $project->project_value ?? '' }}
-            </td class="edit-route" data-route="{{ route('sales-projects.edit', $project->id) }}">
+            </td>
 
             <td class="edit-route" data-route="{{ route('sales-projects.edit', $project->id) }}">
                 {{ $project->project_upfront ?? '' }}
@@ -45,7 +45,7 @@
             </td>
             <td>
                 <a title="Delete Project" data-route="{{ route('sales-projects.delete', $project->id) }}"
-                    href="javascipt:void(0);" id="delete"><i class="fas fa-trash text-danger"></i></a>
+                    href="javascript:void(0);" class="delete"><i class="fas fa-trash text-danger"></i></a>
                 &nbsp;&nbsp;
                 <a title="View Follow-ups" class="view-followups" data-id="{{ $project->id }}"
                     href="javascript:void(0);"><i class="fas fa-comments text-primary"></i></a>
