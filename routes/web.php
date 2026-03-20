@@ -128,6 +128,7 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
     Route::get('/prospect-search', [DashboardController::class, 'dashboardProspectFetch'])->name('admin.dashboard.prospect-fetch-data');
     //top performer
     Route::get('/top-performer', [DashboardController::class, 'topPerformerFilter'])->name('admin.dashboard.top-performer');
+    Route::get('/top-stats', [DashboardController::class, 'getTopStats'])->name('admin.dashboard.top-stats');
 
     Route::get('/goals-search', [GoalsController::class, 'search'])->name('project-goals.search');
     Route::get('/sales-managers-search', [CustomerController::class, 'search'])->name('sales_managers.search');

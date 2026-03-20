@@ -13,130 +13,173 @@ use App\Models\Prospect;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $count['users'] = User::whereNotIn('id', [Auth::user()->id])->where('status', 1)->count();
-        $count['sales_managers'] = User::Role('SALES_MANAGER')->where('status', 1)->count();
-        $count['account_managers'] = User::Role('ACCOUNT_MANAGER')->where('status', 1)->count();
-        $count['sales_excecutive'] = User::Role('SALES_EXCUETIVE')->where('status', 1)->count();
-        $count['bdm'] = User::Role('BUSINESS_DEVELOPMENT_MANAGER')->where('status', 1)->count();
-        // Tender Manager (TENDER_USER role) stats
-        $count['tender_managers'] = User::Role('TENDER_USER')->where('status', 1)->count();
-        $count['tender_projects'] = TenderProject::count();
-        $count['tender_projects_value'] = TenderProject::sum('tender_value_lakhs');
-        // Sales pipeline projects
-        $count['projects'] = Project::orderBy('created_at', 'desc')->count();
-        // $prospects = Prospect::orderBy('sale_date', 'desc')->get();
+        $stats = $this->getStatsData('this_month');
+        $count = $stats['count'];
+        $goal = $stats['goal'];
+        
         $prospects = Prospect::orderBy('sale_date', 'desc')->take(10)->get();
-        $count['prospects'] = Prospect::count();
-        $count['win'] = Prospect::where('status', 'Win')->count();
-        $count['follow_up'] = Prospect::where('status', 'Follow Up')->count();
-        $count['close'] = Prospect::where('status', 'Close')->count();
-        $count['sent_proposal'] = Prospect::where('status', 'Sent Proposal')->count();
         $projects = Project::orderBy('sale_date', 'desc')->take(7)->get();
-        // account manager revenue this month
-        $account_manager_id = User::Role('ACCOUNT_MANAGER')->pluck('id');
-        $bdma_manager_id = User::Role('BUSINESS_DEVELOPMENT_MANAGER')->pluck('id');
-        $count['account_manager_revenue'] = 0;
-        foreach ($account_manager_id as $acc_m_id) {
-            $achievements = \App\Helpers\Helper::getUserAchievementDateRange($acc_m_id, date('Y-m-01'), date('Y-m-t'));
-            // For Account Manager, net_amount represents their milestone goals achieved
-            $count['account_manager_revenue'] += $achievements['net_amount'];
-        }
-
-        $count['bdm_revenue'] = 0;
-        foreach ($bdma_manager_id as $bdm_id) {
-            $achievements = \App\Helpers\Helper::getUserAchievementDateRange($bdm_id, date('Y-m-01'), date('Y-m-t'));
-            // BDMs have Gross and Net goals. Since the original summed all goals_achieve without filtering goals_type,
-            // we will sum both. However, usually revenue only tracks one (Gross). Let's use Gross.
-            // Wait, their original sum('goals_achieve') would have doubled the actual revenue!
-            // Let's accurately use gross_amount, as revenue is usually gross.
-            $count['bdm_revenue'] += $achievements['gross_amount']; 
-        }
-
-        $count['account_manager_goals'] = Goal::whereIn('user_id', $account_manager_id)->whereMonth('goals_date', date('m'))->whereYear('goals_date', date('Y'))->sum('goals_amount');
-        // Filter sum of goals_amount to only gross goals to avoid double counting if they had both types
-        $count['bdm_goals'] = Goal::whereIn('user_id', $bdma_manager_id)->whereMonth('goals_date', date('m'))->whereYear('goals_date', date('Y'))->where('goals_type', 1)->sum('goals_amount');
         
-        // Fallback: If no gross goal, try to get net goal (in case BDM only has net)
-        if ($count['bdm_goals'] == 0) {
-           $count['bdm_goals'] = Goal::whereIn('user_id', $bdma_manager_id)->whereMonth('goals_date', date('m'))->whereYear('goals_date', date('Y'))->sum('goals_amount');
-           // Just fallback to old behavior of summing all goal amounts if they only have 1 type anyway
-        }
-
-        $count['account_manager_percentage'] = ($count['account_manager_goals'] > 0) ? round(($count['account_manager_revenue']  / $count['account_manager_goals']) * 100) : 0;
-        $count['bdm_percentage'] = ($count['bdm_goals'] > 0) ? round(($count['bdm_revenue'] / $count['bdm_goals']) * 100) : 0;
-        // get sales manager id
-        $sales_manager_id = User::Role('SALES_MANAGER')->pluck('id');
-        $goal['gross_goals'] = Goal::where('goals_type', 1)->whereIn('user_id', $sales_manager_id)->whereMonth('goals_date', date('m'))->sum('goals_amount');
-        $goal['net_goals'] = Goal::where('goals_type', 2)->whereIn('user_id', $sales_manager_id)->whereMonth('goals_date', date('m'))->sum('goals_amount');
-
-        $goal['gross_goals_achieve'] = 0;
-        $goal['net_goals_achieve'] = 0;
-        
-        $currentStart = date('Y-m-01');
-        $currentEnd = date('Y-m-t');
-
-        foreach ($sales_manager_id as $sm_id) {
-            $achievements = \App\Helpers\Helper::getUserAchievementDateRange($sm_id, $currentStart, $currentEnd);
-            $goal['gross_goals_achieve'] += $achievements['gross_amount'];
-            $goal['net_goals_achieve']   += $achievements['net_amount'];
-        }
-
-        for ($m = 1; $m <= 12; $m++) {
-            $monthName = strtolower(date('F', mktime(0, 0, 0, $m, 1)));
-            $startOfMonth = date('Y-m-01', mktime(0, 0, 0, $m, 1));
-            $endOfMonth = date('Y-m-t', mktime(0, 0, 0, $m, 1));
-            
-            $gross_sum = 0;
-            $net_sum = 0;
-            
-            foreach ($sales_manager_id as $sm_id) {
-                $achievements = \App\Helpers\Helper::getUserAchievementDateRange($sm_id, $startOfMonth, $endOfMonth);
-                $gross_sum += $achievements['gross_amount'];
-                $net_sum   += $achievements['net_amount'];
-            }
-            
-            $goal['gross_goals_' . $monthName] = $gross_sum;
-            $goal['net_goals_' . $monthName] = $net_sum;
-        }
-
-        $goal['prospect_january'] = Prospect::whereMonth('sale_date', 1)->whereYear('sale_date', date('Y'))->count();
-        $goal['prospect_february'] = Prospect::whereMonth('sale_date', 2)->whereYear('sale_date', date('Y'))->count();
-        $goal['prospect_march'] = Prospect::whereMonth('sale_date', 3)->whereYear('sale_date', date('Y'))->count();
-        $goal['prospect_april'] = Prospect::whereMonth('sale_date', 4)->whereYear('sale_date', date('Y'))->count();
-        $goal['prospect_may'] = Prospect::whereMonth('sale_date', 5)->whereYear('sale_date', date('Y'))->count();
-        $goal['prospect_june'] = Prospect::whereMonth('sale_date', 6)->whereYear('sale_date', date('Y'))->count();
-        $goal['prospect_july'] = Prospect::whereMonth('sale_date', 7)->whereYear('sale_date', date('Y'))->count();
-        $goal['prospect_august'] = Prospect::whereMonth('sale_date', 8)->whereYear('sale_date', date('Y'))->count();
-        $goal['prospect_september'] = Prospect::whereMonth('sale_date', 9)->whereYear('sale_date', date('Y'))->count();
-        $goal['prospect_october'] = Prospect::whereMonth('sale_date', 10)->whereYear('sale_date', date('Y'))->count();
-        $goal['prospect_november'] = Prospect::whereMonth('sale_date', 11)->whereYear('sale_date', date('Y'))->count();
-        $goal['prospect_december'] = Prospect::whereMonth('sale_date', 12)->whereYear('sale_date', date('Y'))->count();
         $labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
         $type = 'YearEarn';
-        // top 6 customers
+        
+        // Load full year chart data for the initial page load (YearEarn is default)
+        $yearStats = $this->getYearlyChartData();
+        $goal = array_merge($goal, $yearStats);
+
         $top_customers = Customer::with('projects')->get();
         $top_customers = $top_customers->sortByDesc(function ($customer) {
             return $customer->projects->sum('project_value');
         })->take(6);
 
-        //top performers list in this month calculate from goals_date
-        $top_performers = Goal::whereMonth('goals_date', date('m'))->whereYear('goals_date', date('Y'))->orderBy('goals_achieve','desc')->take(7)->get();
+        $top_performers = Goal::whereMonth('goals_date', date('m'))->whereYear('goals_date', date('Y'))->orderBy('goals_achieve', 'desc')->take(7)->get();
 
-        // dd($count);
-        return view('admin.dashboard')->with(compact('count', 'goal', 'prospects','projects','labels','type','top_customers','top_performers'));
+        return view('admin.dashboard')->with(compact('count', 'goal', 'prospects', 'projects', 'labels', 'type', 'top_customers', 'top_performers'));
+    }
+
+    public function getTopStats(Request $request)
+    {
+        $type = $request->type ?? 'this_month';
+        $stats = $this->getStatsData($type);
+        $count = $stats['count'];
+        $goal = $stats['goal'];
+        $top_customers = Customer::with('projects')->get();
+        $top_customers = $top_customers->sortByDesc(function ($customer) {
+            return $customer->projects->sum('project_value');
+        })->take(6);
+
+        return response()->json([
+            'html' => view('admin.dashboard_stats_cards', compact('count', 'goal', 'top_customers'))->render(),
+            'count' => $count
+        ]);
+    }
+
+    private function getStatsData($type)
+    {
+        $startDate = null;
+        $endDate = null;
+
+        if ($type == 'today') {
+            $startDate = date('Y-m-d');
+            $endDate = date('Y-m-d');
+        } elseif ($type == 'this_month') {
+            $startDate = date('Y-m-01');
+            $endDate = date('Y-m-t');
+        } elseif ($type == 'this_year' || $type == 'yearEarn') {
+            $startDate = date('Y-01-01');
+            $endDate = date('Y-12-31');
+        } elseif ($type == 'this_week' || $type == 'WeekEarn') {
+            $startDate = date('Y-m-d', strtotime('last sunday'));
+            $endDate = date('Y-m-d', strtotime('next saturday'));
+        }
+        // for 'overall', dates remain null
+
+        $count['sales_managers'] = User::Role('SALES_MANAGER')->where('status', 1)->count();
+        $count['account_managers'] = User::Role('ACCOUNT_MANAGER')->where('status', 1)->count();
+        $count['sales_excecutive'] = User::Role('SALES_EXCUETIVE')->where('status', 1)->count();
+        $count['bdm'] = User::Role('BUSINESS_DEVELOPMENT_MANAGER')->where('status', 1)->count();
+        $count['tender_managers'] = User::Role('TENDER_USER')->where('status', 1)->count();
+
+        $tpQuery = TenderProject::query();
+        $pQuery = Project::query();
+        $prQuery = Prospect::query();
+
+        if ($startDate && $endDate) {
+            $tpQuery->whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']);
+            $pQuery->whereBetween('sale_date', [$startDate, $endDate]);
+            $prQuery->whereBetween('sale_date', [$startDate, $endDate]);
+        }
+
+        $count['tender_projects'] = $tpQuery->count();
+        $count['tender_projects_value'] = $tpQuery->sum('tender_value_lakhs');
+        $count['projects'] = $pQuery->count();
+        
+        $count['prospects'] = (clone $prQuery)->count();
+        $count['win'] = (clone $prQuery)->where('status', 'Win')->count();
+        $count['follow_up'] = (clone $prQuery)->where('status', 'Follow Up')->count();
+        $count['close'] = (clone $prQuery)->where('status', 'Close')->count();
+        $count['sent_proposal'] = (clone $prQuery)->where('status', 'Sent Proposal')->count();
+
+        // Achievements and Goals
+        $account_manager_id = User::Role('ACCOUNT_MANAGER')->pluck('id');
+        $bdma_manager_id = User::Role('BUSINESS_DEVELOPMENT_MANAGER')->pluck('id');
+        $sales_manager_id = User::Role('SALES_MANAGER')->pluck('id');
+
+        $count['account_manager_revenue'] = 0;
+        foreach ($account_manager_id as $acc_m_id) {
+            $achievements = \App\Helpers\Helper::getUserAchievementDateRange($acc_m_id, $startDate ?: '2000-01-01', $endDate ?: '2099-12-31');
+            $count['account_manager_revenue'] += $achievements['net_amount'];
+        }
+
+        $count['bdm_revenue'] = 0;
+        foreach ($bdma_manager_id as $bdm_id) {
+            $achievements = \App\Helpers\Helper::getUserAchievementDateRange($bdm_id, $startDate ?: '2000-01-01', $endDate ?: '2099-12-31');
+            $count['bdm_revenue'] += $achievements['gross_amount'];
+        }
+
+        $goalQuery = Goal::query();
+        if ($startDate && $endDate) {
+             // Goals are usually month-based in this system, so we check if goals_date falls in range
+             $goalQuery->whereBetween('goals_date', [$startDate, $endDate]);
+        }
+        
+        $count['account_manager_goals'] = (clone $goalQuery)->whereIn('user_id', $account_manager_id)->sum('goals_amount');
+        $count['bdm_goals'] = (clone $goalQuery)->whereIn('user_id', $bdma_manager_id)->where('goals_type', 1)->sum('goals_amount');
+        if ($count['bdm_goals'] == 0) {
+            $count['bdm_goals'] = (clone $goalQuery)->whereIn('user_id', $bdma_manager_id)->sum('goals_amount');
+        }
+
+        $count['account_manager_percentage'] = ($count['account_manager_goals'] > 0) ? round(($count['account_manager_revenue'] / $count['account_manager_goals']) * 100) : 0;
+        $count['bdm_percentage'] = ($count['bdm_goals'] > 0) ? round(($count['bdm_revenue'] / $count['bdm_goals']) * 100) : 0;
+
+        $goal['gross_goals'] = (clone $goalQuery)->where('goals_type', 1)->whereIn('user_id', $sales_manager_id)->sum('goals_amount');
+        $goal['net_goals'] = (clone $goalQuery)->where('goals_type', 2)->whereIn('user_id', $sales_manager_id)->sum('goals_amount');
+
+        $goal['gross_goals_achieve'] = 0;
+        $goal['net_goals_achieve'] = 0;
+        foreach ($sales_manager_id as $sm_id) {
+            $achievements = \App\Helpers\Helper::getUserAchievementDateRange($sm_id, $startDate ?: '2000-01-01', $endDate ?: '2099-12-31');
+            $goal['gross_goals_achieve'] += $achievements['gross_amount'];
+            $goal['net_goals_achieve'] += $achievements['net_amount'];
+        }
+
+        return ['count' => $count, 'goal' => $goal];
+    }
+
+    private function getYearlyChartData()
+    {
+        $sales_manager_id = User::Role('SALES_MANAGER')->pluck('id');
+        $data = [];
+        for ($m = 1; $m <= 12; $m++) {
+            $monthName = strtolower(date('F', mktime(0, 0, 0, $m, 1)));
+            $startOfMonth = date('Y-m-01', mktime(0, 0, 0, $m, 1));
+            $endOfMonth = date('Y-m-t', mktime(0, 0, 0, $m, 1));
+
+            $gross_sum = 0;
+            $net_sum = 0;
+
+            foreach ($sales_manager_id as $sm_id) {
+                $achievements = \App\Helpers\Helper::getUserAchievementDateRange($sm_id, $startOfMonth, $endOfMonth);
+                $gross_sum += $achievements['gross_amount'];
+                $net_sum += $achievements['net_amount'];
+            }
+
+            $data['gross_goals_' . $monthName] = $gross_sum;
+            $data['net_goals_' . $monthName] = $net_sum;
+            $data['prospect_' . $monthName] = Prospect::whereMonth('sale_date', $m)->whereYear('sale_date', date('Y'))->count();
+        }
+        return $data;
     }
 
     public function dashboardProspectFetch(Request $request)
     {
-
         if ($request->ajax()) {
-            $sort_by = $request->get('sortby');
-            $sort_type = $request->get('sorttype');
             $query = $request->get('query');
             $query = str_replace(" ", "%", $query);
             $prospects = Prospect::where('id', 'like', '%' . $query . '%')
@@ -157,144 +200,73 @@ class DashboardController extends Controller
 
     public function getEarningStatistics(Request $request)
     {
-
         $type = $request->type;
-        if($type == 'yearEarn')
-        {
+        $sales_manager_id = User::Role('SALES_MANAGER')->pluck('id');
 
-            $goal['gross_goals_january'] = Goal::where('goals_type', 1)->whereMonth('goals_date', 1)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-            $goal['gross_goals_february'] = Goal::where('goals_type', 1)->whereMonth('goals_date', 2)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-            $goal['gross_goals_march'] = Goal::where('goals_type', 1)->whereMonth('goals_date', 3)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-            $goal['gross_goals_april'] = Goal::where('goals_type', 1)->whereMonth('goals_date', 4)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-            $goal['gross_goals_may'] = Goal::where('goals_type', 1)->whereMonth('goals_date', 5)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-            $goal['gross_goals_june'] = Goal::where('goals_type', 1)->whereMonth('goals_date', 6)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-            $goal['gross_goals_july'] = Goal::where('goals_type', 1)->whereMonth('goals_date', 7)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-            $goal['gross_goals_august'] = Goal::where('goals_type', 1)->whereMonth('goals_date', 8)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-            $goal['gross_goals_september'] = Goal::where('goals_type', 1)->whereMonth('goals_date', 9)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-            $goal['gross_goals_october'] = Goal::where('goals_type', 1)->whereMonth('goals_date', 10)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-            $goal['gross_goals_november'] = Goal::where('goals_type', 1)->whereMonth('goals_date', 11)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-            $goal['gross_goals_december'] = Goal::where('goals_type', 1)->whereMonth('goals_date', 12)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-
-            $goal['net_goals_january'] = Goal::where('goals_type', 2)->whereMonth('goals_date', 1)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-            $goal['net_goals_february'] = Goal::where('goals_type', 2)->whereMonth('goals_date', 2)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-            $goal['net_goals_march'] = Goal::where('goals_type', 2)->whereMonth('goals_date', 3)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-            $goal['net_goals_april'] = Goal::where('goals_type', 2)->whereMonth('goals_date', 4)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-            $goal['net_goals_may'] = Goal::where('goals_type', 2)->whereMonth('goals_date', 5)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-            $goal['net_goals_june'] = Goal::where('goals_type', 2)->whereMonth('goals_date', 6)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-            $goal['net_goals_july'] = Goal::where('goals_type', 2)->whereMonth('goals_date', 7)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-            $goal['net_goals_august'] = Goal::where('goals_type', 2)->whereMonth('goals_date', 8)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-            $goal['net_goals_september'] = Goal::where('goals_type', 2)->whereMonth('goals_date', 9)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-            $goal['net_goals_october'] = Goal::where('goals_type', 2)->whereMonth('goals_date', 10)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-            $goal['net_goals_november'] = Goal::where('goals_type', 2)->whereMonth('goals_date', 11)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-            $goal['net_goals_december'] = Goal::where('goals_type', 2)->whereMonth('goals_date', 12)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-
-            $goal['prospect_january'] = Prospect::whereMonth('sale_date', 1)->whereYear('sale_date', date('Y'))->count();
-            $goal['prospect_february'] = Prospect::whereMonth('sale_date', 2)->whereYear('sale_date', date('Y'))->count();
-            $goal['prospect_march'] = Prospect::whereMonth('sale_date', 3)->whereYear('sale_date', date('Y'))->count();
-            $goal['prospect_april'] = Prospect::whereMonth('sale_date', 4)->whereYear('sale_date', date('Y'))->count();
-            $goal['prospect_may'] = Prospect::whereMonth('sale_date', 5)->whereYear('sale_date', date('Y'))->count();
-            $goal['prospect_june'] = Prospect::whereMonth('sale_date', 6)->whereYear('sale_date', date('Y'))->count();
-            $goal['prospect_july'] = Prospect::whereMonth('sale_date', 7)->whereYear('sale_date', date('Y'))->count();
-            $goal['prospect_august'] = Prospect::whereMonth('sale_date', 8)->whereYear('sale_date', date('Y'))->count();
-            $goal['prospect_september'] = Prospect::whereMonth('sale_date', 9)->whereYear('sale_date', date('Y'))->count();
-            $goal['prospect_october'] = Prospect::whereMonth('sale_date', 10)->whereYear('sale_date', date('Y'))->count();
-            $goal['prospect_november'] = Prospect::whereMonth('sale_date', 11)->whereYear('sale_date', date('Y'))->count();
-            $goal['prospect_december'] = Prospect::whereMonth('sale_date', 12)->whereYear('sale_date', date('Y'))->count();
+        if ($type == 'yearEarn') {
+            $goal = $this->getYearlyChartData();
             $labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
             $type = 'YearEarn';
-
-
-            return response()->json(['view'=>(String)View::make('admin.statistic_ajax_bar_chart')->with(compact('labels','goal','type'))]);
-            // return "gg";
-            // return response()->json(['view'=>(String)View::make('admin.statistic_ajax_bar_chart')->with(compact('labels','goal','type'))]);
-        }
-        else if($type == 'MonthEarn')
-        {
-
+            return response()->json(['view' => (string)View::make('admin.statistic_ajax_bar_chart')->with(compact('labels', 'goal', 'type'))]);
+        } elseif ($type == 'MonthEarn') {
             $current_month = date('m');
             $total_days = cal_days_in_month(CAL_GREGORIAN, date('m'), date('Y'));
-                $goals = [];
-                $labels = [];
-
-                for ($i = 1; $i <= $total_days; $i++) {
-                   // store all days in array in labels
-                    $labels[] = $i;
-                      $gross_goals[]= Goal::where('goals_type', 1)->whereDay('goals_date',$i)->whereMonth('goals_date', $current_month)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? 0;
-                      $net_goals[]= Goal::where('goals_type', 2)->whereDay('goals_date',$i)->whereMonth('goals_date', $current_month)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? 0;
-                      $prospects[]= Prospect::whereDay('sale_date',$i)->whereMonth('sale_date', $current_month)->whereYear('sale_date', date('Y'))->count();
-                      // $goals[$i]['days'] = Goal::where('goals_type', 1)
-                    //     ->whereDay('goals_date', $i)
-                    //     ->whereMonth('goals_date', date('m'))
-                    //     ->whereYear('goals_date', date('Y'))
-                    //     ->sum('goals_achieve');
-                }
-
-
-            $type = 'MonthEarn';
-
-            return response()->json(['view'=>(String)View::make('admin.statistic_ajax_bar_chart')->with(compact('labels','gross_goals','type','net_goals','prospects'))]);
-        }else{
-
-        //    $date =  Prospect::whereDay('sale_date', 6)
-        //             ->whereRaw('WEEK(sale_date) = 49')
-        //             ->whereYear('sale_date', date('Y'))->toSql();
-        //             return $date;
-            //week earn chart
-            $current_month = date('m');
-            $current_week = date('W');
-            $total_days = 7;
-            $labels = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            $labels = [];
             $gross_goals = [];
             $net_goals = [];
             $prospects = [];
 
             for ($i = 1; $i <= $total_days; $i++) {
-                // store all days in array in labels
-
-                $j =$i -1;
-                $currentDay = $labels[$j];
-                $gross_goals[] = Goal::where('goals_type', 1)
-                    ->whereDay('goals_date', $i)
-                    ->whereRaw('WEEK(goals_date) = ?', [$current_week])
-                    ->whereYear('goals_date', date('Y'))
-                    ->sum('goals_achieve');
-
-                $net_goals[] = Goal::where('goals_type', 2)
-                    ->whereDay('goals_date', $i)
-                    ->whereRaw('WEEK(goals_date) = ?', [$current_week])
-                    ->whereYear('goals_date', date('Y'))
-                    ->sum('goals_achieve');
-
-                $prospects[] = Prospect::whereRaw('DAYNAME(sale_date)="'.$currentDay.'"')
-                    ->whereRaw('WEEK(sale_date) ='.$current_week)
-                    ->whereYear('sale_date', date('Y'))
-                    ->count();
+                $labels[] = $i;
+                $date = date('Y-m-') . sprintf('%02d', $i);
+                
+                $gross_sum = 0;
+                $net_sum = 0;
+                foreach ($sales_manager_id as $sm_id) {
+                    $achievements = \App\Helpers\Helper::getUserAchievementDateRange($sm_id, $date, $date);
+                    $gross_sum += $achievements['gross_amount'];
+                    $net_sum += $achievements['net_amount'];
+                }
+                $gross_goals[] = $gross_sum;
+                $net_goals[] = $net_sum;
+                $prospects[] = Prospect::whereDate('sale_date', $date)->count();
             }
+            $type = 'MonthEarn';
+            return response()->json(['view' => (string)View::make('admin.statistic_ajax_bar_chart')->with(compact('labels', 'gross_goals', 'type', 'net_goals', 'prospects'))]);
+        } else {
+            // WeekEarn
+            $startOfWeek = Carbon::now()->startOfWeek();
+            $labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            $gross_goals = [];
+            $net_goals = [];
+            $prospects = [];
 
+            for ($i = 0; $i < 7; $i++) {
+                $date = (clone $startOfWeek)->addDays($i)->format('Y-m-d');
+                $gross_sum = 0;
+                $net_sum = 0;
+                foreach ($sales_manager_id as $sm_id) {
+                    $achievements = \App\Helpers\Helper::getUserAchievementDateRange($sm_id, $date, $date);
+                    $gross_sum += $achievements['gross_amount'];
+                    $net_sum += $achievements['net_amount'];
+                }
+                $gross_goals[] = $gross_sum;
+                $net_goals[] = $net_sum;
+                $prospects[] = Prospect::whereDate('sale_date', $date)->count();
+            }
             $type = 'WeekEarn';
-            return response()->json(['view'=>(String)View::make('admin.statistic_ajax_bar_chart')->with(compact('labels','gross_goals','type','net_goals','prospects'))]);
+            return response()->json(['view' => (string)View::make('admin.statistic_ajax_bar_chart')->with(compact('labels', 'gross_goals', 'type', 'net_goals', 'prospects'))]);
         }
-
-
-
     }
 
     public function topPerformerFilter(Request $request)
     {
-        // performance filter
         $duration = $request->duration;
-
-        if($duration == 'Monthly')
-        {
-            $top_performers = Goal::whereMonth('goals_date', date('m'))->whereYear('goals_date', date('Y'))->orderBy('goals_achieve','desc')->take(7)->get();
+        if ($duration == 'Monthly') {
+            $top_performers = Goal::whereMonth('goals_date', date('m'))->whereYear('goals_date', date('Y'))->orderBy('goals_achieve', 'desc')->take(7)->get();
+        } else {
+            $top_performers = Goal::whereYear('goals_date', date('Y'))->orderBy('goals_achieve', 'desc')->take(7)->get();
         }
-        else
-        {
-            $top_performers = Goal::whereYear('goals_date', date('Y'))->orderBy('goals_achieve','desc')->take(7)->get();
-        }
-
-        
-
         return response()->json(['data' => view('admin.dashboard_performer_table', compact('top_performers'))->render()]);
     }
 }
