@@ -386,9 +386,11 @@ class GoalsController extends Controller
         $amounts = $request->amount;
         $totalInput = array_sum($amounts);
 
+        /* 
         if ($totalInput > ($smGoal->goals_amount + 0.5)) {
             return redirect()->route('goals.index')->with('error', 'Distributed amount exceeds the Sales Manager total goal.');
         }
+        */
 
         foreach ($amounts as $userId => $amount) {
             $exec = User::role('SALES_EXCUETIVE')->where('sales_manager_id', $salesManagerId)->where('id', $userId)->first();

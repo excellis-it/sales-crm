@@ -112,7 +112,7 @@ class GoalsController extends Controller
         $html .= '<input type="hidden" name="goals_date" value="' . $goalsDate . '">';
         $html .= '<div class="d-flex justify-content-between p-3 mb-3 align-items-center rounded border">
                     <div style="font-weight: bold; font-size: 16px;">Total Goal: $<span id="total_sm_goal">' . $smGoal->goals_amount . '</span></div>
-                    <div style="font-weight: bold; font-size: 16px;">Remaining to Allocate: $<span id="remaining_goal">0.00</span></div>
+                    <div style="font-weight: bold; font-size: 16px;"><span id="allocation_label">Remaining to Allocate</span>: $<span id="remaining_goal">0.00</span></div>
                   </div>';
         $html .= '<div class="table-responsive"><table class="table table-hover table-center mb-4">';
         $html .= '<thead><tr><th>Sales Executive</th><th>Allocated Target Amount ($)</th></tr></thead>';
@@ -187,9 +187,11 @@ class GoalsController extends Controller
         $totalInput = array_sum($amounts);
 
         // Let's add a small leeway for floating point rounding issues
+        /* 
         if ($totalInput > ($smGoal->goals_amount + 0.5)) {
             return redirect()->route('sales-manager.goals.index')->with('error', 'Distributed amount exceeds your total goal.');
         }
+        */
 
         foreach ($amounts as $userId => $amount) {
             $exec = User::role('SALES_EXCUETIVE')->where('sales_manager_id', $salesManagerId)->where('id', $userId)->first();

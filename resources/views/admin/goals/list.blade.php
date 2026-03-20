@@ -462,11 +462,11 @@
 
     <script>
         $(document).ready(function() {
-            function fetch_goals() {
+            function fetch_goals(page = 1) {
                 var text = $('#search').val();
                 var month = $('#filter_month').val();
                 var year = $('#filter_year').val();
-                var url = "{{ route('project-goals.search') }}";
+                var url = "{{ route('project-goals.search') }}" + "?page=" + page;
 
                 $('#loading').addClass('loading');
                 $('#loading-content').addClass('loading-content');
@@ -490,6 +490,12 @@
                     }
                 });
             }
+
+            $(document).on('click', '#project_goals_data .pagination a', function(event) {
+                event.preventDefault();
+                var page = $(this).attr('href').split('page=')[1];
+                fetch_goals(page);
+            });
 
             $('#search').on('keyup', function() {
                 fetch_goals();
@@ -543,13 +549,18 @@
                 $('#remaining_goal').text(remaining.toFixed(2));
 
                 if (remaining < -0.5) {
+                    $('#allocation_label').text('Extra Allocation');
+                    $('#remaining_goal').text(Math.abs(remaining).toFixed(2));
                     $('#remaining_goal').css('color', '#dc3545');
-                    $('#submitDistribution').prop('disabled', true);
-                } else if (remaining > 0.5) {
-                    $('#remaining_goal').css('color', '#f37e20');
                     $('#submitDistribution').prop('disabled', false);
                 } else {
-                    $('#remaining_goal').css('color', '#28a745');
+                    $('#allocation_label').text('Remaining');
+                    $('#remaining_goal').text(remaining.toFixed(2));
+                    if (remaining > 0.5) {
+                        $('#remaining_goal').css('color', '#f37e20');
+                    } else {
+                        $('#remaining_goal').css('color', '#28a745');
+                    }
                     $('#submitDistribution').prop('disabled', false);
                 }
             }
@@ -590,7 +601,7 @@
                             html += '<input type="hidden" name="goals_date" value="' + goalsDate + '">';
                             html += '<div class="d-flex justify-content-between p-3 mb-3 align-items-center rounded" style="background: linear-gradient(135deg, #ffdfc5, #fff3e8); border: 1px solid #f37e20;">';
                             html += '<div style="font-weight: bold; font-size: 16px; color: #ad1e23;">Total Goal: $<span id="total_sm_goal">' + response.total_amount + '</span></div>';
-                            html += '<div style="font-weight: bold; font-size: 16px;">Remaining: $<span id="remaining_goal">0.00</span></div>';
+                            html += '<div style="font-weight: bold; font-size: 16px;"><span id="allocation_label">Remaining</span>: $<span id="remaining_goal">0.00</span></div>';
                             html += '</div>';
                             html += '<div class="table-responsive"><table class="table table-hover table-center mb-4">';
                             html += '<thead><tr style="background: #ffdfc5; color: #ac1e23;"><th>Sales Executive</th><th>Allocated Target Amount ($)</th></tr></thead>';

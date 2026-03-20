@@ -153,13 +153,18 @@
                 $('#remaining_goal').text(remaining.toFixed(2));
 
                 if (remaining < -0.5) { // Allowing small float imprecision
-                    $('#remaining_goal').parent().addClass('text-danger').removeClass('text-success');
-                    $('#submitDistribution').prop('disabled', true);
-                } else if (remaining > 0.5) {
-                    $('#remaining_goal').parent().addClass('text-warning').removeClass('text-danger text-success');
+                    $('#allocation_label').text('Extra Allocation');
+                    $('#remaining_goal').text(Math.abs(remaining).toFixed(2));
+                    $('#remaining_goal').parent().addClass('text-danger').removeClass('text-success text-warning');
                     $('#submitDistribution').prop('disabled', false);
                 } else {
-                    $('#remaining_goal').parent().addClass('text-success').removeClass('text-danger text-warning');
+                    $('#allocation_label').text('Remaining to Allocate');
+                    $('#remaining_goal').text(remaining.toFixed(2));
+                    if (remaining > 0.5) {
+                        $('#remaining_goal').parent().addClass('text-warning').removeClass('text-danger text-success');
+                    } else {
+                        $('#remaining_goal').parent().addClass('text-success').removeClass('text-danger text-warning');
+                    }
                     $('#submitDistribution').prop('disabled', false);
                 }
             }
@@ -211,11 +216,11 @@
     </script>
     <script>
         $(document).ready(function() {
-            function fetch_goals() {
+            function fetch_goals(page = 1) {
                 var text = $('#search').val();
                 var month = $('#filter_month').val();
                 var year = $('#filter_year').val();
-                var url = "{{ route('sales-manager.goals.search') }}";
+                var url = "{{ route('sales-manager.goals.search') }}" + "?page=" + page;
 
                 $('#loading').addClass('loading');
                 $('#loading-content').addClass('loading-content');
@@ -239,6 +244,12 @@
                     }
                 });
             }
+
+            $(document).on('click', '#project_goals_data .pagination a', function(event) {
+                event.preventDefault();
+                var page = $(this).attr('href').split('page=')[1];
+                fetch_goals(page);
+            });
 
             $('#search').on('keyup', function() {
                 fetch_goals();
