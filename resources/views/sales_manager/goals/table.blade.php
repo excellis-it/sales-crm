@@ -11,6 +11,12 @@
     <tbody>
         @if (count($goals) > 0)
             @foreach ($goals as $key => $goal)
+                @php
+                    $startOfMonth = date('Y-m-01', strtotime($goal->goals_date));
+                    $endOfMonth = date('Y-m-t', strtotime($goal->goals_date));
+                    $achievements = \App\Helpers\Helper::getUserAchievementDateRange($goal->user_id, $startOfMonth, $endOfMonth);
+                    $dynamic_achieve = $goal->goals_type == 1 ? $achievements['gross_amount'] : $achievements['net_amount'];
+                @endphp
                 <tr>
                     <td>
                         {{ date('F - Y', strtotime($goal->goals_date)) }}
@@ -29,7 +35,7 @@
                         ${{ number_format($goal->goals_amount) }}
                     </td>
                     <td>
-                        ${{ number_format($goal->goals_achieve) }}
+                        ${{ number_format($dynamic_achieve) }}
                     </td>
                 </tr>
             @endforeach

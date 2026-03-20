@@ -22,32 +22,31 @@ class DashboardController extends Controller
         $goal['gross_goals'] = Goal::where('user_id', auth()->user()->id)->where('goals_type', 1)->whereMonth('goals_date', date('m'))->first();
         $goal['net_goals'] = Goal::where('user_id', auth()->user()->id)->where('goals_type', 2)->whereMonth('goals_date', date('m'))->first();
 
-        $goal['gross_goals_january'] = Goal::where('user_id', auth()->user()->id)->where('goals_type', 1)->whereMonth('goals_date', 1)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-        $goal['gross_goals_febuary'] = Goal::where('user_id', auth()->user()->id)->where('goals_type', 1)->whereMonth('goals_date', 2)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-        $goal['gross_goals_march'] = Goal::where('user_id', auth()->user()->id)->where('goals_type', 1)->whereMonth('goals_date', 3)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-        $goal['gross_goals_april'] = Goal::where('user_id', auth()->user()->id)->where('goals_type', 1)->whereMonth('goals_date', 4)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-        $goal['gross_goals_may'] = Goal::where('user_id', auth()->user()->id)->where('goals_type', 1)->whereMonth('goals_date', 5)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-        $goal['gross_goals_june'] = Goal::where('user_id', auth()->user()->id)->where('goals_type', 1)->whereMonth('goals_date', 6)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-        $goal['gross_goals_july'] = Goal::where('user_id', auth()->user()->id)->where('goals_type', 1)->whereMonth('goals_date', 7)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-        $goal['gross_goals_august'] = Goal::where('user_id', auth()->user()->id)->where('goals_type', 1)->whereMonth('goals_date', 8)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-        $goal['gross_goals_september'] = Goal::where('user_id', auth()->user()->id)->where('goals_type', 1)->whereMonth('goals_date', 9)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-        $goal['gross_goals_october'] = Goal::where('user_id', auth()->user()->id)->where('goals_type', 1)->whereMonth('goals_date', 10)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-        $goal['gross_goals_november'] = Goal::where('user_id', auth()->user()->id)->where('goals_type', 1)->whereMonth('goals_date', 11)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-        $goal['gross_goals_december'] = Goal::where('user_id', auth()->user()->id)->where('goals_type', 1)->whereMonth('goals_date', 12)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
+        for ($m = 1; $m <= 12; $m++) {
+            $monthName = strtolower(date('F', mktime(0, 0, 0, $m, 1)));
+            $startOfMonth = date('Y-m-01', mktime(0, 0, 0, $m, 1));
+            $endOfMonth = date('Y-m-t', mktime(0, 0, 0, $m, 1));
+            
+            $achievements = \App\Helpers\Helper::getUserAchievementDateRange(auth()->user()->id, $startOfMonth, $endOfMonth);
+            $goal['gross_goals_' . $monthName] = $achievements['gross_amount'];
+            $goal['net_goals_' . $monthName] = $achievements['net_amount'];
+        }
 
-        $goal['net_goals_january'] = Goal::where('user_id', auth()->user()->id)->where('goals_type', 2)->whereMonth('goals_date', 1)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-        $goal['net_goals_febuary'] = Goal::where('user_id', auth()->user()->id)->where('goals_type', 2)->whereMonth('goals_date', 2)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-        $goal['net_goals_march'] = Goal::where('user_id', auth()->user()->id)->where('goals_type', 2)->whereMonth('goals_date', 3)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-        $goal['net_goals_april'] = Goal::where('user_id', auth()->user()->id)->where('goals_type', 2)->whereMonth('goals_date', 4)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-        $goal['net_goals_may'] = Goal::where('user_id', auth()->user()->id)->where('goals_type', 2)->whereMonth('goals_date', 5)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
+        // Backward compatibility for misspelled february
+        $goal['gross_goals_febuary'] = $goal['gross_goals_february'];
+        $goal['net_goals_febuary'] = $goal['net_goals_february'];
 
-        $goal['net_goals_june'] = Goal::where('user_id', auth()->user()->id)->where('goals_type', 2)->whereMonth('goals_date', 6)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-        $goal['net_goals_july'] = Goal::where('user_id', auth()->user()->id)->where('goals_type', 2)->whereMonth('goals_date', 7)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-        $goal['net_goals_august'] = Goal::where('user_id', auth()->user()->id)->where('goals_type', 2)->whereMonth('goals_date', 8)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-        $goal['net_goals_september'] = Goal::where('user_id', auth()->user()->id)->where('goals_type', 2)->whereMonth('goals_date', 9)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-        $goal['net_goals_october'] = Goal::where('user_id', auth()->user()->id)->where('goals_type', 2)->whereMonth('goals_date', 10)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-        $goal['net_goals_november'] = Goal::where('user_id', auth()->user()->id)->where('goals_type', 2)->whereMonth('goals_date', 11)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
-        $goal['net_goals_december'] = Goal::where('user_id', auth()->user()->id)->where('goals_type', 2)->whereMonth('goals_date', 12)->whereYear('goals_date', date('Y'))->first()['goals_achieve'] ?? '';
+        // Add dynamic achievement values for the current month
+        $currentStart = date('Y-m-01');
+        $currentEnd = date('Y-m-t');
+        $currentAchieve = \App\Helpers\Helper::getUserAchievementDateRange(auth()->user()->id, $currentStart, $currentEnd);
+        
+        if ($goal['gross_goals']) {
+            $goal['gross_goals']->goals_achieve = $currentAchieve['gross_amount'];
+        }
+        if ($goal['net_goals']) {
+            $goal['net_goals']->goals_achieve = $currentAchieve['net_amount'];
+        }
 
         $goal['prospect_january'] = BdmProspect::where('user_id', auth()->user()->id)->whereMonth('sale_date', 1)->whereYear('sale_date', date('Y'))->count();
         $goal['prospect_febuary'] = BdmProspect::where('user_id', auth()->user()->id)->whereMonth('sale_date', 2)->whereYear('sale_date', date('Y'))->count();

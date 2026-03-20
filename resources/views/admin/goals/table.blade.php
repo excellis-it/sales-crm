@@ -19,7 +19,12 @@
         @else
             @foreach ($goals as $key => $goal)
                 @php
-                    $percentage = $goal->goals_amount > 0 ? round(($goal->goals_achieve / $goal->goals_amount) * 100, 1) : 0;
+                    $startOfMonth = date('Y-m-01', strtotime($goal->goals_date));
+                    $endOfMonth = date('Y-m-t', strtotime($goal->goals_date));
+                    $achievements = \App\Helpers\Helper::getUserAchievementDateRange($goal->user_id, $startOfMonth, $endOfMonth);
+                    $dynamic_achieve = $goal->goals_type == 1 ? $achievements['gross_amount'] : $achievements['net_amount'];
+
+                    $percentage = $goal->goals_amount > 0 ? round(($dynamic_achieve / $goal->goals_amount) * 100, 1) : 0;
                     $percentage = min($percentage, 100);
                     if ($percentage >= 80) {
                         $progressColor = '#28a745';
@@ -70,7 +75,7 @@
                         <span style="font-weight: 600; color: #334257;">${{ number_format($goal->goals_amount, 2) }}</span>
                     </td>
                     <td>
-                        <span style="font-weight: 600; color: {{ $percentage >= 80 ? '#28a745' : ($percentage >= 50 ? '#f37e20' : '#dc3545') }};">${{ number_format($goal->goals_achieve ?? 0, 2) }}</span>
+                        <span style="font-weight: 600; color: {{ $percentage >= 80 ? '#28a745' : ($percentage >= 50 ? '#f37e20' : '#dc3545') }};">${{ number_format($dynamic_achieve ?? 0, 2) }}</span>
                     </td>
                     <td>
                         <div style="display: flex; align-items: center; gap: 8px;">

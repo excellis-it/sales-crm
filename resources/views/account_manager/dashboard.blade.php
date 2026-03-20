@@ -22,48 +22,81 @@
             </div>
 
             <div class="row">
-                <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-                    <a href="{{ route('account-manager.projects.index') }}" style="color: black">
-                        <div class="card dash-widget">
-                            <div class="card-body">
-                                <div class="dash-widget-info">
-                                    <h3>{{ $count['projects'] }}</h3>
-                                    <span>Total Projects</span>
+                <!-- Total Projects Card -->
+                <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4">
+                    <a href="{{ route('account-manager.projects.index') }}" class="dash-card-link">
+                        <div class="stats-card-one dash-card card-info mb-30" style="min-height: 180px;">
+                            <div class="d-flex justify-content-between align-items-center mb-10">
+                                <div class="d-flex align-items-center">
+                                    <div class="dash-icon-box bg-pale-blue mr-2"
+                                        style="width: 35px; height: 35px; font-size: 16px;">
+                                        <i class="la la-briefcase"></i>
+                                    </div>
+                                    <p class="dash-title mb-0">Total Projects</p>
                                 </div>
-                                <div class="">
-                                    <span class="dash-widget-icon"><i class="fa fa-credit-card"></i></span>
-                                </div>
+                                <span class="badge badge-cyan fs-12">
+                                    <span class="fw-600">{{ $count['projects'] }}</span>
+                                </span>
                             </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-                    <a href="javascript::void(0);" style="color: black">
-                        <div class="card dash-widget">
-                            <div class="card-body">
-                                <span class="dash-widget-icon"><i class="fas fa-dollar"></i></span>
-                                <div class="dash-widget-info">
-                                    <h3>{{(isset($count['net_target']['goals_amount'])) ? '$' .$count['net_target']['goals_amount'] : 'No Goal Set'}}</h3>
-                                    <span>Net Target This Month</span>
+                            <h3 class="fs-22 mb-10">{{ $count['projects'] }} Project(s)</h3>
+
+                            <div class="mt-15">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <span class="dash-title">Assigned To You</span>
                                 </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-                    <a href="javascript::void(0);" style="color: black">
-                        <div class="card dash-widget">
-                            <div class="card-body">
-                                <span class="dash-widget-icon"><i class="fas fa-dollar"></i></span>
-                                <div class="dash-widget-info">
-                                    <h3>{{(isset($count['net_target']['goals_achieve'])) ? '$'.$count['net_target']['goals_achieve'] :'No Goal Set'}}</h3>
-                                    <span>Net Achieve This Month</span>
+                                <div class="progress progress-sm" style="height: 6px;">
+                                    <div class="progress-bar bg-info" style="width: 100%"></div>
                                 </div>
                             </div>
                         </div>
                     </a>
                 </div>
 
+                <!-- Monthly Revenue Goal (Net) -->
+                @php
+                    $target = isset($count['net_target']['goals_amount']) ? $count['net_target']['goals_amount'] : 0;
+                    $achieve = isset($count['net_target']['goals_achieve']) ? $count['net_target']['goals_achieve'] : 0;
+                    $percentage = $target > 0 ? round(($achieve / $target) * 100, 0) : 0;
+                @endphp
+                <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4">
+                    <a href="javascript:void(0);" class="dash-card-link">
+                        <div class="stats-card-one dash-card card-danger mb-30" style="min-height: 180px;">
+                            <div class="d-flex justify-content-between align-items-center mb-10">
+                                <div class="d-flex align-items-center">
+                                    <div class="dash-icon-box bg-pale-red mr-2"
+                                        style="width: 35px; height: 35px; font-size: 16px;">
+                                        <i class="la la-money-bill"></i>
+                                    </div>
+                                    <p class="dash-title mb-0">Monthly Revenue (Net)</p>
+                                </div>
+                                <span class="badge badge-red fs-12">
+                                    <span class="fw-600">{{ $percentage }}%</span>
+                                </span>
+                            </div>
+                            @if ($target > 0)
+                                <h3 class="fs-22 mb-10">${{ $achieve }} / ${{ $target }}</h3>
+                                <div class="mt-15">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span class="dash-title">Monthly Goal Achievement</span>
+                                    </div>
+                                    <div class="progress progress-sm" style="height: 6px;">
+                                        <div class="progress-bar bg-danger" style="width: {{ min($percentage, 100) }}%"></div>
+                                    </div>
+                                </div>
+                            @else
+                                <h3 class="fs-22 mb-10">No Goal Set</h3>
+                                <div class="mt-15">
+                                    <div class="progress progress-sm" style="height: 6px;">
+                                        <div class="progress-bar bg-danger" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Empty space or another card if needed. The 3-card layout before is now condensed into beautiful 2 or 3 premium cards -->
+                
             </div>
 
             <div class="row">
