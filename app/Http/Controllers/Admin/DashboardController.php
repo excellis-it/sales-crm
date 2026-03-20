@@ -18,13 +18,13 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $count['users'] = User::whereNotIn('id', [Auth::user()->id])->count();
-        $count['sales_managers'] = User::Role('SALES_MANAGER')->count();
-        $count['account_managers'] = User::Role('ACCOUNT_MANAGER')->count();
-        $count['sales_excecutive'] = User::Role('SALES_EXCUETIVE')->count();
-        $count['bdm'] = User::Role('BUSINESS_DEVELOPMENT_MANAGER')->count();
+        $count['users'] = User::whereNotIn('id', [Auth::user()->id])->where('status', 1)->count();
+        $count['sales_managers'] = User::Role('SALES_MANAGER')->where('status', 1)->count();
+        $count['account_managers'] = User::Role('ACCOUNT_MANAGER')->where('status', 1)->count();
+        $count['sales_excecutive'] = User::Role('SALES_EXCUETIVE')->where('status', 1)->count();
+        $count['bdm'] = User::Role('BUSINESS_DEVELOPMENT_MANAGER')->where('status', 1)->count();
         // Tender Manager (TENDER_USER role) stats
-        $count['tender_managers'] = User::Role('TENDER_USER')->count();
+        $count['tender_managers'] = User::Role('TENDER_USER')->where('status', 1)->count();
         $count['tender_projects'] = TenderProject::count();
         $count['tender_projects_value'] = TenderProject::sum('tender_value_lakhs');
         // Sales pipeline projects

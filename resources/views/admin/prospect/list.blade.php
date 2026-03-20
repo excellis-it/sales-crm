@@ -65,19 +65,22 @@
                     <div class="card-title">
                         <div class="row filter-gap align-items-center">
                             <div class="col">
-                                <a href="javascript:void(0);" data-value="All" class="desin-filter active-filter">
+                                <a href="javascript:void(0);" data-value="All"
+                                    class="desin-filter {{ !request()->status ? 'active-filter' : '' }}">
                                     <p>All</p>
                                     <h5>{{ $count['prospect'] }}</h5>
                                 </a>
                             </div>
                             <div class="col">
-                                <a href="javascript:void(0);" data-value="Win" class="desin-filter">
+                                <a href="javascript:void(0);" data-value="Win"
+                                    class="desin-filter {{ request()->status == 'Win' ? 'active-filter' : '' }}">
                                     <p>On Board</p>
                                     <h5>{{ $count['win'] }}</h5>
                                 </a>
                             </div>
                             <div class="col">
-                                <a href="javascript:void(0);" data-value="Follow Up" class="desin-filter">
+                                <a href="javascript:void(0);" data-value="Follow Up"
+                                    class="desin-filter {{ request()->status == 'Follow Up' ? 'active-filter' : '' }}">
                                     <p>Follow Up</p>
                                     <h5>{{ $count['follow_up'] }}</h5>
                                 </a>
@@ -329,11 +332,10 @@
         </div>
 
     </div>
-
 @endsection
 
 @push('scripts')
- @include('bdm.includes.followup_modal')
+    @include('bdm.includes.followup_modal')
     <script>
         $(document).on('click', '.delete', function(e) {
             swal({

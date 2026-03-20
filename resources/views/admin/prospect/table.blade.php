@@ -30,18 +30,20 @@
                 {{ $prospect->reportTo->name ?? '-' }}
             </td>
             <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.prospects.edit', $prospect->id) }}" @endif>
-                {{ $prospect->status ?? '' }}
+                @if ($prospect->status == 'Win')
+                    On Board
+                @elseif($prospect->status == 'Follow Up')
+                    Follow Up
+                @elseif($prospect->status == 'Sent Proposal')
+                    Sent Proposal
+                @elseif($prospect->status == 'Close')
+                    Cancel
+                @else
+                    {{ $prospect->status ?? '' }}
+                @endif
             </td>
             <td>
-                @if ($prospect->status == 'Win')
-                <span>On Board</span>
-                @elseif ($prospect->status == 'Follow Up')
-                <span>Follow Up</span>
-                @elseif ($prospect->status == 'Sent Proposal')
-                <span>Sent Proposal</span>
-                @elseif ($prospect->status == 'Close')
-                <span>Cancel</span>
-            @endif
+                {{ $prospect->offered_for ?? '' }}
             </td>
             <td>
                 {{ $prospect->followup_date ? date('d-m-Y', strtotime($prospect->followup_date)) : '' }}

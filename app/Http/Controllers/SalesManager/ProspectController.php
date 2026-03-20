@@ -36,7 +36,13 @@ class ProspectController extends Controller
             $count['follow_up'] = Prospect::where('report_to', auth()->user()->id)->where('user_id', $request->sales_executive_id)->where('status', 'Follow Up')->count();
             $count['close'] = Prospect::where('report_to', auth()->user()->id)->where('user_id', $request->sales_executive_id)->where('status', 'Close')->count();
             $count['sent_proposal'] = Prospect::where('report_to', auth()->user()->id)->where('user_id', $request->sales_executive_id)->where('status', 'Sent Proposal')->count();
-            $prospects = Prospect::where('report_to', Auth::user()->id)->where('user_id', $request->sales_executive_id)->orderBy('created_at', 'desc')->paginate(15);
+            
+            $prospects = Prospect::where('report_to', Auth::user()->id)->where('user_id', $request->sales_executive_id);
+            if ($request->status && $request->status != 'All') {
+                $prospects->where('status', $request->status);
+            }
+            $prospects = $prospects->orderBy('created_at', 'desc')->paginate(15);
+            
             $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE', 'BUSINESS_DEVELOPMENT_MANAGER', 'BUSINESS_DEVELOPMENT_EXCECUTIVE'])->get();
             $sales_executives = User::role('SALES_EXCUETIVE')->where(['status' => 1, 'sales_manager_id' => Auth::user()->id])->orderBy('id', 'desc')->get();
             return view('sales_manager.prospect.list')->with(compact('prospects', 'count', 'users', 'sales_executives', 'sales_executive_id'));
@@ -46,7 +52,13 @@ class ProspectController extends Controller
         $count['follow_up'] = Prospect::where('report_to', auth()->user()->id)->where('status', 'Follow Up')->count();
         $count['close'] = Prospect::where('report_to', auth()->user()->id)->where('status', 'Close')->count();
         $count['sent_proposal'] = Prospect::where('report_to', auth()->user()->id)->where('status', 'Sent Proposal')->count();
-        $prospects = Prospect::where('report_to', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(15);
+        
+        $prospects = Prospect::where('report_to', Auth::user()->id);
+        if ($request->status && $request->status != 'All') {
+            $prospects->where('status', $request->status);
+        }
+        $prospects = $prospects->orderBy('created_at', 'desc')->paginate(15);
+        
         $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE', 'BUSINESS_DEVELOPMENT_MANAGER', 'BUSINESS_DEVELOPMENT_EXCECUTIVE'])->get();
         $sales_executives = User::role('SALES_EXCUETIVE')->where(['status' => 1, 'sales_manager_id' => Auth::user()->id])->orderBy('id', 'desc')->get();
         return view('sales_manager.prospect.list')->with(compact('prospects', 'count', 'users', 'sales_executives', 'sales_executive_id'));
