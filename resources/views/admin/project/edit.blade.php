@@ -250,6 +250,9 @@
                                                         <option value="Bank Transfer"
                                                             {{ $milestone->payment_mode == 'Bank Transfer' ? 'selected' : '' }}>
                                                             Bank Transfer</option>
+                                                        <option value="Payoneer"
+                                                            {{ $milestone->payment_mode == 'Payoneer' ? 'selected' : '' }}>
+                                                            Payoneer</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -388,7 +391,7 @@
                                                 <option value="Paypal">Paypal</option>
                                                 <option value="Stripe">Stripe</option>
                                                 <option value="Bank Transfer">Bank Transfer</option>
-                                                            <option value="Payoneer">Payoneer</option>
+                                                <option value="Payoneer">Payoneer</option>
                                             </select>
                                         </div>
                                     </div>
