@@ -4,30 +4,195 @@
 @endsection
 @push('styles')
     <style>
-        .dataTables_filter { margin-bottom: 20px !important; }
-        .offcanvas { width: 45% !important; background-color: #f8f9fa; border-left: none; box-shadow: -5px 0 15px rgba(0,0,0,0.1); }
-        .offcanvas-header { background: #fff; border-bottom: 1px solid #eee; padding: 20px; }
-        .offcanvas-body { padding: 25px; }
-        .section-header { margin-top: 25px; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid #e9ecef; color: #343a40; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; }
-        .section-header i { margin-right: 10px; color: #ff9b44; }
-        .form-label { font-weight: 600; color: #495057; margin-bottom: 6px; font-size: 14px; }
-        .form-control, .form-select { border-radius: 8px; border: 1px solid #ced4da; padding: 10px 15px; transition: all 0.2s; background-color: #fff; }
-        .form-control:focus { border-color: #ff9b44; box-shadow: 0 0 0 0.2rem rgba(255, 155, 68, 0.25); }
-        .card-custom { border: none; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
-        .milestone-item { background: #fff; border-radius: 10px; padding: 20px; margin-bottom: 15px; border: 1px solid #e9ecef; position: relative; transition: all 0.3s; }
-        .milestone-item:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-        .remove-btn { color: #dc3545; cursor: pointer; transition: all 0.2s; font-size: 18px; }
-        .remove-btn:hover { color: #a71d2a; transform: scale(1.1); }
-        .submit-btn-modern { background: linear-gradient(135deg, #ff9b44 0%, #fc6075 100%); border: none; color: #fff; padding: 12px 30px; border-radius: 30px; font-weight: 600; box-shadow: 0 4px 15px rgba(255, 155, 68, 0.3); transition: all 0.3s; }
-        .submit-btn-modern:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 155, 68, 0.4); color: #fff; }
-        .btn-process { background-color: #343a40; color: #fff; border-radius: 8px; padding: 8px 20px; transition: all 0.2s; }
-        .btn-process:hover { background-color: #23272b; color: #fff; }
-        .add-more-btn { color: #ff9b44; background: transparent; border: 2px dashed #ff9b44; border-radius: 8px; padding: 10px; width: 100%; font-weight: 600; margin-top: 10px; transition: all 0.2s; }
-        .add-more-btn:hover { background: rgba(255, 155, 68, 0.05); transform: translateY(-1px); }
-        .customer-type-group { display: flex; gap: 20px; background: #fff; padding: 15px; border-radius: 10px; border: 1px solid #e9ecef; margin-bottom: 20px; }
-        .form-check-input:checked { background-color: #ff9b44; border-color: #ff9b44; }
-        @media (max-width: 991px) { .offcanvas { width: 80% !important; } }
-        @media (max-width: 767px) { .offcanvas { width: 100% !important; } }
+        .dataTables_filter {
+            margin-bottom: 20px !important;
+        }
+
+        .offcanvas {
+            width: 45% !important;
+            background-color: #f8f9fa;
+            border-left: none;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .offcanvas-header {
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            padding: 20px;
+        }
+
+        .offcanvas-body {
+            padding: 25px;
+        }
+
+        .section-header {
+            margin-top: 25px;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e9ecef;
+            color: #343a40;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-header i {
+            margin-right: 10px;
+            color: #ff9b44;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: 8px;
+            border: 1px solid #ced4da;
+            padding: 10px 15px;
+            transition: all 0.2s;
+            background-color: #fff;
+        }
+
+        .form-control:focus {
+            border-color: #ff9b44;
+            box-shadow: 0 0 0 0.2rem rgba(255, 155, 68, 0.25);
+        }
+
+        .card-custom {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .milestone-item {
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid #e9ecef;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .milestone-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .remove-btn {
+            color: #dc3545;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 18px;
+        }
+
+        .remove-btn:hover {
+            color: #a71d2a;
+            transform: scale(1.1);
+        }
+
+        .submit-btn-modern {
+            background: linear-gradient(135deg, #ff9b44 0%, #fc6075 100%);
+            border: none;
+            color: #fff;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(255, 155, 68, 0.3);
+            transition: all 0.3s;
+        }
+
+        .submit-btn-modern:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 155, 68, 0.4);
+            color: #fff;
+        }
+
+        .btn-process {
+            background-color: #343a40;
+            color: #fff;
+            border-radius: 8px;
+            padding: 8px 20px;
+            transition: all 0.2s;
+        }
+
+        .btn-process:hover {
+            background-color: #23272b;
+            color: #fff;
+        }
+
+        .add-more-btn {
+            color: #ff9b44;
+            background: transparent;
+            border: 2px dashed #ff9b44;
+            border-radius: 8px;
+            padding: 10px;
+            width: 100%;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: all 0.2s;
+        }
+
+        .add-more-btn:hover {
+            background: rgba(255, 155, 68, 0.05);
+            transform: translateY(-1px);
+        }
+
+        .customer-type-group {
+            display: flex;
+            gap: 20px;
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #e9ecef;
+            margin-bottom: 20px;
+        }
+
+        .form-check-input:checked {
+            background-color: #ff9b44;
+            border-color: #ff9b44;
+        }
+
+        .prod-search {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .prod-search-icon {
+            position: absolute;
+            right: 15px;
+            color: #ff9b44;
+            transition: all 0.3s;
+        }
+
+        .prod-search-icon:hover {
+            color: #fc6075;
+        }
+
+        .rounded_search {
+            padding-right: 45px !important;
+            border-radius: 8px !important;
+        }
+
+        @media (max-width: 991px) {
+            .offcanvas {
+                width: 80% !important;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .offcanvas {
+                width: 100% !important;
+            }
+        }
     </style>
 @endpush
 
@@ -73,10 +238,19 @@
                     </div>
 
                     <hr />
-                    <div class="row justify-content-end">
-                        <div class="col-md-6">
-                            <div class="row g-1 justify-content-end">
-                                <div class="col-md-8 pr-0">
+                    <div class="row align-items-center">
+                        <div class="col-md-9">
+                            <div class="row g-2">
+                                <div class="col-md-3">
+                                    <label class="form-label mb-0">Start Date</label>
+                                    <input type="date" name="start_date" id="start_date" class="form-control">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label mb-0">End Date</label>
+                                    <input type="date" name="end_date" id="end_date" class="form-control">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label mb-0">Search</label>
                                     <div class="search-field prod-search">
                                         <input type="text" name="search" id="search" placeholder="search..." required
                                             class="form-control rounded_search">
@@ -84,10 +258,13 @@
                                                 class="fa fa-search"></i></a>
                                     </div>
                                 </div>
-                                {{-- <div class="col-md-3 pl-0 ml-2">
-                                    <button class="btn btn-primary button-search" id="search-button"> <span class=""><i
-                                                class="ph ph-magnifying-glass"></i></span> Search</button>
-                                </div> --}}
+                                <div class="col-md-2 d-flex align-items-end">
+                                    <div class="w-100">
+                                        <label class="form-label mb-0">&nbsp;</label>
+                                        <button class="btn btn-secondary w-100" id="reset-filters"
+                                            style="height: 45px; border-radius: 8px; margin-bottom:10px;">Reset</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
@@ -105,15 +282,19 @@
                                     @csrf
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <div class="section-header"><i class="fas fa-user-circle"></i> Customer Information</div>
+                                            <div class="section-header"><i class="fas fa-user-circle"></i> Customer
+                                                Information</div>
                                             <div class="customer-type-group mb-3">
                                                 <div class="form-check">
-                                                    <input class="form-check-input customer" type="radio" name="customer" id="new_user" value="1" checked required>
+                                                    <input class="form-check-input customer" type="radio" name="customer"
+                                                        id="new_user" value="1" checked required>
                                                     <label class="form-check-label" for="new_user">New Customer</label>
                                                 </div>
                                                 <div class="form-check">
-                                                    <input class="form-check-input customer" type="radio" name="customer" id="existing_user" value="0" required>
-                                                    <label class="form-check-label" for="existing_user">Existing Customer</label>
+                                                    <input class="form-check-input customer" type="radio" name="customer"
+                                                        id="existing_user" value="0" required>
+                                                    <label class="form-check-label" for="existing_user">Existing
+                                                        Customer</label>
                                                 </div>
                                             </div>
 
@@ -121,40 +302,59 @@
                                         </div>
 
                                         <div class="col-md-6 mb-3">
-                                            <label class="form-label">Client Name <span class="text-danger">*</span></label>
-                                            <input type="text" name="client_name" id="client_name" required data-parsley-trigger="keyup" class="form-control" placeholder="John Doe">
+                                            <label class="form-label">Client Name <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="text" name="client_name" id="client_name" required
+                                                data-parsley-trigger="keyup" class="form-control" placeholder="John Doe">
                                         </div>
 
                                         <div class="col-md-6 mb-3">
-                                            <label class="form-label">Client Email <span class="text-danger">*</span></label>
-                                            <input type="email" name="client_email" id="client_email" required data-parsley-trigger="keyup" class="form-control" placeholder="john@example.com">
+                                            <label class="form-label">Client Email <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="email" name="client_email" id="client_email" required
+                                                data-parsley-trigger="keyup" class="form-control"
+                                                placeholder="john@example.com">
                                             <span class="client_email_error text-danger"></span>
                                         </div>
 
                                         <div class="col-md-6 mb-3">
-                                            <label class="form-label">Client Phone <span class="text-danger">*</span></label>
-                                            <input type="text" name="client_phone" id="client_phone" required data-parsley-trigger="keyup" data-parsley-type="number" class="form-control" placeholder="1234567890">
+                                            <label class="form-label">Client Phone <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="text" name="client_phone" id="client_phone" required
+                                                data-parsley-trigger="keyup" data-parsley-type="number"
+                                                class="form-control" placeholder="1234567890">
                                         </div>
 
                                         <div class="col-md-6 mb-3">
-                                            <label class="form-label">Client Address <span class="text-danger">*</span></label>
-                                            <input type="text" name="client_address" id="client_address" required data-parsley-trigger="keyup" class="form-control" placeholder="City, Country">
+                                            <label class="form-label">Client Address <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="text" name="client_address" id="client_address" required
+                                                data-parsley-trigger="keyup" class="form-control"
+                                                placeholder="City, Country">
                                         </div>
 
                                         <div class="col-md-12 mb-3">
-                                            <label class="form-label">Business Name <span class="text-danger">*</span></label>
-                                            <input type="text" name="business_name" id="business_name" required data-parsley-trigger="keyup" class="form-control" placeholder="Business Solutions Inc.">
+                                            <label class="form-label">Business Name <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="text" name="business_name" id="business_name" required
+                                                data-parsley-trigger="keyup" class="form-control"
+                                                placeholder="Business Solutions Inc.">
                                         </div>
 
                                         <div class="col-md-12">
-                                            <div class="section-header"><i class="fas fa-briefcase"></i> Project Details</div>
+                                            <div class="section-header"><i class="fas fa-briefcase"></i> Project Details
+                                            </div>
                                         </div>
 
                                         <div class="col-md-12 mb-3">
-                                            <label class="form-label">Project Type <span class="text-danger">*</span></label>
-                                            <select name="project_type[]" id="project_type" class="form-control mySelect" multiple="multiple" required>
-                                                <option value="Website Design & Development">Website Design & Development</option>
-                                                <option value="Mobile Application Development">Mobile Application Development</option>
+                                            <label class="form-label">Project Type <span
+                                                    class="text-danger">*</span></label>
+                                            <select name="project_type[]" id="project_type" class="form-control mySelect"
+                                                multiple="multiple" required>
+                                                <option value="Website Design & Development">Website Design & Development
+                                                </option>
+                                                <option value="Mobile Application Development">Mobile Application
+                                                    Development</option>
                                                 <option value="Digital Marketing">Digital Marketing</option>
                                                 <option value="Logo Design">Logo Design</option>
                                                 <option value="SEO">SEO</option>
@@ -166,15 +366,21 @@
                                         <div id="other-value" class="col-md-12 mb-3"></div>
 
                                         <div class="col-md-6 mb-3">
-                                            <label class="form-label">Project Value (Total) <span class="text-danger">*</span></label>
+                                            <label class="form-label">Project Value (Total) <span
+                                                    class="text-danger">*</span></label>
                                             <div class="input-group">
-                                                <input type="text" name="project_value" id="project_value" required data-parsley-trigger="keyup" data-parsley-type="number" class="form-control" placeholder="0.00">
+                                                <input type="text" name="project_value" id="project_value" required
+                                                    data-parsley-trigger="keyup" data-parsley-type="number"
+                                                    class="form-control" placeholder="0.00">
                                             </div>
                                         </div>
 
                                         <div class="col-md-6 mb-3">
-                                            <label class="form-label">Project Upfront <span class="text-danger">*</span></label>
-                                            <input type="text" name="project_upfront" id="project_upfront" required data-parsley-trigger="keyup" data-parsley-type="number" class="form-control" placeholder="0.00">
+                                            <label class="form-label">Project Upfront <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="text" name="project_upfront" id="project_upfront" required
+                                                data-parsley-trigger="keyup" data-parsley-type="number"
+                                                class="form-control" placeholder="0.00">
                                         </div>
 
                                         <div class="col-md-6 mb-3">
@@ -191,63 +397,80 @@
                                         </div>
 
                                         <div class="col-md-6 mb-3">
-                                            <label class="form-label">Payment Mode <span class="text-danger">*</span></label>
-                                            <input type="text" name="payment_mode" required data-parsley-trigger="keyup" id="payment_mode" class="form-control" placeholder="e.g. Bank Transfer, Paypal">
+                                            <label class="form-label">Payment Mode <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="text" name="payment_mode" required
+                                                data-parsley-trigger="keyup" id="payment_mode" class="form-control"
+                                                placeholder="e.g. Bank Transfer, Paypal">
                                         </div>
 
                                         <div class="col-md-6 mb-3">
-                                            <label class="form-label">Project Opener <span class="text-danger">*</span></label>
-                                            <select name="project_opener" id="project_opener" required class="form-select select2">
+                                            <label class="form-label">Project Opener <span
+                                                    class="text-danger">*</span></label>
+                                            <select name="project_opener" id="project_opener" required
+                                                class="form-select select2">
                                                 <option value="">Select Opener</option>
                                                 @foreach ($project_openers as $project_opener)
-                                                    <option value="{{ $project_opener->id }}">{{ $project_opener->name }} ({{ $project_opener->email }})</option>
+                                                    <option value="{{ $project_opener->id }}">{{ $project_opener->name }}
+                                                        ({{ $project_opener->email }})</option>
                                                 @endforeach
                                             </select>
                                         </div>
 
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label">Project Closer</label>
-                                            <select name="project_closer" id="project_closer" class="form-select select2">
+                                            <select name="project_closer" id="project_closer"
+                                                class="form-select select2">
                                                 <option value="">Select Closer</option>
                                                 @foreach ($users as $user)
-                                                    <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->email }})</option>
+                                                    <option value="{{ $user->id }}">{{ $user->name }}
+                                                        ({{ $user->email }})</option>
                                                 @endforeach
                                             </select>
                                         </div>
 
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label">Sale Date <span class="text-danger">*</span></label>
-                                            <input type="date" name="sale_date" id="sale_date" required class="form-control picker">
+                                            <input type="date" name="sale_date" id="sale_date" required
+                                                class="form-control picker">
                                         </div>
 
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label">Delivery TAT</label>
-                                            <input type="date" name="delivery_tat" id="delivery_tat" class="form-control picker">
+                                            <input type="date" name="delivery_tat" id="delivery_tat"
+                                                class="form-control picker">
                                         </div>
 
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label">Website</label>
-                                            <input type="text" name="website" id="website" data-parsley-type="url" class="form-control" placeholder="https://example.com">
+                                            <input type="text" name="website" id="website" data-parsley-type="url"
+                                                class="form-control" placeholder="https://example.com">
                                         </div>
 
                                         <div class="col-md-6 mb-3">
-                                            <label class="form-label">Assigned To <span class="text-danger">*</span></label>
-                                            <select name="assigned_to" id="assigned_to" required class="form-select select2">
+                                            <label class="form-label">Assigned To <span
+                                                    class="text-danger">*</span></label>
+                                            <select name="assigned_to" id="assigned_to" required
+                                                class="form-select select2">
                                                 <option value="">Select User</option>
                                                 @foreach ($account_managers as $account_manager)
-                                                    <option value="{{ $account_manager->id }}">{{ $account_manager->name }} ({{ $account_manager->email }})</option>
+                                                    <option value="{{ $account_manager->id }}">
+                                                        {{ $account_manager->name }} ({{ $account_manager->email }})
+                                                    </option>
                                                 @endforeach
                                             </select>
                                         </div>
 
                                         <div class="col-md-12 mb-3">
                                             <label class="form-label">Project Description</label>
-                                            <textarea name="project_description" id="project_description" rows="3" class="form-control" placeholder="Briefly describe the project scope..."></textarea>
+                                            <textarea name="project_description" id="project_description" rows="3" class="form-control"
+                                                placeholder="Briefly describe the project scope..."></textarea>
                                         </div>
 
                                         <div class="col-md-12 mb-3">
                                             <label class="form-label">Internal Comment</label>
-                                            <textarea name="comment" id="comment" rows="2" class="form-control" placeholder="Additional internal details..."></textarea>
+                                            <textarea name="comment" id="comment" rows="2" class="form-control"
+                                                placeholder="Additional internal details..."></textarea>
                                         </div>
 
                                         <div class="col-md-12">
@@ -255,10 +478,12 @@
                                             <div class="row align-items-end mb-4">
                                                 <div class="col-md-8">
                                                     <label class="form-label">Number of Milestones</label>
-                                                    <input type="number" id="number_of_milestone" min="0" name="number_of_milestone" class="form-control" placeholder="0">
+                                                    <input type="number" id="number_of_milestone" min="0"
+                                                        name="number_of_milestone" class="form-control" placeholder="0">
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <button type="button" class="btn btn-process w-100 milestone-print">Process</button>
+                                                    <button type="button"
+                                                        class="btn btn-process w-100 milestone-print">Process</button>
                                                 </div>
                                             </div>
 
@@ -273,10 +498,12 @@
                                                 <div class="row milestone-item mx-0">
                                                     <div class="col-md-12 mb-3">
                                                         <label class="form-label">Upload PDF</label>
-                                                        <input type="file" name="pdf[]" class="form-control" accept="application/pdf">
+                                                        <input type="file" name="pdf[]" class="form-control"
+                                                            accept="application/pdf">
                                                     </div>
                                                     <div class="col-md-12">
-                                                        <button type="button" class="btn add-more-btn add-pdf-button"><i class="fas fa-plus"></i> Add Another PDF</button>
+                                                        <button type="button" class="btn add-more-btn add-pdf-button"><i
+                                                                class="fas fa-plus"></i> Add Another PDF</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -284,8 +511,10 @@
                                     </div>
 
                                     <div class="mt-4 pt-4 border-top text-end">
-                                        <button class="btn btn-light px-4 me-2" type="reset" data-bs-dismiss="offcanvas">Cancel</button>
-                                        <button class="btn submit-btn-modern check-form" type="submit">Create Project</button>
+                                        <button class="btn btn-light px-4 me-2" type="reset"
+                                            data-bs-dismiss="offcanvas">Cancel</button>
+                                        <button class="btn submit-btn-modern check-form" type="submit">Create
+                                            Project</button>
                                     </div>
                                 </form>
                             </div>
@@ -295,7 +524,7 @@
                         </div>
 
                     </div>
-                    <div class="table-responsive" >
+                    <div class="table-responsive">
                         <table class="dd table table-striped  table-hover" style="width:100%">
                             <thead>
                                 <tr>
@@ -348,10 +577,9 @@
         </div>
 
     </div>
-
 @endsection
 @push('scripts')
- @include('bdm.includes.followup_modal')
+    @include('bdm.includes.followup_modal')
     <script src="http://parsleyjs.org/dist/parsley.js"></script>
     <script>
         window.ParsleyConfig = {
@@ -381,11 +609,15 @@
                         url: "{{ route('sales-projects.new-customer') }}",
                         type: 'GET',
                         success: function(response) {
-                            var html = '<label class="form-label mt-2">Select Customer <span class="text-danger">*</span></label>';
-                            html += '<select name="customer_id" id="customer_id" required class="form-select select2-customer">';
+                            var html =
+                                '<label class="form-label mt-2">Select Customer <span class="text-danger">*</span></label>';
+                            html +=
+                                '<select name="customer_id" id="customer_id" required class="form-select select2-customer">';
                             html += '<option value="">Select a customer</option>';
                             $.each(response, function(key, value) {
-                                html += '<option value="' + value.id + '">' + value.customer_name + ' (' + value.customer_email + ')</option>';
+                                html += '<option value="' + value.id + '">' + value
+                                    .customer_name + ' (' + value.customer_email +
+                                    ')</option>';
                             });
                             html += '</select>';
                             $('#select_user').html(html);
@@ -403,16 +635,19 @@
             // Auto-fill Customer Details
             $(document).on('change', '#customer_id', function() {
                 var customer_id = $(this).val();
-                if(!customer_id) return;
+                if (!customer_id) return;
                 $.ajax({
                     url: "{{ route('sales-projects.customer-details') }}",
                     type: 'GET',
-                    data: { customer_id: customer_id },
+                    data: {
+                        customer_id: customer_id
+                    },
                     success: function(response) {
                         $('#client_name').val(response.customer_name).prop('readonly', true);
                         $('#client_email').val(response.customer_email).prop('readonly', true);
                         $('#client_phone').val(response.customer_phone).prop('readonly', true);
-                        $('#client_address').val(response.customer_address).prop('readonly', true);
+                        $('#client_address').val(response.customer_address).prop('readonly',
+                            true);
                         // $('#business_name').val(response.business_name).prop('readonly', true);
                     }
                 });
@@ -421,7 +656,9 @@
             // Project Type "Other" Toggle
             $('#project_type').on('change', function() {
                 if ($(this).val().includes('Other')) {
-                    $('#other-value').html('<label class="form-label">Other Project Type Value <span class="text-danger">*</span></label><input type="text" name="other_value" required class="form-control" placeholder="Specify type">');
+                    $('#other-value').html(
+                        '<label class="form-label">Other Project Type Value <span class="text-danger">*</span></label><input type="text" name="other_value" required class="form-control" placeholder="Specify type">'
+                        );
                 } else {
                     $('#other-value').html('');
                 }
@@ -550,7 +787,8 @@
                     success: function(response) {
                         $('#edit-project-model').html(response.view);
                         $('#loading').removeClass('loading');
-                        var offcanvas = new bootstrap.Offcanvas(document.getElementById('offcanvasEdit'));
+                        var offcanvas = new bootstrap.Offcanvas(document.getElementById(
+                            'offcanvasEdit'));
                         offcanvas.show();
                         $('#edit-form-validation').parsley();
                     }
@@ -582,8 +820,13 @@
             // AJAX Searching, Sorting and Pagination
             function fetch_data(page, sort_type, sort_by, query) {
                 $('#loading').addClass('loading');
+                var start_date = $('#start_date').val();
+                var end_date = $('#end_date').val();
+
                 $.ajax({
-                    url: "{{ route('sales-projects.fetch-data') }}?page=" + page + "&sortby=" + sort_by + "&sorttype=" + sort_type + "&query=" + query,
+                    url: "{{ route('sales-projects.fetch-data') }}?page=" + page + "&sortby=" + sort_by +
+                        "&sorttype=" + sort_type + "&query=" + query + "&start_date=" + start_date +
+                        "&end_date=" + end_date,
                     success: function(data) {
                         $('#project-data').html(data.data);
                         $('#loading').removeClass('loading');
@@ -597,6 +840,22 @@
                 var sort_type = $('#hidden_sort_type').val();
                 var page = $('#hidden_page').val();
                 fetch_data(page, sort_type, column_name, query);
+            });
+
+            $(document).on('change', '#start_date, #end_date', function() {
+                var query = $('#search').val();
+                var column_name = $('#hidden_column_name').val();
+                var sort_type = $('#hidden_sort_type').val();
+                var page = 1; // Reset to page 1 on filter change
+                $('#hidden_page').val(page);
+                fetch_data(page, sort_type, column_name, query);
+            });
+
+            $(document).on('click', '#reset-filters', function() {
+                $('#start_date').val('');
+                $('#end_date').val('');
+                $('#search').val('');
+                fetch_data(1, 'desc', 'sale_date', '');
             });
 
             $(document).on('click', '.sorting', function() {
@@ -635,5 +894,3 @@
         });
     </script>
 @endpush
-
-

@@ -212,13 +212,33 @@
                     </div>
 
                     <hr />
-                    <div class="row justify-content-end mb-3">
-                        <div class="col-md-4">
-                            <div class="search-field prod-search">
-                                <input type="text" name="search" id="search" placeholder="Search projects..."
-                                    required class="form-control rounded_search">
-                                <a href="javascript:void(0)" class="prod-search-icon submit_search"><i
-                                        class="fa fa-search"></i></a>
+                    <div class="row align-items-center mb-3">
+                        <div class="col-md-9">
+                            <div class="row g-2">
+                                <div class="col-md-3">
+                                    <label class="form-label mb-0">Start Date</label>
+                                    <input type="date" name="start_date" id="start_date" class="form-control">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label mb-0">End Date</label>
+                                    <input type="date" name="end_date" id="end_date" class="form-control">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label mb-0">Search</label>
+                                    <div class="search-field prod-search">
+                                        <input type="text" name="search" id="search" placeholder="Search projects..."
+                                            required class="form-control rounded_search">
+                                        <a href="javascript:void(0)" class="prod-search-icon submit_search"><i
+                                                class="fa fa-search"></i></a>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 d-flex align-items-end">
+                                    <div class="w-100">
+                                        <label class="form-label mb-0">&nbsp;</label>
+                                        <button class="btn btn-secondary w-100" id="reset-filters"
+                                            style="height: 45px; border-radius: 8px; margin-bottom:10px;">Reset</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -348,7 +368,8 @@
                                             <option value="">Select Opener</option>
                                             @foreach ($project_openers as $project_opener)
                                                 <option value="{{ $project_opener->id }}">{{ $project_opener->name }}
-                                                    ({{ $project_opener->email }})</option>
+                                                    ({{ $project_opener->email }})
+                                                </option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -358,7 +379,8 @@
                                             <option value="">Select Closer</option>
                                             @foreach ($users as $user)
                                                 <option value="{{ $user->id }}">{{ $user->name }}
-                                                    ({{ $user->email }})</option>
+                                                    ({{ $user->email }})
+                                                </option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -378,7 +400,8 @@
                                             <option value="">Select Account Manager</option>
                                             @foreach ($account_managers as $account_manager)
                                                 <option value="{{ $account_manager->id }}">{{ $account_manager->name }}
-                                                    ({{ $account_manager->email }})</option>
+                                                    ({{ $account_manager->email }})
+                                                </option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -485,11 +508,10 @@
             </div>
         </div>
     </div>
-
 @endsection
 
 @push('scripts')
- @include('bdm.includes.followup_modal')
+    @include('bdm.includes.followup_modal')
     <script src="http://parsleyjs.org/dist/parsley.js"></script>
     <script>
         window.ParsleyConfig = {
@@ -522,6 +544,9 @@
             @endif
 
             function fetch_data(page, sort_type, sort_by, query, call_status = "") {
+                var start_date = $('#start_date').val();
+                var end_date = $('#end_date').val();
+
                 $.ajax({
                     url: "{{ route('sales-manager.project.filter') }}",
                     data: {
@@ -529,7 +554,9 @@
                         sortby: sort_by,
                         sorttype: sort_type,
                         query: query,
-                        call_status: call_status
+                        call_status: call_status,
+                        start_date: start_date,
+                        end_date: end_date
                     },
                     success: function(data) {
                         $('tbody').html(data.data);
@@ -543,6 +570,22 @@
                 var sort_type = $('#hidden_sort_type').val();
                 var page = $('#hidden_page').val();
                 fetch_data(page, sort_type, column_name, query);
+            });
+
+            $(document).on('change', '#start_date, #end_date', function() {
+                var query = $('#search').val();
+                var column_name = $('#hidden_column_name').val();
+                var sort_type = $('#hidden_sort_type').val();
+                var page = 1;
+                $('#hidden_page').val(page);
+                fetch_data(page, sort_type, column_name, query);
+            });
+
+            $(document).on('click', '#reset-filters', function() {
+                $('#start_date').val('');
+                $('#end_date').val('');
+                $('#search').val('');
+                fetch_data(1, 'desc', 'id', '');
             });
 
             $(document).on('click', '.sorting', function() {

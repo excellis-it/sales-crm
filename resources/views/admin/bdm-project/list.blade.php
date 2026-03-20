@@ -160,6 +160,28 @@
             border-color: #ff9b44;
         }
 
+        .prod-search {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .prod-search-icon {
+            position: absolute;
+            right: 15px;
+            color: #ff9b44;
+            transition: all 0.3s;
+        }
+
+        .prod-search-icon:hover {
+            color: #fc6075;
+        }
+
+        .rounded_search {
+            padding-right: 45px !important;
+            border-radius: 8px !important;
+        }
+
         @media (max-width: 991px) {
             .offcanvas {
                 width: 80% !important;
@@ -216,10 +238,19 @@
                     </div>
 
                     <hr />
-                    <div class="row justify-content-end">
-                        <div class="col-md-6">
-                            <div class="row g-1 justify-content-end">
-                                <div class="col-md-8 pr-0">
+                    <div class="row align-items-center">
+                        <div class="col-md-9">
+                            <div class="row g-2">
+                                <div class="col-md-3">
+                                    <label class="form-label mb-0">Start Date</label>
+                                    <input type="date" name="start_date" id="start_date" class="form-control">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label mb-0">End Date</label>
+                                    <input type="date" name="end_date" id="end_date" class="form-control">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label mb-0">Search</label>
                                     <div class="search-field prod-search">
                                         <input type="text" name="search" id="search" placeholder="search..." required
                                             class="form-control rounded_search">
@@ -227,10 +258,13 @@
                                                 class="fa fa-search"></i></a>
                                     </div>
                                 </div>
-                                {{-- <div class="col-md-3 pl-0 ml-2">
-                                    <button class="btn btn-primary button-search" id="search-button"> <span class=""><i
-                                                class="ph ph-magnifying-glass"></i></span> Search</button>
-                                </div> --}}
+                                <div class="col-md-2 d-flex align-items-end">
+                                    <div class="w-100">
+                                        <label class="form-label mb-0">&nbsp;</label>
+                                        <button class="btn btn-secondary w-100" id="reset-filters"
+                                            style="height: 45px; border-radius: 8px; margin-bottom:10px;">Reset</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
@@ -268,7 +302,8 @@
                                         </div>
 
                                         <div class="col-md-6 mb-3">
-                                            <label class="form-label">Client Name <span class="text-danger">*</span></label>
+                                            <label class="form-label">Client Name <span
+                                                    class="text-danger">*</span></label>
                                             <input type="text" name="client_name" id="client_name" required
                                                 data-parsley-trigger="keyup" class="form-control" placeholder="John Doe">
                                         </div>
@@ -540,7 +575,7 @@
                                     </th>
                                     <th> Status</th>
                                     <th> Action </th>
-                                </tr>   
+                                </tr>
                             </thead>
                             <tbody id="project-data">
                                 @include('admin.bdm-project.table')
@@ -801,9 +836,13 @@
             // AJAX Searching, Sorting and Pagination
             function fetch_data(page, sort_type, sort_by, query) {
                 $('#loading').addClass('loading');
+                var start_date = $('#start_date').val();
+                var end_date = $('#end_date').val();
+
                 $.ajax({
                     url: "{{ route('admin.bdm-projects.filter') }}?page=" + page + "&sortby=" + sort_by +
-                        "&sorttype=" + sort_type + "&query=" + query,
+                        "&sorttype=" + sort_type + "&query=" + query + "&start_date=" + start_date +
+                        "&end_date=" + end_date,
                     success: function(data) {
                         $('#project-data').html(data.data);
                         $('#loading').removeClass('loading');
@@ -817,6 +856,22 @@
                 var sort_type = $('#hidden_sort_type').val();
                 var page = $('#hidden_page').val();
                 fetch_data(page, sort_type, column_name, query);
+            });
+
+            $(document).on('change', '#start_date, #end_date', function() {
+                var query = $('#search').val();
+                var column_name = $('#hidden_column_name').val();
+                var sort_type = $('#hidden_sort_type').val();
+                var page = 1;
+                $('#hidden_page').val(page);
+                fetch_data(page, sort_type, column_name, query);
+            });
+
+            $(document).on('click', '#reset-filters', function() {
+                $('#start_date').val('');
+                $('#end_date').val('');
+                $('#search').val('');
+                fetch_data(1, 'desc', 'sale_date', '');
             });
 
             $(document).on('click', '.sorting', function() {

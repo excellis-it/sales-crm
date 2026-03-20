@@ -11,10 +11,10 @@ use App\Models\ProjectDocument;
 use App\Models\ProjectMilestone;
 use App\Models\ProjectType;
 use App\Models\User;
-use Session;
 use App\Traits\ImageTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class ProjectController extends Controller
 {
@@ -24,9 +24,15 @@ class ProjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $projects = Project::where('user_id', Auth::user()->id)->orderBy('sale_date', 'desc')->paginate(15);
+        $query = Project::where('user_id', Auth::user()->id);
+
+        if ($request->start_date && $request->end_date) {
+            $query->whereBetween('sale_date', [$request->start_date, $request->end_date]);
+        }
+
+        $projects = $query->orderBy('sale_date', 'desc')->paginate(15);
         $account_managers = User::role('ACCOUNT_MANAGER')->orderBy('name', 'DESC')->where('status', 1)->get();
         $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
         $project_openers = User::role(['SALES_EXCUETIVE'])->where(['sales_manager_id' => Auth::user()->id, 'status' => 1])->orderBy('id', 'desc')->get();
@@ -35,38 +41,46 @@ class ProjectController extends Controller
 
     public function filterProject(Request $request)
     {
-        // return $request->all();
         if ($request->ajax()) {
-            $sort_by = $request->get('sortby');
-            $sort_type = $request->get('sorttype');
-            $query = $request->get('query');
-            $query = str_replace(" ", "%", $query);
+            $sort_by = $request->get('sortby') ?? 'sale_date';
+            $sort_type = $request->get('sorttype') ?? 'desc';
+            $query_str = $request->get('query');
+            $start_date = $request->get('start_date');
+            $end_date = $request->get('end_date');
 
-            $projects = Project::where('user_id', Auth::user()->id)->orderBy($sort_by, $sort_type)->where(function ($q) use ($query) {
-                $q->orWhere('sale_date', 'like', '%' . $query . '%')
-                    ->orWhere('business_name', 'like', '%' . $query . '%')
-                    ->orWhere('business_name', 'like', '%' . $query . '%')
-                    ->orWhere('client_name', 'like', '%' . $query . '%')
-                    ->orWhere('client_phone', 'like', '%' . $query . '%')
-                    ->orWhere('project_value', 'like', '%' . $query . '%')
-                    ->orWhere('project_upfront', 'like', '%' . $query . '%')
-                    ->orWhere('currency', 'like', '%' . $query . '%')
-                    ->orWhere('payment_mode', 'like', '%' . $query . '%')
-                    ->orWhereHas('projectTypes', function ($q) use ($query) {
-                        $q->Where('type', 'like', '%' . $query . '%');
-                    })
-                    ->orWhereRaw('project_value - project_upfront like ?', ["%{$query}%"]);
-            })->paginate(15);
+            $projects = Project::where('user_id', Auth::user()->id);
 
-
-            Session::put('call_status',$request->get('call_status'));
-            if($request->get('call_status') == '')
-            {
-                $page = Session::put('page_number',1);
+            if ($query_str) {
+                $query_str = str_replace(" ", "%", $query_str);
+                $projects->where(function ($q) use ($query_str) {
+                    $q->where('sale_date', 'like', '%' . $query_str . '%')
+                        ->orWhere('business_name', 'like', '%' . $query_str . '%')
+                        ->orWhere('client_name', 'like', '%' . $query_str . '%')
+                        ->orWhere('client_phone', 'like', '%' . $query_str . '%')
+                        ->orWhere('project_value', 'like', '%' . $query_str . '%')
+                        ->orWhere('project_upfront', 'like', '%' . $query_str . '%')
+                        ->orWhere('currency', 'like', '%' . $query_str . '%')
+                        ->orWhere('payment_mode', 'like', '%' . $query_str . '%')
+                        ->orWhereHas('projectTypes', function ($q2) use ($query_str) {
+                            $q2->where('type', 'like', '%' . $query_str . '%');
+                        })
+                        ->orWhereRaw('project_value - project_upfront like ?', ["%{$query_str}%"]);
+                });
             }
-            if(Session::get('call_status') == 'Yes') {
-                Session::put('call_status',"");
-                Session::put('update_success',false);
+
+            if ($start_date && $end_date) {
+                $projects->whereBetween('sale_date', [$start_date, $end_date]);
+            }
+
+            $projects = $projects->orderBy($sort_by, $sort_type)->paginate(15);
+
+            Session::put('call_status', $request->get('call_status'));
+            if ($request->get('call_status') == '') {
+                Session::put('page_number', 1);
+            }
+            if (Session::get('call_status') == 'Yes') {
+                Session::put('call_status', "");
+                Session::put('update_success', false);
             }
 
             return response()->json(['data' => view('sales_manager.project.table', compact('projects'))->render()]);

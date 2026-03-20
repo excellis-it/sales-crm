@@ -5,7 +5,47 @@
 @push('styles')
     <style>
         .dataTables_filter {
-            margin-bottom: 10px !important;
+            margin-bottom: 20px !important;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: 8px;
+            border: 1px solid #ced4da;
+            padding: 10px 15px;
+            transition: all 0.2s;
+            background-color: #fff;
+        }
+
+        .prod-search {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .prod-search-icon {
+            position: absolute;
+            right: 15px;
+            color: #ff9b44;
+            transition: all 0.3s;
+            background: none;
+            border: none;
+        }
+
+        .prod-search-icon:hover {
+            color: #fc6075;
+        }
+
+        .rounded_search {
+            padding-right: 45px !important;
+            border-radius: 8px !important;
         }
     </style>
 @endpush
@@ -48,10 +88,19 @@
                     </div>
 
                     <hr />
-                    <div class="row justify-content-end">
-                        <div class="col-md-6">
-                            <div class="row g-1 justify-content-end">
-                                <div class="col-md-8 pr-0">
+                    <div class="row align-items-center">
+                        <div class="col-md-9">
+                            <div class="row g-2">
+                                <div class="col-md-3">
+                                    <label class="form-label mb-0">Start Date</label>
+                                    <input type="date" name="start_date" id="start_date" class="form-control">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label mb-0">End Date</label>
+                                    <input type="date" name="end_date" id="end_date" class="form-control">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label mb-0">Search</label>
                                     <div class="search-field">
                                         <input type="text" name="search" id="search" placeholder="search..." required
                                             class="form-control rounded_search">
@@ -59,10 +108,13 @@
                                                     class="fa fa-search"></i></span></button>
                                     </div>
                                 </div>
-                                {{-- <div class="col-md-3 pl-0 ml-2">
-                                    <button class="btn btn-primary button-search" id="search-button"> <span class=""><i
-                                                class="ph ph-magnifying-glass"></i></span> Search</button>
-                                </div> --}}
+                                <div class="col-md-2 d-flex align-items-end">
+                                    <div class="w-100">
+                                        <label class="form-label mb-0">&nbsp;</label>
+                                        <button class="btn btn-secondary w-100" id="reset-filters"
+                                            style="height: 45px; border-radius: 8px; margin-bottom:10px;">Reset</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
@@ -75,8 +127,8 @@
                                 <h4 id="offcanvasEditLabel">Add Project Details</h4>
                             </div>
                             <div class="offcanvas-body">
-                                <form action="{{ route('bdm.projects.store') }}" method="post" data-parsley-validate="" id="form-validation"
-                                    enctype="multipart/form-data">
+                                <form action="{{ route('bdm.projects.store') }}" method="post" data-parsley-validate=""
+                                    id="form-validation" enctype="multipart/form-data">
                                     @csrf
                                     <div class="row">
                                         {{-- new user and existing user radio button --}}
@@ -108,7 +160,7 @@
                                                 data-parsley-type-message="Please enter a valid email address."
                                                 class="form-control" value="{{ old('client_email') }}"
                                                 placeholder="Enter Client Email">
-                                                <span class="client_email_error text-danger"></span>
+                                            <span class="client_email_error text-danger"></span>
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Client Phone
@@ -146,7 +198,8 @@
                                             <label for="inputEnterYourName" class="col-form-label">Project
                                                 Type <span style="color: red;">*</span></label>
                                             <select name="project_type[]" id="project_type" required
-                                                data-parsley-trigger="keyup" class="form-control mySelect" multiple="multiple">
+                                                data-parsley-trigger="keyup" class="form-control mySelect"
+                                                multiple="multiple">
                                                 <option value="">Select Project Type</option>
                                                 <option value="Website Design & Development">Website Design &
                                                     Development</option>
@@ -211,7 +264,7 @@
                                             <label for="inputEnterYourName" class="col-form-label">Project
                                                 Opener</label>
                                             <select name="project_opener" id="project_opener"
-                                                class="form-control select2" >
+                                                class="form-control select2">
                                                 <option value="">Select Project
                                                     Opener
                                                 </option>
@@ -275,7 +328,7 @@
                                             <label for="inputEnterYourName" class="col-form-label">No. of
                                                 Milestone</label>
                                             <input type="number" id="number_of_milestone" required
-                                                name="number_of_milestone" class="form-control" min="0" >
+                                                name="number_of_milestone" class="form-control" min="0">
                                         </div>
                                         <div class="col-md-12 mb-3" style="margin-top:40px;">
                                             <button type="button"
@@ -378,7 +431,6 @@
         </div>
 
     </div>
-
 @endsection
 
 @push('scripts')
@@ -409,14 +461,14 @@
     <script>
         $(document).ready(function() {
 
-            @if(Session::get('update_success') == true)
+            @if (Session::get('update_success') == true)
 
-            var query = $('#search').val();
-            var column_name = $('#hidden_column_name').val();
-            var sort_type = $('#hidden_sort_type').val();
-            var page = @php echo Session::get('page_number') @endphp;
+                var query = $('#search').val();
+                var column_name = $('#hidden_column_name').val();
+                var sort_type = $('#hidden_sort_type').val();
+                var page = @php echo Session::get('page_number') @endphp;
 
-            fetch_data(page, sort_type, column_name, query,"Yes");
+                fetch_data(page, sort_type, column_name, query, "Yes");
             @endif
 
             function clear_icon() {
@@ -430,7 +482,10 @@
                 $('#currency_icon').html('');
             }
 
-            function fetch_data(page, sort_type, sort_by, query,call_status = "") {
+            function fetch_data(page, sort_type, sort_by, query, call_status = "") {
+                var start_date = $('#start_date').val();
+                var end_date = $('#end_date').val();
+
                 $.ajax({
                     url: "{{ route('bdm.project.filter') }}",
                     data: {
@@ -438,7 +493,9 @@
                         sortby: sort_by,
                         sorttype: sort_type,
                         query: query,
-                        call_status: call_status
+                        call_status: call_status,
+                        start_date: start_date,
+                        end_date: end_date
                     },
                     success: function(data) {
                         $('tbody').html(data.data);
@@ -451,7 +508,23 @@
                 var column_name = $('#hidden_column_name').val();
                 var sort_type = $('#hidden_sort_type').val();
                 var page = $('#hidden_page').val();
-                fetch_data(page, sort_type, column_name, query,call_status = "");
+                fetch_data(page, sort_type, column_name, query, call_status = "");
+            });
+
+            $(document).on('change', '#start_date, #end_date', function() {
+                var query = $('#search').val();
+                var column_name = $('#hidden_column_name').val();
+                var sort_type = $('#hidden_sort_type').val();
+                var page = 1;
+                $('#hidden_page').val(page);
+                fetch_data(page, sort_type, column_name, query, "");
+            });
+
+            $(document).on('click', '#reset-filters', function() {
+                $('#start_date').val('');
+                $('#end_date').val('');
+                $('#search').val('');
+                fetch_data(1, 'desc', 'sale_date', '', "");
             });
 
             $(document).on('click', '.sorting', function() {
@@ -476,7 +549,7 @@
                 $('#hidden_sort_type').val(reverse_order);
                 var page = $('#hidden_page').val();
                 var query = $('#search').val();
-                fetch_data(page, reverse_order, column_name, query,call_status = "");
+                fetch_data(page, reverse_order, column_name, query, call_status = "");
             });
 
             $(document).on('click', '.pagination a', function(event) {
@@ -490,7 +563,7 @@
 
                 $('li').removeClass('active');
                 $(this).parent().addClass('active');
-                fetch_data(page, sort_type, column_name, query,call_status = "");
+                fetch_data(page, sort_type, column_name, query, call_status = "");
             });
 
         });
@@ -509,7 +582,7 @@
     <script>
         // add more functionality for milestone
         $(document).ready(function() {
-              $('.select2').each(function() {
+            $('.select2').each(function() {
                 $(this).select2({
                     dropdownParent: $(this).parent()
                 });
@@ -537,12 +610,14 @@
                 html += '</div>';
                 html += '<div class="col-md-12 mb-3">';
                 html += '<div style="display: flex">';
-                html += '<input type="date" name="milestone_payment_date[]" class="form-control picker" value="" id="" required data-parsley-trigger="keyup">';
+                html +=
+                    '<input type="date" name="milestone_payment_date[]" class="form-control picker" value="" id="" required data-parsley-trigger="keyup">';
                 html += '</div>';
                 html += '</div>';
                 html += '<div class="col-md-12 mb-3">';
                 html += '<div style="display: flex">';
-                html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" placeholder="Milestone payment mode" required data-parsley-trigger="keyup">';
+                html +=
+                    '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" placeholder="Milestone payment mode" required data-parsley-trigger="keyup">';
                 html += '</div>';
                 html += '</div>';
                 // html += '<div class="col-md-12 mb-3 pb-3">';
@@ -675,7 +750,7 @@
                 if (startDate > endDate || startDate == endDate) {
                     $('#end_date').after(
                         '<span class="error" style="color:red;">End date must be greater than to start date</span>'
-                        );
+                    );
                     return false;
                 }
                 if (project_value == '') {
@@ -719,12 +794,14 @@
                     html += '</div>';
                     html += '<div class="col-md-12 mb-3">';
                     html += '<div style="display: flex">';
-                    html += '<input type="date" name="milestone_payment_date[]" class="form-control picker" value="" id="" required data-parsley-trigger="keyup">';
+                    html +=
+                        '<input type="date" name="milestone_payment_date[]" class="form-control picker" value="" id="" required data-parsley-trigger="keyup">';
                     html += '</div>';
                     html += '</div>';
                     html += '<div class="col-md-12 mb-3">';
                     html += '<div style="display: flex">';
-                    html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" placeholder="Milestone payment mode" required data-parsley-trigger="keyup">';
+                    html +=
+                        '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" placeholder="Milestone payment mode" required data-parsley-trigger="keyup">';
                     html += '</div>';
                     html += '</div>';
                     // html += '<div class="col-md-12 mb-3 pb-3">';
@@ -785,18 +862,22 @@
                 html += '<div class="col-md-12 mb-3 pb-3">';
                 html += '<div style="display: flex">';
                 html +=
-                    '<select name="payment_status[]" id="payment_status" data-id="' + index + '" class="form-control payment-status"  data-parsley-trigger="keyup"><option value="" disabled >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
+                    '<select name="payment_status[]" id="payment_status" data-id="' + index +
+                    '" class="form-control payment-status"  data-parsley-trigger="keyup"><option value="" disabled >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
                 html += '</div>';
                 html += '</div>';
-                html += '<div class="edit-payment-hide-'+index+'" style="display:none;">';
+                html += '<div class="edit-payment-hide-' + index + '" style="display:none;">';
                 html += '<div class="col-md-12 mb-3">';
                 html += '<div style="display: flex">';
-                html += '<input type="date" name="milestone_payment_date[]" class="form-control picker" value="" id="milestone-date-'+index+'" data-parsley-trigger="keyup">';
+                html +=
+                    '<input type="date" name="milestone_payment_date[]" class="form-control picker" value="" id="milestone-date-' +
+                    index + '" data-parsley-trigger="keyup">';
                 html += '</div>';
                 html += '</div>';
                 html += '<div class="col-md-12 mb-3">';
                 html += '<div style="display: flex">';
-                html += '<select name="milestone_payment_mode[]" class="form-control" id="milestone-mode-'+index+'" data-parsley-trigger="keyup">';
+                html += '<select name="milestone_payment_mode[]" class="form-control" id="milestone-mode-' + index +
+                    '" data-parsley-trigger="keyup">';
                 html += '<option value="">Select Payment Mode</option>';
                 html += '<option value="Paypal">Paypal</option>';
                 html += '<option value="Stripe">Stripe</option>';
@@ -872,7 +953,7 @@
                         // console.log(response.data);
                         $('#select_user').append(
                             ' <label for="inputEnterYourName" class="col-form-label"> Select customer <span style="color: red;">*</span></label> <select name="customer_id" id="customer_id" required data-parsley-trigger="keyup" class="form-control select2"> <option value="">Select a user</option>'
-                            )
+                        )
                         $.each(response, function(key, value) {
                             $('#customer_id').append('<option value="' + value.id + '">' + value
                                 .customer_name +
@@ -982,21 +1063,21 @@
             var payment_status = $(this).val();
 
             // $('#milestone_payment_date').prop('required', false);
-            $('#milestone-date-'+id).prop('required', false);
-            $('#milestone-mode-'+id).prop('required', false);
+            $('#milestone-date-' + id).prop('required', false);
+            $('#milestone-mode-' + id).prop('required', false);
             if (payment_status == 'Paid') {
 
-                $('.edit-payment-hide-'+id).show();
-                $('#milestone-date-'+id).prop('required', true);
-                $('#milestone-mode-'+id).prop('required', true);
+                $('.edit-payment-hide-' + id).show();
+                $('#milestone-date-' + id).prop('required', true);
+                $('#milestone-mode-' + id).prop('required', true);
             } else {
-                $('.edit-payment-hide-'+id).hide();
-                $('#milestone-date-'+id).prop('required', false);
-                $('#milestone-mode-'+id).prop('required', false);
+                $('.edit-payment-hide-' + id).hide();
+                $('#milestone-date-' + id).prop('required', false);
+                $('#milestone-mode-' + id).prop('required', false);
             }
         });
     </script>
-     <script>
+    <script>
         $(document).ready(function() {
             // Attach an event listener to the Sale Date input
             $('#sale_date').on('change', function() {
@@ -1016,9 +1097,9 @@
         });
     </script>
 
-<script>
-    $(document).ready(function() {
-        $('.mySelect').select2();
-    });
-</script>
+    <script>
+        $(document).ready(function() {
+            $('.mySelect').select2();
+        });
+    </script>
 @endpush
