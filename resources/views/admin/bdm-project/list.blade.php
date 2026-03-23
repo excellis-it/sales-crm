@@ -484,7 +484,7 @@
 
                                         <div class="col-md-12 mb-3">
                                             <label class="form-label">Internal Comment</label>
-                                            <textarea name="comment" id="comment" rows="2" class="form-control"
+                                            <textarea name="comment" id="comment" rows="2" class="form-control" readonly
                                                 placeholder="Additional internal details..."></textarea>
                                         </div>
 

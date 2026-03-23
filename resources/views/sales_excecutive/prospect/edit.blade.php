@@ -194,7 +194,17 @@
                                     value="{{ $prospect->upfront_value ?? '' }}"
                                     placeholder="Enter Upfront Value">
                             </div>
+</div>
                             <div class="col-md-12 mb-3">
+                                <label class="col-form-label">Payment Mode</label>
+                                <select name="payment_mode" class="form-control" required data-parsley-trigger="keyup">
+                                    <option value="">Select Mode</option>
+                                    <option value="Paypal" {{ (isset($prospect) && $prospect->payment_mode == "Paypal") ? "selected" : "" }}>Paypal</option>
+                                    <option value="Stripe" {{ (isset($prospect) && $prospect->payment_mode == "Stripe") ? "selected" : "" }}>Stripe</option>
+                                    <option value="Bank Transfer" {{ (isset($prospect) && $prospect->payment_mode == "Bank Transfer") ? "selected" : "" }}>Bank Transfer</option>
+                                    <option value="Payoneer" {{ (isset($prospect) && $prospect->payment_mode == "Payoneer") ? "selected" : "" }}>Payoneer</option>
+                                </select>
+<div class="col-md-12 mb-3">
                                 <label for="inputEnterYourName"
                                     class="col-form-label">Sale
                                     Date</label>
@@ -207,12 +217,12 @@
                     </div>
 
                     {{-- comments --}}
-                    {{-- <div class="col-md-12 mb-3">
+                    <div class="col-md-12 mb-3">
                         <label for="inputEnterYourName"
                             class="col-form-label">Comments</label>
-                        <textarea name="comments" id="comments" cols="30" rows="5" class="form-control"
+                        <textarea name="comments" id="comments" cols="30" rows="5" class="form-control" readonly
                             placeholder="Enter Comments"> {{ $prospect['comments'] }} </textarea>
-                    </div> --}}
+                    </div>
                 </div>
                 <div class="d-flex alin-items-center w-100 text-end">
                     <button class="print_btn cancel_btn me-3" type="reset"><i class="far fa-times-circle"></i>
@@ -268,7 +278,7 @@
                 if (status.includes('Win')) {
                     var html = '';
                     html +=
-                        '<div class="col-md-12 mb-3"><label for="inputEnterYourName" data-parsley-type="number" class="col-form-label">Upfront Value <span style="color: red;">*</span></label><input type="text" name="upfront_value" id="upfront_value"  required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number." class="form-control" value="{{ old('upfront_value') }}" placeholder="Enter Upfront Value"></div><div class="col-md-12 mb-3"> <label for = "inputEnterYourName" class="col-form-label"> Sale Date <span style="color: red;">*</span></label></label> <input type="date" name ="sale_date" id ="sale_date" class ="form-control picker"></div><h3 class="mt-4 text-uppercase">Milestone</h3><hr><div class="row"><div class="col-md-12 mb-3 pb-3"><div style="display: flex"><input type="text" name="milestone_name[]" class="form-control" value="" placeholder="Milestone name" id="" required data-parsley-trigger="keyup"></div></div><div class="col-md-12 mb-3 pb-3"><div style="display: flex"><input type="text" name="milestone_value[]" class="form-control" value="" placeholder="Milestone value" id="" required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number."></div></div><div class="col-md-12 mb-3 pb-3"><div style="display: flex"><textarea name="milestone_comment[]" class="form-control" placeholder="Milestone Comment" id="" cols="3" rows="2" ></textarea></div></div></div><div class="col-md-12 mb-3"><button type="button" class="btn btn-primary milestone-print-edit"><i class="fas fa-plus"></i> Add Milestone</button></div><div class="add-milestone-edit"></div></div>';
+                        '<div class="col-md-12 mb-3"><label for="inputEnterYourName" data-parsley-type="number" class="col-form-label">Upfront Value <span style="color: red;">*</span></label><input type="text" name="upfront_value" id="upfront_value"  required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number." class="form-control" value="{{ old('upfront_value') }}" placeholder="Enter Upfront Value"></div><div class="col-md-12 mb-3"><label class="col-form-label">Payment Mode <span style="color: red;">*</span></label><select name="payment_mode" class="form-control" required data-parsley-trigger="keyup"><option value="">Select Mode</option><option value="Paypal">Paypal</option><option value="Stripe">Stripe</option><option value="Bank Transfer">Bank Transfer</option><option value="Payoneer">Payoneer</option></select></div><div class="col-md-12 mb-3"> <label for = "inputEnterYourName" class="col-form-label"> Sale Date <span style="color: red;">*</span></label></label> <input type="date" name ="sale_date" id ="sale_date" class ="form-control picker"></div><h3 class="mt-4 text-uppercase">Milestone</h3><hr><div class="row"><div class="col-md-12 mb-3 pb-3"><div style="display: flex"><input type="text" name="milestone_name[]" class="form-control" value="" placeholder="Milestone name" id="" required data-parsley-trigger="keyup"></div></div><div class="col-md-12 mb-3 pb-3"><div style="display: flex"><input type="text" name="milestone_value[]" class="form-control" value="" placeholder="Milestone value" id="" required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number."></div></div><div class="col-md-12 mb-3 pb-3"><div style="display: flex"><textarea name="milestone_comment[]" class="form-control" placeholder="Milestone Comment" id="" cols="3" rows="2" ></textarea></div></div></div><div class="col-md-12 mb-3"><button type="button" class="btn btn-primary milestone-print-edit"><i class="fas fa-plus"></i> Add Milestone</button></div><div class="add-milestone-edit"></div></div>';
                     $('#upfront_value_show_edit').html(html);
                 } else {
                     $('#upfront_value_show_edit').html('');

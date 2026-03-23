@@ -186,10 +186,10 @@
                         <textarea name="project_description" class="form-control" rows="3">{{ $project->project_description }}</textarea>
                     </div>
 
-                    {{-- <div class="col-md-12 mb-3">
+                    <div class="col-md-12 mb-3">
                         <label class="form-label">Internal Comment</label>
-                        <textarea name="comment" class="form-control" rows="2">{{ $project->comment }}</textarea>
-                    </div> --}}
+                        <textarea name="comment" class="form-control" rows="2" readonly>{{ $project->comment }}</textarea>
+                    </div>
 
                     <div class="col-md-12">
                         <div class="section-header"><i class="fas fa-tasks"></i> Milestones</div>

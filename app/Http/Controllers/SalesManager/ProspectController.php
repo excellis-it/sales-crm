@@ -104,6 +104,7 @@ class ProspectController extends Controller
         $prospect->upfront_value = $data['upfront_value'] ?? '';
         $prospect->comments = $data['comments'];
         $prospect->price_quote = $data['price_quote'];
+        $prospect->payment_mode = $data['payment_mode'] ?? null;
         if ($data['offered_for'] == 'Other') {
             $prospect->offered_for = $data['other_value'];
         } else {
@@ -160,7 +161,7 @@ class ProspectController extends Controller
             $project->client_address = $prospect->business_address;
             $project->project_value = $prospect->price_quote;
             $project->currency = 'USD'; // default currency 'USD
-            $project->payment_mode = '';
+            $project->payment_mode = $prospect->payment_mode ?? null;
             $project->project_opener = $user->id;
             $project->project_closer = '';
             $project->project_upfront = $prospect->upfront_value;
@@ -290,6 +291,7 @@ class ProspectController extends Controller
         $prospect->followup_time = $data['followup_time'];
         $prospect->sale_date = $data['sale_date'] ?? '';
         $prospect->upfront_value = $data['upfront_value'] ?? '';
+        $prospect->payment_mode = $data['payment_mode'] ?? null;
         // $prospect->comments = $data['comments'];
         $prospect->price_quote = $data['price_quote'];
         if ($data['offered_for'] == 'Other') {
@@ -339,7 +341,7 @@ class ProspectController extends Controller
             $project->client_address = $prospect->business_address;
             $project->project_value = $prospect->price_quote;
             $project->currency = 'USD'; // default currency 'USD
-            $project->payment_mode = '';
+            $project->payment_mode = $prospect->payment_mode ?? null;
             $project->project_opener = $user->id;
             $project->project_closer = '';
             $project->project_upfront = $prospect->upfront_value;

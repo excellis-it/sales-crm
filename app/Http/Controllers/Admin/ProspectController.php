@@ -140,6 +140,7 @@ class ProspectController extends Controller
         $prospect->sale_date = $data['sale_date'] ?? '';
         $prospect->upfront_value = $data['upfront_value'] ?? '';
         $prospect->comments = $data['comments'];
+        $prospect->payment_mode = $data['payment_mode'] ?? null;
         $prospect->price_quote = $data['price_quote'];
         if ($data['offered_for'] == 'Other') {
             $prospect->offered_for = $data['other_value'];
@@ -197,13 +198,13 @@ class ProspectController extends Controller
             $project->client_address = $prospect->business_address;
             $project->project_value = $prospect->price_quote;
             $project->currency = 'USD'; // default currency 'USD
-            $project->payment_mode = '';
             $project->project_opener = $user->id;
             $project->project_closer = '';
             $project->project_upfront = $prospect->upfront_value;
             $project->website = $prospect->website;
             $project->sale_date = $prospect->sale_date ?? '';
             $project->comment = $prospect->comments;
+            $project->payment_mode = $prospect->payment_mode ?? null;
             $project->save();
 
             if ($prospect->upfront_value > 0) {
@@ -338,6 +339,7 @@ class ProspectController extends Controller
             $prospect->offered_for = $data['offered_for'];
         }
         $prospect->transfer_token_by = $data['transfer_token_by'];
+        $prospect->payment_mode = $data['payment_mode'] ?? null;
         $prospect->save();
 
         if ($request->status == 'Win') {
@@ -379,7 +381,7 @@ class ProspectController extends Controller
             $project->client_address = $prospect->business_address;
             $project->project_value = $prospect->price_quote;
             $project->currency = 'USD'; // default currency 'USD
-            $project->payment_mode = '';
+            $project->payment_mode = $prospect->payment_mode ?? null;
             $project->project_opener = $user->id;
             $project->project_closer = '';
             $project->project_upfront = $prospect->upfront_value;

@@ -31,7 +31,7 @@ class ProspectController extends Controller
         $count['close'] = BdmProspect::where('report_to', Auth::user()->id)->where('status', 'Close')->count();
         $count['sent_proposal'] = BdmProspect::where('report_to', Auth::user()->id)->where('status', 'Sent Proposal')->count();
         $count['prospect'] = BdmProspect::where('report_to', Auth::user()->id)->count();
-        
+
         $prospects = BdmProspect::orderBy('created_at', 'desc')->where('report_to', Auth::user()->id);
 
         if ($search) {
@@ -78,7 +78,7 @@ class ProspectController extends Controller
             Session::put('bdm_prospect_filter_start_date', $request->start_date);
             Session::put('bdm_prospect_filter_end_date', $request->end_date);
             Session::put('bdm_prospect_filter_status', $status);
-            
+
             $query = str_replace(" ", "%", $query);
             $prospects = BdmProspect::query();
             if ($query != '') {
@@ -156,6 +156,7 @@ class ProspectController extends Controller
         $prospect->followup_time = $data['followup_time'];
         $prospect->sale_date = $data['sale_date'] ?? '';
         $prospect->upfront_value = $data['upfront_value'] ?? '';
+        $prospect->payment_mode = $data['payment_mode'] ?? null;
         $prospect->comments = $data['comments'];
         $prospect->price_quote = $data['price_quote'];
         if ($data['offered_for'] == 'Other') {
@@ -217,7 +218,7 @@ class ProspectController extends Controller
             $project->client_address = $prospect->business_address;
             $project->project_value = $prospect->price_quote;
             $project->currency = 'USD'; // default currency 'USD
-            $project->payment_mode = '';
+            $project->payment_mode = $prospect->payment_mode ?? null;
             $project->project_opener = auth()->id();
             $project->project_closer = '';
             $project->project_upfront = $prospect->upfront_value;
@@ -343,6 +344,7 @@ class ProspectController extends Controller
         $prospect->source = $data['source'];
         $prospect->followup_date = $data['followup_date'];
         $prospect->followup_time = $data['followup_time'];
+        $prospect->payment_mode = $data['payment_mode'] ?? null;
         $prospect->sale_date = $data['sale_date'] ?? '';
         $prospect->upfront_value = $data['upfront_value'] ?? '';
         // $prospect->comments = $data['comments'];
@@ -398,7 +400,7 @@ class ProspectController extends Controller
             $project->client_address = $prospect->business_address;
             $project->project_value = $prospect->price_quote;
             $project->currency = 'USD'; // default currency 'USD
-            $project->payment_mode = '';
+            $project->payment_mode = $prospect->payment_mode ?? null;
             $project->project_opener = auth()->id();
             $project->project_closer = '';
             $project->project_upfront = $prospect->upfront_value;
