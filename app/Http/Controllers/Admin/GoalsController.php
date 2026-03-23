@@ -8,6 +8,7 @@ use App\Models\Project;
 use App\Models\Prospect;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
 use Facade\Ignition\Exceptions\ViewException;
 class GoalsController extends Controller
@@ -21,6 +22,10 @@ class GoalsController extends Controller
     {
         $goals = Goal::query();
 
+        $text = Session::get('goals_filter_text');
+        $month = Session::get('goals_filter_month');
+        $year = Session::get('goals_filter_year');
+
         if ($request->duration) {
             [$startDate, $endDate] = \App\Helpers\Helper::getDateRangeByDuration($request->duration);
             if ($startDate && $endDate) {
@@ -28,11 +33,35 @@ class GoalsController extends Controller
             }
         }
 
+        if ($text) {
+            $goals->where(function ($q) use ($text) {
+                $q->where('goals_amount', 'LIKE', '%' . $text . '%')
+                    ->orWhere('goals_achieve', 'LIKE', '%' . $text . '%')
+                    ->orWhere('goals_date', 'LIKE', '%' . $text . '%')
+                    ->orWhereHas('user', function ($query) use ($text) {
+                        $query->where('name', 'LIKE', '%' . $text . '%');
+                    });
+                if (strcasecmp($text, 'Gross') == 0) {
+                    $q->orWhere('goals_type', 1);
+                } else if (strcasecmp($text, 'Net') == 0) {
+                    $q->orWhere('goals_type', 2);
+                }
+            });
+        }
+
+        if ($month) {
+            $goals->whereMonth('goals_date', $month);
+        }
+
+        if ($year) {
+            $goals->whereYear('goals_date', $year);
+        }
+
         $goals = $goals->selectRaw('MAX(id) as id, user_id, goals_date')
             ->groupBy('user_id', 'goals_date')
             ->orderBy('goals_date', 'desc')
             ->paginate(15);
-        return view('admin.goals.list')->with(compact('goals'));
+        return view('admin.goals.list')->with(compact('goals', 'text', 'month', 'year'));
     }
 
 
@@ -42,6 +71,10 @@ class GoalsController extends Controller
     {
         if ($request->ajax()) {
             $goals = Goal::query();
+
+            Session::put('goals_filter_text', $request->text);
+            Session::put('goals_filter_month', $request->month);
+            Session::put('goals_filter_year', $request->year);
 
             // Text Search
             if ($request->filled('text')) {
@@ -168,7 +201,7 @@ class GoalsController extends Controller
                     $net_goals->user_id = $request->user_id;
                     $net_goals->goals_date = $request->goals_date;
                     // 25% of goals_amount
-                    $net_goals->goals_amount = $request->goals_amount * 25 / 100;
+                    $net_goals->goals_amount = $request->goals_amount * 40 / 100;
                     $net_goals->goals_achieve = $goals_achieve_net;
                     $net_goals->save();
                 }
@@ -194,7 +227,7 @@ class GoalsController extends Controller
                 $net_goals = new Goal();
                 $net_goals->user_id = $request->user_id;
                 $net_goals->goals_date = $request->goals_date;
-                $net_goals->goals_amount = $request->goals_amount * 25 / 100;
+                $net_goals->goals_amount = $request->goals_amount * 40 / 100;
                 $net_goals->goals_achieve = $goals_achieve_net;
                 $net_goals->goals_type = 2;
                 $net_goals->save();

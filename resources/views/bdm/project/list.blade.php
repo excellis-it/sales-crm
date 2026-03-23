@@ -93,16 +93,16 @@
                             <div class="row g-2">
                                 <div class="col-md-3">
                                     <label class="form-label mb-0">Start Date</label>
-                                    <input type="date" name="start_date" id="start_date" class="form-control">
+                                    <input type="date" name="start_date" id="start_date" class="form-control" value="{{ $start_date }}">
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label mb-0">End Date</label>
-                                    <input type="date" name="end_date" id="end_date" class="form-control">
+                                    <input type="date" name="end_date" id="end_date" class="form-control" value="{{ $end_date }}">
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label mb-0">Search</label>
                                     <div class="search-field">
-                                        <input type="text" name="search" id="search" placeholder="search..." required
+                                        <input type="text" name="search" id="search" placeholder="search..." required value="{{ $search ?? '' }}"
                                             class="form-control rounded_search">
                                         <button class="submit_search" id="search-button"> <span class=""><i
                                                     class="fa fa-search"></i></span></button>

@@ -34,6 +34,13 @@ class ProjectController extends Controller
 
         $query = Project::query();
 
+        // When coming from user list or dashboard, clear stale session filters
+        if ($request->sales_manager_id || $request->account_manager_id || $request->duration) {
+            Session::forget('project_filter_start_date');
+            Session::forget('project_filter_end_date');
+            Session::forget('project_filter_search');
+        }
+
         if ($request->sales_manager_id) {
             $query->where('user_id', $request->sales_manager_id);
         }
@@ -42,22 +49,42 @@ class ProjectController extends Controller
             $query->where('assigned_to', $request->account_manager_id);
         }
 
-        $startDate = $request->start_date;
-        $endDate = $request->end_date;
+        $startDate = Session::get('project_filter_start_date', $request->start_date);
+        $endDate = Session::get('project_filter_end_date', $request->end_date);
+        $search = Session::get('project_filter_search');
 
         if ($request->duration) {
             [$startDate, $endDate] = \App\Helpers\Helper::getDateRangeByDuration($request->duration);
             if ($startDate && $endDate) {
+                Session::put('project_filter_start_date', $startDate);
+                Session::put('project_filter_end_date', $endDate);
                 $query->whereBetween('sale_date', [$startDate, $endDate]);
             }
         } elseif ($startDate && $endDate) {
             $query->whereBetween('sale_date', [$startDate, $endDate]);
         }
 
+        if ($search) {
+            $query_str = str_replace(" ", "%", $search);
+            $query->where(function ($q) use ($query_str) {
+                $q->where('id', 'like', '%' . $query_str . '%')
+                    ->orWhere('sale_date', 'like', '%' . $query_str . '%')
+                    ->orWhere('client_name', 'like', '%' . $query_str . '%')
+                    ->orWhere('business_name', 'like', '%' . $query_str . '%')
+                    ->orWhere('client_phone', 'like', '%' . $query_str . '%')
+                    ->orWhere('project_value', 'like', '%' . $query_str . '%')
+                    ->orWhere('project_upfront', 'like', '%' . $query_str . '%')
+                    ->orWhere('currency', 'like', '%' . $query_str . '%')
+                    ->orWhere('payment_mode', 'like', '%' . $query_str . '%')
+                    ->orWhereHas('salesManager', function ($q2) use ($query_str) {
+                        $q2->where('name', 'like', '%' . $query_str . '%');
+                    });
+            });
+        }
 
         $projects = $query->orderBy('sale_date', 'desc')->paginate(15);
-
-        return view('admin.project.list')->with(compact('projects', 'sales_managers', 'users', 'account_managers', 'project_openers', 'startDate', 'endDate'));
+        
+        return view('admin.project.list')->with(compact('projects', 'sales_managers', 'users', 'account_managers', 'project_openers', 'startDate', 'endDate', 'search'));
     }
 
 
@@ -503,6 +530,10 @@ class ProjectController extends Controller
             $query_str = $request->get('query');
             $start_date = $request->get('start_date');
             $end_date = $request->get('end_date');
+
+            Session::put('project_filter_search', $query_str);
+            Session::put('project_filter_start_date', $start_date);
+            Session::put('project_filter_end_date', $end_date);
 
             $projects = Project::query();
 

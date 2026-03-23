@@ -64,31 +64,31 @@
                     <div class="card-title">
                         <div class="row filter-gap align-items-center">
                             <div class="col">
-                                <a href="javascript:void(0);" data-value="All" class="desin-filter active-filter">
+                                <a href="javascript:void(0);" data-value="All" class="desin-filter {{ (!isset($status_filter) || $status_filter == 'All' || $status_filter == '') ? 'active-filter' : '' }}">
                                     <p>All</p>
                                     <h5>{{ $count['total'] }}</h5>
                                 </a>
                             </div>
                             <div class="col">
-                                <a href="javascript:void(0);" data-value="Win" class="desin-filter">
+                                <a href="javascript:void(0);" data-value="Win" class="desin-filter {{ (isset($status_filter) && $status_filter == 'Win') ? 'active-filter' : '' }}">
                                     <p>On Board</p>
                                     <h5>{{ $count['win'] }}</h5>
                                 </a>
                             </div>
                             <div class="col">
-                                <a href="javascript:void(0);" data-value="Follow Up" class="desin-filter">
+                                <a href="javascript:void(0);" data-value="Follow Up" class="desin-filter {{ (isset($status_filter) && $status_filter == 'Follow Up') ? 'active-filter' : '' }}">
                                     <p>Follow Up</p>
                                     <h5>{{ $count['follow_up'] }}</h5>
                                 </a>
                             </div>
                             <div class="col">
-                                <a href="javascript:void(0);" data-value="Sent Proposal" class="desin-filter">
+                                <a href="javascript:void(0);" data-value="Sent Proposal" class="desin-filter {{ (isset($status_filter) && $status_filter == 'Sent Proposal') ? 'active-filter' : '' }}">
                                     <p>Sent Proposal</p>
                                     <h5>{{ $count['sent_proposal'] }}</h5>
                                 </a>
                             </div>
                             <div class="col">
-                                <a href="javascript:void(0);" data-value="Close" class="desin-filter">
+                                <a href="javascript:void(0);" data-value="Close" class="desin-filter {{ (isset($status_filter) && $status_filter == 'Close') ? 'active-filter' : '' }}">
                                     <p>Cancel</p>
                                     <h5>{{ $count['close'] }}</h5>
                                 </a>
@@ -97,20 +97,20 @@
                     </div>
 
                     <div class="row justify-content-end">
-                        <div class="col-md-6">
+                        <div class="col-md-9">
                             <div class="row g-1 justify-content-end">
-                                <div class="col-md-8 pr-0">
+                                <div class="col-md-6 pr-0">
                                     <div class="search-field">
-                                        <input type="text" name="search" id="search" placeholder="search..." required
+                                        <input type="text" name="search" id="search" placeholder="search..." required value="{{ $search ?? '' }}"
                                             class="form-control rounded_search">
                                         <button class="submit_search" id="search-button"> <span class=""><i
                                                     class="fa fa-search"></i></span></button>
                                     </div>
                                 </div>
-                                {{-- <div class="col-md-3 pl-0 ml-2">
-                                    <button class="btn btn-primary button-search" id="search-button"> <span class=""><i
-                                                class="ph ph-magnifying-glass"></i></span> Search</button>
-                                </div> --}}
+                                <div class="col-md-2 pl-0 ml-2">
+                                    <button class="btn btn-secondary w-100" id="reset-filters"
+                                        style="height: 45px; border-radius: 8px; margin-bottom:10px;">Reset</button>
+                                </div>
                             </div>
                         </div>
                         <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
@@ -447,6 +447,14 @@
                 var followup_date = $('#followup_date_filter').val();
                 // alert(followup_date);
                 fetch_data(1, status, query, followup_date);
+            });
+
+            $(document).on('click', '#reset-filters', function() {
+                $('.desin-filter').removeClass('active-filter');
+                $('[data-value="All"]').addClass('active-filter');
+                $('#search').val('');
+                $('#followup_date_filter').val('');
+                fetch_data(1, 'All', '', '');
             });
         });
         // $(document).ready(function() {

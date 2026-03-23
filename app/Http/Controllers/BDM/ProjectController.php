@@ -29,15 +29,36 @@ class ProjectController extends Controller
     {
         $query = BdmProject::where('user_id', Auth::user()->id);
 
-        if ($request->start_date && $request->end_date) {
-            $query->whereBetween('sale_date', [$request->start_date, $request->end_date]);
+        $start_date = Session::get('bdm_project_filter_start_date', $request->start_date);
+        $end_date = Session::get('bdm_project_filter_end_date', $request->end_date);
+        $search = Session::get('bdm_project_filter_search');
+
+        if ($start_date && $end_date) {
+            $query->whereBetween('sale_date', [$start_date, $end_date]);
+        }
+
+        if ($search) {
+             $query_str = str_replace(" ", "%", $search);
+             $query->where(function ($q) use ($query_str) {
+                 $q->where('sale_date', 'like', '%' . $query_str . '%')
+                    ->orWhere('business_name', 'like', '%' . $query_str . '%')
+                    ->orWhere('client_name', 'like', '%' . $query_str . '%')
+                    ->orWhere('client_phone', 'like', '%' . $query_str . '%')
+                    ->orWhere('project_value', 'like', '%' . $query_str . '%')
+                    ->orWhere('project_upfront', 'like', '%' . $query_str . '%')
+                    ->orWhere('currency', 'like', '%' . $query_str . '%')
+                    ->orWhere('payment_mode', 'like', '%' . $query_str . '%')
+                    ->orWhereHas('projectTypes', function ($q2) use ($query_str) {
+                        $q2->where('type', 'like', '%' . $query_str . '%');
+                    });
+             });
         }
 
         $projects = $query->orderBy('id', 'desc')->paginate(15);
         $account_managers = User::role('ACCOUNT_MANAGER')->orderBy('name', 'DESC')->where('status', 1)->get();
         $users = User::role(['BUSINESS_DEVELOPMENT_MANAGER', 'BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
         $project_openers = User::role(['BUSINESS_DEVELOPMENT_MANAGER', 'BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where(['bdm_id' => Auth::user()->id, 'status' => 1])->orderBy('id', 'desc')->get();
-        return view('bdm.project.list', compact('projects', 'users', 'account_managers', 'project_openers'));
+        return view('bdm.project.list', compact('projects', 'users', 'account_managers', 'project_openers', 'start_date', 'end_date', 'search'));
     }
 
     public function bdmProjectFilter(Request $request)
@@ -48,6 +69,10 @@ class ProjectController extends Controller
             $query_str = $request->get('query');
             $start_date = $request->get('start_date');
             $end_date = $request->get('end_date');
+
+            Session::put('bdm_project_filter_search', $query_str);
+            Session::put('bdm_project_filter_start_date', $start_date);
+            Session::put('bdm_project_filter_end_date', $end_date);
 
             $projects = BdmProject::where('user_id', Auth::user()->id);
 

@@ -252,7 +252,7 @@
                                 <div class="col-md-4">
                                     <label class="form-label mb-0">Search</label>
                                     <div class="search-field prod-search">
-                                        <input type="text" name="search" id="search" placeholder="search..." required
+                                        <input type="text" name="search" id="search" placeholder="search..." required value="{{ $search ?? '' }}"
                                             class="form-control rounded_search">
                                         <a href="javascript:void(0)" class="prod-search-icon submit_search"><i
                                                 class="fa fa-search"></i></a>

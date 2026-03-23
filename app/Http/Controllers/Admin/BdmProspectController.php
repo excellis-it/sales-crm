@@ -12,6 +12,7 @@ use App\Models\BdmProspect;
 use App\Models\ProjectMilestone;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
 
 class BdmProspectController extends Controller
@@ -28,20 +29,57 @@ class BdmProspectController extends Controller
         // dd($request->user_id);
         $prospects = BdmProspect::orderBy('id', 'desc');
 
-        $startDate = $request->start_date;
-        $endDate = $request->end_date;
+        // When coming from user list or dashboard, clear stale session filters
+        if ($request->has('user_id') || $request->has('duration')) {
+            Session::forget('admin_bdm_prospect_filter_start_date');
+            Session::forget('admin_bdm_prospect_filter_end_date');
+            Session::forget('admin_bdm_prospect_filter_search');
+            Session::forget('admin_bdm_prospect_filter_status');
+            Session::forget('admin_bdm_prospect_filter_user_id');
+        }
+
+        $startDate = Session::get('admin_bdm_prospect_filter_start_date');
+        $endDate = Session::get('admin_bdm_prospect_filter_end_date');
+        $search = Session::get('admin_bdm_prospect_filter_search');
+        $user_id_filter = Session::get('admin_bdm_prospect_filter_user_id', $request->user_id);
+        $status_filter = Session::get('admin_bdm_prospect_filter_status');
 
         if ($request->duration) {
             [$startDate, $endDate] = \App\Helpers\Helper::getDateRangeByDuration($request->duration);
             if ($startDate && $endDate) {
-                $prospects->whereBetween('sale_date', [$startDate, $endDate]);
+                Session::put('admin_bdm_prospect_filter_start_date', $startDate);
+                Session::put('admin_bdm_prospect_filter_end_date', $endDate);
+                $prospects->whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']);
             }
         } elseif ($startDate && $endDate) {
-            $prospects->whereBetween('sale_date', [$startDate, $endDate]);
+            $prospects->whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']);
         }
 
-        if ($request->user_id) {
-            $prospects->where('user_id', $request->user_id);
+        if ($search) {
+            $query = str_replace(" ", "%", $search);
+            $prospects->where(function ($q) use ($query) {
+                $q->orWhere('client_name', 'like', '%' . $query . '%')
+                    ->orWhere('business_name', 'like', '%' . $query . '%')
+                    ->orWhere('client_email', 'like', '%' . $query . '%')
+                    ->orWhere('client_phone', 'like', '%' . $query . '%')
+                    ->orWhere('price_quote', 'like', '%' . $query . '%')
+                    ->orWhere('followup_date', 'like', '%' . $query . '%')
+                    ->orWhere('offered_for', 'like', '%' . $query . '%')
+                    ->orWhereHas('user', function ($q) use ($query) {
+                        $q->where('name', 'like', '%' . $query . '%');
+                    })
+                    ->orWhereHas('transferTakenBy', function ($q) use ($query) {
+                        $q->where('name', 'like', '%' . $query . '%');
+                    });
+            });
+        }
+
+        if ($user_id_filter) {
+            $prospects->where('user_id', $user_id_filter);
+        }
+
+        if ($status_filter && $status_filter != 'All') {
+            $prospects->where('status', $status_filter);
         }
 
         $count['win'] = (clone $prospects)->where('status', 'Win')->count();
@@ -52,7 +90,7 @@ class BdmProspectController extends Controller
 
         $prospects = $prospects->paginate('10');
 
-        return view('admin.bdm-prospect.list', compact('count', 'prospects', 'users', 'bdm_managers', 'startDate', 'endDate'));
+        return view('admin.bdm-prospect.list', compact('count', 'prospects', 'users', 'bdm_managers', 'startDate', 'endDate', 'search', 'status_filter'));
     }
 
 
@@ -423,6 +461,13 @@ class BdmProspectController extends Controller
         if ($request->ajax()) {
             $status = $request->status;
             $query = $request->get('query');
+
+            Session::put('admin_bdm_prospect_filter_search', $query);
+            Session::put('admin_bdm_prospect_filter_start_date', $request->start_date);
+            Session::put('admin_bdm_prospect_filter_end_date', $request->end_date);
+            Session::put('admin_bdm_prospect_filter_user_id', $request->user_id);
+            Session::put('admin_bdm_prospect_filter_status', $request->status);
+
             $query = str_replace(" ", "%", $query);
             $prospects = BdmProspect::query();
             if ($query != '') {
@@ -452,8 +497,16 @@ class BdmProspectController extends Controller
             }
 
             if ($request->start_date && $request->end_date) {
-                $prospects->whereBetween('sale_date', [$request->start_date, $request->end_date]);
+                $prospects->whereBetween('created_at', [$request->start_date . ' 00:00:00', $request->end_date . ' 23:59:59']);
             }
+
+            // Compute counts before applying status filter
+            $count = [];
+            $count['prospect'] = (clone $prospects)->count();
+            $count['win'] = (clone $prospects)->where('status', 'Win')->count();
+            $count['follow_up'] = (clone $prospects)->where('status', 'Follow Up')->count();
+            $count['sent_proposal'] = (clone $prospects)->where('status', 'Sent Proposal')->count();
+            $count['close'] = (clone $prospects)->where('status', 'Close')->count();
 
             if ($status == 'All') {
                 $prospects = $prospects->orderBy('id', 'desc')->paginate('10');
@@ -461,7 +514,10 @@ class BdmProspectController extends Controller
                 $prospects = $prospects->orderBy('id', 'desc')->where(['status' => $status])->paginate('10');
             }
 
-            return response()->json(['data' => view('admin.bdm-prospect.table', compact('prospects'))->render()]);
+            return response()->json([
+                'data' => view('admin.bdm-prospect.table', compact('prospects'))->render(),
+                'count' => $count
+            ]);
         }
     }
 

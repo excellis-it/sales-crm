@@ -193,7 +193,7 @@ class GoalsController extends Controller
         $totalInput = array_sum($amounts);
 
         // Let's add a small leeway for floating point rounding issues
-        /* 
+        /*
         if ($totalInput > ($smGoal->goals_amount + 0.5)) {
             return redirect()->route('sales-manager.goals.index')->with('error', 'Distributed amount exceeds your total goal.');
         }
@@ -242,7 +242,7 @@ class GoalsController extends Controller
                 $execNetGoal->goals_type = 2;
             }
             $execNetGoal->goals_achieve = $goals_achieve_net;
-            $execNetGoal->goals_amount = $amount * 0.25;
+            $execNetGoal->goals_amount = $amount * 0.40;
             $execNetGoal->save();
         }
 

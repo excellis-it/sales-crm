@@ -278,9 +278,9 @@
                         <div class="col-lg-6 text-end">
                             <select class="custom-select w-auto" id="top-stats-filter">
                                 <option value="overall">Overall statistics</option>
-                                <option value="today">Todays Statistics</option>
+                                {{-- <option value="today">Todays Statistics</option> --}}
                                 <option value="this_month" selected>This Months Statistics</option>
-                                <option value="this_week">This Weeks Statistics</option>
+                                {{-- <option value="this_week">This Weeks Statistics</option> --}}
                                 <option value="this_year">This Years Statistics</option>
                             </select>
                         </div>

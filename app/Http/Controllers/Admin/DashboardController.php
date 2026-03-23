@@ -23,13 +23,13 @@ class DashboardController extends Controller
         $stats = $this->getStatsData($stats_type);
         $count = $stats['count'];
         $goal = $stats['goal'];
-        
+
         $prospects = Prospect::orderBy('sale_date', 'desc')->take(10)->get();
         $projects = Project::orderBy('sale_date', 'desc')->take(7)->get();
-        
+
         $labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
         $chartType = 'YearEarn';
-        
+
         // Load full year chart data for the initial page load (YearEarn is default)
         $yearStats = $this->getYearlyChartData();
         $goal = array_merge($goal, $yearStats);
@@ -95,13 +95,13 @@ class DashboardController extends Controller
         if ($startDate && $endDate) {
             $tpQuery->whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']);
             $pQuery->whereBetween('sale_date', [$startDate, $endDate]);
-            $prQuery->whereBetween('sale_date', [$startDate, $endDate]);
+            $prQuery->whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']);
         }
 
         $count['tender_projects'] = $tpQuery->count();
         $count['tender_projects_value'] = $tpQuery->sum('tender_value_lakhs');
         $count['projects'] = $pQuery->count();
-        
+
         $count['prospects'] = (clone $prQuery)->count();
         $count['win'] = (clone $prQuery)->where('status', 'Win')->count();
         $count['follow_up'] = (clone $prQuery)->where('status', 'Follow Up')->count();
@@ -130,7 +130,7 @@ class DashboardController extends Controller
              // Goals are usually month-based in this system, so we check if goals_date falls in range
              $goalQuery->whereBetween('goals_date', [$startDate, $endDate]);
         }
-        
+
         $count['account_manager_goals'] = (clone $goalQuery)->whereIn('user_id', $account_manager_id)->sum('goals_amount');
         $count['bdm_goals'] = (clone $goalQuery)->whereIn('user_id', $bdma_manager_id)->where('goals_type', 1)->sum('goals_amount');
         if ($count['bdm_goals'] == 0) {
@@ -221,7 +221,7 @@ class DashboardController extends Controller
             for ($i = 1; $i <= $total_days; $i++) {
                 $labels[] = $i;
                 $date = date('Y-m-') . sprintf('%02d', $i);
-                
+
                 $gross_sum = 0;
                 $net_sum = 0;
                 foreach ($sales_manager_id as $sm_id) {

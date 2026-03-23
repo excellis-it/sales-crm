@@ -14,20 +14,58 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 
+use Illuminate\Support\Facades\Session;
+
 class ProspectController extends Controller
 {
     public function index(Request $request)
     {
+        $status_filter = Session::get('bdm_prospect_filter_status', $request->status);
+        $startDate = Session::get('bdm_prospect_filter_start_date', $request->start_date);
+        $endDate = Session::get('bdm_prospect_filter_end_date', $request->end_date);
+        $search = Session::get('bdm_prospect_filter_search');
+
         $count['total'] = BdmProspect::where('report_to', Auth::user()->id)->count();
         $count['win'] = BdmProspect::where('report_to', Auth::user()->id)->where('status', 'Win')->count();
         $count['follow_up'] = BdmProspect::where('report_to', Auth::user()->id)->where('status', 'Follow Up')->count();
         $count['close'] = BdmProspect::where('report_to', Auth::user()->id)->where('status', 'Close')->count();
         $count['sent_proposal'] = BdmProspect::where('report_to', Auth::user()->id)->where('status', 'Sent Proposal')->count();
         $count['prospect'] = BdmProspect::where('report_to', Auth::user()->id)->count();
-        $prospects = BdmProspect::orderBy('created_at', 'desc')->where('report_to', Auth::user()->id)->paginate('15');
+        
+        $prospects = BdmProspect::orderBy('created_at', 'desc')->where('report_to', Auth::user()->id);
+
+        if ($search) {
+             $query = str_replace(" ", "%", $search);
+             $prospects->where(function ($q) use ($query) {
+                 $q->orWhere('client_name', 'like', '%' . $query . '%')
+                     ->orWhere('business_name', 'like', '%' . $query . '%')
+                     ->orWhere('client_email', 'like', '%' . $query . '%')
+                     ->orWhere('client_phone', 'like', '%' . $query . '%')
+                     ->orWhere('price_quote', 'like', '%' . $query . '%')
+                     ->orWhere('followup_date', 'like', '%' . $query . '%')
+                     ->orWhere('offered_for', 'like', '%' . $query . '%')
+                     ->orWhereHas('user', function ($q) use ($query) {
+                         $q->where('name', 'like', '%' . $query . '%');
+                     })
+                     ->orWhereHas('transferTakenBy', function ($q) use ($query) {
+                         $q->where('name', 'like', '%' . $query . '%');
+                     });
+             });
+        }
+
+        if ($startDate && $endDate) {
+            $prospects->whereBetween('sale_date', [$startDate, $endDate]);
+        }
+
+        if ($status_filter && $status_filter != 'All') {
+            $prospects->where('status', $status_filter);
+        }
+
+        $prospects = $prospects->paginate('15');
+
         $users = User::role(['BUSINESS_DEVELOPMENT_MANAGER', 'BUSINESS_DEVELOPMENT_EXCECUTIVE'])->orderBy('id', 'desc')->get();
         $sales_executives = User::role('BUSINESS_DEVELOPMENT_EXCECUTIVE')->where(['status' => 1])->orderBy('id', 'desc')->get();
-        return view('bdm.prospect.list', compact('count', 'prospects', 'users', 'sales_executives'));
+        return view('bdm.prospect.list', compact('count', 'prospects', 'users', 'sales_executives', 'status_filter', 'startDate', 'endDate', 'search'));
     }
 
     public function bdmProspectFilter(Request $request)
@@ -35,6 +73,12 @@ class ProspectController extends Controller
         if ($request->ajax()) {
             $status = $request->status;
             $query = $request->get('query');
+
+            Session::put('bdm_prospect_filter_search', $query);
+            Session::put('bdm_prospect_filter_start_date', $request->start_date);
+            Session::put('bdm_prospect_filter_end_date', $request->end_date);
+            Session::put('bdm_prospect_filter_status', $status);
+            
             $query = str_replace(" ", "%", $query);
             $prospects = BdmProspect::query();
             if ($query != '') {
@@ -57,6 +101,10 @@ class ProspectController extends Controller
             if ($request->followup_date) {
                 $followup_date = date('Y-m-d', strtotime($request->followup_date));
                 $prospects = $prospects->where('followup_date', $followup_date);
+            }
+
+            if ($request->start_date && $request->end_date) {
+                $prospects->whereBetween('sale_date', [$request->start_date, $request->end_date]);
             }
 
             if ($status == 'All') {

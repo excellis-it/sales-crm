@@ -62,44 +62,7 @@
 
                     <hr />
 
-                    <div class="card-title">
-                        <div class="row filter-gap align-items-center">
-                            <div class="col">
-                                <a href="javascript:void(0);" data-value="All"
-                                    class="desin-filter {{ !request()->status ? 'active-filter' : '' }}">
-                                    <p>All</p>
-                                    <h5>{{ $count['prospect'] }}</h5>
-                                </a>
-                            </div>
-                            <div class="col">
-                                <a href="javascript:void(0);" data-value="Win"
-                                    class="desin-filter {{ request()->status == 'Win' ? 'active-filter' : '' }}">
-                                    <p>On Board</p>
-                                    <h5>{{ $count['win'] }}</h5>
-                                </a>
-                            </div>
-                            <div class="col">
-                                <a href="javascript:void(0);" data-value="Follow Up"
-                                    class="desin-filter {{ request()->status == 'Follow Up' ? 'active-filter' : '' }}">
-                                    <p>Follow Up</p>
-                                    <h5>{{ $count['follow_up'] }}</h5>
-                                </a>
-                            </div>
-                            <div class="col">
-                                <a href="javascript:void(0);" data-value="Sent Proposal" class="desin-filter">
-                                    <p>Sent Proposal</p>
-                                    <h5>{{ $count['sent_proposal'] }}</h5>
-                                </a>
-                            </div>
-                            <div class="col">
-                                <a href="javascript:void(0);" data-value="Close" class="desin-filter">
-                                    <p>Cancel</p>
-                                    <h5>{{ $count['close'] }}</h5>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row align-items-center mb-3 mt-4">
+                    <div class="row align-items-center mb-3">
                         <div class="col-md-9">
                             <div class="row g-2">
                                 <div class="col-md-3">
@@ -113,7 +76,7 @@
                                 <div class="col-md-4">
                                     <label class="form-label mb-0">Search</label>
                                     <div class="search-field prod-search">
-                                        <input type="text" name="search" id="search" placeholder="search..." required
+                                        <input type="text" name="search" id="search" placeholder="search..." required value="{{ $search ?? '' }}"
                                             class="form-control rounded_search">
                                         <a href="javascript:void(0)" class="prod-search-icon submit_search"><i
                                                 class="fa fa-search"></i></a>
@@ -126,6 +89,44 @@
                                             style="height: 45px; border-radius: 8px; margin-bottom:10px;">Reset</button>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-title">
+                        <div class="row filter-gap align-items-center">
+                            <div class="col">
+                                <a href="javascript:void(0);" data-value="All"
+                                    class="desin-filter {{ (!isset($status_filter) || !$status_filter || $status_filter == 'All') ? 'active-filter' : '' }}">
+                                    <p>All</p>
+                                    <h5 id="count-all">{{ $count['prospect'] }}</h5>
+                                </a>
+                            </div>
+                            <div class="col">
+                                <a href="javascript:void(0);" data-value="Win"
+                                    class="desin-filter {{ (isset($status_filter) && $status_filter == 'Win') ? 'active-filter' : '' }}">
+                                    <p>On Board</p>
+                                    <h5 id="count-win">{{ $count['win'] }}</h5>
+                                </a>
+                            </div>
+                            <div class="col">
+                                <a href="javascript:void(0);" data-value="Follow Up"
+                                    class="desin-filter {{ (isset($status_filter) && $status_filter == 'Follow Up') ? 'active-filter' : '' }}">
+                                    <p>Follow Up</p>
+                                    <h5 id="count-follow-up">{{ $count['follow_up'] }}</h5>
+                                </a>
+                            </div>
+                            <div class="col">
+                                <a href="javascript:void(0);" data-value="Sent Proposal" class="desin-filter {{ (isset($status_filter) && $status_filter == 'Sent Proposal') ? 'active-filter' : '' }}">
+                                    <p>Sent Proposal</p>
+                                    <h5 id="count-sent-proposal">{{ $count['sent_proposal'] }}</h5>
+                                </a>
+                            </div>
+                            <div class="col">
+                                <a href="javascript:void(0);" data-value="Close" class="desin-filter {{ (isset($status_filter) && $status_filter == 'Close') ? 'active-filter' : '' }}">
+                                    <p>Cancel</p>
+                                    <h5 id="count-close">{{ $count['close'] }}</h5>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -432,6 +433,13 @@
                         $('#loading').removeClass('loading');
                         $('#loading-content').removeClass('loading-content');
                         $('#prospect-body').html(resp.data);
+                        if (resp.count) {
+                            $('#count-all').text(resp.count.prospect);
+                            $('#count-win').text(resp.count.win);
+                            $('#count-follow-up').text(resp.count.follow_up);
+                            $('#count-sent-proposal').text(resp.count.sent_proposal);
+                            $('#count-close').text(resp.count.close);
+                        }
                     }
                 });
             }
