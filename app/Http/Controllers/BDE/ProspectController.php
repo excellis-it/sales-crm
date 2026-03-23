@@ -42,7 +42,7 @@ class ProspectController extends Controller
             $users = User::role(['BUSINESS_DEVELOPMENT_EXCECUTIVE'])->get();
         }
 
-        return view('bde.prospect.list')->with(compact('prospects', 'count','users'));
+        return view('bde.prospect.list')->with(compact('prospects', 'count', 'users'));
     }
 
     public function bdeProspectFilter(Request $request)
@@ -81,7 +81,6 @@ class ProspectController extends Controller
             }
 
             return response()->json(['data' => view('bde.prospect.table', compact('prospects'))->render()]);
-
         }
     }
 
@@ -181,15 +180,6 @@ class ProspectController extends Controller
             $project->comment = $prospect->comments;
             $project->save();
 
-             // if comments store at BdmFollowup
-        if (isset($data['comments']) && $data['comments'] != null) {
-            $followup = new BdmFollowup();
-            $followup->user_id = auth()->id();
-            $followup->bdm_prospect_id = $prospect->id;
-            $followup->remark = $data['comments'];
-            $followup->save();
-        }
-
             //prospect milestone
             if (isset($data['milestone_name'])) {
                 foreach ($data['milestone_name'] as $key => $milestone) {
@@ -199,7 +189,7 @@ class ProspectController extends Controller
                         $project_milestone->bdm_project_id = $project->id;
                         $project_milestone->milestone_name = $milestone;
                         $project_milestone->milestone_value = $data['milestone_value'][$key];
-                        $project_milestone->payment_status ='Due';
+                        $project_milestone->payment_status = 'Due';
                         // $project_milestone->payment_date = ($data['payment_status'][$key] == 'Paid') ? date('Y-m-d') : '';
                         $project_milestone->milestone_comment = $data['milestone_comment'][$key];
                         // $project_milestone->payment_mode = $data['milestone_payment_mode'][$key];
@@ -207,6 +197,33 @@ class ProspectController extends Controller
                         $project_milestone->save();
                     }
                 }
+            }
+
+            if ($prospect->upfront_value > 0) {
+                $upfront = ProjectMilestone::where('bdm_project_id', $project->id)->where('milestone_type', 'upfront')->first();
+                if ($upfront) {
+                    $upfront->milestone_value = $prospect->upfront_value;
+                    $upfront->save();
+                } else {
+                    $upfront = new ProjectMilestone();
+                    $upfront->bdm_project_id = $project->id;
+                    $upfront->milestone_name = 'Upfront';
+                    $upfront->milestone_type = 'upfront';
+                    $upfront->milestone_value = $prospect->upfront_value;
+                    $upfront->payment_status = 'Paid';
+                    $upfront->payment_mode = $data['payment_mode'] ?? null;
+                    $upfront->payment_date = date('Y-m-d');
+                    $upfront->save();
+                }
+            }
+
+            // if comments store at BdmFollowup
+            if (isset($data['comments']) && $data['comments'] != null) {
+                $followup = new BdmFollowup();
+                $followup->user_id = auth()->id();
+                $followup->bdm_prospect_id = $prospect->id;
+                $followup->remark = $data['comments'];
+                $followup->save();
             }
 
             $project_type = new BdmProjectType();
@@ -260,7 +277,7 @@ class ProspectController extends Controller
             $users = User::role(['BUSINESS_DEVELOPMENT_EXCECUTIVE'])->get();
             $prospect = BdmProspect::find($id);
             $type = true;
-            return response()->json(['view' => view('bde.prospect.edit', compact('prospect', 'users','type'))->render()]);
+            return response()->json(['view' => view('bde.prospect.edit', compact('prospect', 'users', 'type'))->render()]);
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }
@@ -349,27 +366,45 @@ class ProspectController extends Controller
             $project->comment = $prospect->comments;
             $project->save();
 
-             //prospect project milestone
-             $previous_milestone_value = ProjectMilestone::where('bdm_project_id', $id)->sum('milestone_value');
+            //prospect project milestone
+            $previous_milestone_value = ProjectMilestone::where('bdm_project_id', $id)->sum('milestone_value');
 
-             ProjectMilestone::where('bdm_project_id', $id)->delete();
-             if (isset($data['milestone_name'])) {
-                 foreach ($data['milestone_name'] as $key => $milestone) {
-                     //check if data is null
-                     if ($data['milestone_name'][$key] != null) {
-                         $project_milestone = new ProjectMilestone();
-                         $project_milestone->bdm_project_id = $project->id;
-                         $project_milestone->milestone_name = $milestone;
-                         $project_milestone->milestone_value = $data['milestone_value'][$key];
-                         $project_milestone->payment_status = 'Due';
-                         // $project_milestone->payment_date = ($data['payment_status'][$key] == 'Paid') ? date('Y-m-d') : '';
-                         $project_milestone->milestone_comment = $data['milestone_comment'][$key];
+            ProjectMilestone::where('bdm_project_id', $id)->delete();
+            if (isset($data['milestone_name'])) {
+                foreach ($data['milestone_name'] as $key => $milestone) {
+                    //check if data is null
+                    if ($data['milestone_name'][$key] != null) {
+                        $project_milestone = new ProjectMilestone();
+                        $project_milestone->bdm_project_id = $project->id;
+                        $project_milestone->milestone_name = $milestone;
+                        $project_milestone->milestone_value = $data['milestone_value'][$key];
+                        $project_milestone->payment_status = 'Due';
+                        // $project_milestone->payment_date = ($data['payment_status'][$key] == 'Paid') ? date('Y-m-d') : '';
+                        $project_milestone->milestone_comment = $data['milestone_comment'][$key];
                         //  $project_milestone->payment_mode = $data['milestone_payment_mode'][$key];
                         //  $project_milestone->payment_date = $data['milestone_payment_date'][$key];
-                         $project_milestone->save();
-                     }
-                 }
-             }
+                        $project_milestone->save();
+                    }
+                }
+            }
+
+            if ($prospect->upfront_value > 0) {
+                $upfront = ProjectMilestone::where('bdm_project_id', $project->id)->where('milestone_type', 'upfront')->first();
+                if ($upfront) {
+                    $upfront->milestone_value = $prospect->upfront_value;
+                    $upfront->save();
+                } else {
+                    $upfront = new ProjectMilestone();
+                    $upfront->bdm_project_id = $project->id;
+                    $upfront->milestone_name = 'Upfront';
+                    $upfront->milestone_type = 'upfront';
+                    $upfront->milestone_value = $prospect->upfront_value;
+                    $upfront->payment_status = 'Paid';
+                    $upfront->payment_mode = $data['payment_mode'] ?? null;
+                    $upfront->payment_date = date('Y-m-d');
+                    $upfront->save();
+                }
+            }
 
             $project_type = new BdmProjectType();
             $project_type->bdm_project_id = $project->id;
@@ -443,8 +478,6 @@ class ProspectController extends Controller
             }
 
             return response()->json(['data' => view('bde.prospect.table', compact('prospects'))->render()]);
-
         }
     }
-
 }

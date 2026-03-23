@@ -103,7 +103,7 @@ class BdmProspectController extends Controller
         $prospect->transfer_token_by = $data['transfer_token_by'];
         $prospect->save();
 
-         // if comments store at BdmFollowup
+        // if comments store at BdmFollowup
         if (isset($data['comments']) && $data['comments'] != null) {
             $followup = new BdmFollowup();
             $followup->user_id = auth()->id();
@@ -160,8 +160,25 @@ class BdmProspectController extends Controller
             $project->comment = $prospect->comments;
             $project->save();
 
-             //project milestone
-             if (isset($data['milestone_name'])) {
+            if ($prospect->upfront_value > 0) {
+                $upfront = ProjectMilestone::where('bdm_project_id', $project->id)->where('milestone_type', 'upfront')->first();
+                if ($upfront) {
+                    $upfront->milestone_value = $prospect->upfront_value;
+                    $upfront->save();
+                } else {
+                    $upfront = new ProjectMilestone();
+                    $upfront->bdm_project_id = $project->id;
+                    $upfront->milestone_name = 'Upfront';
+                    $upfront->milestone_type = 'upfront';
+                    $upfront->milestone_value = $prospect->upfront_value;
+                    $upfront->payment_status = 'Paid';
+                    $upfront->payment_date = date('Y-m-d');
+                    $upfront->save();
+                }
+            }
+
+            //project milestone
+            if (isset($data['milestone_name'])) {
                 foreach ($data['milestone_name'] as $key => $milestone) {
                     //check if data is null
                     if ($data['milestone_name'][$key] != null) {
@@ -321,27 +338,46 @@ class BdmProspectController extends Controller
             $project->comment = $prospect->comments;
             $project->save();
 
-             //prospect project milestone
-             $previous_milestone_value = ProjectMilestone::where('bdm_project_id', $id)->sum('milestone_value');
 
-             ProjectMilestone::where('bdm_project_id', $id)->delete();
-             if (isset($data['milestone_name'])) {
-                 foreach ($data['milestone_name'] as $key => $milestone) {
-                     //check if data is null
-                     if ($data['milestone_name'][$key] != null) {
-                         $project_milestone = new ProjectMilestone();
-                         $project_milestone->bdm_project_id = $project->id;
-                         $project_milestone->milestone_name = $milestone;
-                         $project_milestone->milestone_value = $data['milestone_value'][$key];
-                         $project_milestone->payment_status = 'Due';
-                         // $project_milestone->payment_date = ($data['payment_status'][$key] == 'Paid') ? date('Y-m-d') : '';
-                         $project_milestone->milestone_comment = $data['milestone_comment'][$key];
+
+            //prospect project milestone
+            $previous_milestone_value = ProjectMilestone::where('bdm_project_id', $id)->sum('milestone_value');
+
+            ProjectMilestone::where('bdm_project_id', $id)->delete();
+            if (isset($data['milestone_name'])) {
+                foreach ($data['milestone_name'] as $key => $milestone) {
+                    //check if data is null
+                    if ($data['milestone_name'][$key] != null) {
+                        $project_milestone = new ProjectMilestone();
+                        $project_milestone->bdm_project_id = $project->id;
+                        $project_milestone->milestone_name = $milestone;
+                        $project_milestone->milestone_value = $data['milestone_value'][$key];
+                        $project_milestone->payment_status = 'Due';
+                        // $project_milestone->payment_date = ($data['payment_status'][$key] == 'Paid') ? date('Y-m-d') : '';
+                        $project_milestone->milestone_comment = $data['milestone_comment'][$key];
                         //  $project_milestone->payment_mode = $data['milestone_payment_mode'][$key];
                         //  $project_milestone->payment_date = $data['milestone_payment_date'][$key];
-                         $project_milestone->save();
-                     }
-                 }
-             }
+                        $project_milestone->save();
+                    }
+                }
+            }
+
+            if ($prospect->upfront_value > 0) {
+                $upfront = ProjectMilestone::where('bdm_project_id', $project->id)->where('milestone_type', 'upfront')->first();
+                if ($upfront) {
+                    $upfront->milestone_value = $prospect->upfront_value;
+                    $upfront->save();
+                } else {
+                    $upfront = new ProjectMilestone();
+                    $upfront->bdm_project_id = $project->id;
+                    $upfront->milestone_name = 'Upfront';
+                    $upfront->milestone_type = 'upfront';
+                    $upfront->milestone_value = $prospect->upfront_value;
+                    $upfront->payment_status = 'Paid';
+                    $upfront->payment_date = date('Y-m-d');
+                    $upfront->save();
+                }
+            }
 
             $project_type = new BdmProjectType();
             $project_type->bdm_project_id = $project->id;
@@ -479,6 +515,22 @@ class BdmProspectController extends Controller
             $project->sale_date = $prospect->sale_date ?? '';
             $project->comment = $prospect->comments;
             $project->save();
+
+            if ($prospect->upfront_value > 0) {
+                $upfront = ProjectMilestone::where('bdm_project_id', $project->id)->where('milestone_type', 'upfront')->first();
+                if ($upfront) {
+                    $upfront->milestone_value = $prospect->upfront_value;
+                    $upfront->save();
+                } else {
+                    $upfront = new ProjectMilestone();
+                    $upfront->bdm_project_id = $project->id;
+                    $upfront->milestone_type = 'upfront';
+                    $upfront->milestone_value = $prospect->upfront_value;
+                    $upfront->payment_status = 'Paid';
+                    $upfront->payment_date = date('Y-m-d');
+                    $upfront->save();
+                }
+            }
 
             $project_type = new BDMProjectType();
             $project_type->bdm_project_id = $project->id;

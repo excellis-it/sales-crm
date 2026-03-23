@@ -13,7 +13,7 @@ class Project extends Model
 
     public function projectMilestones()
     {
-        return $this->hasMany(ProjectMilestone::class);
+        return $this->hasMany(ProjectMilestone::class)->where('milestone_type', 'milestone');
     }
 
     public function projectTypes()

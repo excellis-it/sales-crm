@@ -67,6 +67,7 @@ class Helper
             $bdmProjectIds = BdmProject::where('user_id', $userId)->pluck('id');
             $net_bdm_milestones = ProjectMilestone::whereIn('bdm_project_id', $bdmProjectIds)
                                                   ->where('payment_status', 'Paid')
+                                                  ->where('milestone_type', '!=', 'upfront')
                                                   ->whereBetween('payment_date', [$startDate, $endDate])
                                                   ->sum('milestone_value');
             $net_amount = $net_amount + $net_bdm_milestones;
@@ -94,6 +95,7 @@ class Helper
             $projectIds = Project::where('assigned_to', $userId)->pluck('id');
             $net_milestones = ProjectMilestone::whereIn('project_id', $projectIds)
                                               ->where('payment_status', 'Paid')
+                                              ->where('milestone_type', '!=', 'upfront')
                                               ->whereBetween('payment_date', [$startDate, $endDate])
                                               ->sum('milestone_value');
 
@@ -101,6 +103,7 @@ class Helper
             $bdmProjectIds = BdmProject::where('assigned_to', $userId)->pluck('id');
             $net_bdm_milestones = ProjectMilestone::whereIn('bdm_project_id', $bdmProjectIds)
                                                   ->where('payment_status', 'Paid')
+                                                  ->where('milestone_type', '!=', 'upfront')
                                                   ->whereBetween('payment_date', [$startDate, $endDate])
                                                   ->sum('milestone_value');
 

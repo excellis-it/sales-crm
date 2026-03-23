@@ -94,7 +94,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        $users = User::role([ 'BUSINESS_DEVELOPMENT_MANAGER', 'BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
+        $users = User::role(['BUSINESS_DEVELOPMENT_MANAGER', 'BUSINESS_DEVELOPMENT_EXCECUTIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
         return view('bdm.project.create')->with(compact('users'));
     }
 
@@ -142,6 +142,24 @@ class ProjectController extends Controller
         $project->delivery_tat = $data['delivery_tat'];
         $project->comment = $data['comment'];
         $project->save();
+
+        if ($data['project_upfront'] > 0) {
+            $upfront = ProjectMilestone::where('bdm_project_id', $project->id)->where('milestone_type', 'upfront')->first();
+            if ($upfront) {
+                $upfront->milestone_value = $data['project_upfront'];
+                $upfront->save();
+            } else {
+                $upfront = new ProjectMilestone();
+                $upfront->bdm_project_id = $project->id;
+                $upfront->milestone_name = 'Upfront';
+                $upfront->milestone_type = 'upfront';
+                $upfront->milestone_value = $data['project_upfront'];
+                $upfront->payment_status = 'Paid';
+                $upfront->payment_mode = $data['payment_mode'] ?? null;
+                $upfront->payment_date = date('Y-m-d');
+                $upfront->save();
+            }
+        }
 
         // if comment store at BdmFollowup
         if (isset($data['comment']) && $data['comment'] != null) {
@@ -292,6 +310,7 @@ class ProjectController extends Controller
         // $project->comment = $data['comment'];
         $project->save();
 
+
         $countGross = Goal::where('user_id', Auth::user()->id)->whereMonth('goals_date', date('m', strtotime($data['sale_date'])))->whereYear('goals_date', date('Y', strtotime($data['sale_date'])))->where('goals_type', 1)->count();
         if ($countGross > 0) {
             $goals = Goal::where('user_id', Auth::user()->id)->whereMonth('goals_date', date('m', strtotime($data['sale_date'])))->whereYear('goals_date', date('Y', strtotime($data['sale_date'])))->where('goals_type', 1)->first();
@@ -369,8 +388,26 @@ class ProjectController extends Controller
             }
         }
 
-        Session::put('page_number',$request->page_no);
-        $update_success = Session::put('update_success',true);
+        if ($data['project_upfront'] > 0) {
+            $upfront = ProjectMilestone::where('bdm_project_id', $project->id)->where('milestone_type', 'upfront')->first();
+            if ($upfront) {
+                $upfront->milestone_value = $data['project_upfront'];
+                $upfront->save();
+            } else {
+                $upfront = new ProjectMilestone();
+                $upfront->bdm_project_id = $project->id;
+                $upfront->milestone_name = 'Upfront';
+                $upfront->milestone_type = 'upfront';
+                $upfront->milestone_value = $data['project_upfront'];
+                $upfront->payment_status = 'Paid';
+                $upfront->payment_mode = $data['payment_mode'] ?? null;
+                $upfront->payment_date = date('Y-m-d');
+                $upfront->save();
+            }
+        }
+
+        Session::put('page_number', $request->page_no);
+        $update_success = Session::put('update_success', true);
 
         return redirect()->route('bdm.projects.index')->with('message', 'Project updated successfully.');
     }

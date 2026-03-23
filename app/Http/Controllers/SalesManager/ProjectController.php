@@ -147,6 +147,24 @@ class ProjectController extends Controller
         $project->comment = $data['comment'];
         $project->save();
 
+        if ($data['project_upfront'] > 0) {
+            $upfront = ProjectMilestone::where('project_id', $project->id)->where('milestone_type', 'upfront')->first();
+            if ($upfront) {
+                $upfront->milestone_value = $data['project_upfront'];
+                $upfront->save();
+            } else {
+                $upfront = new ProjectMilestone();
+                $upfront->project_id = $project->id;
+                $upfront->milestone_name = 'Upfront';
+                $upfront->milestone_type = 'upfront';
+                $upfront->milestone_value = $data['project_upfront'];
+                $upfront->payment_status = 'Paid';
+                $upfront->payment_mode = $data['payment_mode'] ?? null;
+                $upfront->payment_date = date('Y-m-d');
+                $upfront->save();
+            }
+        }
+
         // if comment add follow up
         if ($data['comment'] && $data['comment'] != null) {
             $follow_up = new Followup();
@@ -199,7 +217,6 @@ class ProjectController extends Controller
                     $project_milestone->payment_mode = $data['milestone_payment_mode'][$key];
                     $project_milestone->payment_date = $data['milestone_payment_date'][$key];
                     $project_milestone->save();
-
                 }
             }
         }
@@ -250,7 +267,7 @@ class ProjectController extends Controller
             $account_managers = User::role('ACCOUNT_MANAGER')->orderBy('name', 'DESC')->where('status', 1)->get();
             $project = Project::find($id);
             $type = true;
-            return response()->json(['view' => view('sales_manager.project.edit', compact('project', 'users', 'type','project_openers','account_managers'))->render()]);
+            return response()->json(['view' => view('sales_manager.project.edit', compact('project', 'users', 'type', 'project_openers', 'account_managers'))->render()]);
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }
@@ -290,6 +307,7 @@ class ProjectController extends Controller
         $project->delivery_tat = $data['delivery_tat'];
         // $project->comment = $data['comment'];
         $project->save();
+
 
         $countGross = Goal::where('user_id', Auth::user()->id)->whereMonth('goals_date', date('m', strtotime($data['sale_date'])))->whereYear('goals_date', date('Y', strtotime($data['sale_date'])))->where('goals_type', 1)->count();
         if ($countGross > 0) {
@@ -350,8 +368,26 @@ class ProjectController extends Controller
             }
         }
 
-        Session::put('page_number',$request->page_no);
-        $update_success = Session::put('update_success',true);
+        if ($data['project_upfront'] > 0) {
+            $upfront = ProjectMilestone::where('project_id', $project->id)->where('milestone_type', 'upfront')->first();
+            if ($upfront) {
+                $upfront->milestone_value = $data['project_upfront'];
+                $upfront->save();
+            } else {
+                $upfront = new ProjectMilestone();
+                $upfront->project_id = $project->id;
+                $upfront->milestone_name = 'Upfront';
+                $upfront->milestone_type = 'upfront';
+                $upfront->milestone_value = $data['project_upfront'];
+                $upfront->payment_status = 'Paid';
+                $upfront->payment_mode = $data['payment_mode'] ?? null;
+                $upfront->payment_date = date('Y-m-d');
+                $upfront->save();
+            }
+        }
+
+        Session::put('page_number', $request->page_no);
+        $update_success = Session::put('update_success', true);
         // return "d";
         return redirect()->route('projects.index')->with('message', 'Project updated successfully.');
     }

@@ -36,13 +36,13 @@ class ProspectController extends Controller
             $count['follow_up'] = Prospect::where('report_to', auth()->user()->id)->where('user_id', $request->sales_executive_id)->where('status', 'Follow Up')->count();
             $count['close'] = Prospect::where('report_to', auth()->user()->id)->where('user_id', $request->sales_executive_id)->where('status', 'Close')->count();
             $count['sent_proposal'] = Prospect::where('report_to', auth()->user()->id)->where('user_id', $request->sales_executive_id)->where('status', 'Sent Proposal')->count();
-            
+
             $prospects = Prospect::where('report_to', Auth::user()->id)->where('user_id', $request->sales_executive_id);
             if ($request->status && $request->status != 'All') {
                 $prospects->where('status', $request->status);
             }
             $prospects = $prospects->orderBy('created_at', 'desc')->paginate(15);
-            
+
             $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE', 'BUSINESS_DEVELOPMENT_MANAGER', 'BUSINESS_DEVELOPMENT_EXCECUTIVE'])->get();
             $sales_executives = User::role('SALES_EXCUETIVE')->where(['status' => 1, 'sales_manager_id' => Auth::user()->id])->orderBy('id', 'desc')->get();
             return view('sales_manager.prospect.list')->with(compact('prospects', 'count', 'users', 'sales_executives', 'sales_executive_id'));
@@ -52,13 +52,13 @@ class ProspectController extends Controller
         $count['follow_up'] = Prospect::where('report_to', auth()->user()->id)->where('status', 'Follow Up')->count();
         $count['close'] = Prospect::where('report_to', auth()->user()->id)->where('status', 'Close')->count();
         $count['sent_proposal'] = Prospect::where('report_to', auth()->user()->id)->where('status', 'Sent Proposal')->count();
-        
+
         $prospects = Prospect::where('report_to', Auth::user()->id);
         if ($request->status && $request->status != 'All') {
             $prospects->where('status', $request->status);
         }
         $prospects = $prospects->orderBy('created_at', 'desc')->paginate(15);
-        
+
         $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE', 'BUSINESS_DEVELOPMENT_MANAGER', 'BUSINESS_DEVELOPMENT_EXCECUTIVE'])->get();
         $sales_executives = User::role('SALES_EXCUETIVE')->where(['status' => 1, 'sales_manager_id' => Auth::user()->id])->orderBy('id', 'desc')->get();
         return view('sales_manager.prospect.list')->with(compact('prospects', 'count', 'users', 'sales_executives', 'sales_executive_id'));
@@ -168,6 +168,24 @@ class ProspectController extends Controller
             $project->sale_date = $prospect->sale_date;
             $project->comment = $prospect->comments;
             $project->save();
+
+            if ($prospect->upfront_value > 0) {
+                $upfront = ProjectMilestone::where('project_id', $project->id)->where('milestone_type', 'upfront')->first();
+                if ($upfront) {
+                    $upfront->milestone_value = $prospect->upfront_value;
+                    $upfront->save();
+                } else {
+                    $upfront = new ProjectMilestone();
+                    $upfront->project_id = $project->id;
+                    $upfront->milestone_name = 'Upfront';
+                    $upfront->milestone_type = 'upfront';
+                    $upfront->milestone_value = $prospect->upfront_value;
+                    $upfront->payment_status = 'Paid';
+                    $upfront->payment_mode = $data['payment_mode'] ?? null;
+                    $upfront->payment_date = date('Y-m-d');
+                    $upfront->save();
+                }
+            }
 
             //project milestone
             if (isset($data['milestone_name'])) {
@@ -330,6 +348,8 @@ class ProspectController extends Controller
             $project->comment = $prospect->comments;
             $project->save();
 
+
+
             //prospect project milestone
             $previous_milestone_value = ProjectMilestone::where('project_id', $id)->sum('milestone_value');
 
@@ -349,6 +369,23 @@ class ProspectController extends Controller
                         // $project_milestone->payment_date = $data['milestone_payment_date'][$key];
                         $project_milestone->save();
                     }
+                }
+            }
+            if ($prospect->upfront_value > 0) {
+                $upfront = ProjectMilestone::where('project_id', $project->id)->where('milestone_type', 'upfront')->first();
+                if ($upfront) {
+                    $upfront->milestone_value = $prospect->upfront_value;
+                    $upfront->save();
+                } else {
+                    $upfront = new ProjectMilestone();
+                    $upfront->project_id = $project->id;
+                    $upfront->milestone_name = 'Upfront';
+                    $upfront->milestone_type = 'upfront';
+                    $upfront->milestone_value = $prospect->upfront_value;
+                    $upfront->payment_status = 'Paid';
+                    $upfront->payment_mode = $data['payment_mode'] ?? null;
+                    $upfront->payment_date = date('Y-m-d');
+                    $upfront->save();
                 }
             }
 
@@ -532,6 +569,22 @@ class ProspectController extends Controller
             $project->sale_date = $prospect->sale_date;
             $project->comment = $prospect->comments;
             $project->save();
+
+            if ($prospect->upfront_value > 0) {
+                $upfront = ProjectMilestone::where('project_id', $project->id)->where('milestone_type', 'upfront')->first();
+                if ($upfront) {
+                    $upfront->milestone_value = $prospect->upfront_value;
+                    $upfront->save();
+                } else {
+                    $upfront = new ProjectMilestone();
+                    $upfront->project_id = $project->id;
+                    $upfront->milestone_type = 'upfront';
+                    $upfront->milestone_value = $prospect->upfront_value;
+                    $upfront->payment_status = 'Paid';
+                    $upfront->payment_date = date('Y-m-d');
+                    $upfront->save();
+                }
+            }
 
             $project_type = new ProjectType();
             $project_type->project_id = $project->id;

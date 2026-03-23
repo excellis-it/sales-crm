@@ -58,7 +58,6 @@ class ProjectController extends Controller
         $projects = $query->orderBy('sale_date', 'desc')->paginate(15);
 
         return view('admin.project.list')->with(compact('projects', 'sales_managers', 'users', 'account_managers', 'project_openers', 'startDate', 'endDate'));
-
     }
 
 
@@ -71,7 +70,7 @@ class ProjectController extends Controller
     public function create()
     {
         $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
-        $sales_managers = User::Role(['SALES_MANAGER','ACCOUNT_MANAGER'])->orderBy('name', 'DESC')->where('status', 1)->get();
+        $sales_managers = User::Role(['SALES_MANAGER', 'ACCOUNT_MANAGER'])->orderBy('name', 'DESC')->where('status', 1)->get();
         $project_openers = User::role(['ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
         return view('admin.project.create')->with(compact('sales_managers', 'users', 'project_openers'));
     }
@@ -87,7 +86,7 @@ class ProjectController extends Controller
 
         $userRole = User::find($request->project_opener);
         if ($userRole->hasRole('SALES_EXCUETIVE')) {
-            $request->merge(['user_id' => $userRole->sales_manager_id ]);
+            $request->merge(['user_id' => $userRole->sales_manager_id]);
         } elseif ($userRole->hasRole('BUSINESS_DEVELOPMENT_EXCECUTIVE')) {
             $request->merge(['user_id' => $userRole->bdm_id]);
         } else {
@@ -132,13 +131,32 @@ class ProjectController extends Controller
         $project->comment = $data['comment'] ?? '';
         $project->save();
 
-         if ($data['comment'] && $data['comment'] != null) {
+        if ($data['comment'] && $data['comment'] != null) {
             $follow_up = new Followup();
             $follow_up->user_id = Auth::user()->id;
             $follow_up->project_id = $project->id;
             $follow_up->followup_type = 'other';
             $follow_up->followup_description = $data['comment'];
             $follow_up->save();
+        }
+
+        if ($data['project_upfront'] > 0) {
+
+            $upfront = ProjectMilestone::where('project_id', $project->id)->where('milestone_type', 'upfront')->first();
+            if ($upfront) {
+                $upfront->milestone_value = $data['project_upfront'];
+                $upfront->save();
+            } else {
+                $upfront = new ProjectMilestone();
+                $upfront->project_id = $project->id;
+                $upfront->milestone_type = 'upfront';
+                $upfront->milestone_value = $data['project_upfront'];
+                $upfront->payment_status = 'Paid';
+                $upfront->payment_mode = $data['payment_mode'] ?? null;
+                $upfront->milestone_name = 'Upfront';
+                $upfront->payment_date = date('Y-m-d');
+                $upfront->save();
+            }
         }
 
 
@@ -237,14 +255,14 @@ class ProjectController extends Controller
 
         try {
             $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
-            $sales_managers = User::Role(['SALES_MANAGER','ACCOUNT_MANAGER'])->get();
+            $sales_managers = User::Role(['SALES_MANAGER', 'ACCOUNT_MANAGER'])->get();
             $account_managers = User::role('ACCOUNT_MANAGER')->orderBy('name', 'DESC')->where('status', 1)->get();
             $project_openers = User::role(['ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->where('status', 1)->orderBy('id', 'desc')->get();
             $project = Project::find($id);
             $followups = Followup::where('project_id', $id)->get();
             // return $project->projectTypes()->pluck('type');
             $type = true;
-            return response()->json(['view' => view('admin.project.edit', compact('followups','project', 'sales_managers', 'users', 'type','account_managers','project_openers'))->render()]);
+            return response()->json(['view' => view('admin.project.edit', compact('followups', 'project', 'sales_managers', 'users', 'type', 'account_managers', 'project_openers'))->render()]);
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }
@@ -262,7 +280,7 @@ class ProjectController extends Controller
 
         $userRole = User::find($request->project_opener);
         if ($userRole->hasRole('SALES_EXCUETIVE')) {
-            $request->merge(['user_id' => $userRole->sales_manager_id ]);
+            $request->merge(['user_id' => $userRole->sales_manager_id]);
         } elseif ($userRole->hasRole('BUSINESS_DEVELOPMENT_EXCECUTIVE')) {
             $request->merge(['user_id' => $userRole->bdm_id]);
         } else {
@@ -316,6 +334,8 @@ class ProjectController extends Controller
         ProjectType::where('project_id', $id)->delete();
 
 
+
+
         if (isset($data['project_type'])) {
             foreach ($data['project_type'] as $key => $project_type) {
                 $update_project_type = new ProjectType();
@@ -348,14 +368,33 @@ class ProjectController extends Controller
                     $project_milestone->payment_status = $data['payment_status'][$key];
                     // $project_milestone->payment_date = ($data['payment_status'][$key] == 'Paid') ? date('Y-m-d') : '';
                     $project_milestone->milestone_comment = $data['milestone_comment'][$key];
-                    if($data['payment_status'][$key] == 'Paid')
-                    {
+                    if ($data['payment_status'][$key] == 'Paid') {
                         $project_milestone->payment_mode = $data['milestone_payment_mode'][$key] ?? null;
                         $project_milestone->payment_date = $data['milestone_payment_date'][$key] ?? null;
                     }
                     $project_milestone->save();
                 }
             }
+        }
+
+        if ($data['project_upfront'] > 0) {
+            $upfront = ProjectMilestone::where('project_id', $project->id)->where('milestone_type', 'upfront')->first();
+            if ($upfront) {
+                $upfront->milestone_value = $data['project_upfront'];
+                $upfront->save();
+            } else {
+                $upfront = new ProjectMilestone();
+                $upfront->project_id = $project->id;
+                $upfront->milestone_name = 'Upfront';
+                $upfront->milestone_type = 'upfront';
+                $upfront->milestone_value = $data['project_upfront'];
+                $upfront->payment_status = 'Paid';
+                $upfront->payment_mode = $data['payment_mode'] ?? null;
+                $upfront->payment_date = date('Y-m-d');
+                $upfront->save();
+            }
+
+            // dd($upfront);
         }
 
 
@@ -370,7 +409,7 @@ class ProjectController extends Controller
         }
         // dd($user_id.' '. $data['user_id']);
         if ($user_id != $data['user_id']) {
-             $past_user = User::findOrFail($user_id);
+            $past_user = User::findOrFail($user_id);
             if ($past_user->hasRole('SALES_MANAGER') || $past_user->hasRole('BUSINESS_DEVELOPMENT_MANAGER')) {
 
                 $gross_goals = Goal::where('user_id', $user_id)->whereMonth('goals_date', date('m', strtotime($project->sale_date)))->whereYear('goals_date', date('Y', strtotime($project->sale_date)))->where('goals_type', 1)->first();
@@ -402,8 +441,8 @@ class ProjectController extends Controller
             }
         }
 
-        Session::put('page_number',$request->page_no);
-        $update_success = Session::put('update_success',true);
+        Session::put('page_number', $request->page_no);
+        $update_success = Session::put('update_success', true);
         // $url = '/admin/sales-project/?page=' . $page_no;
         // return redirect()->to($url);
 
@@ -469,7 +508,7 @@ class ProjectController extends Controller
 
             if ($query_str) {
                 $query_str = str_replace(" ", "%", $query_str);
-                $projects->where(function($q) use ($query_str) {
+                $projects->where(function ($q) use ($query_str) {
                     $q->where('id', 'like', '%' . $query_str . '%')
                         ->orWhere('sale_date', 'like', '%' . $query_str . '%')
                         ->orWhere('client_name', 'like', '%' . $query_str . '%')
@@ -519,6 +558,4 @@ class ProjectController extends Controller
             return response()->json($customer);
         }
     }
-
-
 }

@@ -1,6 +1,6 @@
 @extends('admin.layouts.master')
 @section('title')
-    All Project Goals Details - {{ env('APP_NAME') }}
+    All Goals Details - {{ env('APP_NAME') }}
 @endsection
 @push('styles')
     <style>
@@ -63,9 +63,9 @@
             <div class="page-header">
                 <div class="row align-items-center">
                     <div class="col">
-                        <h3 class="page-title">Project Goals</h3>
+                        <h3 class="page-title">Goals</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('goals.index') }}">Project Goals</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('goals.index') }}">Goals</a></li>
                             <li class="breadcrumb-item active">List</li>
                         </ul>
                     </div>
@@ -76,7 +76,7 @@
                 <div class="col-xl-12 mx-auto" id="goal-create">
                     <div class="card shadow-sm border-0">
                         <div class="card-body p-4">
-                            <h5 class="mb-4 text-uppercase">Project Goals Create</h5>
+                            <h5 class="mb-4 text-uppercase">Goals Create</h5>
                             <hr class="mb-4">
                             <form action="{{ route('goals.store') }}" method="post" id="createGoals"
                                 enctype="multipart/form-data">
@@ -195,8 +195,7 @@
                                         <a href="javascript:void(0);" class="btn px-4 submit-btn me-2" id="se-dist-btn"><i
                                                 class="fa fa-sitemap"></i> Distribute SE Goals</a>
                                         <a href="javascript:void(0);" class="btn px-4 submit-btn" id="add-btn"><i
-                                                class="fa fa-plus"></i> Add a
-                                            Project Goals</a>
+                                                class="fa fa-plus"></i> Add Goals</a>
                                     </div>
                                 </div>
                             </div>

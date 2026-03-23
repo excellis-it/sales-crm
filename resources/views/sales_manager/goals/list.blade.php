@@ -1,6 +1,6 @@
 @extends('sales_manager.layouts.master')
 @section('title')
-    All Project Goals Details - {{ env('APP_NAME') }}
+    All Goals Details - {{ env('APP_NAME') }}
 @endsection
 @push('styles')
     <style>
@@ -37,9 +37,9 @@
             <div class="page-header">
                 <div class="row align-items-center">
                     <div class="col">
-                        <h3 class="page-title">Project Goals</h3>
+                        <h3 class="page-title">Goals</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('sales-manager.goals.index') }}">Project Goals</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('sales-manager.goals.index') }}">Goals</a></li>
                             <li class="breadcrumb-item active">List</li>
                         </ul>
                     </div>

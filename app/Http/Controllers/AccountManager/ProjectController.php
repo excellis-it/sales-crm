@@ -12,7 +12,7 @@ use App\Models\ProjectType;
 use App\Traits\ImageTrait;
 use App\Models\ProjectDocument;
 use App\Models\User;
-use Session;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -86,7 +86,25 @@ class ProjectController extends Controller
         $project->comment = $data['comment'];
         $project->save();
 
-         if ($data['comment'] && $data['comment'] != null) {
+        if ($data['project_upfront'] > 0) {
+            $upfront = ProjectMilestone::where('project_id', $project->id)->where('milestone_type', 'upfront')->first();
+            if ($upfront) {
+                $upfront->milestone_value = $data['project_upfront'];
+                $upfront->save();
+            } else {
+                $upfront = new ProjectMilestone();
+                $upfront->project_id = $project->id;
+                $upfront->milestone_name = 'Upfront';
+                $upfront->milestone_type = 'upfront';
+                $upfront->milestone_value = $data['project_upfront'];
+                $upfront->payment_status = 'Paid';
+                $upfront->payment_mode = $data['payment_mode'] ?? null;
+                $upfront->payment_date = date('Y-m-d');
+                $upfront->save();
+            }
+        }
+
+        if ($data['comment'] && $data['comment'] != null) {
             $follow_up = new Followup();
             $follow_up->user_id = Auth::user()->id;
             $follow_up->project_id = $project->id;
@@ -218,6 +236,8 @@ class ProjectController extends Controller
         // $project->comment = $data['comment'];
         $project->save();
 
+
+
         // ProjectType::where('project_id', $id)->delete();
         // $project_type = new ProjectType();
         // $project_type->project_id = $project->id;
@@ -245,7 +265,7 @@ class ProjectController extends Controller
             }
         }
 
-        $previous_milestone_value = ProjectMilestone::where(['project_id'=> $id, 'payment_status' => 'Paid'])->get();
+        $previous_milestone_value = ProjectMilestone::where(['project_id' => $id, 'payment_status' => 'Paid'])->get();
 
         // $net_goals_t = Goal::where('user_id', Auth::user()->id)->whereMonth('goals_date', date('m', strtotime($data['sale_date'])))->whereYear('goals_date', date('Y', strtotime($data['sale_date'])))->where('goals_type', 2)->first();
         foreach ($previous_milestone_value as $key => $value) {
@@ -284,6 +304,24 @@ class ProjectController extends Controller
             }
         }
 
+        if ($data['project_upfront'] > 0) {
+            $upfront = ProjectMilestone::where('project_id', $project->id)->where('milestone_type', 'upfront')->first();
+            if ($upfront) {
+                $upfront->milestone_value = $data['project_upfront'];
+                $upfront->save();
+            } else {
+                $upfront = new ProjectMilestone();
+                $upfront->project_id = $project->id;
+                $upfront->milestone_name = 'Upfront';
+                $upfront->milestone_type = 'upfront';
+                $upfront->milestone_value = $data['project_upfront'];
+                $upfront->payment_status = 'Paid';
+                $upfront->payment_mode = $data['payment_mode'] ?? null;
+                $upfront->payment_date = date('Y-m-d');
+                $upfront->save();
+            }
+        }
+
         if (isset($data['pdf'])) {
             foreach ($data['pdf'] as $key => $pdfFile) {
                 $project_pdf = new ProjectDocument();
@@ -293,8 +331,8 @@ class ProjectController extends Controller
             }
         }
 
-        Session::put('page_number',$request->page_no);
-        $update_success = Session::put('update_success',true);
+        Session::put('page_number', $request->page_no);
+        $update_success = Session::put('update_success', true);
 
         return redirect()->route('account-manager.projects.index')->with('message', 'Project updated successfully.');
     }
@@ -335,17 +373,15 @@ class ProjectController extends Controller
                         $q->Where('type', 'like', '%' . $query . '%');
                     })
                     ->orWhereRaw('project_value - project_upfront like ?', ["%{$query}%"]);
-
             })->paginate(15);
 
-            Session::put('call_status',$request->get('call_status'));
-            if($request->get('call_status') == '')
-            {
-                $page = Session::put('page_number',1);
+            Session::put('call_status', $request->get('call_status'));
+            if ($request->get('call_status') == '') {
+                $page = Session::put('page_number', 1);
             }
-            if(Session::get('call_status') == 'Yes') {
-                Session::put('call_status',"");
-                Session::put('update_success',false);
+            if (Session::get('call_status') == 'Yes') {
+                Session::put('call_status', "");
+                Session::put('update_success', false);
             }
 
 

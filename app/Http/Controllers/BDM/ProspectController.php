@@ -154,7 +154,7 @@ class ProspectController extends Controller
                 $net_goal->save();
             }
 
-            $gross_goal = Goal::where(['user_id' =>auth()->id(), 'goals_type' => 2])->whereMonth('goals_date', date('m', strtotime($prospect->sale_date)))->whereYear('goals_date', date('Y', strtotime($prospect->sale_date)))->first();
+            $gross_goal = Goal::where(['user_id' => auth()->id(), 'goals_type' => 2])->whereMonth('goals_date', date('m', strtotime($prospect->sale_date)))->whereYear('goals_date', date('Y', strtotime($prospect->sale_date)))->first();
             if ($gross_goal) {
                 $gross_goal->goals_achieve = $gross_goal->goals_achieve + $prospect->price_quote;
                 $gross_goal->save();
@@ -177,6 +177,22 @@ class ProspectController extends Controller
             $project->sale_date = $prospect->sale_date ?? '';
             $project->comment = $prospect->comments;
             $project->save();
+
+            if ($prospect->upfront_value > 0) {
+                $upfront = ProjectMilestone::where('bdm_project_id', $project->id)->where('milestone_type', 'upfront')->first();
+                if ($upfront) {
+                    $upfront->milestone_value = $prospect->upfront_value;
+                    $upfront->save();
+                } else {
+                    $upfront = new ProjectMilestone();
+                    $upfront->bdm_project_id = $project->id;
+                    $upfront->milestone_type = 'upfront';
+                    $upfront->milestone_value = $prospect->upfront_value;
+                    $upfront->payment_status = 'Paid';
+                    $upfront->payment_date = date('Y-m-d');
+                    $upfront->save();
+                }
+            }
 
             //project milestone
             if (isset($data['milestone_name'])) {
@@ -343,6 +359,8 @@ class ProspectController extends Controller
             $project->comment = $prospect->comments;
             $project->save();
 
+
+
             //prospect project milestone
             $previous_milestone_value = ProjectMilestone::where('bdm_project_id', $id)->sum('milestone_value');
 
@@ -362,6 +380,24 @@ class ProspectController extends Controller
                         //  $project_milestone->payment_date = $data['milestone_payment_date'][$key];
                         $project_milestone->save();
                     }
+                }
+
+            }
+
+             if ($prospect->upfront_value > 0) {
+                $upfront = ProjectMilestone::where('bdm_project_id', $project->id)->where('milestone_type', 'upfront')->first();
+                if ($upfront) {
+                    $upfront->milestone_value = $prospect->upfront_value;
+                    $upfront->save();
+                } else {
+                    $upfront = new ProjectMilestone();
+                    $upfront->bdm_project_id = $project->id;
+                    $upfront->milestone_name = 'Upfront';
+                    $upfront->milestone_type = 'upfront';
+                    $upfront->milestone_value = $prospect->upfront_value;
+                    $upfront->payment_status = 'Paid';
+                    $upfront->payment_date = date('Y-m-d');
+                    $upfront->save();
                 }
             }
 
