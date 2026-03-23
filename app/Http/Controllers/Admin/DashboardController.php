@@ -19,7 +19,8 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $stats = $this->getStatsData('this_month');
+        $stats_type = 'this_month';
+        $stats = $this->getStatsData($stats_type);
         $count = $stats['count'];
         $goal = $stats['goal'];
         
@@ -27,7 +28,7 @@ class DashboardController extends Controller
         $projects = Project::orderBy('sale_date', 'desc')->take(7)->get();
         
         $labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
-        $type = 'YearEarn';
+        $chartType = 'YearEarn';
         
         // Load full year chart data for the initial page load (YearEarn is default)
         $yearStats = $this->getYearlyChartData();
@@ -40,13 +41,14 @@ class DashboardController extends Controller
 
         $top_performers = Goal::whereMonth('goals_date', date('m'))->whereYear('goals_date', date('Y'))->orderBy('goals_achieve', 'desc')->take(7)->get();
 
-        return view('admin.dashboard')->with(compact('count', 'goal', 'prospects', 'projects', 'labels', 'type', 'top_customers', 'top_performers'));
+        return view('admin.dashboard')->with(compact('count', 'goal', 'prospects', 'projects', 'labels', 'stats_type', 'chartType', 'top_customers', 'top_performers'));
     }
+
 
     public function getTopStats(Request $request)
     {
-        $type = $request->type ?? 'this_month';
-        $stats = $this->getStatsData($type);
+        $stats_type = $request->type ?? 'this_month';
+        $stats = $this->getStatsData($stats_type);
         $count = $stats['count'];
         $goal = $stats['goal'];
         $top_customers = Customer::with('projects')->get();
@@ -55,7 +57,7 @@ class DashboardController extends Controller
         })->take(6);
 
         return response()->json([
-            'html' => view('admin.dashboard_stats_cards', compact('count', 'goal', 'top_customers'))->render(),
+            'html' => view('admin.dashboard_stats_cards', ['count' => $count, 'goal' => $goal, 'top_customers' => $top_customers, 'type' => $stats_type])->render(),
             'count' => $count
         ]);
     }

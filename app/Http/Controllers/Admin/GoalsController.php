@@ -17,11 +17,21 @@ class GoalsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $goals = Goal::orderBy('goals_date', 'desc')->paginate(15);
+        $goals = Goal::query();
+
+        if ($request->duration) {
+            [$startDate, $endDate] = \App\Helpers\Helper::getDateRangeByDuration($request->duration);
+            if ($startDate && $endDate) {
+                $goals->whereBetween('goals_date', [$startDate, $endDate]);
+            }
+        }
+
+        $goals = $goals->orderBy('goals_date', 'desc')->paginate(15);
         return view('admin.goals.list')->with(compact('goals'));
     }
+
 
 
 

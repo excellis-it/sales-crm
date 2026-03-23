@@ -26,33 +26,37 @@ class ProspectController extends Controller
         $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->orderBy('id', 'desc')->get();
         $sales_executives = User::role(['SALES_EXCUETIVE'])->where(['status' => 1])->orderBy('id', 'desc')->get();
         // dd($request->user_id);
-        if ($request->user_id) {
-            $count['win'] = Prospect::where('user_id', $request->user_id)->where('status', 'Win')->count();
-            $count['follow_up'] = Prospect::where('user_id', $request->user_id)->where('status', 'Follow Up')->count();
-            $count['close'] = Prospect::where('user_id', $request->user_id)->where('status', 'Close')->count();
-            $count['sent_proposal'] = Prospect::where('user_id', $request->user_id)->where('status', 'Sent Proposal')->count();
-            $count['prospect'] = Prospect::where('user_id', $request->user_id)->count();
-            
-            $prospects = Prospect::orderBy('id', 'desc')->where('user_id', $request->user_id);
-            if ($request->status && $request->status != 'All') {
-                $prospects->where('status', $request->status);
-            }
-            $prospects = $prospects->paginate('10');
-        } else {
-            $count['win'] = Prospect::where('status', 'Win')->count();
-            $count['follow_up'] = Prospect::where('status', 'Follow Up')->count();
-            $count['close'] = Prospect::where('status', 'Close')->count();
-            $count['sent_proposal'] = Prospect::where('status', 'Sent Proposal')->count();
-            $count['prospect'] = Prospect::count();
+        $prospects = Prospect::orderBy('id', 'desc');
 
-            $prospects = Prospect::orderBy('id', 'desc');
-            if ($request->status && $request->status != 'All') {
-                $prospects->where('status', $request->status);
+        $startDate = $request->start_date;
+        $endDate = $request->end_date;
+
+        if ($request->duration) {
+            [$startDate, $endDate] = \App\Helpers\Helper::getDateRangeByDuration($request->duration);
+            if ($startDate && $endDate) {
+                $prospects->whereBetween('sale_date', [$startDate, $endDate]);
             }
-            $prospects = $prospects->paginate('10');
+        } elseif ($startDate && $endDate) {
+            $prospects->whereBetween('sale_date', [$startDate, $endDate]);
         }
 
-        return view('admin.prospect.list', compact('count', 'prospects', 'users', 'sales_executives'));
+        if ($request->user_id) {
+            $prospects->where('user_id', $request->user_id);
+        }
+
+        if ($request->status && $request->status != 'All') {
+            $prospects->where('status', $request->status);
+        }
+
+        $count['win'] = (clone $prospects)->where('status', 'Win')->count();
+        $count['follow_up'] = (clone $prospects)->where('status', 'Follow Up')->count();
+        $count['close'] = (clone $prospects)->where('status', 'Close')->count();
+        $count['sent_proposal'] = (clone $prospects)->where('status', 'Sent Proposal')->count();
+        $count['prospect'] = (clone $prospects)->count();
+
+        $prospects = $prospects->paginate('10');
+
+        return view('admin.prospect.list', compact('count', 'prospects', 'users', 'sales_executives', 'startDate', 'endDate'));
     }
 
 
@@ -420,6 +424,10 @@ class ProspectController extends Controller
 
             if ($request->user_id) {
                 $prospects = $prospects->where(['user_id' => $request->user_id]);
+            }
+
+            if ($request->start_date && $request->end_date) {
+                $prospects->whereBetween('sale_date', [$request->start_date, $request->end_date]);
             }
 
             if ($status == 'All') {

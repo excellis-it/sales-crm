@@ -286,7 +286,7 @@
                         </div>
                     </div>
                     <div id="dashboard-stats-container">
-                        @include('admin.dashboard_stats_cards')
+                        @include('admin.dashboard_stats_cards', ['type' => $stats_type])
                     </div>
                 </div>
             </div>
@@ -332,7 +332,7 @@
                                     <div class="expand-trigger chartjs-custom" id="statisticAjaxBarChart">
 
                                         {{-- <canvas id="canvas"></canvas> --}}
-                                        @include('admin.statistic_ajax_bar_chart')
+                                        @include('admin.statistic_ajax_bar_chart', ['type' => $chartType])
                                     </div>
                                     <div class="contract-trigger"></div>
                                 </div>
@@ -348,7 +348,7 @@
                         <div class="card-body" style="position: relative;">
                             <div class="d-flex align-items-center justify-content-between mb-3">
                                 <h5 class="card-title mb-0">Top Customer</h5>
-                                <a href="{{ route('customers.index') }}" class="view_all">View All</a>
+                                <a href="{{ route('customers.index') }}?duration={{ $stats_type }}" class="view_all">View All</a>
                             </div>
                             <div class="grid-card-wrap">
                                 @foreach ($top_customers as $item)
@@ -381,7 +381,7 @@
                         <div class="card-body" style="position: relative;">
                             <div class="d-flex align-items-center justify-content-between mb-3">
                                 <h5 class="card-title mb-0">Latest Projects</h5>
-                                <a href="{{ route('sales-projects.index') }}" class="view_all">View All</a>
+                                <a href="{{ route('sales-projects.index') }}?duration={{ $stats_type }}" class="view_all">View All</a>
                             </div>
                             <div class="table-responsive dashboard_mini_table">
                                 <table class="table table-hover">

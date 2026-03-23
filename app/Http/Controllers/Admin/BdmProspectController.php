@@ -26,23 +26,33 @@ class BdmProspectController extends Controller
         $users = User::role(['BUSINESS_DEVELOPMENT_MANAGER', 'BUSINESS_DEVELOPMENT_EXCECUTIVE'])->orderBy('id', 'desc')->get();
         $bdm_managers = User::role(['BUSINESS_DEVELOPMENT_MANAGER'])->where(['status' => 1])->orderBy('id', 'desc')->get();
         // dd($request->user_id);
-        if ($request->user_id) {
-            $count['win'] = BdmProspect::where('user_id', $request->user_id)->where('status', 'Win')->count();
-            $count['follow_up'] = BdmProspect::where('user_id', $request->user_id)->where('status', 'Follow Up')->count();
-            $count['close'] = BdmProspect::where('user_id', $request->user_id)->where('status', 'Close')->count();
-            $count['sent_proposal'] = BdmProspect::where('user_id', $request->user_id)->where('status', 'Sent Proposal')->count();
-            $count['prospect'] = BdmProspect::where('user_id', $request->user_id)->count();
-            $prospects = BdmProspect::orderBy('id', 'desc')->where('user_id', $request->user_id)->paginate('10');
-        } else {
-            $count['win'] = BdmProspect::where('status', 'Win')->count();
-            $count['follow_up'] = BdmProspect::where('status', 'Follow Up')->count();
-            $count['close'] = BdmProspect::where('status', 'Close')->count();
-            $count['sent_proposal'] = BdmProspect::where('status', 'Sent Proposal')->count();
-            $count['prospect'] = BdmProspect::count();
-            $prospects = BdmProspect::orderBy('id', 'desc')->paginate('10');
+        $prospects = BdmProspect::orderBy('id', 'desc');
+
+        $startDate = $request->start_date;
+        $endDate = $request->end_date;
+
+        if ($request->duration) {
+            [$startDate, $endDate] = \App\Helpers\Helper::getDateRangeByDuration($request->duration);
+            if ($startDate && $endDate) {
+                $prospects->whereBetween('sale_date', [$startDate, $endDate]);
+            }
+        } elseif ($startDate && $endDate) {
+            $prospects->whereBetween('sale_date', [$startDate, $endDate]);
         }
 
-        return view('admin.bdm-prospect.list', compact('count', 'prospects', 'users', 'bdm_managers'));
+        if ($request->user_id) {
+            $prospects->where('user_id', $request->user_id);
+        }
+
+        $count['win'] = (clone $prospects)->where('status', 'Win')->count();
+        $count['follow_up'] = (clone $prospects)->where('status', 'Follow Up')->count();
+        $count['close'] = (clone $prospects)->where('status', 'Close')->count();
+        $count['sent_proposal'] = (clone $prospects)->where('status', 'Sent Proposal')->count();
+        $count['prospect'] = (clone $prospects)->count();
+
+        $prospects = $prospects->paginate('10');
+
+        return view('admin.bdm-prospect.list', compact('count', 'prospects', 'users', 'bdm_managers', 'startDate', 'endDate'));
     }
 
 
@@ -403,6 +413,10 @@ class BdmProspectController extends Controller
 
             if ($request->user_id) {
                 $prospects = $prospects->where(['user_id' => $request->user_id]);
+            }
+
+            if ($request->start_date && $request->end_date) {
+                $prospects->whereBetween('sale_date', [$request->start_date, $request->end_date]);
             }
 
             if ($status == 'All') {

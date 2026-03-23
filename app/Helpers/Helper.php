@@ -123,4 +123,27 @@ class Helper
             'net_amount'   => $net_amount,
         ];
     }
+
+    public static function getDateRangeByDuration($duration)
+    {
+        $startDate = null;
+        $endDate = null;
+
+        if ($duration == 'today') {
+            $startDate = date('Y-m-d');
+            $endDate = date('Y-m-d');
+        } elseif ($duration == 'this_month') {
+            $startDate = date('Y-m-01');
+            $endDate = date('Y-m-t');
+        } elseif ($duration == 'this_year' || $duration == 'yearEarn') {
+            $startDate = date('Y-01-01');
+            $endDate = date('Y-12-31');
+        } elseif ($duration == 'this_week' || $duration == 'WeekEarn') {
+            $startDate = date('Y-m-d', strtotime('last sunday'));
+            $endDate = date('Y-m-d', strtotime('next saturday'));
+        }
+
+        return [$startDate, $endDate];
+    }
 }
+

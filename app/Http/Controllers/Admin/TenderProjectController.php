@@ -19,6 +19,19 @@ class TenderProjectController extends Controller
     {
         $tender_projects = TenderProject::with(['tenderStatus', 'tenderUser']);
 
+        $startDate = $request->start_date;
+        $endDate = $request->end_date;
+
+        if ($request->duration) {
+            [$startDate, $endDate] = \App\Helpers\Helper::getDateRangeByDuration($request->duration);
+            if ($startDate && $endDate) {
+                $tender_projects->whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']);
+            }
+        } elseif ($startDate && $endDate) {
+            $tender_projects->whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']);
+        }
+
+
         if ($request->status) {
             $tender_projects->where('status', $request->status);
         }
@@ -37,7 +50,7 @@ class TenderProjectController extends Controller
             return view('admin.tender_project.table', compact('tender_projects', 'statuses'))->render();
         }
 
-        return view('admin.tender_project.list', compact('tender_projects', 'statuses'));
+        return view('admin.tender_project.list', compact('tender_projects', 'statuses', 'startDate', 'endDate'));
     }
 
     public function create()

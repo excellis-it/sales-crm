@@ -39,13 +39,22 @@ class BdmProjectController extends Controller
             $query->where('user_id', $request->bdm_id);
         }
 
-        if ($request->start_date && $request->end_date) {
-            $query->whereBetween('sale_date', [$request->start_date, $request->end_date]);
+        $startDate = $request->start_date;
+        $endDate = $request->end_date;
+
+        if ($request->duration) {
+            [$startDate, $endDate] = \App\Helpers\Helper::getDateRangeByDuration($request->duration);
+            if ($startDate && $endDate) {
+                $query->whereBetween('sale_date', [$startDate, $endDate]);
+            }
+        } elseif ($startDate && $endDate) {
+            $query->whereBetween('sale_date', [$startDate, $endDate]);
         }
+
 
         $projects = $query->orderBy('sale_date', 'desc')->paginate(15);
 
-        return view('admin.bdm-project.list')->with(compact('projects', 'sales_managers', 'users', 'account_managers', 'project_openers'));
+        return view('admin.bdm-project.list')->with(compact('projects', 'sales_managers', 'users', 'account_managers', 'project_openers', 'startDate', 'endDate'));
     }
 
 

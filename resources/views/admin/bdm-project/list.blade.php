@@ -243,11 +243,11 @@
                             <div class="row g-2">
                                 <div class="col-md-3">
                                     <label class="form-label mb-0">Start Date</label>
-                                    <input type="date" name="start_date" id="start_date" class="form-control">
+                                    <input type="date" name="start_date" id="start_date" class="form-control" value="{{ $startDate }}">
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label mb-0">End Date</label>
-                                    <input type="date" name="end_date" id="end_date" class="form-control">
+                                    <input type="date" name="end_date" id="end_date" class="form-control" value="{{ $endDate }}">
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label mb-0">Search</label>

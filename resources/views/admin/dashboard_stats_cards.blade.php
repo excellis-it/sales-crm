@@ -92,7 +92,7 @@
 <div class="row">
     @if ($goal['gross_goals'] > 0)
         <div class="col-lg-20 col-lg-3 col-sm-6">
-            <a href="{{ route('goals.index') }}" class="dash-card-link">
+            <a href="{{ route('sales-projects.index') }}?duration={{ $type }}" class="dash-card-link">
                 <div class="stats-card-one dash-card card-primary mb-30" style="min-height: 180px;">
                     <div class="d-flex justify-content-between align-items-center mb-10">
                         <div class="d-flex align-items-center">
@@ -113,7 +113,7 @@
                     </div>
                     <h3 class="fs-22 mb-10">${{ $goal['gross_goals_achieve'] ?? 0 }} /
                         ${{ $goal['gross_goals'] ?? 0 }}</h3>
-
+...
                     <div class="mt-15">
                         <div class="d-flex justify-content-between mb-1">
                             <span class="dash-title">Goal Period</span>
@@ -129,7 +129,7 @@
         </div>
     @else
         <div class="col-lg-20 col-lg-3 col-sm-6">
-            <a href="{{ route('goals.index') }}" class="dash-card-link">
+            <a href="{{ route('sales-projects.index') }}?duration={{ $type }}" class="dash-card-link">
                 <div class="stats-card-one dash-card mb-30" style="min-height: 180px;">
                     <div class="d-flex justify-content-between align-items-center mb-10">
                         <div class="d-flex align-items-center">
@@ -154,7 +154,7 @@
 
     @if ($goal['net_goals'] > 0)
         <div class="col-lg-20 col-lg-3 col-sm-6">
-            <a href="{{ route('goals.index') }}" class="dash-card-link">
+            <a href="{{ route('sales-projects.index') }}?duration={{ $type }}" class="dash-card-link">
                 <div class="stats-card-one dash-card card-danger mb-30" style="min-height: 180px;">
                     <div class="d-flex justify-content-between align-items-center mb-10">
                         <div class="d-flex align-items-center">
@@ -175,7 +175,7 @@
                     </div>
                     <h3 class="fs-22 mb-10">${{ $goal['net_goals_achieve'] ?? 0 }} /
                         ${{ $goal['net_goals'] ?? 0 }}</h3>
-
+...
                     <div class="mt-15">
                         <div class="d-flex justify-content-between mb-1">
                             <span class="dash-title">Goal Period</span>
@@ -191,7 +191,7 @@
         </div>
     @else
         <div class="col-lg-20 col-lg-3 col-sm-6">
-            <a href="{{ route('goals.index') }}" class="dash-card-link">
+            <a href="{{ route('sales-projects.index') }}?duration={{ $type }}" class="dash-card-link">
                 <div class="stats-card-one dash-card mb-30" style="min-height: 180px;">
                     <div class="d-flex justify-content-between align-items-center mb-10">
                         <div class="d-flex align-items-center">
@@ -215,7 +215,7 @@
     @endif
 
     <div class="col-lg-20 col-lg-3 col-sm-6">
-        <a href="{{ route('goals.index') }}" class="dash-card-link">
+        <a href="{{ route('sales-projects.index') }}?duration={{ $type }}" class="dash-card-link">
             <div class="stats-card-one dash-card card-info mb-30" style="min-height: 180px;">
                 <div class="d-flex justify-content-between align-items-center mb-10">
                     <div class="d-flex align-items-center">
@@ -225,6 +225,7 @@
                         </div>
                         <p class="dash-title mb-0">AM Revenue</p>
                     </div>
+...
                     <span class="badge bg-pale-purple fs-12">
                         <span class="fw-600">{{ $count['account_manager_percentage'] }}%</span>
                     </span>
@@ -245,7 +246,7 @@
         </a>
     </div>
     <div class="col-lg-20 col-lg-3 col-sm-6">
-        <a href="{{ route('goals.index') }}" class="dash-card-link">
+        <a href="{{ route('admin.bdm-projects.index') }}?duration={{ $type }}" class="dash-card-link">
             <div class="stats-card-one dash-card card-black mb-30" style="min-height: 180px;">
                 <div class="d-flex justify-content-between align-items-center mb-10">
                     <div class="d-flex align-items-center">
@@ -275,7 +276,7 @@
     </div>
 
     <div class="col-lg-20 col-lg-3 col-sm-6">
-        <a href="{{ route('admin.tender-projects.index') }}" class="dash-card-link">
+        <a href="{{ route('admin.tender-projects.index') }}?duration={{ $type }}" class="dash-card-link">
             <div class="stats-card-one dash-card card-info mb-30" style="min-height: 180px;">
                 <div class="d-flex justify-content-between align-items-center mb-10">
                     <div class="d-flex align-items-center">
@@ -285,7 +286,7 @@
                         </div>
                         <p class="dash-title mb-0">Tender Projects</p>
                     </div>
-                    <span class="badge badge-cyan fs-12">
+...                    <span class="badge badge-cyan fs-12">
                         <span class="fw-600">{{ $count['tender_projects'] ?? 0 }}</span>
                     </span>
                 </div>
@@ -302,7 +303,7 @@
 </div>
 <div class="row">
     <div class="col-lg-20 col-lg-3 col-md-6">
-        <a href="{{ route('admin.prospects.index') }}" class="dash-card-link">
+        <a href="{{ route('admin.prospects.index') }}?duration={{ $type }}" class="dash-card-link">
             <div class="card dash-card mb-30" style="min-height: 100px;">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
@@ -320,7 +321,7 @@
     </div>
 
     <div class="col-lg-20 col-lg-3 col-md-6">
-        <a href="{{ route('admin.prospects.index') }}?status=Win" class="dash-card-link">
+        <a href="{{ route('admin.prospects.index') }}?status=Win&duration={{ $type }}" class="dash-card-link">
             <div class="card dash-card mb-30" style="min-height: 100px;">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
@@ -338,7 +339,7 @@
     </div>
 
     <div class="col-lg-20 col-lg-3 col-md-6">
-        <a href="{{ route('customers.index') }}" class="dash-card-link">
+        <a href="{{ route('customers.index') }}?duration={{ $type }}" class="dash-card-link">
             <div class="card dash-card mb-30" style="min-height: 100px;">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
@@ -356,7 +357,7 @@
     </div>
 
     <div class="col-lg-20 col-lg-3 col-md-6">
-        <a href="{{ route('sales-projects.index') }}" class="dash-card-link">
+        <a href="{{ route('sales-projects.index') }}?duration={{ $type }}" class="dash-card-link">
             <div class="card dash-card mb-30" style="min-height: 100px;">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
@@ -374,7 +375,7 @@
     </div>
     
     <div class="col-lg-20 col-lg-3 col-md-6">
-        <a href="{{ route('admin.prospects.index') }}?status=Follow+Up" class="dash-card-link">
+        <a href="{{ route('admin.prospects.index') }}?status=Follow+Up&duration={{ $type }}" class="dash-card-link">
             <div class="card dash-card mb-30" style="min-height: 100px;">
                 <div class="card-body">
                     <div class="d-flex align-items-center">

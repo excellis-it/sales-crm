@@ -58,13 +58,25 @@
         <!-- Search Filter -->
         <form action="{{ route('admin.tender-projects.index') }}" method="GET" id="search_form">
             <div class="row filter-row">
-                <div class="col-sm-6 col-md-4">
+                <div class="col-sm-6 col-md-3">
+                    <div class="form-group form-focus">
+                        <input type="date" name="start_date" class="form-control floating" value="{{ $startDate }}">
+                        <label class="focus-label">Start Date</label>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="form-group form-focus">
+                        <input type="date" name="end_date" class="form-control floating" value="{{ $endDate }}">
+                        <label class="focus-label">End Date</label>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
                     <div class="form-group form-focus">
                         <input type="text" name="search" class="form-control floating" value="{{ request('search') }}">
                         <label class="focus-label">Project Name / ID</label>
                     </div>
                 </div>
-                <div class="col-sm-6 col-md-4">
+                <div class="col-sm-6 col-md-3">
                     <div class="form-group form-focus select-focus">
                         <select class="select floating" name="status">
                             <option value="">Select Status</option>
@@ -75,11 +87,9 @@
                         <label class="focus-label">Status</label>
                     </div>
                 </div>
-                <div class="col-sm-6 col-md-2">
-                    <button type="submit" class="btn btn-tender w-100"> SEARCH </button>
-                </div>
-                <div class="col-sm-6 col-md-2">
-                    <button type="button" id="btn_refresh" class="btn btn-tender w-100" style="background: #333 !important; box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;"> REFRESH </button>
+                <div class="col-sm-12 col-md-12 text-end mb-3">
+                    <button type="submit" class="btn btn-tender px-5"> SEARCH </button>
+                    <button type="button" id="btn_refresh" class="btn btn-tender px-5" style="background: #333 !important; box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;"> REFRESH </button>
                 </div>
             </div>
         </form>

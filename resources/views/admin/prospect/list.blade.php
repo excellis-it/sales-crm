@@ -99,10 +99,19 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row justify-content-end">
-                        <div class="col-md-6">
-                            <div class="row g-1 justify-content-end">
-                                <div class="col-md-8 pr-0">
+                    <div class="row align-items-center mb-3 mt-4">
+                        <div class="col-md-9">
+                            <div class="row g-2">
+                                <div class="col-md-3">
+                                    <label class="form-label mb-0">Start Date</label>
+                                    <input type="date" name="start_date" id="start_date" class="form-control" value="{{ $startDate }}">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label mb-0">End Date</label>
+                                    <input type="date" name="end_date" id="end_date" class="form-control" value="{{ $endDate }}">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label mb-0">Search</label>
                                     <div class="search-field prod-search">
                                         <input type="text" name="search" id="search" placeholder="search..." required
                                             class="form-control rounded_search">
@@ -110,12 +119,16 @@
                                                 class="fa fa-search"></i></a>
                                     </div>
                                 </div>
-                                {{-- <div class="col-md-3 pl-0 ml-2">
-                                    <button class="btn btn-primary button-search" id="search-button"> <span class=""><i
-                                                class="ph ph-magnifying-glass"></i></span> Search</button>
-                                </div> --}}
+                                <div class="col-md-2 d-flex align-items-end">
+                                    <div class="w-100">
+                                        <label class="form-label mb-0">&nbsp;</label>
+                                        <button class="btn btn-secondary w-100" id="reset-filters"
+                                            style="height: 45px; border-radius: 8px; margin-bottom:10px;">Reset</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                    </div>
                         <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
                             aria-labelledby="offcanvasRightLabel">
                             <div class="offcanvas-header">
@@ -402,6 +415,8 @@
             function fetch_data(page, status, query, followup_date) {
                 // console.log(status + ' ' + page);
                 var user_id = {{ request()->user_id ?? 0 }};
+                var start_date = $('#start_date').val();
+                var end_date = $('#end_date').val();
                 $.ajax({
                     url: "{{ route('admin.prospects.filter') }}",
                     data: {
@@ -409,7 +424,9 @@
                         page: page,
                         query: query,
                         user_id: user_id,
-                        followup_date: followup_date
+                        followup_date: followup_date,
+                        start_date: start_date,
+                        end_date: end_date
                     },
                     success: function(resp) {
                         $('#loading').removeClass('loading');
@@ -446,6 +463,25 @@
                 var status = $('.active-filter').data('value');
                 var followup_date = $('#followup_date_filter').val();
                 fetch_data(1, status, query, followup_date);
+            });
+
+            $(document).on('change', '#start_date, #end_date', function(e) {
+                e.preventDefault();
+                var query = $('#search').val();
+                var status = $('.active-filter').data('value');
+                var followup_date = $('#followup_date_filter').val();
+                fetch_data(1, status, query, followup_date);
+            });
+
+            $(document).on('click', '#reset-filters', function(e) {
+                e.preventDefault();
+                $('#start_date').val('');
+                $('#end_date').val('');
+                $('#search').val('');
+                var status = 'All';
+                $('.desin-filter').removeClass('active-filter');
+                $('.desin-filter[data-value="All"]').addClass('active-filter');
+                fetch_data(1, status, '', '');
             });
 
             $(document).on('change', '#followup_date_filter', function(e) {
