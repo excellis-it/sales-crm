@@ -2,10 +2,11 @@
     <thead>
         <tr>
             <th>Date</th>
-            <th>Type</th>
             <th>Name</th>
-            <th>Target Amount</th>
-            <th>Achieve Amount</th>
+            <th>Gross Target Amount</th>
+            <th>Gross Achieve Amount</th>
+            <th>Net Target Amount</th>
+            <th>Net Achieve Amount</th>
         </tr>
     </thead>
     <tbody>
@@ -15,33 +16,51 @@
                     $startOfMonth = date('Y-m-01', strtotime($goal->goals_date));
                     $endOfMonth = date('Y-m-t', strtotime($goal->goals_date));
                     $achievements = \App\Helpers\Helper::getUserAchievementDateRange($goal->user_id, $startOfMonth, $endOfMonth);
-                    $dynamic_achieve = $goal->goals_type == 1 ? $achievements['gross_amount'] : $achievements['net_amount'];
+                    
+                    $grossGoal = \App\Models\Goal::where('user_id', $goal->user_id)->whereMonth('goals_date', date('m', strtotime($goal->goals_date)))->whereYear('goals_date', date('Y', strtotime($goal->goals_date)))->where('goals_type', 1)->first();
+                    $netGoal = \App\Models\Goal::where('user_id', $goal->user_id)->whereMonth('goals_date', date('m', strtotime($goal->goals_date)))->whereYear('goals_date', date('Y', strtotime($goal->goals_date)))->where('goals_type', 2)->first();
+
+                    $gross_achieved = $achievements['gross_amount'];
+                    $net_achieved = $achievements['net_amount'];
                 @endphp
                 <tr>
                     <td>
                         {{ date('F - Y', strtotime($goal->goals_date)) }}
                     </td>
                     <td>
-                        @if ($goal->goals_type == 1)
-                            <span class="badge bg-inverse-success">Gross</span>
-                        @else
-                            <span class="badge bg-inverse-warning">Net</span>
-                        @endif
-                    </td>
-                    <td>
                         {{ $goal?->user?->name }}
                     </td>
-                    <td>
-                        ${{ number_format($goal->goals_amount) }}
-                    </td>
-                    <td>
-                        ${{ number_format($dynamic_achieve) }}
-                    </td>
+                    
+                    <!-- Gross Goal Columns -->
+                    @if ($grossGoal)
+                        <td>
+                            ${{ number_format($grossGoal->goals_amount) }}
+                        </td>
+                        <td>
+                            <span class="{{ $gross_achieved >= $grossGoal->goals_amount ? 'text-success fw-bold' : '' }}">${{ number_format($gross_achieved) }}</span>
+                        </td>
+                    @else
+                        <td class="text-muted">-</td>
+                        <td class="text-muted">-</td>
+                    @endif
+
+                    <!-- Net Goal Columns -->
+                    @if ($netGoal)
+                        <td>
+                            ${{ number_format($netGoal->goals_amount) }}
+                        </td>
+                        <td>
+                            <span class="{{ $net_achieved >= $netGoal->goals_amount ? 'text-success fw-bold' : '' }}">${{ number_format($net_achieved) }}</span>
+                        </td>
+                    @else
+                        <td class="text-muted">-</td>
+                        <td class="text-muted">-</td>
+                    @endif
                 </tr>
             @endforeach
         @else
             <tr>
-                <td colspan="5" class="text-center">No Data Found</td>
+                <td colspan="6" class="text-center">No Data Found</td>
             </tr>
         @endif
     </tbody>

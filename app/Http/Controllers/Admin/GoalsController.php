@@ -28,7 +28,10 @@ class GoalsController extends Controller
             }
         }
 
-        $goals = $goals->orderBy('goals_date', 'desc')->paginate(15);
+        $goals = $goals->selectRaw('MAX(id) as id, user_id, goals_date')
+            ->groupBy('user_id', 'goals_date')
+            ->orderBy('goals_date', 'desc')
+            ->paginate(15);
         return view('admin.goals.list')->with(compact('goals'));
     }
 
@@ -69,7 +72,10 @@ class GoalsController extends Controller
                 $goals->whereYear('goals_date', $request->year);
             }
 
-            $goals = $goals->orderBy('goals_date', 'desc')->paginate(15);
+            $goals = $goals->selectRaw('MAX(id) as id, user_id, goals_date')
+                ->groupBy('user_id', 'goals_date')
+                ->orderBy('goals_date', 'desc')
+                ->paginate(15);
             return response()->json(['view' => (string)View::make('admin.goals.table')->with(compact('goals'))]);
         }
     }
@@ -93,7 +99,7 @@ class GoalsController extends Controller
     {
         // return $request->all();exit;
         if (!$request->id) {
-            $count = Goal::where('user_id', $request->user_id)->whereMonth('goals_date', date('m', strtotime($request->goals_date)))->whereYear('goals_date', date('Y', strtotime($request->goals_date)))->where('goals_type', $request->goals_type)->count();
+            $count = Goal::where('user_id', $request->user_id)->whereMonth('goals_date', date('m', strtotime($request->goals_date)))->whereYear('goals_date', date('Y', strtotime($request->goals_date)))->count();
             if ($count > 0) {
                 return redirect()->route('goals.index')->with('error', 'Goal already exists for this month.');
             }
@@ -264,7 +270,13 @@ class GoalsController extends Controller
     {
         $goal = Goal::find($id);
         if ($goal) {
-            $goal->delete();
+            $relatedGoals = Goal::where('user_id', $goal->user_id)
+                ->whereMonth('goals_date', date('m', strtotime($goal->goals_date)))
+                ->whereYear('goals_date', date('Y', strtotime($goal->goals_date)))
+                ->get();
+            foreach ($relatedGoals as $r) {
+                $r->delete();
+            }
             return redirect()->route('goals.index')->with('message', 'Goal deleted successfully.');
         } else {
             return redirect()->route('goals.index')->with('error', 'Goal not found.');
@@ -396,7 +408,7 @@ class GoalsController extends Controller
         $amounts = $request->amount;
         $totalInput = array_sum($amounts);
 
-        /* 
+        /*
         if ($totalInput > ($smGoal->goals_amount + 0.5)) {
             return redirect()->route('goals.index')->with('error', 'Distributed amount exceeds the Sales Manager total goal.');
         }

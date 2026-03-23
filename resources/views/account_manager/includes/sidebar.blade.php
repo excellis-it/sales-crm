@@ -20,9 +20,9 @@
 
                     </ul>
                 </li>
-                <li class="{{ Request::is('account-manager/followups*') ? 'active' : ' ' }}">
+                {{-- <li class="{{ Request::is('account-manager/followups*') ? 'active' : ' ' }}">
                     <a href="{{ route('account-manager.followups.index') }}"><i class="la la-arrow-up"></i> <span>Follow-Up</span></a>
-                </li>
+                </li> --}}
                 <li class="{{ Request::is('account-manager/projects*') ? 'active' : ' ' }}">
                     <a href="{{ route('account-manager.projects.index') }}"><i class="la la-credit-card"></i> <span>Projects</span></a>
                 </li>

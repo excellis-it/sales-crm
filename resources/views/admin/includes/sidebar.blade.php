@@ -30,10 +30,10 @@
                             class="menu-arrow"></span></a>
                     <ul style="display: none;">
                         <li class="{{ Request::is('admin/bdm-prospects*') ? 'active' : '' }}">
-                            <a href="{{ route('admin.bdm-prospects.index') }}">BDM Prospects</a>
+                            <a href="{{ route('admin.bdm-prospects.index') }}"> Prospects</a>
                         </li>
                         <li class="{{ Request::is('admin/bdm-projects*') ? 'active' : '' }}">
-                            <a href="{{ route('admin.bdm-projects.index') }}">BDM Projects</a>
+                            <a href="{{ route('admin.bdm-projects.index') }}"> Projects</a>
                         </li>
                     </ul>
                 </li>
@@ -61,10 +61,10 @@
                             class="la la-users"></i> <span> Telesales Team </span> <span class="menu-arrow"></span></a>
                     <ul style="display: none;">
                         <li class="{{ Request::is('admin/sales_managers*') ? 'active' : '' }}">
-                            <a href="{{ route('sales_managers.index') }}">Sales managers</a>
+                            <a href="{{ route('sales_managers.index') }}">Sales Manager</a>
                         </li>
                         <li class="{{ Request::is('admin/account_managers*') ? 'active' : '' }}">
-                            <a href="{{ route('account_managers.index') }}">Account managers</a>
+                            <a href="{{ route('account_managers.index') }}">Account Manager</a>
                         </li>
                         <li class="{{ Request::is('admin/sales-excecutive*') ? 'active' : '' }}">
                             <a href="{{ route('sales-excecutive.index') }}">Sales Excecutive</a>

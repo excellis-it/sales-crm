@@ -32,7 +32,10 @@ class GoalsController extends Controller
             $query->where('sales_manager_id', $salesManagerId)->whereHas('roles', function($q2){
                 $q2->where('name', 'SALES_EXCUETIVE');
             });
-        })->orderBy('goals_date', 'desc')->paginate(15);
+        })
+        ->selectRaw('MAX(id) as id, user_id, goals_date')
+        ->groupBy('user_id', 'goals_date')
+        ->orderBy('goals_date', 'desc')->paginate(15);
 
         return view('sales_manager.goals.list')->with(compact('goals', 'available_months'));
     }
@@ -76,7 +79,10 @@ class GoalsController extends Controller
                 $goals->whereYear('goals_date', $request->year);
             }
 
-            $goals = $goals->orderBy('goals_date', 'desc')->paginate(15);
+            $goals = $goals->selectRaw('MAX(id) as id, user_id, goals_date')
+                ->groupBy('user_id', 'goals_date')
+                ->orderBy('goals_date', 'desc')
+                ->paginate(15);
             return response()->json(['view' => (string)View::make('sales_manager.goals.table')->with(compact('goals'))]);
         }
     }
