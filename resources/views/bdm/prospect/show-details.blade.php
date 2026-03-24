@@ -11,6 +11,18 @@
     <span>Business Name:-</span>
     {{ $prospect->business_name }}
 </p>
+<p>
+    <span>Category:-</span>
+    {{ $prospect->category }}
+</p>
+<p>
+    <span>Designation:-</span>
+    {{ $prospect->designation }}
+</p>
+<p>
+    <span>Added By:-</span>
+    {{ $prospect->addedBy->name ?? 'N/A' }}
+</p>
 
 <p>
     <span>Client Name:-</span>
@@ -32,8 +44,7 @@
 </p>
 <p>
     <span>Transfer Taken By:-</span>
-    {{ $prospect->transfer_token_by }}
-
+    {{ $prospect->transferTakenBy->name ?? 'N/A' }}
 </p>
 
 <p>

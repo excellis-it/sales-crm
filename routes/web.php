@@ -156,6 +156,8 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
         ]);
         Route::get('/bdm-prospects-delete/{id}', [AdminBdmProspectController::class, 'delete'])->name('bdm-prospects.delete');
         Route::get('/bdm-prospects-filter', [AdminBdmProspectController::class, 'filter'])->name('bdm-prospects.filter');
+        Route::get('/bdm-prospects-sample', [AdminBdmProspectController::class, 'downloadSample'])->name('bdm-prospects.sample-download');
+        Route::post('/bdm-prospects-import', [AdminBdmProspectController::class, 'import'])->name('bdm-prospects.import');
 
         Route::get('/bdm-projects-delete/{id}', [AdminBdmProjectController::class, 'delete'])->name('bdm-projects.delete');
         Route::get('/bdm-projects-filter', [AdminBdmProjectController::class, 'bdmProjectFilter'])->name('bdm-projects.filter');

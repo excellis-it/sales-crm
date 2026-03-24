@@ -490,7 +490,7 @@ class GoalsController extends Controller
                 $execNetGoal->goals_type = 2;
             }
             $execNetGoal->goals_achieve = $goals_achieve_net;
-            $execNetGoal->goals_amount = $amount * 0.25;
+            $execNetGoal->goals_amount = $amount * 0.40;
             $execNetGoal->save();
         }
 

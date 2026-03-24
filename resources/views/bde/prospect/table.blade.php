@@ -12,15 +12,7 @@
             <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bde-prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->business_name }}
             </td>
-            <td  @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bde-prospects.edit', $prospect->id) }}" @endif>
-                {{ $prospect->client_name }}
-            </td>
-            <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bde-prospects.edit', $prospect->id) }}" @endif>
-                {{ $prospect->client_email }}
-            </td>
-            <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bde-prospects.edit', $prospect->id) }}" @endif>
-                {{ $prospect->client_phone }}
-            </td>
+           
             <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bde-prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->transferTakenBy->name ?? '' }}
             </td>

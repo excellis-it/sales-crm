@@ -9,20 +9,16 @@
                 {{ $prospect->created_at ? date('d-m-Y', strtotime($prospect->created_at)) : '' }}
             </td>
             <td  @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.bdm-prospects.edit', $prospect->id) }}" @endif>
-                {{ $prospect->user->name ?? '' }}
+                {{ $prospect->addedBy->name ?? '' }}
             </td>
             <td  @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.bdm-prospects.edit', $prospect->id) }}" @endif>
-                {{ $prospect->client_name ?? '' }}
+                {{ $prospect->user->name ?? '' }}
             </td>
+
             <td  @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.bdm-prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->business_name ?? '' }}
             </td>
-            <td  @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.bdm-prospects.edit', $prospect->id) }}" @endif>
-                {{ $prospect->client_email ?? '' }}
-            </td>
-            <td  @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.bdm-prospects.edit', $prospect->id) }}" @endif>
-                {{ $prospect->client_phone ?? '' }}
-            </td>
+
             <td>
                 {{ $prospect->transferTakenBy->name ?? '' }}
             </td>

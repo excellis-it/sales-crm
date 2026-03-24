@@ -143,6 +143,27 @@
                                                 value="{{ old('business_name') }}" placeholder="Enter Business Name">
                                         </div>
                                         <div class="col-md-12 mb-3">
+                                            <label for="category" class="col-form-label">Category
+                                                <span style="color: red;">*</span></label>
+                                            <input type="text" name="category" id="category" required
+                                                data-parsley-trigger="keyup" class="form-control"
+                                                value="{{ old('category') }}" placeholder="Enter Category">
+                                        </div>
+                                        <div class="col-md-12 mb-3">
+                                            <label for="designation" class="col-form-label">Designation
+                                                <span style="color: red;">*</span></label>
+                                            <input type="text" name="designation" id="designation" required
+                                                data-parsley-trigger="keyup" class="form-control"
+                                                value="{{ old('designation') }}" placeholder="Enter Designation">
+                                        </div>
+                                        {{-- <div class="col-md-12 mb-3">
+                                            <label for="added_by" class="col-form-label">Added By
+                                                <span style="color: red;">*</span></label>
+                                            <input type="text" name="added_by" id="added_by" required
+                                                data-parsley-trigger="keyup" class="form-control"
+                                                value="{{ old('added_by') }}" placeholder="Enter Added By">
+                                        </div> --}}
+                                        <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Client Email</label>
                                             <input type="text" name="client_email" id="client_email"
                                                 data-parsley-trigger="keyup" data-parsley-type="email"
@@ -291,11 +312,11 @@
                             <thead>
                                 <tr>
                                     <th>Date</th>
+                                    <th>Added By</th>
                                     <th>Prospect By</th>
-                                    <th>Client Name</th>
+
                                     <th>Business Name</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
+
                                     <th>Transfer Taken By</th>
                                     <th>Status</th>
                                     <th>Service Offered</th>

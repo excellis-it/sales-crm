@@ -165,6 +165,9 @@ class ProspectController extends Controller
             $prospect->offered_for = $data['offered_for'];
         }
         $prospect->transfer_token_by = $data['transfer_token_by'];
+        $prospect->category = $data['category'];
+        $prospect->designation = $data['designation'];
+        $prospect->added_by = auth()->id();
         $prospect->save();
 
         // if comments store at BdmFollowup
@@ -355,6 +358,8 @@ class ProspectController extends Controller
             $prospect->offered_for = $data['offered_for'];
         }
         $prospect->transfer_token_by = $data['transfer_token_by'];
+        $prospect->category = $data['category'];
+        $prospect->designation = $data['designation'];
         $prospect->save();
 
         if ($request->status == 'Win') {

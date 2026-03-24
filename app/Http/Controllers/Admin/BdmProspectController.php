@@ -139,6 +139,9 @@ class BdmProspectController extends Controller
             $prospect->offered_for = $data['offered_for'];
         }
         $prospect->transfer_token_by = $data['transfer_token_by'];
+        $prospect->category = $data['category'];
+        $prospect->designation = $data['designation'];
+        $prospect->added_by = auth()->id();
         $prospect->save();
 
         // if comments store at BdmFollowup
@@ -326,6 +329,8 @@ class BdmProspectController extends Controller
             $prospect->offered_for = $data['offered_for'];
         }
         $prospect->transfer_token_by = $data['transfer_token_by'];
+        $prospect->category = $data['category'];
+        $prospect->designation = $data['designation'];
         $prospect->save();
 
         if ($request->status == 'Win') {
@@ -610,5 +615,145 @@ class BdmProspectController extends Controller
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }
+    }
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:csv,txt,xlsx,xls',
+        ]);
+
+        $file = $request->file('file');
+        $extension = $file->getClientOriginalExtension();
+
+        if (in_array($extension, ['xlsx', 'xls'])) {
+             return redirect()->back()->with('error', 'Excel files (.xlsx, .xls) are not supported directly yet. Please "Save As" .csv and try again.');
+        }
+
+        $handle = fopen($file->getPathname(), 'r');
+        
+        // Handle UTF-8 BOM
+        $bom = fread($handle, 3);
+        if ($bom !== pack("CCC", 0xef, 0xbb, 0xbf)) {
+            rewind($handle);
+        }
+
+        $header = fgetcsv($handle);
+
+        if (!$header) {
+            fclose($handle);
+            return redirect()->back()->with('error', 'The CSV file is empty or invalid.');
+        }
+
+        // Clean headers (remove whitespace/quotes)
+        $header = array_map(function($h) { return trim(strtolower(str_replace(' ', '_', $h))); }, $header);
+
+        $rowCount = 0;
+        $errors = [];
+        $line = 1;
+
+        while (($data = fgetcsv($handle)) !== false) {
+            $line++;
+            // Basic data check
+            if (empty(array_filter($data))) continue;
+
+            if (count($header) !== count($data)) {
+                $errors[] = "Line $line: Column count mismatch (Got " . count($data) . " columns, expected " . count($header) . ").";
+                continue;
+            }
+            $row = array_combine($header, $data);
+
+            // Required field check - updated with more flexible mapping if possible
+            $required = ['client_name', 'designation', 'client_phone', 'business_name', 'business_address', 'category'];
+            $missing = [];
+            foreach ($required as $field) {
+                if (empty(trim($row[$field] ?? ''))) {
+                    $missing[] = ucwords(str_replace('_', ' ', $field));
+                }
+            }
+
+            if (!empty($missing)) {
+                $errors[] = "Line $line: Missing required field(s): " . implode(', ', $missing);
+                continue;
+            }
+
+            $prospect = new BdmProspect();
+            $prospect->client_name = trim($row['client_name']);
+            $prospect->business_name = trim($row['business_name']);
+            $prospect->category = trim($row['category']);
+            $prospect->designation = trim($row['designation']);
+            $prospect->client_email = !empty(trim($row['client_email'] ?? '')) ? trim($row['client_email']) : null;
+            $prospect->client_phone = trim($row['client_phone']);
+            $prospect->business_address = trim($row['business_address']);
+            $prospect->website = !empty(trim($row['website'] ?? '')) ? trim($row['website']) : null;
+            $prospect->price_quote = !empty(trim($row['price_quote'] ?? '')) ? floatval($row['price_quote']) : 0;
+            $prospect->source = trim($row['source'] ?? '');
+            $prospect->offered_for = trim($row['offered_for'] ?? '');
+            $prospect->status = trim($row['status'] ?? 'Prospect');
+            $prospect->followup_date = !empty(trim($row['followup_date'] ?? '')) ? trim($row['followup_date']) : date('Y-m-d');
+            $prospect->followup_time = !empty(trim($row['followup_time'] ?? '')) ? trim($row['followup_time']) : '10:00';
+            $prospect->added_by = auth()->id();
+
+            // Default user_id and report_to
+            $prospect->user_id = auth()->id();
+            $prospect->report_to = auth()->id();
+
+            // Email id match of sales manager
+            if (!empty(trim($row['sales_manager_email'] ?? ''))) {
+                $email = trim($row['sales_manager_email']);
+                $salesManager = User::role(['BUSINESS_DEVELOPMENT_MANAGER'])->where('email', $email)->first();
+                if ($salesManager) {
+                    $prospect->user_id = $salesManager->id;
+                    $prospect->report_to = $salesManager->id;
+                }
+            }
+
+            $prospect->save();
+            $rowCount++;
+        }
+
+        fclose($handle);
+
+        $message = $rowCount . ' prospects imported successfully.';
+        if (!empty($errors)) {
+            // Only show first 5 errors to avoid overwhelming the screen
+            $errorCount = count($errors);
+            $errorHeader = $errorCount > 5 ? "First 5 errors: " : "Errors: ";
+            $message .= ' Some rows were skipped. ' . $errorHeader . implode(' | ', array_slice($errors, 0, 5));
+            if ($errorCount > 5) $message .= " ... and " . ($errorCount - 5) . " more errors.";
+            return redirect()->back()->with('error', $message);
+        }
+
+        return redirect()->back()->with('message', $message);
+    }
+
+    public function downloadSample()
+    {
+        $filename = "prospects_sample.csv";
+        $handle = fopen('php://temp', 'w+');
+
+        $header = [
+            'client_name', 'business_name', 'category', 'designation',
+            'client_email', 'client_phone', 'business_address', 'website',
+            'price_quote', 'source', 'offered_for', 'status', 'followup_date', 'followup_time',
+            'sales_manager_email'
+        ];
+
+        fputcsv($handle, $header);
+
+        // Sample data
+        fputcsv($handle, [
+            'John Doe', 'Doe Industries', 'IT', 'Manager',
+            'john@example.com', '1234567890', '123 Street, NY', 'https://example.com',
+            '5000', 'LinkedIn', 'Website Design & Development', 'Prospect', date('Y-m-d'), '14:30',
+            'salesmanager@example.com'
+        ]);
+
+        rewind($handle);
+        $csvContent = stream_get_contents($handle);
+        fclose($handle);
+
+        return response($csvContent)
+            ->header('Content-Type', 'text/csv')
+            ->header('Content-Disposition', 'attachment; filename="' . $filename . '"');
     }
 }

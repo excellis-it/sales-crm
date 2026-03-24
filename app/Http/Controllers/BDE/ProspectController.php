@@ -129,6 +129,9 @@ class ProspectController extends Controller
             $prospect->offered_for = $data['offered_for'];
         }
         $prospect->transfer_token_by = $data['transfer_token_by'];
+        $prospect->category = $data['category'];
+        $prospect->designation = $data['designation'];
+        $prospect->added_by = auth()->id();
         // date add in created_at and updated_at
         $prospect->save();
 
@@ -318,6 +321,8 @@ class ProspectController extends Controller
         }
 
         $prospect->transfer_token_by = $data['transfer_token_by'];
+        $prospect->category = $data['category'];
+        $prospect->designation = $data['designation'];
         $prospect->save();
 
         if ($data['status'] == 'Win') {

@@ -11,24 +11,18 @@
             </td>
             <td
                 @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bdm.prospects.edit', $prospect->id) }}" @endif>
-                {{ $prospect->user->name ?? '' }}
+                {{ $prospect->addedBy->name ?? '' }}
             </td>
             <td
                 @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bdm.prospects.edit', $prospect->id) }}" @endif>
-                {{ $prospect->client_name ?? '' }}
+                {{ $prospect->user->name ?? '' }}
             </td>
+
             <td
                 @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bdm.prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->business_name ?? '' }}
             </td>
-            <td
-                @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bdm.prospects.edit', $prospect->id) }}" @endif>
-                {{ $prospect->client_email ?? '' }}
-            </td>
-            <td
-                @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bdm.prospects.edit', $prospect->id) }}" @endif>
-                {{ $prospect->client_phone ?? '' }}
-            </td>
+
             <td
                 @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bdm.prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->transferTakenBy->name ?? '' }}
