@@ -143,9 +143,8 @@
                                                 value="{{ old('business_name') }}" placeholder="Enter Business Name">
                                         </div>
                                         <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Client Email
-                                                <span style="color: red;">*</span></label>
-                                            <input type="text" name="client_email" id="client_email" required
+                                            <label for="inputEnterYourName" class="col-form-label">Client Email</label>
+                                            <input type="text" name="client_email" id="client_email"
                                                 data-parsley-trigger="keyup" data-parsley-type="email"
                                                 data-parsley-type-message="Please enter a valid email address."
                                                 class="form-control" value="{{ old('client_email') }}"
