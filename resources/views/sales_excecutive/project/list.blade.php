@@ -83,6 +83,7 @@
                                     data-column_name="currency" style="cursor: pointer"> Currency <span id="currency_icon"><span class="fa fa-sort-down"></span></span></th>
                                     <th class="sorting" data-tippy-content="Sort by Payment Mode" data-sorting_type="desc"
                                     data-column_name="payment_mode" style="cursor: pointer"> Payment Mode <span id="payment_mode_icon"><span class="fa fa-sort-down"></span></span></th>
+                                    <th data-tippy-content="Cant't sort by Paid Milestone" style="cursor: pointer"> Paid Milestone </th>
                                     <th data-tippy-content="Cant't sort by Due Amount" style="cursor: pointer"> Due Amount <span id="due_amount_icon"></span></th>
                                     <th> Action</th>
                                 </tr>

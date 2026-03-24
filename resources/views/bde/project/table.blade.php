@@ -1,7 +1,7 @@
 
 @if (count($projects) == 0)
 <tr>
-    <td colspan="11" class="text-center">No Projects found</td>
+    <td colspan="12" class="text-center">No Projects found</td>
 </tr>
 @else
 
@@ -40,7 +40,10 @@
                 {{ $project->payment_mode }}
             </td>
             <td>
-                {{ (int)$project->project_value - (int)$project->project_upfront }}
+                {{ $project->projectMilestones->where('payment_status', 'Paid')->sum('milestone_value') }}
+            </td>
+            <td>
+                {{ (int)$project->project_value - ((int)$project->project_upfront + (int)$project->projectMilestones->where('payment_status', 'Paid')->sum('milestone_value')) }}
             </td>
             <td>
                 <a title="View Project" data-route=""
@@ -53,7 +56,7 @@
 @endif   
 
 <tr>
-    <td colspan="12">
+    <td colspan="13">
         <div class="d-flex justify-content-between align-items-center">
             <div class="">
                 (Showing {{ $projects->firstItem() }} – {{ $projects->lastItem() }} Projects of

@@ -298,7 +298,8 @@
                                     <th class="sorting" data-column_name="project_upfront">Upfront <i class="fa fa-sort ms-1 text-muted"></i></th>
                                     <th class="sorting" data-column_name="currency">CCY <i class="fa fa-sort ms-1 text-muted"></i></th>
                                     <th class="sorting" data-column_name="payment_mode">Payment Mode <i class="fa fa-sort ms-1 text-muted"></i></th>
-                                    <th>Due Amount</th>
+                                    <th data-tippy-content="Cant't sort by Paid Milestone" style="cursor: pointer"> Paid Milestone </th>
+                                    <th> Due Amount</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>

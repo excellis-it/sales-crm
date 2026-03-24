@@ -24,7 +24,7 @@
 
         <a id="mobile_btn" class="mobile_btn" href="#sidebar"><i class="fa fa-bars"></i></a>
         <ul class="nav user-menu">
-            <li class="nav-item dropdown dropdown-large">
+            {{-- <li class="nav-item dropdown dropdown-large">
               <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="javascript:;" data-bs-toggle="dropdown" aria-expanded="false">
                 <div class="position-relative">
                   <span class="notify-badge">8</span>
@@ -152,7 +152,7 @@
                   <div class="text-center msg-footer">View All Notifications</div>
                 </a>
               </div>
-            </li>
+            </li> --}}
 
             <li class="nav-item dropdown has-arrow main-drop">
                 <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">

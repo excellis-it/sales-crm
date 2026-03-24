@@ -1,6 +1,6 @@
 @if (count($projects) == 0)
     <tr>
-        <td colspan="11" class="text-center">No Project found</td>
+        <td colspan="12" class="text-center">No Project found</td>
     </tr>
 @else
     @foreach ($projects as $key => $project)
@@ -39,7 +39,10 @@
                 {{ $project->payment_mode }}
             </td>
             <td class="edit-route" data-route="{{ route('account-manager.projects.edit', $project->id) }}">
-                {{ (int) $project->project_value - (int) $project->project_upfront }}
+                {{ $project->projectMilestones->where('payment_status', 'Paid')->sum('milestone_value') }}
+            </td>
+            <td class="edit-route" data-route="{{ route('account-manager.projects.edit', $project->id) }}">
+                {{ (int) $project->project_value - ((int) $project->project_upfront + (int) $project->projectMilestones->where('payment_status', 'Paid')->sum('milestone_value')) }}
             </td>
             <td>
                 <a title="View Follow-ups" class="view-followups" data-id="{{ $project->id }}"
@@ -49,7 +52,7 @@
     @endforeach
 
     <tr>
-        <td colspan="11">
+        <td colspan="12">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="">
                     {!! $projects->links() !!}

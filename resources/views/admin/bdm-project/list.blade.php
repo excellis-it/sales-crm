@@ -571,6 +571,7 @@
                                             id="currency_icon"><span class="fa fa-sort-down"></span></span></th>
                                     <th data-tippy-content="Cant't sort by Payment Mode" style="cursor: pointer"> Payment
                                         Mode</th>
+                                    <th data-tippy-content="Cant't sort by Paid Milestone" style="cursor: pointer"> Paid Milestone </th>
                                     <th data-tippy-content="Cant't sort by Due Amount" style="cursor: pointer"> Due Amount
                                     </th>
                                     <th> Status</th>
