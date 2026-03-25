@@ -268,7 +268,7 @@
                         <label for="inputEnterYourName" class="col-form-label">Comments <span
                                 style="color: red;">*</span></label>
                         <textarea name="comments" id="comments" cols="30" rows="5" class="form-control" required
-                            data-parsley-trigger="keyup" placeholder="Enter Comments"> </textarea>
+                            data-parsley-trigger="keyup" placeholder="Enter Comments"></textarea>
                     </div>
                 </div>
                 <div class="d-flex alin-items-center w-100 text-end">

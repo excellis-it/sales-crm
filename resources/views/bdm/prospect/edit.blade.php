@@ -265,7 +265,7 @@
                         <label for="inputEnterYourName" class="col-form-label">Comments <span
                                 style="color: red;">*</span></label>
                         <textarea name="comments" id="comments" cols="30" rows="10" class="form-control" required
-                            placeholder="Enter Comments"> </textarea>
+                            placeholder="Enter Comments"></textarea>
                     </div>
                 </div>
                 <div class="d-flex alin-items-center w-100 text-end">
@@ -322,7 +322,7 @@
 
 <script>
     $(document).ready(function() {
-        $('#status_edit').on('change', function() {
+        $('#prospect-status').on('change', function() {
             // get value win show the upfront value
             var status = $(this).val();
             // alert(status);

@@ -302,6 +302,16 @@ class ProspectController extends Controller
         $prospect->transfer_token_by = $data['transfer_token_by'];
         $prospect->save();
 
+        if ($data['comments']) {
+            $follow_up = new Followup();
+            $follow_up->user_id = Auth::user()->id;
+            $follow_up->prospect_id = $prospect->id;
+            $follow_up->followup_type = 'other';
+            $follow_up->status = $data['status'];
+            $follow_up->followup_description = $data['comments'];
+            $follow_up->save();
+        }
+
         if ($data['status'] == 'Win') {
             $prospect = Prospect::findOrFail($prospect->id);
             $prospect->is_project = true;

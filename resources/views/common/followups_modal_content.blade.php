@@ -13,6 +13,12 @@
                             <span class="type-badge remark">
                                 {{ strtoupper($followup->followup_type ?? 'REMARK') }}
                             </span>
+                            @if ($followup->status)
+                                <span class="badge {{ $followup->status == 'Win' ? 'bg-success' : ($followup->status == 'Follow Up' ? 'bg-warning' : ($followup->status == 'In Meeting' ? 'bg-info' : ($followup->status == 'Sent Proposal' ? 'bg-primary' : 'bg-secondary'))) }}"
+                                    style="font-size: 10px; margin-left: 5px;">
+                                    {{ $followup->status }}
+                                </span>
+                            @endif
                         </div>
                         <span class="time-stamp">
                             <i class="far fa-clock"></i> {{ $followup->created_at->format('d M Y, h:i A') }}

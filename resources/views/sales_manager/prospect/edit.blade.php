@@ -5,6 +5,10 @@
                 <i class="fa fa-chevron-right" aria-hidden="true"></i>
             </button>
             <h4 id="offcanvasEditLabel">Edit Prospect Details</h4>
+            <button type="button" class="btn btn-sm btn-outline-primary view-followups ms-auto"
+                data-id="{{ $prospect->id }}">
+                <i class="fas fa-comments"></i> Remarks
+            </button>
         </div>
         <div class="offcanvas-body">
             <form action="{{ route('sales-manager.prospects.update', $prospect->id) }}" method="POST"
@@ -146,18 +150,22 @@
                         </select>
                     </div>
                     {{-- followup_date --}}
-                    <div class="col-md-12 mb-3">
-                        <label for="inputEnterYourName" class="col-form-label">Followup
-                            Date <span style="color: red;">*</span></label>
-                        <input type="date" name="followup_date" id="followup_date" required class="form-control picker"
-                            value="{{ $prospect->followup_date }}" placeholder="Enter Followup Date">
-                    </div>
-                    {{-- followup_time --}}
-                    <div class="col-md-12 mb-3">
-                        <label for="inputEnterYourName" class="col-form-label">Followup
-                            Time</label>
-                        <input type="time" name="followup_time" id="followup_time" class="form-control"
-                            value="{{ $prospect->followup_time }}" placeholder="Enter Followup Time">
+                    <div id="followup_date_div" style="display: {{ $prospect->status == 'Follow Up' ? 'block' : 'none' }};">
+                        <div class="col-md-12 mb-3">
+                            <label for="inputEnterYourName" class="col-form-label">Followup
+                                Date <span style="color: red;">*</span></label>
+                            <input type="date" name="followup_date" id="followup_date"
+                                {{ $prospect->status == 'Follow Up' ? 'required' : '' }} class="form-control picker"
+                                value="{{ $prospect->followup_date }}" placeholder="Enter Followup Date">
+                        </div>
+                        {{-- followup_time --}}
+                        <div class="col-md-12 mb-3">
+                            <label for="inputEnterYourName" class="col-form-label">Followup
+                                Time <span style="color: red;">*</span></label>
+                            <input type="time" name="followup_time" id="followup_time"
+                                {{ $prospect->status == 'Follow Up' ? 'required' : '' }} class="form-control"
+                                value="{{ $prospect->followup_time }}" placeholder="Enter Followup Time">
+                        </div>
                     </div>
                     {{-- status --}}
                     <div class="col-md-12 mb-3">
@@ -205,9 +213,9 @@
                     </div>
                     {{-- comments --}}
                     <div class="col-md-12 mb-3">
-                        <label for="inputEnterYourName" class="col-form-label">Comments</label>
-                        <textarea name="comments" id="comments" cols="30" rows="10" class="form-control" readonly
-                            placeholder="Enter Comments"> {{ $prospect['comments'] }} </textarea>
+                        <label for="inputEnterYourName" class="col-form-label">Comments <span style="color: red;">*</span></label>
+                        <textarea name="comments" id="comments" cols="30" rows="10" class="form-control" required
+                            placeholder="Enter Comments"></textarea>
                     </div>
                 </div>
                 <div class="d-flex alin-items-center w-100 text-end">
@@ -278,6 +286,16 @@
                 $('#upfront_value_show_edit').html(html);
             } else {
                 $('#upfront_value_show_edit').html('');
+            }
+
+            if (status == 'Follow Up') {
+                $('#followup_date_div').show();
+                $('#followup_date').attr('required', 'required');
+                $('#followup_time').attr('required', 'required');
+            } else {
+                $('#followup_date_div').hide();
+                $('#followup_date').removeAttr('required');
+                $('#followup_time').removeAttr('required');
             }
         });
     });

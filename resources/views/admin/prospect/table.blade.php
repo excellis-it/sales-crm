@@ -5,31 +5,40 @@
 @else
     @foreach ($prospects as $prospect)
         <tr>
-            <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.prospects.edit', $prospect->id) }}" @endif>
+            <td
+                @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->created_at ? date('d-m-Y', strtotime($prospect->created_at)) : '' }}
             </td>
-            <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.prospects.edit', $prospect->id) }}" @endif>
+            <td
+                @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->user->name ?? '' }}
             </td>
-            <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.prospects.edit', $prospect->id) }}" @endif>
+            <td
+                @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->client_name ?? '' }}
             </td>
-            <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.prospects.edit', $prospect->id) }}" @endif>
+            <td
+                @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->business_name ?? '' }}
             </td>
-            <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.prospects.edit', $prospect->id) }}" @endif>
+            <td
+                @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->client_email ?? '' }}
             </td>
-            <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.prospects.edit', $prospect->id) }}" @endif>
+            <td
+                @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->client_phone ?? '' }}
             </td>
-            <td>
+            <td
+                @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->transferTakenBy->name ?? '' }}
             </td>
-            <td>
+            <td
+                @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->reportTo->name ?? '-' }}
             </td>
-            <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.prospects.edit', $prospect->id) }}" @endif>
+            <td
+                @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.prospects.edit', $prospect->id) }}" @endif>
                 @if ($prospect->status == 'Win')
                     On Board
                 @elseif($prospect->status == 'Follow Up')
@@ -42,13 +51,16 @@
                     {{ $prospect->status ?? '' }}
                 @endif
             </td>
-            <td>
+            <td
+                @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->offered_for ?? '' }}
             </td>
-            <td>
+            <td
+                @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->followup_date ? date('d-m-Y', strtotime($prospect->followup_date)) : '' }}
             </td>
-            <td>
+            <td
+                @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->price_quote ?? '' }}
             </td>
             <td>
@@ -74,4 +86,3 @@
         </div>
     </td>
 </tr>
-

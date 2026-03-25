@@ -304,7 +304,7 @@
 </script>
 <script>
     $(document).ready(function() {
-        $('#status_edit').on('change', function() {
+        $('#prospect-status').on('change', function() {
             // get value win show the upfront value
             var status = $(this).val();
             // alert(status);
