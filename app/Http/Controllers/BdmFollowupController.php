@@ -11,14 +11,15 @@ use Illuminate\Support\Facades\Auth;
 
 class BdmFollowupController extends Controller
 {
-    public function getProspectFollowups($id)
+    public function getProspectFollowups(Request $request)
     {
         $followups = BdmFollowup::with('user')
-            ->where('bdm_prospect_id', $id)
+            ->where('bdm_prospect_id', $request->id)
             ->orderBy('created_at', 'desc')
             ->get();
+        $project = false;
         return response()->json([
-            'view' => view('bdm.followups_modal_content', compact('followups'))->render()
+            'view' => view('bdm.followups_modal_content', compact('followups', 'project',))->render()
         ]);
     }
 
@@ -27,36 +28,53 @@ class BdmFollowupController extends Controller
         $request->validate([
             'bdm_prospect_id' => 'required|exists:bdm_prospects,id',
             'comment' => 'required|string',
+            'status' => 'nullable|string',
+            'meeting_date' => 'nullable|date',
             'next_followup_date' => 'nullable|date',
         ]);
+
+        $prospect = BdmProspect::find($request->bdm_prospect_id);
 
         BdmFollowup::create([
             'bdm_prospect_id' => $request->bdm_prospect_id,
             'remark' => $request->comment,
+            'status' => $request->status ?? ($prospect ? $prospect->status : null),
+            'meeting_date' => $request->meeting_date ?? ($prospect ? $prospect->meeting_date : null),
             'next_followup_date' => $request->next_followup_date,
             'user_id' => Auth::id(),
         ]);
 
         // also update prospect followup date if provided
-        if ($request->next_followup_date) {
-            $prospect = BdmProspect::find($request->bdm_prospect_id);
-            if ($prospect) {
+        if ($prospect) {
+            if ($request->next_followup_date) {
                 $prospect->followup_date = $request->next_followup_date;
-                $prospect->save();
             }
+            if ($request->status) {
+                $prospect->status = $request->status;
+            }
+            if ($request->meeting_date) {
+                $prospect->meeting_date = $request->meeting_date;
+            }
+            $prospect->save();
         }
 
         return response()->json(['success' => 'Follow-up added successfully.']);
     }
 
-    public function getProjectFollowups($id)
+    public function getProjectFollowups(Request $request)
     {
         $followups = BdmFollowup::with('user')
-            ->where('bdm_project_id', $id)
+            ->where('bdm_project_id', $request->id)
             ->orderBy('created_at', 'desc')
             ->get();
+        $project = true;
+        $id = $request->id;
+        $type = $request->type;
+        $prefix = $request->url;
+        $add_url = $request->add_url;
+        $id_field = $request->id_field;
         return response()->json([
-            'view' => view('bdm.followups_modal_content', compact('followups'))->render()
+            'view' => view('bdm.followups_modal_content', compact('followups', 'project', 'id', 'type', 'prefix', 'add_url', 'id_field'))->render()
         ]);
     }
 

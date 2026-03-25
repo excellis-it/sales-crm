@@ -138,7 +138,11 @@ class ProspectController extends Controller
      */
     public function store(Request $request)
     {
-        // try {
+        $request->validate([
+            'meeting_date' => 'required_if:status,In Meeting',
+            'followup_date' => 'required_if:status,Follow Up',
+            'comments' => 'required',
+        ]);
         $data = $request->all();
 
         $prospect = new BdmProspect();
@@ -177,6 +181,8 @@ class ProspectController extends Controller
             $followup->user_id = auth()->id();
             $followup->bdm_prospect_id = $prospect->id;
             $followup->remark = $data['comments'];
+            $followup->status = $data['status'];
+            $followup->meeting_date = !empty($data['meeting_date']) ? $data['meeting_date'] : null;
             $followup->save();
         }
 
@@ -334,6 +340,11 @@ class ProspectController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'meeting_date' => 'required_if:status,In Meeting',
+            'followup_date' => 'required_if:status,Follow Up',
+            'comments' => 'required',
+        ]);
         $data = $request->all();
         $prospect = BdmProspect::findOrfail($id);
         $prospect->user_id = $data['user_id'] ?? auth()->id();
@@ -363,6 +374,17 @@ class ProspectController extends Controller
         $prospect->category = $data['category'];
         $prospect->designation = $data['designation'];
         $prospect->save();
+
+        // if comments store at BdmFollowup
+        if (isset($data['comments']) && $data['comments'] != null) {
+            $followup = new BdmFollowup();
+            $followup->user_id = auth()->id();
+            $followup->bdm_prospect_id = $prospect->id;
+            $followup->remark = $data['comments'];
+            $followup->status = $data['status'];
+            $followup->meeting_date = !empty($data['meeting_date']) ? $data['meeting_date'] : null;
+            $followup->save();
+        }
 
         if ($request->status == 'Win') {
             $prospect = BdmProspect::findOrFail($prospect->id);

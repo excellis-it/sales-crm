@@ -13,9 +13,7 @@
                 {{ $prospect->business_name }}
             </td>
 
-            <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bde-prospects.edit', $prospect->id) }}" @endif>
-                {{ $prospect->transferTakenBy->name ?? '' }}
-            </td>
+          
             <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bde-prospects.edit', $prospect->id) }}" @endif>
                 @if ($prospect->status == 'Win')
                     <span>On Board</span>
@@ -33,7 +31,10 @@
                 {{ $prospect->offered_for ?? ''}}
             </td>
             <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bde-prospects.edit', $prospect->id) }}" @endif>
-                {{ date('d M, Y', strtotime($prospect->followup_date)) }}
+                {{ $prospect->followup_date ? date('d-m-Y', strtotime($prospect->followup_date)) : '' }} {{ $prospect->followup_time ? date('H:i A', strtotime($prospect->followup_time)) : '' }}
+            </td>
+            <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bde-prospects.edit', $prospect->id) }}" @endif>
+                {{ $prospect->meeting_date ? date('d-m-Y', strtotime($prospect->meeting_date)) : '-' }} 
             </td>
             <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bde-prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->price_quote }}

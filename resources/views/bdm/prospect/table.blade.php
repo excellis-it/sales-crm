@@ -38,7 +38,10 @@
                 {{ $prospect->offered_for ?? '' }}
             </td>
             <td    @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bdm.prospects.edit', $prospect->id) }}" @endif>
-                {{ $prospect->followup_date ? date('d-m-Y', strtotime($prospect->followup_date)) : '' }}
+                {{ $prospect->followup_date ? date('d-m-Y', strtotime($prospect->followup_date)) : '' }} {{ $prospect->followup_time ? date('H:i A', strtotime($prospect->followup_time)) : '' }}
+            </td>
+            <td    @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bdm.prospects.edit', $prospect->id) }}" @endif>
+                {{ $prospect->meeting_date ? date('d-m-Y', strtotime($prospect->meeting_date)) : '-' }} 
             </td>
           
             <td>

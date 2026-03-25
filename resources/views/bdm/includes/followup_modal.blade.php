@@ -2,38 +2,20 @@
     <div id="followup_modal" class="modal custom-modal fade" role="dialog">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content overflow-hidden" style="border-radius: 15px; border: none;">
-                <div class="modal-header" style="background: linear-gradient(135deg, #ff9b44 0%, #fc6075 100%); padding: 20px;">
-                    <h5 class="modal-title text-white" style="font-weight: 600;"><i class="fas fa-comments me-2"></i> Remarks & Follow-ups History</h5>
-                    <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="Close" style="opacity: 1; border: none; background: transparent; font-size: 24px;">
+                <div class="modal-header"
+                    style="background: linear-gradient(135deg, #ff9b44 0%, #fc6075 100%); padding: 20px;">
+                    <h5 class="modal-title text-white" style="font-weight: 600;"><i class="fas fa-comments me-2"></i>
+                        Remarks & Follow-ups History</h5>
+                    <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="Close"
+                        style="opacity: 1; border: none; background: transparent; font-size: 24px;">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body p-0">
-                    <div id="followup_content" style="background: #fdfdfd;">
-                        <!-- Content loaded by AJAX -->
-                    </div>
-                    <div class="p-4 bg-light border-top">
-                        <form id="add_followup_form">
-                            @csrf
-                            <input type="hidden" name="id" id="followup_item_id">
-                            <input type="hidden" name="type" id="followup_item_type"> <!-- 'project' or 'prospect' -->
-                            <input type="hidden" name="prefix" id="followup_prefix">
+                <div class="modal-body p-0" id="followup_content">
 
-                            <div class="form-group mb-3">
-                                <label class="form-label fw-bold"><i class="fas fa-pencil-alt me-1"></i> Add New Remark <span class="text-danger">*</span></label>
-                                <textarea name="comment" class="form-control border-0 shadow-sm" rows="3" required placeholder="Type your follow-up note here..." style="border-radius: 10px; resize: none;"></textarea>
-                            </div>
+                    <!-- Content loaded by AJAX -->
 
-                            <div class="form-group mb-3">
-                                <label class="form-label fw-bold"><i class="far fa-calendar-alt me-1"></i> Next Follow-up Date (Optional)</label>
-                                <input type="date" name="next_followup_date" class="form-control border-0 shadow-sm" style="border-radius: 10px;">
-                            </div>
 
-                            <div class="submit-section text-center mb-2">
-                                <button type="submit" class="btn btn-primary px-5 py-2" style="background: linear-gradient(135deg, #ff9b44 0%, #fc6075 100%); border: none; border-radius: 25px;">Submit Follow-up</button>
-                            </div>
-                        </form>
-                    </div>
                 </div>
             </div>
         </div>
@@ -41,7 +23,7 @@
     <!-- /Follow-up Modal -->
 
 
- <script>
+    <script>
         $(document).ready(function() {
             // Mapping of named routes by prefix and type.
             var followupRoutes = {
@@ -149,24 +131,59 @@
                 }
 
                 var routeData = followupRoutes[prefix][type];
-                if (!routeData) return;
+                if (!routeData) return; 
 
                 var get_url = routeData.get.replace('__ID__', id);
+                var routeDataAdd =routeData.add;
+                var routeDataIdField =routeData.id_field;
 
                 $('#followup_item_id').val(id);
                 $('#followup_item_type').val(type);
                 $('#followup_prefix').val(get_url);
-                $('#followup_item_id').attr('data-add-url', routeData.add);
-                $('#followup_item_id').attr('data-id-field', routeData.id_field);
+                $('#followup_item_id').attr('data-add-url', routeDataAdd);
+                $('#followup_item_id').attr('data-id-field', routeDataIdField);
 
-                loadFollowups(get_url);
+                loadFollowups(id, type, get_url, routeDataAdd, routeDataIdField);
+
+
+                // Show/hide prospect specific fields
+                if (type.includes('prospect')) {
+                    $('.prospect-only-fields').show();
+                } else {
+                    $('.prospect-only-fields').hide();
+                }
+
+                // Reset fields
+                $('#followup_status').val('');
+                $('#followup_meeting_date').val('').attr('required', false);
+                $('#followup_meeting_date_div').hide();
+
                 $('#followup_modal').modal('show');
             });
 
-            function loadFollowups(url) {
+            // Toggle meeting date based on status in modal
+            $(document).on('change', '#followup_status', function() {
+                var status = $(this).val();
+                if (status === 'In Meeting') {
+                    $('#followup_meeting_date_div').show();
+                    $('#followup_meeting_date').attr('required', true);
+                } else {
+                    $('#followup_meeting_date_div').hide();
+                    $('#followup_meeting_date').attr('required', false);
+                }
+            });
+
+            function loadFollowups(id, type, url, add_url, id_field) {
                 $.ajax({
                     url: url,
                     type: 'GET',
+                    data: {
+                        id: id,
+                        type: type,
+                        url: url,
+                        add_url: add_url,
+                        id_field: id_field  
+                    },
                     success: function(response) {
                         $('#followup_content').html(response.view);
                     }
@@ -174,13 +191,13 @@
             }
 
             // Add Follow-up
-            $('#add_followup_form').submit(function(e) {
+            $(document).on('submit', '#add_followup_form', function(e) {
                 e.preventDefault();
                 var id = $('#followup_item_id').val();
                 var get_url = $('#followup_prefix').val();
                 var add_url = $('#followup_item_id').attr('data-add-url');
                 var id_field = $('#followup_item_id').attr('data-id-field');
-
+                var type = $('#followup_item_type').val();
                 var formData = $(this).serializeArray();
                 formData.push({
                     name: id_field,
@@ -199,7 +216,7 @@
                                 alert(response.success);
                             }
                             $('#add_followup_form')[0].reset();
-                            loadFollowups(get_url);
+                            loadFollowups(id, type, get_url, add_url, id_field);
                         }
                     },
                     error: function(xhr) {
@@ -215,4 +232,3 @@
             });
         });
     </script>
-

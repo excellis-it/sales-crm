@@ -103,7 +103,10 @@ class ProspectController extends Controller
      */
     public function store(Request $request)
     {
-        // try {
+        $request->validate([
+           
+            'comments' => 'required',
+        ]);
         $data = $request->all();
 
         $prospect = new BdmProspect();
@@ -132,9 +135,18 @@ class ProspectController extends Controller
         $prospect->transfer_token_by = $data['transfer_token_by'];
         $prospect->category = $data['category'];
         $prospect->designation = $data['designation'];
-        $prospect->added_by = auth()->id();
-        // date add in created_at and updated_at
         $prospect->save();
+
+        // if comments store at BdmFollowup
+        if (isset($data['comments']) && $data['comments'] != null) {
+            $followup = new BdmFollowup();
+            $followup->user_id = auth()->id();
+            $followup->bdm_prospect_id = $prospect->id;
+            $followup->remark = $data['comments'];
+            $followup->status = $data['status'];
+            $followup->meeting_date = !empty($data['meeting_date']) ? $data['meeting_date'] : null;
+            $followup->save();
+        }
 
         if ($data['status'] == 'Win') {
             $prospect = BdmProspect::findOrFail($prospect->id);
@@ -222,14 +234,6 @@ class ProspectController extends Controller
                 }
             }
 
-            // if comments store at BdmFollowup
-            if (isset($data['comments']) && $data['comments'] != null) {
-                $followup = new BdmFollowup();
-                $followup->user_id = auth()->id();
-                $followup->bdm_prospect_id = $prospect->id;
-                $followup->remark = $data['comments'];
-                $followup->save();
-            }
 
             $project_type = new BdmProjectType();
             $project_type->bdm_project_id = $project->id;
@@ -297,6 +301,10 @@ class ProspectController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $request->validate([
+          
+            'comments' => 'required',
+        ]);
         $data = $request->all();
         $prospect = BdmProspect::findOrfail($id);
         $prospect->user_id = Auth::user()->id;
@@ -326,6 +334,17 @@ class ProspectController extends Controller
         $prospect->category = $data['category'];
         $prospect->designation = $data['designation'];
         $prospect->save();
+
+        // if comments store at BdmFollowup
+        if (isset($data['comments']) && $data['comments'] != null) {
+            $followup = new BdmFollowup();
+            $followup->user_id = auth()->id();
+            $followup->bdm_prospect_id = $prospect->id;
+            $followup->remark = $data['comments'];
+            $followup->status = $data['status'];
+            $followup->meeting_date = !empty($data['meeting_date']) ? $data['meeting_date'] : null;
+            $followup->save();
+        }
 
         if ($data['status'] == 'Win') {
             $prospect = BdmProspect::findOrFail($prospect->id);

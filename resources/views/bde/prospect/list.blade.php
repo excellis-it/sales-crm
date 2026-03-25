@@ -125,7 +125,7 @@
                             </div>
                             <div class="offcanvas-body">
                                 <form action="{{ route('bde-prospects.store') }}" method="post" data-parsley-validate=""
-                                    enctype="multipart/form-data">
+                                    enctype="multipart/form-data" id="addProspectForm">
                                     @csrf
                                     <div class="row">
                                         <div class="col-md-12 mb-3">
@@ -249,26 +249,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        {{-- meeting_date --}}
-                                        <div class="col-md-4 mb-3">
-                                            <label class="col-form-label">Meeting Date</label>
-                                            <input type="date" name="meeting_date" id="meeting_date"
-                                                class="form-control">
-                                        </div>
-                                        {{-- followup_date --}}
-                                        <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Followup
-                                                Date </label>
-                                            <input type="date" name="followup_date" id="followup_date" 
-                                                class="form-control picker" placeholder="Enter Followup Date">
-                                        </div>
-                                        {{-- followup_time --}}
-                                        <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Followup
-                                                Time</label>
-                                            <input type="time" name="followup_time" id="followup_time"
-                                                class="form-control" placeholder="Enter Followup Time">
-                                        </div>
+                                      
                                         {{-- status --}}
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Status
@@ -276,6 +257,7 @@
                                             <select name="status" id="status" class="form-control" required
                                                 data-parsley-trigger="keyup">
                                                 <option value="">Select Status</option>
+                                                <option value="In Meeting">In Meeting</option>
                                               {{-- Not Interested, No Answer, Wrong Number --}}
                                                 <option value="Not Interested">Not Interested</option>
                                                 <option value="No Answer">No Answer</option>
@@ -286,6 +268,26 @@
                                                 <option value="Close">Cancel</option>
                                             </select>
                                         </div>
+                                          {{-- meeting_date --}}
+                                        <div class="col-md-12 mb-3" id="meeting_date_div" style="display: none;">
+                                            <label class="col-form-label">Meeting Date <span style="color: red;">*</span></label>
+                                            <input type="date" name="meeting_date" id="meeting_date"
+                                                class="form-control">
+                                        </div>
+                                        {{-- followup_date --}}
+                                        <div class="col-md-12 mb-3" id="followup_date_div" style="display: none;">
+                                            <label for="inputEnterYourName" class="col-form-label">Followup
+                                                Date <span style="color: red;">*</span></label>
+                                            <input type="date" name="followup_date" id="followup_date" 
+                                                class="form-control picker" placeholder="Enter Followup Date">
+                                        </div>
+                                        {{-- followup_time --}}
+                                        <div class="col-md-12 mb-3" id="followup_time_div" style="display: none;">
+                                            <label for="inputEnterYourName" class="col-form-label">Followup
+                                                Time</label>
+                                            <input type="time" name="followup_time" id="followup_time"
+                                                class="form-control" placeholder="Enter Followup Time">
+                                        </div>
                                     </div>
                                     {{-- upfront_value --}}
                                     <div class="row" id="upfront_value_show">
@@ -293,8 +295,8 @@
 
                                     {{-- comments --}}
                                     <div class="col-md-12 mb-3">
-                                        <label for="inputEnterYourName" class="col-form-label">Comments</label>
-                                        <textarea name="comments" id="comments" cols="30" rows="5" class="form-control"
+                                        <label for="inputEnterYourName" class="col-form-label">Comments<span style="color: red;">*</span></label>
+                                        <textarea name="comments" id="comments" cols="30" rows="5" class="form-control" required
                                             placeholder="Enter Comments ...">{{ old('comments') }}</textarea>
                                     </div>
                                     <div class="d-flex alin-items-center w-100 text-end">
@@ -320,14 +322,15 @@
                                     <th>Date</th>
                                     <th>Business Name</th>
 
-                                    <th>Transfer Taken By</th>
+                                 
                                     <th>Status</th>
                                     <th>Service Offered</th>
-                                    <th>Followup Date <input type="text" class="datepicker" id="followup_date_filter"
+                                    <th>Last Followup Date <input type="text" class="datepicker" id="followup_date_filter"
                                             style="width: 0; padding:0; border:none" />
                                         <label for="followup_date_filter" class="datepik" style="font-size: 22px"><i
                                                 class="las la-calendar"></i></label>
                                     </th>
+                                    <th>Last Meeting Date</th>
                                     <th>Price Quoted</th>
                                     <th>Action</th>
                                 </tr>
@@ -506,6 +509,7 @@
 
     <script>
         $(document).ready(function() {
+            $('#addProspectForm').parsley();
             // Handle the click event for the edit-route button
             $(document).on('click', '.edit-route', function() {
 
@@ -547,6 +551,29 @@
                     );
                 } else {
                     $('#upfront_value_show').html('');
+                }
+
+                if (status == 'In Meeting') {
+                    $('#meeting_date_div').show();
+                    $('#meeting_date').attr('required', 'required');
+                    $('#followup_date_div').hide();
+                    $('#followup_date').removeAttr('required');
+                    $('#followup_time_div').hide();
+                    $('#followup_time').removeAttr('required');
+                } else if (status == 'Follow Up') {
+                    $('#followup_date_div').show();
+                    $('#followup_date').attr('required', 'required');
+                    $('#meeting_date_div').hide();
+                    $('#meeting_date').removeAttr('required');
+                    $('#followup_time_div').show();
+                    $('#followup_time').attr('required', 'required');
+                } else {
+                    $('#meeting_date_div').hide();
+                    $('#meeting_date').removeAttr('required');
+                    $('#followup_date_div').hide();
+                    $('#followup_date').removeAttr('required');
+                    $('#followup_time_div').hide();
+                    $('#followup_time').removeAttr('required');
                 }
             });
         });

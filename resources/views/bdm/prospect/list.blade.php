@@ -260,26 +260,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        {{-- meeting_date --}}
-                                        <div class="col-md-4 mb-3">
-                                            <label class="col-form-label">Meeting Date</label>
-                                            <input type="date" name="meeting_date" id="meeting_date"
-                                                class="form-control">
-                                        </div>
-                                        {{-- followup_date --}}
-                                        <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Followup
-                                                Date </label>
-                                            <input type="date" name="followup_date" id="followup_date" 
-                                                class="form-control picker" placeholder="Enter Followup Date">
-                                        </div>
-                                        {{-- followup_time --}}
-                                        <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Followup
-                                                Time</label>
-                                            <input type="time" name="followup_time" id="followup_time"
-                                                class="form-control" placeholder="Enter Followup Time">
-                                        </div>
+                                      
                                         {{-- status --}}
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Status
@@ -298,6 +279,26 @@
                                                 <option value="Close">Cancel</option>
                                                 
                                             </select>
+                                        </div>
+                                          {{-- meeting_date --}}
+                                        <div class="col-md-12 mb-3" id="meeting_date_div" style="display: none;">
+                                            <label class="col-form-label">Meeting Date <span style="color: red;">*</span></label>
+                                            <input type="date" name="meeting_date" id="meeting_date"
+                                                class="form-control">
+                                        </div>
+                                        {{-- followup_date --}}
+                                        <div class="col-md-12 mb-3" id="followup_date_div" style="display: none;">
+                                            <label for="inputEnterYourName" class="col-form-label">Followup
+                                                Date <span style="color: red;">*</span></label>
+                                            <input type="date" name="followup_date" id="followup_date" 
+                                                class="form-control picker" placeholder="Enter Followup Date">
+                                        </div>
+                                        {{-- followup_time --}}
+                                        <div class="col-md-12 mb-3" id="followup_time_div" style="display: none;">
+                                            <label for="inputEnterYourName" class="col-form-label">Followup
+                                                Time</label>
+                                            <input type="time" name="followup_time" id="followup_time"
+                                                class="form-control" placeholder="Enter Followup Time">
                                         </div>
                                     </div>
                                     {{-- upfront_value --}}
@@ -333,10 +334,12 @@
                                     <th>Added By</th>
                                     <th>Status</th>
                                     <th>Service Offered</th>
-                                    <th>Followup Date <input type="text" class="datepicker" id="followup_date_filter"
+                                    <th>Last Followup Date <input type="text" class="datepicker" id="followup_date_filter"
                                             style="width: 0; padding:0; border:none" />
                                         <label for="followup_date_filter" class="datepik" style="font-size: 22px"><i
                                                 class="las la-calendar"></i></label>
+                                    </th>
+                                    <th>Last Meeting Date
                                     </th>
                                     <th>Action</th>
                                 </tr>
@@ -587,6 +590,29 @@
                     );
                 } else {
                     $('#upfront_value_show').html('');
+                }
+
+                if (status == 'In Meeting') {
+                    $('#meeting_date_div').show();
+                    $('#meeting_date').attr('required', 'required');
+                    $('#followup_date_div').hide();
+                    $('#followup_date').removeAttr('required');
+                    $('#followup_time_div').hide();
+                    $('#followup_time').removeAttr('required');
+                } else if (status == 'Follow Up') {
+                    $('#followup_date_div').show();
+                    $('#followup_date').attr('required', 'required');
+                    $('#meeting_date_div').hide();
+                    $('#meeting_date').removeAttr('required');
+                    $('#followup_time_div').show();
+                    $('#followup_time').attr('required', 'required');
+                } else {
+                    $('#meeting_date_div').hide();
+                    $('#meeting_date').removeAttr('required');
+                    $('#followup_date_div').hide();
+                    $('#followup_date').removeAttr('required');
+                    $('#followup_time_div').hide();
+                    $('#followup_time').removeAttr('required');
                 }
             });
         });

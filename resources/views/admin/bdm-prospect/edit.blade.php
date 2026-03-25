@@ -95,8 +95,8 @@
                     <div class="col-md-12 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Service
                             Offered
-                            </label>
-                        <select name="offered_for" id="prospect_type"  data-parsley-trigger="keyup"
+                        </label>
+                        <select name="offered_for" id="prospect_type" data-parsley-trigger="keyup"
                             class="form-control">
                             <option value="">Select prospect Type</option>
                             <option value="Website Design & Development"
@@ -138,11 +138,11 @@
                     {{--  price_quote --}}
                     <div class="col-md-12 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Price Quote
-                            </label>
-                        <input type="text" name="price_quote" id="price_quote" 
-                            data-parsley-trigger="keyup" data-parsley-type="number"
-                            data-parsley-type-message="Please enter a valid number." class="form-control"
-                            value="{{ $prospect->price_quote }}" placeholder="Enter Price Quote">
+                        </label>
+                        <input type="text" name="price_quote" id="price_quote" data-parsley-trigger="keyup"
+                            data-parsley-type="number" data-parsley-type-message="Please enter a valid number."
+                            class="form-control" value="{{ $prospect->price_quote }}"
+                            placeholder="Enter Price Quote">
                     </div>
                     {{-- source --}}
                     <div class="col-md-12 mb-3">
@@ -150,13 +150,6 @@
                             <span style="color: red;">*</span></label>
                         <input type="text" name="source" id="source" required data-parsley-trigger="keyup"
                             class="form-control" value="{{ $prospect->source }}" placeholder="Enter Source">
-                    </div>
-                    {{-- meeting_date --}}
-                    <div class="col-md-12 mb-3">
-                        <label for="inputEnterYourName" class="col-form-label">Meeting
-                            Date</label>
-                        <input type="date" name="meeting_date" id="meeting_date" class="form-control"
-                            value="{{ $prospect->meeting_date }}" placeholder="Enter Meeting Date">
                     </div>
                     {{-- transfer_token_by --}}
                     <div class="col-md-12 mb-3">
@@ -172,20 +165,6 @@
                             @endforeach
                         </select>
                     </div>
-                    {{-- followup_date --}}
-                    <div class="col-md-12 mb-3">
-                        <label for="inputEnterYourName" class="col-form-label">Followup
-                            Date <span style="color: red;">*</span></label>
-                        <input type="date" name="followup_date" id="followup_date" required class="form-control"
-                            value="{{ $prospect->followup_date }}" placeholder="Enter Followup Date">
-                    </div>
-                    {{-- followup_time --}}
-                    <div class="col-md-12 mb-3">
-                        <label for="inputEnterYourName" class="col-form-label">Followup
-                            Time</label>
-                        <input type="time" name="followup_time" id="followup_time" class="form-control"
-                            value="{{ $prospect->followup_time }}" placeholder="Enter Followup Time">
-                    </div>
                     {{-- status --}}
                     <div class="col-md-12 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Status
@@ -193,22 +172,55 @@
                         <select name="status" id="prospect-status" class="form-control" required
                             data-parsley-trigger="keyup">
                             <option value="">Select Status</option>
-                             {{-- Not Interested, No Answer, Wrong Number --}}
-                             <option value="Not Interested" {{ $prospect->status == 'Not Interested' ? 'selected' : '' }}>Not Interested
+                            <option value="In Meeting" >In
+                                Meeting
                             </option>
-                            <option value="No Answer" {{ $prospect->status == 'No Answer' ? 'selected' : '' }}>No Answer</option>
-                            <option value="Wrong Number" {{ $prospect->status == 'Wrong Number' ? 'selected' : '' }}>Wrong Number
+                            {{-- Not Interested, No Answer, Wrong Number --}}
+                            <option value="Not Interested"
+                               >Not Interested
                             </option>
-                            <option value="Win" {{ $prospect->status == 'Win' ? 'selected' : '' }}>On board
+                            <option value="No Answer" >No
+                                Answer</option>
+                            <option value="Wrong Number" >
+                                Wrong Number
                             </option>
-                            <option value="Follow Up" {{ $prospect->status == 'Follow Up' ? 'selected' : '' }}>
+                            <option value="Win" >On board
+                            </option>
+                            <option value="Follow Up" >
                                 Follow Up</option>
                             <option value="Sent Proposal"
-                                {{ $prospect->status == 'Sent Proposal' ? 'selected' : '' }}>
+                                >
                                 Sent Proposal</option>
-                            <option value="Close" {{ $prospect->status == 'Close' ? 'selected' : '' }}>Cancel
+                            <option value="Close" >Cancel
                             </option>
                         </select>
+                    </div>
+                    {{-- meeting_date --}}
+                    <div class="col-md-12 mb-3" id="meeting_date_div_edit"
+                        style="display: none;">
+                        <label for="inputEnterYourName" class="col-form-label">Meeting
+                            Date <span style="color: red;">*</span></label>
+                        <input type="date" name="meeting_date" id="meeting_date_edit" class="form-control"
+                            value="" placeholder="Enter Meeting Date"
+                            >
+                    </div>
+                    {{-- followup_date --}}
+                    <div class="col-md-12 mb-3" id="followup_date_div_edit"
+                        style="display: none;">
+                        <label for="inputEnterYourName" class="col-form-label">Followup
+                            Date <span style="color: red;">*</span></label>
+                        <input type="date" name="followup_date" id="followup_date_edit" class="form-control"
+                            value="" placeholder="Enter Followup Date"
+                            >
+                    </div>
+                    {{-- followup_time --}}
+                    <div class="col-md-12 mb-3" id="followup_time_div_edit"
+                        style="display: none;">
+                        <label for="inputEnterYourName" class="col-form-label">Followup
+                            Time <span style="color: red;">*</span></label>
+                        <input type="time" name="followup_time" id="followup_time_edit" class="form-control"
+                            value="" placeholder="Enter Followup Time"
+                            >
                     </div>
                     <div class="row" id="upfront_value_show_edit">
                         @if ($prospect->status == 'Win')
@@ -218,39 +230,39 @@
                                 <input type="text" name="upfront_value" id="upfront_value" class="form-control"
                                     value="{{ $prospect->upfront_value ?? '' }}" placeholder="Enter Upfront Value">
                             </div>
+                            <div class="col-md-12 mb-3">
+                                <label class="col-form-label">Payment Mode</label>
+                                <select name="payment_mode" class="form-control" required data-parsley-trigger="keyup">
+                                    <option value="">Select Mode</option>
+                                    <option value="Paypal"
+                                        {{ isset($prospect) && $prospect->payment_mode == 'Paypal' ? 'selected' : '' }}>
+                                        Paypal</option>
+                                    <option value="Stripe"
+                                        {{ isset($prospect) && $prospect->payment_mode == 'Stripe' ? 'selected' : '' }}>
+                                        Stripe</option>
+                                    <option value="Bank Transfer"
+                                        {{ isset($prospect) && $prospect->payment_mode == 'Bank Transfer' ? 'selected' : '' }}>
+                                        Bank Transfer</option>
+                                    <option value="Payoneer"
+                                        {{ isset($prospect) && $prospect->payment_mode == 'Payoneer' ? 'selected' : '' }}>
+                                        Payoneer</option>
+                                </select>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="inputEnterYourName" class="col-form-label">Sale
+                                    Date</label>
+                                <input type="date" name="sale_date" id="sale_date" required data-parsley-trigger="keyup"
+                                    data-parsley-type="date" data-parsley-type-message="Please enter a valid date."
+                                    class="form-control" value="{{ $prospect->sale_date ?? '' }}"
+                                    placeholder="Enter Sale Date">
+                            </div>
+                        @endif
                     </div>
-                    <div class="col-md-12 mb-3">
-                        <label class="col-form-label">Payment Mode</label>
-                        <select name="payment_mode" class="form-control" required data-parsley-trigger="keyup">
-                            <option value="">Select Mode</option>
-                            <option value="Paypal"
-                                {{ isset($prospect) && $prospect->payment_mode == 'Paypal' ? 'selected' : '' }}>
-                                Paypal</option>
-                            <option value="Stripe"
-                                {{ isset($prospect) && $prospect->payment_mode == 'Stripe' ? 'selected' : '' }}>
-                                Stripe</option>
-                            <option value="Bank Transfer"
-                                {{ isset($prospect) && $prospect->payment_mode == 'Bank Transfer' ? 'selected' : '' }}>
-                                Bank Transfer</option>
-                            <option value="Payoneer"
-                                {{ isset($prospect) && $prospect->payment_mode == 'Payoneer' ? 'selected' : '' }}>
-                                Payoneer</option>
-                        </select>
-                        <div class="col-md-12 mb-3">
-                            <label for="inputEnterYourName" class="col-form-label">Sale
-                                Date</label>
-                            <input type="date" name="sale_date" id="sale_date" required
-                                data-parsley-trigger="keyup" data-parsley-type="date"
-                                data-parsley-type-message="Please enter a valid date." class="form-control"
-                                value="{{ $prospect->sale_date ?? '' }}" placeholder="Enter Sale Date">
-                        </div>
-@endif
-</div>
 {{-- comments --}}
 <div class="col-md-12 mb-3">
-    <label for="inputEnterYourName" class="col-form-label">Comments</label>
-    <textarea name="comments" id="comments" cols="30" rows="5" class="form-control" readonly
-        placeholder="Enter Comments"> {{ $prospect['comments'] }} </textarea>
+    <label for="inputEnterYourName" class="col-form-label">Comments <span style="color: red;">*</span></label>
+    <textarea name="comments" id="comments" cols="30" rows="5" class="form-control" required
+        data-parsley-trigger="keyup" placeholder="Enter Comments"> </textarea>
 </div>
 </div>
 <div class="d-flex alin-items-center w-100 text-end">
@@ -280,7 +292,8 @@
             $(this).select2({
                 dropdownParent: $(this).parent()
             });
-        })
+        });
+        $('form[data-parsley-validate]').parsley();
         $('#prospect_type').on('change', function() {
             //    select 2 value get and seo,other value check
             var prospect_type = $(this).val();
@@ -311,6 +324,29 @@
                 $('#upfront_value_show_edit').html(html);
             } else {
                 $('#upfront_value_show_edit').html('');
+            }
+
+            if (status == 'In Meeting') {
+                $('#meeting_date_div_edit').show();
+                $('#meeting_date_edit').attr('required', 'required');
+                $('#followup_date_div_edit').hide();
+                $('#followup_date_edit').removeAttr('required');
+                $('#followup_time_div_edit').hide();
+                $('#followup_time_edit').removeAttr('required');
+            } else if (status == 'Follow Up') {
+                $('#followup_date_div_edit').show();
+                $('#followup_date_edit').attr('required', 'required');
+                $('#followup_time_div_edit').show();
+                $('#followup_time_edit').attr('required', 'required');
+                $('#meeting_date_div_edit').hide();
+                $('#meeting_date_edit').removeAttr('required');
+            } else {
+                $('#meeting_date_div_edit').hide();
+                $('#meeting_date_edit').removeAttr('required');
+                $('#followup_date_div_edit').hide();
+                $('#followup_date_edit').removeAttr('required');
+                $('#followup_time_div_edit').hide();
+                $('#followup_time_edit').removeAttr('required');
             }
         });
     });

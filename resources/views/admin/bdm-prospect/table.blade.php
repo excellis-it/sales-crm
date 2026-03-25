@@ -9,23 +9,22 @@
                 {{ $prospect->created_at ? date('d-m-Y', strtotime($prospect->created_at)) : '' }}
             </td>
             <td  @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.bdm-prospects.edit', $prospect->id) }}" @endif>
+                {{ $prospect->business_name ?? '' }}
+            </td>
+            <td  @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.bdm-prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->addedBy->name ?? '' }}
             </td>
             <td  @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.bdm-prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->user->name ?? '' }}
             </td>
 
-            <td  @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.bdm-prospects.edit', $prospect->id) }}" @endif>
-                {{ $prospect->business_name ?? '' }}
-            </td>
+            
 
-            <td>
-                {{ $prospect->transferTakenBy->name ?? '' }}
-            </td>
+           
             <td  @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.bdm-prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->status ?? '' }}
             </td>
-            <td>
+            <td  @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.bdm-prospects.edit', $prospect->id) }}" @endif>
                 @if ($prospect->status == 'Win')
                 <span>On Board</span>
                 @elseif ($prospect->status == 'Follow Up')
@@ -36,11 +35,12 @@
                 <span>Cancel</span>
             @endif
             </td>
-            <td>
+            <td  @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.bdm-prospects.edit', $prospect->id) }}" @endif>
+                {{ $prospect->followup_date ? date('d-m-Y', strtotime($prospect->followup_date)) : '' }} 
                 {{ $prospect->followup_date ? date('d-m-Y', strtotime($prospect->followup_date)) : '' }}
             </td>
-            <td>
-                {{ $prospect->price_quote ?? '' }}
+            <td  @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('admin.bdm-prospects.edit', $prospect->id) }}" @endif>
+                {{ $prospect->meeting_date ? date('d-m-Y', strtotime($prospect->meeting_date)) : '' }}
             </td>
             <td>
                 <a title="View Prospect" class="view-details-btn"

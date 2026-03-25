@@ -261,7 +261,7 @@
                                     {{--  price_quote --}}
                                     <div class="col-md-12 mb-3">
                                         <label for="inputEnterYourName" class="col-form-label">Price Quote
-                                            </label>
+                                        </label>
                                         <input type="text" name="price_quote" id="price_quote"
                                             data-parsley-trigger="keyup" data-parsley-type="number"
                                             data-parsley-type-message="Please enter a valid number." class="form-control"
@@ -291,26 +291,6 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    {{-- meeting_date --}}
-                                    <div class="col-md-4 mb-3">
-                                        <label class="col-form-label">Meeting Date</label>
-                                        <input type="date" name="meeting_date" id="meeting_date"
-                                            class="form-control">
-                                    </div>
-                                    {{-- followup_date --}}
-                                    <div class="col-md-12 mb-3">
-                                        <label for="inputEnterYourName" class="col-form-label">Followup
-                                            Date <span style="color: red;">*</span></label>
-                                        <input type="date" name="followup_date" id="followup_date" required
-                                            class="form-control picker" placeholder="Enter Followup Date">
-                                    </div>
-                                    {{-- followup_time --}}
-                                    <div class="col-md-12 mb-3">
-                                        <label for="inputEnterYourName" class="col-form-label">Followup
-                                            Time</label>
-                                        <input type="time" name="followup_time" id="followup_time"
-                                            class="form-control" placeholder="Enter Followup Time">
-                                    </div>
                                     {{-- status --}}
                                     <div class="col-md-12 mb-3">
                                         <label for="inputEnterYourName" class="col-form-label">Status
@@ -318,6 +298,7 @@
                                         <select name="status" id="status" class="form-control" required
                                             data-parsley-trigger="keyup">
                                             <option value="">Select Status</option>
+                                            <option value="In Meeting">In Meeting</option>
                                             <option value="Not Interested">Not Interested</option>
                                             <option value="No Answer">No Answer</option>
                                             <option value="Wrong Number">Wrong Number</option>
@@ -327,6 +308,27 @@
                                             <option value="Close">Cancel</option>
                                         </select>
                                     </div>
+                                    {{-- meeting_date --}}
+                                    <div class="col-md-12 mb-3" id="meeting_date_div" style="display: none;">
+                                        <label class="col-form-label">Meeting Date <span
+                                                style="color: red;">*</span></label>
+                                        <input type="date" name="meeting_date" id="meeting_date"
+                                            class="form-control">
+                                    </div>
+                                    {{-- followup_date --}}
+                                    <div class="col-md-12 mb-3" id="followup_date_div" style="display: none;">
+                                        <label for="inputEnterYourName" class="col-form-label">Followup
+                                            Date <span style="color: red;">*</span></label>
+                                        <input type="date" name="followup_date" id="followup_date" required
+                                            class="form-control picker" placeholder="Enter Followup Date">
+                                    </div>
+                                    {{-- followup_time --}}
+                                    <div class="col-md-12 mb-3" id="followup_time_div" style="display: none;">
+                                        <label for="inputEnterYourName" class="col-form-label">Followup
+                                            Time <span style="color: red;">*</span></label>
+                                        <input type="time" name="followup_time" id="followup_time"
+                                            class="form-control" placeholder="Enter Followup Time">
+                                    </div>
                                 </div>
                                 {{-- upfront_value --}}
                                 <div class="row" id="upfront_value_show">
@@ -334,8 +336,9 @@
 
                                 {{-- comments --}}
                                 <div class="col-md-12 mb-3">
-                                    <label for="inputEnterYourName" class="col-form-label">Comments</label>
+                                    <label for="inputEnterYourName" class="col-form-label">Comments <span style="color: red;">*</span></label>
                                     <textarea name="comments" id="comments" cols="30" rows="5" class="form-control"
+                                        required data-parsley-trigger="keyup"
                                         placeholder="Enter Comments ...">{{ old('comments') }}</textarea>
                                 </div>
                                 <div class="d-flex alin-items-center w-100 text-end">
@@ -358,22 +361,20 @@
                         <thead>
                             <tr>
                                 <th>Date</th>
+                                <th>Business Name</th>
                                 <th>
                                     Added By
                                 </th>
                                 <th>Prospect By</th>
-                                <th>Business Name</th>
-
-                                <th>Transfer Taken By</th>
                                 <th>Status</th>
                                 <th>Service Offered</th>
-                                <th>Followup Date
+                                <th>Last Followup Date
                                     <input type="text" class="datepicker" id="followup_date_filter"
                                         style="width: 0; padding:0; border:none" />
                                     <label for="followup_date_filter" class="datepik" style="font-size: 22px"><i
                                             class="las la-calendar"></i></label>
                                 </th>
-                                <th>Price Quoted</th>
+                                <th>Last Meeting Date</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -678,6 +679,29 @@
                     );
                 } else {
                     $('#upfront_value_show').html('');
+                }
+
+                if (status == 'In Meeting') {
+                    $('#meeting_date_div').show();
+                    $('#meeting_date').attr('required', 'required');
+                    $('#followup_date_div').hide();
+                    $('#followup_time_div').hide();
+                    $('#followup_date').removeAttr('required');
+                    $('#followup_time').removeAttr('required');
+                } else if (status == 'Follow Up') {
+                    $('#followup_date_div').show();
+                    $('#followup_date').attr('required', 'required');
+                    $('#followup_time_div').show();
+                    $('#followup_time').attr('required', 'required');
+                    $('#meeting_date_div').hide();
+                    $('#meeting_date').removeAttr('required');
+                } else {
+                    $('#meeting_date_div').hide();
+                    $('#meeting_date').removeAttr('required');
+                    $('#followup_date_div').hide();
+                    $('#followup_date').removeAttr('required');
+                    $('#followup_time_div').hide();
+                    $('#followup_time').removeAttr('required');
                 }
             });
         });

@@ -13,6 +13,8 @@ class BdmFollowup extends Model
         'bdm_prospect_id',
         'bdm_project_id',
         'remark',
+        'status',
+        'meeting_date',
         'next_followup_date',
         'user_id'
     ];

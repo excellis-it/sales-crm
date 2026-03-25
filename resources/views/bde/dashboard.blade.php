@@ -73,7 +73,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
                 @else
                 <div class="col-lg-3 col-sm-6">
                     <div class="stats-card-one mb-30">
