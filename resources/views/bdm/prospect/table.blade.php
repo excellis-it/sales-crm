@@ -11,26 +11,15 @@
             </td>
             <td
                 @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bdm.prospects.edit', $prospect->id) }}" @endif>
-                {{ $prospect->addedBy->name ?? '' }}
-            </td>
-            <td
-                @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bdm.prospects.edit', $prospect->id) }}" @endif>
-                {{ $prospect->user->name ?? '' }}
-            </td>
-
-            <td
-                @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bdm.prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->business_name ?? '' }}
             </td>
+            <td
+                @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bdm.prospects.edit', $prospect->id) }}" @endif>
+                {{ $prospect->addedBy->name ?? '' }}
+        </td>
+          
 
-            <td
-                @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bdm.prospects.edit', $prospect->id) }}" @endif>
-                {{ $prospect->transferTakenBy->name ?? '' }}
-            </td>
-            <td
-                @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bdm.prospects.edit', $prospect->id) }}" @endif>
-                {{ $prospect->status ?? '' }}
-            </td>
+
             <td    @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bdm.prospects.edit', $prospect->id) }}" @endif>
                 @if ($prospect->status == 'Win')
                     <span>On Board</span>
@@ -40,14 +29,18 @@
                     <span>Sent Proposal</span>
                 @elseif ($prospect->status == 'Close')
                     <span>Cancel</span>
+                @else
+                    <span>{{ $prospect->status ?? '' }}</span>
                 @endif
+            </td>
+               <td
+                @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bdm.prospects.edit', $prospect->id) }}" @endif>
+                {{ $prospect->offered_for ?? '' }}
             </td>
             <td    @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bdm.prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->followup_date ? date('d-m-Y', strtotime($prospect->followup_date)) : '' }}
             </td>
-            <td    @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bdm.prospects.edit', $prospect->id) }}" @endif>
-                {{ $prospect->price_quote ?? '' }}
-            </td>
+          
             <td>
                 <a title="View Follow-ups" class="view-followups btn btn-sm " data-id="{{ $prospect->id }}" href="javascript:void(0);"><i class="fas fa-comments" style="color: #ff9b44;"></i></a>
                 <a title="View Prospect" class="view-details-btn btn btn-sm "

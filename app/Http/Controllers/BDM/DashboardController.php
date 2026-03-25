@@ -19,28 +19,31 @@ class DashboardController extends Controller
         $count['follow_up'] = BdmProspect::where('report_to', auth()->user()->id)->where('status', 'Follow Up')->count();
         $count['close'] = BdmProspect::where('report_to', auth()->user()->id)->where('status', 'Close')->count();
         $count['sent_proposal'] = BdmProspect::where('report_to', auth()->user()->id)->where('status', 'Sent Proposal')->count();
-        $goal['gross_goals'] = Goal::where('user_id', auth()->user()->id)->where('goals_type', 1)->whereMonth('goals_date', date('m'))->first();
-        $goal['net_goals'] = Goal::where('user_id', auth()->user()->id)->where('goals_type', 2)->whereMonth('goals_date', date('m'))->first();
+        $userId = auth()->user()->id;
+        $currentMonth = date('m');
+        $currentYear  = date('Y');
+
+        $goal['gross_goals']    = Goal::where('user_id', $userId)->where('goals_type', 1)->whereMonth('goals_date', $currentMonth)->first();
+        $goal['net_goals']      = Goal::where('user_id', $userId)->where('goals_type', 2)->whereMonth('goals_date', $currentMonth)->first();
+        $goal['meetings_goal']  = Goal::where('user_id', $userId)->where('goals_type', 3)->whereMonth('goals_date', $currentMonth)->whereYear('goals_date', $currentYear)->first();
+        $goal['onboard_goal']   = Goal::where('user_id', $userId)->where('goals_type', 4)->whereMonth('goals_date', $currentMonth)->whereYear('goals_date', $currentYear)->first();
 
         for ($m = 1; $m <= 12; $m++) {
             $monthName = strtolower(date('F', mktime(0, 0, 0, $m, 1)));
             $startOfMonth = date('Y-m-01', mktime(0, 0, 0, $m, 1));
-            $endOfMonth = date('Y-m-t', mktime(0, 0, 0, $m, 1));
-            
-            $achievements = \App\Helpers\Helper::getUserAchievementDateRange(auth()->user()->id, $startOfMonth, $endOfMonth);
+            $endOfMonth   = date('Y-m-t',  mktime(0, 0, 0, $m, 1));
+            $achievements = \App\Helpers\Helper::getUserAchievementDateRange($userId, $startOfMonth, $endOfMonth);
             $goal['gross_goals_' . $monthName] = $achievements['gross_amount'];
-            $goal['net_goals_' . $monthName] = $achievements['net_amount'];
+            $goal['net_goals_' . $monthName]   = $achievements['net_amount'];
         }
 
-        // Backward compatibility for misspelled february
         $goal['gross_goals_febuary'] = $goal['gross_goals_february'];
-        $goal['net_goals_febuary'] = $goal['net_goals_february'];
+        $goal['net_goals_febuary']   = $goal['net_goals_february'];
 
-        // Add dynamic achievement values for the current month
-        $currentStart = date('Y-m-01');
-        $currentEnd = date('Y-m-t');
-        $currentAchieve = \App\Helpers\Helper::getUserAchievementDateRange(auth()->user()->id, $currentStart, $currentEnd);
-        
+        $currentStart   = date('Y-m-01');
+        $currentEnd     = date('Y-m-t');
+        $currentAchieve = \App\Helpers\Helper::getUserAchievementDateRange($userId, $currentStart, $currentEnd);
+
         if ($goal['gross_goals']) {
             $goal['gross_goals']->goals_achieve = $currentAchieve['gross_amount'];
         }
@@ -48,18 +51,29 @@ class DashboardController extends Controller
             $goal['net_goals']->goals_achieve = $currentAchieve['net_amount'];
         }
 
-        $goal['prospect_january'] = BdmProspect::where('report_to', auth()->user()->id)->whereMonth('sale_date', 1)->whereYear('sale_date', date('Y'))->count();
-        $goal['prospect_febuary'] = BdmProspect::where('report_to', auth()->user()->id)->whereMonth('sale_date', 2)->whereYear('sale_date', date('Y'))->count();
-        $goal['prospect_march'] = BdmProspect::where('report_to', auth()->user()->id)->whereMonth('sale_date', 3)->whereYear('sale_date', date('Y'))->count();
-        $goal['prospect_april'] = BdmProspect::where('report_to', auth()->user()->id)->whereMonth('sale_date', 4)->whereYear('sale_date', date('Y'))->count();
-        $goal['prospect_may'] = BdmProspect::where('report_to', auth()->user()->id)->whereMonth('sale_date', 5)->whereYear('sale_date', date('Y'))->count();
-        $goal['prospect_june'] = BdmProspect::where('report_to', auth()->user()->id)->whereMonth('sale_date', 6)->whereYear('sale_date', date('Y'))->count();
-        $goal['prospect_july'] = BdmProspect::where('report_to', auth()->user()->id)->whereMonth('sale_date', 7)->whereYear('sale_date', date('Y'))->count();
-        $goal['prospect_august'] = BdmProspect::where('report_to', auth()->user()->id)->whereMonth('sale_date', 8)->whereYear('sale_date', date('Y'))->count();
-        $goal['prospect_september'] = BdmProspect::where('report_to', auth()->user()->id)->whereMonth('sale_date', 9)->whereYear('sale_date', date('Y'))->count();
-        $goal['prospect_october'] = BdmProspect::where('report_to', auth()->user()->id)->whereMonth('sale_date', 10)->whereYear('sale_date', date('Y'))->count();
-        $goal['prospect_november'] = BdmProspect::where('report_to', auth()->user()->id)->whereMonth('sale_date', 11)->whereYear('sale_date', date('Y'))->count();
-        $goal['prospect_december'] = BdmProspect::where('report_to', auth()->user()->id)->whereMonth('sale_date', 12)->whereYear('sale_date', date('Y'))->count();
+        // Live meetings and onboard achievements for current month via Helper
+        $moAchieve = \App\Helpers\Helper::getUserMeetingsAndOnboardAchievement($userId, $currentStart, $currentEnd);
+
+        if ($goal['meetings_goal']) {
+            $goal['meetings_goal']->goals_achieve = $moAchieve['meetings'];
+        }
+        if ($goal['onboard_goal']) {
+            $goal['onboard_goal']->goals_achieve = $moAchieve['onboard'];
+        }
+
+        for ($m = 1; $m <= 12; $m++) {
+            $mName = strtolower(date('F', mktime(0, 0, 0, $m, 1)));
+            $startOfMonth = date('Y-m-01', mktime(0, 0, 0, $m, 1));
+            $endOfMonth   = date('Y-m-t',  mktime(0, 0, 0, $m, 1));
+            $moAchieve = \App\Helpers\Helper::getUserMeetingsAndOnboardAchievement($userId, $startOfMonth, $endOfMonth);
+            $goal['meetings_achieve_' . $mName] = $moAchieve['meetings'];
+            $goal['onboard_achieve_' . $mName]  = $moAchieve['onboard'];
+            $goal['prospect_' . $mName] = BdmProspect::where('report_to', $userId)->whereMonth('sale_date', $m)->whereYear('sale_date', $currentYear)->count();
+        }
+        $goal['prospect_febuary'] = $goal['prospect_february'];
+        $goal['meetings_achieve_febuary'] = $goal['meetings_achieve_february'];
+        $goal['onboard_achieve_febuary']  = $goal['onboard_achieve_february'];
+
         return view('bdm.dashboard')->with(compact('count', 'prospects', 'goal'));
     }
 

@@ -95,8 +95,8 @@
                     <div class="col-md-12 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Service
                             Offered
-                            <span style="color: red;">*</span></label>
-                        <select name="offered_for" id="prospect_type" required data-parsley-trigger="keyup"
+                            </label>
+                        <select name="offered_for" id="prospect_type"  data-parsley-trigger="keyup"
                             class="form-control">
                             <option value="">Select prospect Type</option>
                             <option value="Website Design & Development"
@@ -138,8 +138,8 @@
                     {{--  price_quote --}}
                     <div class="col-md-12 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Price Quote
-                            <span style="color: red;">*</span></label>
-                        <input type="text" name="price_quote" id="price_quote" required
+                            </label>
+                        <input type="text" name="price_quote" id="price_quote" 
                             data-parsley-trigger="keyup" data-parsley-type="number"
                             data-parsley-type-message="Please enter a valid number." class="form-control"
                             value="{{ $prospect->price_quote }}" placeholder="Enter Price Quote">
@@ -150,6 +150,13 @@
                             <span style="color: red;">*</span></label>
                         <input type="text" name="source" id="source" required data-parsley-trigger="keyup"
                             class="form-control" value="{{ $prospect->source }}" placeholder="Enter Source">
+                    </div>
+                    {{-- meeting_date --}}
+                    <div class="col-md-12 mb-3">
+                        <label for="inputEnterYourName" class="col-form-label">Meeting
+                            Date</label>
+                        <input type="date" name="meeting_date" id="meeting_date" class="form-control"
+                            value="{{ $prospect->meeting_date }}" placeholder="Enter Meeting Date">
                     </div>
                     {{-- transfer_token_by --}}
                     <div class="col-md-12 mb-3">
@@ -186,6 +193,12 @@
                         <select name="status" id="prospect-status" class="form-control" required
                             data-parsley-trigger="keyup">
                             <option value="">Select Status</option>
+                             {{-- Not Interested, No Answer, Wrong Number --}}
+                             <option value="Not Interested" {{ $prospect->status == 'Not Interested' ? 'selected' : '' }}>Not Interested
+                            </option>
+                            <option value="No Answer" {{ $prospect->status == 'No Answer' ? 'selected' : '' }}>No Answer</option>
+                            <option value="Wrong Number" {{ $prospect->status == 'Wrong Number' ? 'selected' : '' }}>Wrong Number
+                            </option>
                             <option value="Win" {{ $prospect->status == 'Win' ? 'selected' : '' }}>On board
                             </option>
                             <option value="Follow Up" {{ $prospect->status == 'Follow Up' ? 'selected' : '' }}>

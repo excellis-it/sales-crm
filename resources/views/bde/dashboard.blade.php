@@ -184,21 +184,16 @@
                                 <p class="mb-10 line-height-1">On Board Prospect</p>
                                 <h3 class="mb-0 fs-25">{{ $count['win'] }}</h3>
                             </div>
-
                             <span class="badge badge-red font-size-12">
                                 <i class="icofont-swoosh-down"></i>
                                 <span class="fw-600 m-l-5">{{ $percentage['win'] }}%</span>
                             </span>
                         </div>
-
                         <div class="mt-15">
                             <div class="d-flex justify-content-between">
-                                <div class="d-flex align-items-center">
-                                    <span>Prospect Percentage</span>
-                                </div>
+                                <div class="d-flex align-items-center"><span>Prospect Percentage</span></div>
                                 <span class="fw-600">{{ $percentage['win'] }}%</span>
                             </div>
-
                             <div class="progress progress-sm mt-1">
                                 <div class="progress-bar bg-purple" style="width: {{ $percentage['win'] }}%"></div>
                             </div>
@@ -206,6 +201,75 @@
                     </div>
                 </div>
             </div>
+
+            {{-- Meetings & OnBoard Goal Cards --}}
+            <div class="row">
+                @php
+                    $meetingsGoal = $goal['meetings_goal'] ?? null;
+                    $onboardGoal  = $goal['onboard_goal']  ?? null;
+                    $mTarget  = $meetingsGoal ? (int)$meetingsGoal->goals_amount  : 0;
+                    $mAchieve = $meetingsGoal ? (int)$meetingsGoal->goals_achieve : 0;
+                    $mPct     = $mTarget > 0 ? min(round(($mAchieve / $mTarget) * 100), 100) : 0;
+                    $oTarget  = $onboardGoal  ? (int)$onboardGoal->goals_amount   : 0;
+                    $oAchieve = $onboardGoal  ? (int)$onboardGoal->goals_achieve  : 0;
+                    $oPct     = $oTarget > 0  ? min(round(($oAchieve / $oTarget) * 100), 100) : 0;
+                @endphp
+                <div class="col-lg-3 col-sm-6">
+                    <div class="stats-card-one mb-30" style="border-left: 4px solid #17a2b8;">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="mb-10 line-height-1">Meetings Goal</p>
+                                @if($meetingsGoal)
+                                    <h3 class="mb-0 fs-25">{{ $mAchieve }} / {{ $mTarget }}</h3>
+                                @else
+                                    <h3 class="fs-25">No Goal Set</h3>
+                                @endif
+                            </div>
+                            <span class="badge badge-cyan fs-12">
+                                <i class="icofont-users-alt-5"></i>
+                                <span class="fw-600 m-l-5">{{ $mPct }}%</span>
+                            </span>
+                        </div>
+                        <div class="mt-15">
+                            <div class="d-flex justify-content-between">
+                                <span>Monthly Meetings</span>
+                                <span class="fw-600">{{ $mPct }}%</span>
+                            </div>
+                            <div class="progress progress-sm mt-1">
+                                <div class="progress-bar" style="width:{{ $mPct }}%;background:{{ $mPct >= 80 ? '#28a745' : ($mPct >= 50 ? '#f37e20' : '#dc3545') }};"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="stats-card-one mb-30" style="border-left: 4px solid #20c997;">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="mb-10 line-height-1">On Board Goal</p>
+                                @if($onboardGoal)
+                                    <h3 class="mb-0 fs-25">{{ $oAchieve }} / {{ $oTarget }}</h3>
+                                @else
+                                    <h3 class="fs-25">No Goal Set</h3>
+                                @endif
+                            </div>
+                            <span class="badge badge-cyan fs-12">
+                                <i class="icofont-check-circled"></i>
+                                <span class="fw-600 m-l-5">{{ $oPct }}%</span>
+                            </span>
+                        </div>
+                        <div class="mt-15">
+                            <div class="d-flex justify-content-between">
+                                <span>Monthly On Board</span>
+                                <span class="fw-600">{{ $oPct }}%</span>
+                            </div>
+                            <div class="progress progress-sm mt-1">
+                                <div class="progress-bar" style="width:{{ $oPct }}%;background:{{ $oPct >= 80 ? '#28a745' : ($oPct >= 50 ? '#f37e20' : '#dc3545') }};"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-lg-6">
                     <div class="card mb-30">
@@ -429,6 +493,32 @@
                         {{ $goal['prospect_july'] ?? 0 }},{{ $goal['prospect_august'] ?? 0 }}, 
                         {{ $goal['prospect_september'] ?? 0 }},{{ $goal['prospect_october'] ?? 0 }}, 
                         {{ $goal['prospect_november'] ?? 0 }},{{ $goal['prospect_december'] ?? 0 }}
+                    ]
+                },
+                {
+                    label: "Meetings Goal",
+                    backgroundColor: "#17a2b8",
+                    borderColor: "#17a2b8",
+                    borderWidth: 1,
+                    data: [{{ $goal['meetings_achieve_january'] ?? 0 }}, {{ $goal['meetings_achieve_february'] ?? 0 }},
+                        {{ $goal['meetings_achieve_march'] ?? 0 }}, {{ $goal['meetings_achieve_april'] ?? 0 }},
+                        {{ $goal['meetings_achieve_may'] ?? 0 }}, {{ $goal['meetings_achieve_june'] ?? 0 }},
+                        {{ $goal['meetings_achieve_july'] ?? 0 }}, {{ $goal['meetings_achieve_august'] ?? 0 }},
+                        {{ $goal['meetings_achieve_september'] ?? 0 }}, {{ $goal['meetings_achieve_october'] ?? 0 }},
+                        {{ $goal['meetings_achieve_november'] ?? 0 }}, {{ $goal['meetings_achieve_december'] ?? 0 }}
+                    ]
+                },
+                {
+                    label: "On Board Goal",
+                    backgroundColor: "#20c997",
+                    borderColor: "#20c997",
+                    borderWidth: 1,
+                    data: [{{ $goal['onboard_achieve_january'] ?? 0 }}, {{ $goal['onboard_achieve_february'] ?? 0 }},
+                        {{ $goal['onboard_achieve_march'] ?? 0 }}, {{ $goal['onboard_achieve_april'] ?? 0 }},
+                        {{ $goal['onboard_achieve_may'] ?? 0 }}, {{ $goal['onboard_achieve_june'] ?? 0 }},
+                        {{ $goal['onboard_achieve_july'] ?? 0 }}, {{ $goal['onboard_achieve_august'] ?? 0 }},
+                        {{ $goal['onboard_achieve_september'] ?? 0 }}, {{ $goal['onboard_achieve_october'] ?? 0 }},
+                        {{ $goal['onboard_achieve_november'] ?? 0 }}, {{ $goal['onboard_achieve_december'] ?? 0 }}
                     ]
                 },
             ]

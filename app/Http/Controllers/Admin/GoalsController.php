@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\BdmProspect;
 use App\Models\Goal;
 use App\Models\Project;
 use App\Models\Prospect;
@@ -130,117 +131,224 @@ class GoalsController extends Controller
      */
     public function store(Request $request)
     {
-        // return $request->all();exit;
+        $user = User::find($request->user_id);
+
+        // Block Sales Executive — goals distributed by Sales Manager only
+        if ($user->hasRole('SALES_EXCUETIVE')) {
+            return redirect()->route('goals.index')->with('error', 'Sales Executive goals can only be set by their Sales Manager through goal distribution.');
+        }
+
+        // ── TenderUser: quarterly goals ──────────────────────────────────────
+        if ($user->hasRole('TENDER_USER')) {
+            $quarter = (int) $request->goals_quarter;
+            $year    = $request->goals_year ?? date('Y');
+            $quarterStartMonth = [1 => '01', 2 => '04', 3 => '07', 4 => '10'];
+            $goalsDate = $year . '-' . ($quarterStartMonth[$quarter] ?? '01') . '-01';
+
+            if (!$request->id) {
+                $existing = Goal::where('user_id', $user->id)
+                    ->whereYear('goals_date', $year)
+                    ->where('quarter', $quarter)
+                    ->where('goals_type', 1)
+                    ->first();
+                if ($existing) {
+                    return redirect()->route('goals.index')->with('error', 'Quarterly goal already exists for Q' . $quarter . ' ' . $year . '.');
+                }
+            }
+
+            $tGoal = $request->id ? Goal::find($request->id) : new Goal();
+            $tGoal->user_id      = $user->id;
+            $tGoal->goals_date   = $goalsDate;
+            $tGoal->goals_amount = $request->goals_amount;
+            $tGoal->goals_achieve = 0;
+            $tGoal->goals_type   = 1;
+            $tGoal->quarter      = $quarter;
+            $tGoal->save();
+
+            $message = $request->id ? 'Quarterly goal updated successfully.' : 'Quarterly goal added successfully.';
+            return redirect()->route('goals.index')->with('message', $message);
+        }
+
+        // ── BDE: target amount + meetings + onboard monthly goals ───────────
+        if ($user->hasRole('BUSINESS_DEVELOPMENT_EXCECUTIVE')) {
+            $month = date('m', strtotime($request->goals_date));
+            $year  = date('Y', strtotime($request->goals_date));
+
+            $meetings_achieve = BdmProspect::where('user_id', $user->id)
+                ->whereMonth('sale_date', $month)->whereYear('sale_date', $year)->count();
+            $onboard_achieve = BdmProspect::where('user_id', $user->id)
+                ->where('status', 'Win')
+                ->whereMonth('sale_date', $month)->whereYear('sale_date', $year)->count();
+
+            // Gross goal (type 1) — target amount
+            if ($request->filled('goals_amount')) {
+                $gGoal = Goal::where('user_id', $user->id)
+                    ->whereMonth('goals_date', $month)->whereYear('goals_date', $year)
+                    ->where('goals_type', 1)->first() ?? new Goal();
+                $gGoal->user_id       = $user->id;
+                $gGoal->goals_date    = $request->goals_date;
+                $gGoal->goals_amount  = $request->goals_amount;
+                $gGoal->goals_achieve = 0;
+                $gGoal->goals_type    = 1;
+                $gGoal->save();
+            }
+
+            // Meetings goal (type 3)
+            $mGoal = Goal::where('user_id', $user->id)
+                ->whereMonth('goals_date', $month)->whereYear('goals_date', $year)
+                ->where('goals_type', 3)->first() ?? new Goal();
+            $mGoal->user_id       = $user->id;
+            $mGoal->goals_date    = $request->goals_date;
+            $mGoal->goals_amount  = $request->meetings_amount ?? 0;
+            $mGoal->goals_achieve = $meetings_achieve;
+            $mGoal->goals_type    = 3;
+            $mGoal->save();
+
+            // Onboard goal (type 4)
+            $oGoal = Goal::where('user_id', $user->id)
+                ->whereMonth('goals_date', $month)->whereYear('goals_date', $year)
+                ->where('goals_type', 4)->first() ?? new Goal();
+            $oGoal->user_id       = $user->id;
+            $oGoal->goals_date    = $request->goals_date;
+            $oGoal->goals_amount  = $request->onboard_amount ?? 0;
+            $oGoal->goals_achieve = $onboard_achieve;
+            $oGoal->goals_type    = 4;
+            $oGoal->save();
+
+            $message = 'BDE goals saved successfully.';
+            return redirect()->route('goals.index')->with('message', $message);
+        }
+
+        // ── All other roles: monthly duplicate check ─────────────────────────
         if (!$request->id) {
-            $count = Goal::where('user_id', $request->user_id)->whereMonth('goals_date', date('m', strtotime($request->goals_date)))->whereYear('goals_date', date('Y', strtotime($request->goals_date)))->count();
+            $count = Goal::where('user_id', $request->user_id)
+                ->whereMonth('goals_date', date('m', strtotime($request->goals_date)))
+                ->whereYear('goals_date', date('Y', strtotime($request->goals_date)))
+                ->count();
             if ($count > 0) {
                 return redirect()->route('goals.index')->with('error', 'Goal already exists for this month.');
             }
         }
-        //  check role by user id
-        $user = User::find($request->user_id);
 
-        // Block admin from directly creating goals for Sales Executives
-        // Sales Executive goals are only distributed by their Sales Manager
-        if ($user->hasRole('SALES_EXCUETIVE')) {
-            return redirect()->route('goals.index')->with('error', 'Sales Executive goals can only be set by their Sales Manager through goal distribution.');
-        }
+        // ── Calculate achievements ───────────────────────────────────────────
         if ($user->hasRole('SALES_MANAGER') || $user->hasRole('BUSINESS_DEVELOPMENT_MANAGER')) {
-            $projects = Project::where('user_id', $request->user_id)->whereMonth('sale_date', date('m', strtotime($request->goals_date)))->whereYear('sale_date', date('Y', strtotime($request->goals_date)))->get();
-            if (count($projects) > 0) {
-                $goals_achieve  = $projects->sum('project_value');
-            } else {
-                $goals_achieve = 0;
-            }
-
-            if (count($projects) > 0) {
-                $goals_achieve_net  = $projects->sum('project_upfront');
-            } else {
-                $goals_achieve_net = 0;
-            }
-        }else if ($user->hasRole('SALES_EXCUETIVE')) {
-            $prospects = Prospect::where(['user_id'=> $request->user_id, 'status' => 'Win'])->whereMonth('sale_date', date('m', strtotime($request->goals_date)))->whereYear('sale_date', date('Y', strtotime($request->goals_date)))->get();
-            if (count($prospects) > 0) {
-                $goals_achieve  = $prospects->sum('price_quote');
-            } else {
-                $goals_achieve = 0;
-            }
-
-            if (count($prospects) > 0) {
-                $goals_achieve_net  = $prospects->sum('upfront_value');
-            } else {
-                $goals_achieve_net = 0;
-            }
-
+            $projects = Project::where('user_id', $request->user_id)
+                ->whereMonth('sale_date', date('m', strtotime($request->goals_date)))
+                ->whereYear('sale_date', date('Y', strtotime($request->goals_date)))
+                ->get();
+            $goals_achieve     = count($projects) > 0 ? $projects->sum('project_value') : 0;
+            $goals_achieve_net = count($projects) > 0 ? $projects->sum('project_upfront') : 0;
+        } else if ($user->hasRole('SALES_EXCUETIVE')) {
+            $prospects = Prospect::where(['user_id' => $request->user_id, 'status' => 'Win'])
+                ->whereMonth('sale_date', date('m', strtotime($request->goals_date)))
+                ->whereYear('sale_date', date('Y', strtotime($request->goals_date)))
+                ->get();
+            $goals_achieve     = count($prospects) > 0 ? $prospects->sum('price_quote') : 0;
+            $goals_achieve_net = count($prospects) > 0 ? $prospects->sum('upfront_value') : 0;
         } else {
             $projects = Project::where('assigned_to', $request->user_id)->get();
+            $goals_achieve = 0;
             if (count($projects) > 0) {
-                $goals_achieve = 0;
-                foreach ($projects as $key => $value) {
-                    $goals_achieve += $value->projectMilestones()->where(['payment_status' => 'Paid'])->whereMonth('payment_date', date('m', strtotime($request->goals_date)))->whereYear('payment_date', date('Y', strtotime($request->goals_date)))->sum('milestone_value');
+                foreach ($projects as $value) {
+                    $goals_achieve += $value->projectMilestones()
+                        ->where(['payment_status' => 'Paid'])
+                        ->whereMonth('payment_date', date('m', strtotime($request->goals_date)))
+                        ->whereYear('payment_date', date('Y', strtotime($request->goals_date)))
+                        ->sum('milestone_value');
                 }
-                // return 'f';
-            } else {
-                $goals_achieve = 0;
             }
+            $goals_achieve_net = 0;
         }
-        // return $goals_achieve;
+
+        // ── Create / update gross + net goals ────────────────────────────────
         if ($request->id) {
-            $goal = Goal::find($request->id);
+            $goal    = Goal::find($request->id);
             $message = 'Goal updated successfully.';
 
             if ($user->hasRole('SALES_MANAGER') || $user->hasRole('SALES_EXCUETIVE') || $user->hasRole('BUSINESS_DEVELOPMENT_MANAGER')) {
-                $goal->user_id = $request->user_id;
-                $goal->goals_date = $request->goals_date;
-                $goal->goals_amount = $request->goals_amount;
+                $goal->user_id       = $request->user_id;
+                $goal->goals_date    = $request->goals_date;
+                $goal->goals_amount  = $request->goals_amount;
                 $goal->goals_achieve = $goals_achieve;
                 $goal->save();
 
-                $net_goals = Goal::where('user_id', $request->user_id)->where('goals_type', 2)->whereMonth('goals_date', date('m', strtotime($request->goals_date)))->whereYear('goals_date', date('Y', strtotime($request->goals_date)))->first();
+                $net_goals = Goal::where('user_id', $request->user_id)->where('goals_type', 2)
+                    ->whereMonth('goals_date', date('m', strtotime($request->goals_date)))
+                    ->whereYear('goals_date', date('Y', strtotime($request->goals_date)))->first();
                 if ($net_goals) {
-                    $net_goals->user_id = $request->user_id;
-                    $net_goals->goals_date = $request->goals_date;
-                    // 25% of goals_amount
-                    $net_goals->goals_amount = $request->goals_amount * 40 / 100;
+                    $net_goals->user_id       = $request->user_id;
+                    $net_goals->goals_date    = $request->goals_date;
+                    $net_goals->goals_amount  = $request->goals_amount * 40 / 100;
                     $net_goals->goals_achieve = $goals_achieve_net;
                     $net_goals->save();
                 }
             } else {
-                $goal->user_id = $request->user_id;
-                $goal->goals_date = $request->goals_date;
-                $goal->goals_amount = $request->goals_amount;
+                $goal->user_id       = $request->user_id;
+                $goal->goals_date    = $request->goals_date;
+                $goal->goals_amount  = $request->goals_amount;
                 $goal->goals_achieve = $goals_achieve;
                 $goal->save();
             }
         } else {
-            $goal = new Goal();
+            $goal    = new Goal();
             $message = 'Goal added successfully.';
 
             if ($user->hasRole('SALES_MANAGER') || $user->hasRole('SALES_EXCUETIVE') || $user->hasRole('BUSINESS_DEVELOPMENT_MANAGER')) {
-                $goal->user_id = $request->user_id;
-                $goal->goals_date = $request->goals_date;
-                $goal->goals_amount = $request->goals_amount;
+                $goal->user_id       = $request->user_id;
+                $goal->goals_date    = $request->goals_date;
+                $goal->goals_amount  = $request->goals_amount;
                 $goal->goals_achieve = $goals_achieve;
-                $goal->goals_type = 1;
+                $goal->goals_type    = 1;
                 $goal->save();
 
-                $net_goals = new Goal();
-                $net_goals->user_id = $request->user_id;
-                $net_goals->goals_date = $request->goals_date;
+                $net_goals               = new Goal();
+                $net_goals->user_id      = $request->user_id;
+                $net_goals->goals_date   = $request->goals_date;
                 $net_goals->goals_amount = $request->goals_amount * 40 / 100;
                 $net_goals->goals_achieve = $goals_achieve_net;
-                $net_goals->goals_type = 2;
+                $net_goals->goals_type   = 2;
                 $net_goals->save();
             } else {
-                $goal->user_id = $request->user_id;
-                $goal->goals_date = $request->goals_date;
-                $goal->goals_amount = $request->goals_amount;
+                $goal->user_id       = $request->user_id;
+                $goal->goals_date    = $request->goals_date;
+                $goal->goals_amount  = $request->goals_amount;
                 $goal->goals_achieve = $goals_achieve;
-                $goal->goals_type = 2;
+                $goal->goals_type    = 2;
                 $goal->save();
             }
         }
 
+        // ── Also save meetings + onboard goals for BDM ───────────────────────
+        if ($user->hasRole('BUSINESS_DEVELOPMENT_MANAGER')) {
+            $m = date('m', strtotime($request->goals_date));
+            $y = date('Y', strtotime($request->goals_date));
+
+            $meetings_achieve = BdmProspect::where('report_to', $user->id)
+                ->whereMonth('sale_date', $m)->whereYear('sale_date', $y)->count();
+            $onboard_achieve = BdmProspect::where('report_to', $user->id)
+                ->where('status', 'Win')
+                ->whereMonth('sale_date', $m)->whereYear('sale_date', $y)->count();
+
+            $mGoal = Goal::where('user_id', $user->id)
+                ->whereMonth('goals_date', $m)->whereYear('goals_date', $y)
+                ->where('goals_type', 3)->first() ?? new Goal();
+            $mGoal->user_id       = $user->id;
+            $mGoal->goals_date    = $request->goals_date;
+            $mGoal->goals_amount  = $request->meetings_amount ?? 0;
+            $mGoal->goals_achieve = $meetings_achieve;
+            $mGoal->goals_type    = 3;
+            $mGoal->save();
+
+            $oGoal = Goal::where('user_id', $user->id)
+                ->whereMonth('goals_date', $m)->whereYear('goals_date', $y)
+                ->where('goals_type', 4)->first() ?? new Goal();
+            $oGoal->user_id       = $user->id;
+            $oGoal->goals_date    = $request->goals_date;
+            $oGoal->goals_amount  = $request->onboard_amount ?? 0;
+            $oGoal->goals_achieve = $onboard_achieve;
+            $oGoal->goals_type    = 4;
+            $oGoal->save();
+        }
 
         return redirect()->route('goals.index')->with('message', $message);
     }
@@ -265,14 +373,35 @@ class GoalsController extends Controller
     public function edit(Request $request, $id)
     {
         if ($request->ajax()) {
-            // return $request->all();
             $goal = Goal::find($id);
-            $users = User::role($request->role)->orderBy('name', 'asc')->get();
-            if ($goal) {
-                return response()->json(['status' => 'success', 'data' => $goal, 'users' => $users]);
-            } else {
+            if (!$goal) {
                 return response()->json(['status' => 'error', 'message' => 'Goal not found.']);
             }
+
+            $users = User::role($request->role)->orderBy('name', 'asc')->get();
+
+            $month = date('m', strtotime($goal->goals_date));
+            $year  = date('Y', strtotime($goal->goals_date));
+
+            // Also load meetings and onboard goals for the same user+month (BDM/BDE)
+            $meetingsGoal = Goal::where('user_id', $goal->user_id)
+                ->whereMonth('goals_date', $month)->whereYear('goals_date', $year)
+                ->where('goals_type', 3)->first();
+            $onboardGoal = Goal::where('user_id', $goal->user_id)
+                ->whereMonth('goals_date', $month)->whereYear('goals_date', $year)
+                ->where('goals_type', 4)->first();
+
+            // Add year to the data payload for TenderUser quarterly form
+            $goalData = $goal->toArray();
+            $goalData['goals_year'] = $year;
+
+            return response()->json([
+                'status'       => 'success',
+                'data'         => $goalData,
+                'users'        => $users,
+                'meetings_goal' => $meetingsGoal,
+                'onboard_goal'  => $onboardGoal,
+            ]);
         }
     }
 

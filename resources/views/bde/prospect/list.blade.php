@@ -204,9 +204,9 @@
                                         {{-- offer for --}}
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Service
-                                                Offered <span style="color: red;">*</span></label>
-                                            <select name="offered_for" id="project_type" required
-                                                data-parsley-trigger="keyup" class="form-control">
+                                                Offered</label>
+                                            <select name="offered_for" id="project_type" data-parsley-trigger="keyup"
+                                                class="form-control">
                                                 <option value="">Select Project Type</option>
                                                 <option value="Website Design & Development">Website Design &
                                                     Development</option>
@@ -225,8 +225,8 @@
                                         {{--  price_quote --}}
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Price Quote
-                                                <span style="color: red;">*</span></label>
-                                            <input type="text" name="price_quote" id="price_quote" required
+                                            </label>
+                                            <input type="text" name="price_quote" id="price_quote"
                                                 data-parsley-trigger="keyup" data-parsley-type="number"
                                                 data-parsley-type-message="Please enter a valid number."
                                                 class="form-control" value="{{ old('price_quote') }}"
@@ -236,10 +236,10 @@
                                         {{-- transfer_token_by --}}
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Transfer
-                                                Taken By <span style="color: red;">*</span>
+                                                Taken By
                                             </label>
                                             <select name="transfer_token_by" id="transfer_token_by"
-                                                class="form-control select2" required>
+                                                class="form-control select2" >
                                                 <option value="">Select Transfer Token By
                                                 </option>
                                                 @foreach ($users as $user)
@@ -249,11 +249,17 @@
                                                 @endforeach
                                             </select>
                                         </div>
+                                        {{-- meeting_date --}}
+                                        <div class="col-md-4 mb-3">
+                                            <label class="col-form-label">Meeting Date</label>
+                                            <input type="date" name="meeting_date" id="meeting_date"
+                                                class="form-control">
+                                        </div>
                                         {{-- followup_date --}}
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Followup
-                                                Date <span style="color: red;">*</span></label>
-                                            <input type="date" name="followup_date" id="followup_date" required
+                                                Date </label>
+                                            <input type="date" name="followup_date" id="followup_date" 
                                                 class="form-control picker" placeholder="Enter Followup Date">
                                         </div>
                                         {{-- followup_time --}}
@@ -270,6 +276,10 @@
                                             <select name="status" id="status" class="form-control" required
                                                 data-parsley-trigger="keyup">
                                                 <option value="">Select Status</option>
+                                              {{-- Not Interested, No Answer, Wrong Number --}}
+                                                <option value="Not Interested">Not Interested</option>
+                                                <option value="No Answer">No Answer</option>
+                                                <option value="Wrong Number">Wrong Number</option>
                                                 <option value="Win">On board</option>
                                                 <option value="Follow Up">Follow Up</option>
                                                 <option value="Sent Proposal">Sent Proposal</option>
@@ -309,7 +319,7 @@
                                 <tr>
                                     <th>Date</th>
                                     <th>Business Name</th>
-                                  
+
                                     <th>Transfer Taken By</th>
                                     <th>Status</th>
                                     <th>Service Offered</th>
@@ -533,7 +543,7 @@
                 var status = $(this).val();
                 if (status.includes('Win')) {
                     $('#upfront_value_show').html(
-                        '<div class="col-md-12 mb-3"><label for="inputEnterYourName" data-parsley-type="number" class="col-form-label">Upfront Value <span style="color: red;">*</span></label><input type="text" name="upfront_value" id="upfront_value"  required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number." class="form-control" value="{{ old('upfront_value') }}" placeholder="Enter Upfront Value"></div><div class="col-md-12 mb-3"><label class="col-form-label">Payment Mode <span style="color: red;">*</span></label><select name="payment_mode" class="form-control" required data-parsley-trigger="keyup"><option value="">Select Mode</option><option value="Paypal">Paypal</option><option value="Stripe">Stripe</option><option value="Bank Transfer">Bank Transfer</option><option value="Payoneer">Payoneer</option></select></div><div class="col-md-12 mb-3"> <label for = "inputEnterYourName" class="col-form-label"> Sale Date <span style="color: red;">*</span></label></label> <input type="date" name ="sale_date" id ="sale_date" class ="form-control picker"></div><h3 class="mt-4 text-uppercase">Milestone</h3><hr><div class="row"><div class="col-md-12 mb-3 pb-3"><div style="display: flex"><input type="text" name="milestone_name[]" class="form-control" value="" placeholder="Milestone name" id="" required data-parsley-trigger="keyup"></div></div><div class="col-md-12 mb-3 pb-3"><div style="display: flex"><input type="text" name="milestone_value[]" class="form-control" value="" placeholder="Milestone value" id="" required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number."></div></div><div class="col-md-12 mb-3 pb-3"><div style="display: flex"><textarea name="milestone_comment[]" class="form-control" placeholder="Milestone Comment" id="" cols="3" rows="2" ></textarea></div></div></div><div class="col-md-12 mb-3"><button type="button" class="btn btn-primary milestone-print"><i class="fas fa-plus"></i> Add Milestone</button></div><div class="add-milestone"></div></div>'
+                        '<div class="col-md-12 mb-3"><label for="inputEnterYourName" data-parsley-type="number" class="col-form-label">Upfront Value <span style="color: red;">*</span></label><input type="text" name="upfront_value" id="upfront_value"   data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number." class="form-control" value="{{ old('upfront_value') }}" placeholder="Enter Upfront Value"></div><div class="col-md-12 mb-3"><label class="col-form-label">Payment Mode <span style="color: red;">*</span></label><select name="payment_mode" class="form-control"  data-parsley-trigger="keyup"><option value="">Select Mode</option><option value="Paypal">Paypal</option><option value="Stripe">Stripe</option><option value="Bank Transfer">Bank Transfer</option><option value="Payoneer">Payoneer</option></select></div><div class="col-md-12 mb-3"> <label for = "inputEnterYourName" class="col-form-label"> Sale Date <span style="color: red;">*</span></label></label> <input type="date" name ="sale_date" id ="sale_date" class ="form-control picker"></div><h3 class="mt-4 text-uppercase">Milestone</h3><hr><div class="row"><div class="col-md-12 mb-3 pb-3"><div style="display: flex"><input type="text" name="milestone_name[]" class="form-control" value="" placeholder="Milestone name" id=""  data-parsley-trigger="keyup"></div></div><div class="col-md-12 mb-3 pb-3"><div style="display: flex"><input type="text" name="milestone_value[]" class="form-control" value="" placeholder="Milestone value" id=""  data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number."></div></div><div class="col-md-12 mb-3 pb-3"><div style="display: flex"><textarea name="milestone_comment[]" class="form-control" placeholder="Milestone Comment" id="" cols="3" rows="2" ></textarea></div></div></div><div class="col-md-12 mb-3"><button type="button" class="btn btn-primary milestone-print"><i class="fas fa-plus"></i> Add Milestone</button></div><div class="add-milestone"></div></div>'
                     );
                 } else {
                     $('#upfront_value_show').html('');

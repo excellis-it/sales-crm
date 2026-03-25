@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\BdmProspect;
 use App\Models\Customer;
 use App\Models\Goal;
 use App\Models\Project;
@@ -139,6 +140,36 @@ class DashboardController extends Controller
 
         $count['account_manager_percentage'] = ($count['account_manager_goals'] > 0) ? round(($count['account_manager_revenue'] / $count['account_manager_goals']) * 100) : 0;
         $count['bdm_percentage'] = ($count['bdm_goals'] > 0) ? round(($count['bdm_revenue'] / $count['bdm_goals']) * 100) : 0;
+
+        // BDM Meetings & OnBoard goals
+        $count['bdm_meetings_goal']   = (clone $goalQuery)->whereIn('user_id', $bdma_manager_id)->where('goals_type', 3)->sum('goals_amount');
+        $count['bdm_onboard_goal']    = (clone $goalQuery)->whereIn('user_id', $bdma_manager_id)->where('goals_type', 4)->sum('goals_amount');
+        $bdmProspectQuery = BdmProspect::whereIn('report_to', $bdma_manager_id)->whereNotNull('meeting_date');
+        if ($startDate && $endDate) {
+            $bdmProspectQuery->whereBetween('meeting_date', [$startDate, $endDate]);
+        }
+        $count['bdm_meetings_achieve']    = (clone $bdmProspectQuery)->count();
+        $count['bdm_onboard_achieve']     = (clone $bdmProspectQuery)->where('status', 'Win')->whereBetween('sale_date', [$startDate, $endDate])->count();
+        $count['bdm_meetings_percentage'] = $count['bdm_meetings_goal'] > 0 ? round(($count['bdm_meetings_achieve'] / $count['bdm_meetings_goal']) * 100) : 0;
+        $count['bdm_onboard_percentage']  = $count['bdm_onboard_goal']  > 0 ? round(($count['bdm_onboard_achieve']  / $count['bdm_onboard_goal'])  * 100) : 0;
+
+        // Tender quarterly goals (always current quarter regardless of filter type)
+        $tender_user_ids   = User::Role('TENDER_USER')->pluck('id');
+        $currentQtr        = (int) ceil((int) date('m') / 3);
+        $currentYear       = (int) date('Y');
+        $qStartMonth       = ($currentQtr - 1) * 3 + 1;
+        $qStart            = date('Y') . '-' . sprintf('%02d', $qStartMonth) . '-01';
+        $qEnd              = date('Y-m-t', mktime(0, 0, 0, $qStartMonth + 2, 1));
+        $count['tender_quarterly_goal']    = Goal::whereIn('user_id', $tender_user_ids)
+            ->where('goals_type', 1)->whereNotNull('quarter')
+            ->where('quarter', $currentQtr)->whereYear('goals_date', $currentYear)
+            ->sum('goals_amount');
+        $count['tender_quarterly_achieve'] = TenderProject::whereIn('tender_user_id', $tender_user_ids)
+            ->whereBetween('created_at', [$qStart . ' 00:00:00', $qEnd . ' 23:59:59'])
+            ->sum('tender_value_lakhs');
+        $count['tender_quarterly_percentage'] = $count['tender_quarterly_goal'] > 0
+            ? round(($count['tender_quarterly_achieve'] / $count['tender_quarterly_goal']) * 100) : 0;
+        $count['tender_current_quarter'] = 'Q' . $currentQtr . ' ' . $currentYear;
 
         $goal['gross_goals'] = (clone $goalQuery)->where('goals_type', 1)->whereIn('user_id', $sales_manager_id)->sum('goals_amount');
         $goal['net_goals'] = (clone $goalQuery)->where('goals_type', 2)->whereIn('user_id', $sales_manager_id)->sum('goals_amount');

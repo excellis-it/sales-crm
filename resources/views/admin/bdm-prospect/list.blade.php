@@ -240,9 +240,9 @@
                                     {{-- offer for --}}
                                     <div class="col-md-12 mb-3">
                                         <label for="inputEnterYourName" class="col-form-label">Service
-                                            Offered <span style="color: red;">*</span></label>
-                                        <select name="offered_for" id="project_type" required
-                                            data-parsley-trigger="keyup" class="form-control">
+                                            Offered </label>
+                                        <select name="offered_for" id="project_type" data-parsley-trigger="keyup"
+                                            class="form-control">
                                             <option value="">Select Project Type</option>
                                             <option value="Website Design & Development">Website Design &
                                                 Development</option>
@@ -261,8 +261,8 @@
                                     {{--  price_quote --}}
                                     <div class="col-md-12 mb-3">
                                         <label for="inputEnterYourName" class="col-form-label">Price Quote
-                                            <span style="color: red;">*</span></label>
-                                        <input type="text" name="price_quote" id="price_quote" required
+                                            </label>
+                                        <input type="text" name="price_quote" id="price_quote"
                                             data-parsley-trigger="keyup" data-parsley-type="number"
                                             data-parsley-type-message="Please enter a valid number." class="form-control"
                                             value="{{ old('price_quote') }}" placeholder="Enter Price Quote">
@@ -291,6 +291,12 @@
                                             @endforeach
                                         </select>
                                     </div>
+                                    {{-- meeting_date --}}
+                                    <div class="col-md-4 mb-3">
+                                        <label class="col-form-label">Meeting Date</label>
+                                        <input type="date" name="meeting_date" id="meeting_date"
+                                            class="form-control">
+                                    </div>
                                     {{-- followup_date --}}
                                     <div class="col-md-12 mb-3">
                                         <label for="inputEnterYourName" class="col-form-label">Followup
@@ -312,6 +318,9 @@
                                         <select name="status" id="status" class="form-control" required
                                             data-parsley-trigger="keyup">
                                             <option value="">Select Status</option>
+                                            <option value="Not Interested">Not Interested</option>
+                                            <option value="No Answer">No Answer</option>
+                                            <option value="Wrong Number">Wrong Number</option>
                                             <option value="Win">On board</option>
                                             <option value="Follow Up">Follow Up</option>
                                             <option value="Sent Proposal">Sent Proposal</option>

@@ -128,6 +128,7 @@ class BdmProspectController extends Controller
         $prospect->status = $data['status'];
         $prospect->followup_date = $data['followup_date'];
         $prospect->followup_time = $data['followup_time'];
+        $prospect->meeting_date = !empty($data['meeting_date']) ? $data['meeting_date'] : null;
         $prospect->sale_date = $data['sale_date'] ?? '';
         $prospect->upfront_value = $data['upfront_value'] ?? '';
         $prospect->comments = $data['comments'];
@@ -319,6 +320,7 @@ class BdmProspectController extends Controller
         $prospect->source = $data['source'];
         $prospect->followup_date = $data['followup_date'];
         $prospect->followup_time = $data['followup_time'];
+        $prospect->meeting_date = !empty($data['meeting_date']) ? $data['meeting_date'] : null;
         $prospect->sale_date = $data['sale_date'] ?? '';
         $prospect->upfront_value = $data['upfront_value'] ?? '';
         // $prospect->comments = $data['comments'];

@@ -127,6 +127,43 @@ class Helper
         ];
     }
 
+    /**
+     * Get live meetings and onboard achievement counts for a BDM or BDE user.
+     *
+     * BDM — counts prospects where report_to = userId (team prospects)
+     * BDE — counts prospects where user_id  = userId (own prospects)
+     *
+     * @param int    $userId
+     * @param string $startDate  Y-m-d
+     * @param string $endDate    Y-m-d
+     * @return array ['meetings' => int, 'onboard' => int]
+     */
+    public static function getUserMeetingsAndOnboardAchievement($userId, $startDate, $endDate)
+    {
+        $user = User::find($userId);
+
+        if (!$user) {
+            return ['meetings' => 0, 'onboard' => 0];
+        }
+
+        if ($user->hasRole('BUSINESS_DEVELOPMENT_MANAGER')) {
+            $query = BdmProspect::where('report_to', $userId)
+                ->whereNotNull('meeting_date')
+                ->whereBetween('meeting_date', [$startDate, $endDate]);
+        } elseif ($user->hasRole('BUSINESS_DEVELOPMENT_EXCECUTIVE')) {
+            $query = BdmProspect::where('user_id', $userId)
+                ->whereNotNull('meeting_date')
+                ->whereBetween('meeting_date', [$startDate, $endDate]);
+        } else {
+            return ['meetings' => 0, 'onboard' => 0];
+        }
+
+        return [
+            'meetings' => (clone $query)->count(),
+            'onboard'  => (clone $query)->where('status', 'Win')->whereBetween('sale_date', [$startDate, $endDate])->count(),
+        ];
+    }
+
     public static function getDateRangeByDuration($duration)
     {
         $startDate = null;

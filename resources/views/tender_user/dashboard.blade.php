@@ -79,6 +79,50 @@
                 </div>
             </div>
 
+            <!-- Quarterly Goal Card -->
+            <div class="row mb-2">
+                <div class="col-md-12">
+                    <div class="card dash-card" style="border-left: 4px solid #ff9b44;">
+                        <div class="card-body py-3">
+                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="dash-card-icon icon-orange" style="width:50px;height:50px;border-radius:10px;flex-shrink:0;">
+                                        <i class="la la-bullseye"></i>
+                                    </div>
+                                    <div>
+                                        <div class="dash-card-title">Quarterly Target — {{ $quarterLabel }}</div>
+                                        @if($quarterlyTarget > 0)
+                                            <div class="dash-card-value">
+                                                ₹{{ number_format($quarterlyAchieve, 2) }}L
+                                                <span style="font-size:14px;color:#888;">/ ₹{{ number_format($quarterlyTarget, 2) }}L</span>
+                                            </div>
+                                        @else
+                                            <div class="dash-card-value" style="font-size:16px;color:#aaa;">No Goal Set for {{ $quarterLabel }}</div>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div style="min-width:200px;flex:1;max-width:400px;">
+                                    @if($quarterlyTarget > 0)
+                                        @php
+                                            $qColor = $quarterlyPct >= 80 ? '#0ba360' : ($quarterlyPct >= 50 ? '#ff9b44' : '#f85032');
+                                        @endphp
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <small style="color:#888;">Progress</small>
+                                            <small style="font-weight:700;color:{{ $qColor }};">{{ $quarterlyPct }}%</small>
+                                        </div>
+                                        <div class="progress" style="height:8px;border-radius:4px;">
+                                            <div class="progress-bar" role="progressbar"
+                                                style="width:{{ $quarterlyPct }}%;background:{{ $qColor }};">
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Stats Rows -->
             <div class="row">
                 <div class="col-md-6 col-sm-6 col-lg-3">

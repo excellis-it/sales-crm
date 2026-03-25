@@ -12,7 +12,7 @@
             <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bde-prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->business_name }}
             </td>
-           
+
             <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bde-prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->transferTakenBy->name ?? '' }}
             </td>
@@ -25,10 +25,12 @@
                     <span>Sent Proposal</span>
                 @elseif ($prospect->status == 'Close')
                     <span>Cancel</span>
+                @else
+                    <span>{{ $prospect->status ?? '' }}</span>
                 @endif
             </td>
             <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bde-prospects.edit', $prospect->id) }}" @endif>
-                {{ $prospect->offered_for }}
+                {{ $prospect->offered_for ?? ''}}
             </td>
             <td @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('bde-prospects.edit', $prospect->id) }}" @endif>
                 {{ date('d M, Y', strtotime($prospect->followup_date)) }}

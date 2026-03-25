@@ -165,6 +165,12 @@
                                                             @endforeach
                                                         </select>
                                                     </div>
+                                                    {{-- meeting_date --}}
+                                                    <div class="col-md-4 mb-3">
+                                                        <label class="col-form-label">Meeting Date</label>
+                                                        <input type="date" name="meeting_date" id="meeting_date"
+                                                            class="form-control">
+                                                    </div>
                                                     {{-- followup_date --}}
                                                     <div class="col-md-4 mb-3">
                                                         <label for="inputEnterYourName" class="col-form-label">Followup

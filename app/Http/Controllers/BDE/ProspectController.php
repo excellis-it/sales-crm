@@ -118,6 +118,7 @@ class ProspectController extends Controller
         $prospect->website = $data['website'];
         $prospect->status = $data['status'];
         $prospect->followup_date = $data['followup_date'];
+        $prospect->meeting_date = !empty($data['meeting_date']) ? $data['meeting_date'] : null;
         $prospect->sale_date = $data['sale_date'] ?? '';
         $prospect->upfront_value = $data['upfront_value'] ?? '';
         $prospect->comments = $data['comments'];
@@ -312,6 +313,7 @@ class ProspectController extends Controller
         $prospect->upfront_value = $data['upfront_value'] ?? '';
         $prospect->payment_mode = $data['payment_mode'] ?? null;
         $prospect->sale_date = $data['sale_date'] ?? '';
+         $prospect->meeting_date = !empty($data['meeting_date']) ? $data['meeting_date'] : null;
         // $prospect->comments = $data['comments'];
         $prospect->price_quote = $data['price_quote'];
         if ($data['offered_for'] == 'Other') {

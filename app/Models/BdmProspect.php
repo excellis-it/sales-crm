@@ -25,6 +25,7 @@ class BdmProspect extends Model
         'status',
         'followup_date',
         'followup_time',
+        'meeting_date',
         'sale_date',
         'upfront_value',
         'payment_mode',

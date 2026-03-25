@@ -82,33 +82,35 @@
                                 enctype="multipart/form-data">
                                 @csrf
                                 <input type="hidden" name="id" id="id">
-                                <div class="row align-items-end mb-4">
+                                {{-- Row 1: User Type + User + Target Amount + Month/Quarter --}}
+                                <div class="row align-items-end mb-3">
                                     <div class="col-md-3">
-                                        <label for="inputEnterYourName" class="form-label fw-bold"> User Type
-                                            <span style="color: red;">*</span></label>
-                                        <select name="user_type" id="user_type" class="form-select border-primary" style="height: 45px; border-radius: 5px;">
+                                        <label class="form-label fw-bold">User Type <span style="color:red;">*</span></label>
+                                        <select name="user_type" id="user_type" class="form-select border-primary" style="height:45px;border-radius:5px;">
                                             <option value="">Select a User Type</option>
                                             <option value="BUSINESS_DEVELOPMENT_MANAGER">BDM</option>
+                                            <option value="BUSINESS_DEVELOPMENT_EXCECUTIVE">BDE</option>
                                             <option value="SALES_MANAGER">Sales Manager</option>
                                             <option value="ACCOUNT_MANAGER">Account Manager</option>
+                                            <option value="TENDER_USER">Tender Manager</option>
                                         </select>
                                     </div>
                                     <div class="col-md-3">
-                                        <label for="inputEnterYourName" class="form-label fw-bold"> Goal Assign For
-                                            <span style="color: red;">*</span></label>
-                                        <select name="user_id" id="user_id" class="form-select border-primary" style="height: 45px; border-radius: 5px;">
+                                        <label class="form-label fw-bold">Goal Assign For <span style="color:red;">*</span></label>
+                                        <select name="user_id" id="user_id" class="form-select border-primary" style="height:45px;border-radius:5px;">
                                             <option value="">Select a User</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-3">
-                                        <label for="inputEnterYourName" class="form-label fw-bold"> Target Amount </label>
+                                    {{-- Target Amount (hidden for BDE) --}}
+                                    <div class="col-md-3" id="goals_amount_wrap">
+                                        <label class="form-label fw-bold">Target Amount</label>
                                         <input type="text" name="goals_amount" id="goals_amount" class="form-control border-primary"
-                                            style="height: 45px; border-radius: 5px;" placeholder="Enter Target Amount">
+                                            style="height:45px;border-radius:5px;" placeholder="Enter Target Amount">
                                     </div>
-                                    <div class="col-md-3">
-                                        <label for="inputEnterYourName" class="form-label fw-bold"> Goal Month
-                                            <span style="color: red;">*</span></label>
-                                        <select name="goals_date" id="goals_date" class="form-select border-primary" style="height: 45px; border-radius: 5px;">
+                                    {{-- Month selector (hidden for TenderUser) --}}
+                                    <div class="col-md-3" id="goals_date_wrap">
+                                        <label class="form-label fw-bold">Goal Month <span style="color:red;">*</span></label>
+                                        <select name="goals_date" id="goals_date" class="form-select border-primary" style="height:45px;border-radius:5px;">
                                             <option value="">Select a month</option>
                                             <option value="{{ date('Y') }}-01-01">January</option>
                                             <option value="{{ date('Y') }}-02-01">February</option>
@@ -124,10 +126,41 @@
                                             <option value="{{ date('Y') }}-12-01">December</option>
                                         </select>
                                     </div>
+                                    {{-- Quarter selectors (shown only for TenderUser) --}}
+                                    <div class="col-md-2" id="goals_year_wrap" style="display:none;">
+                                        <label class="form-label fw-bold">Year <span style="color:red;">*</span></label>
+                                        <select name="goals_year" id="goals_year" class="form-select border-primary" style="height:45px;border-radius:5px;">
+                                            @for($y = date('Y'); $y >= 2025; $y--)
+                                                <option value="{{ $y }}">{{ $y }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2" id="goals_quarter_wrap" style="display:none;">
+                                        <label class="form-label fw-bold">Quarter <span style="color:red;">*</span></label>
+                                        <select name="goals_quarter" id="goals_quarter" class="form-select border-primary" style="height:45px;border-radius:5px;">
+                                            <option value="">Select Quarter</option>
+                                            <option value="1">Q1 (Jan – Mar)</option>
+                                            <option value="2">Q2 (Apr – Jun)</option>
+                                            <option value="3">Q3 (Jul – Sep)</option>
+                                            <option value="4">Q4 (Oct – Dec)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                {{-- Row 2: Meetings + OnBoard (shown only for BDM / BDE) --}}
+                                <div class="row align-items-end mb-4" id="meetings_onboard_row" style="display:none;">
+                                    <div class="col-md-3">
+                                        <label class="form-label fw-bold">Meetings Target</label>
+                                        <input type="number" name="meetings_amount" id="meetings_amount" class="form-control border-primary"
+                                            style="height:45px;border-radius:5px;" placeholder="Total Meetings Target" min="0">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label fw-bold">On Board Target</label>
+                                        <input type="number" name="onboard_amount" id="onboard_amount" class="form-control border-primary"
+                                            style="height:45px;border-radius:5px;" placeholder="Total On Board Target" min="0">
+                                    </div>
                                 </div>
                                 <div class="d-flex w-100 justify-content-end">
-                                    <button type="submit"
-                                        class="btn px-5 submit-btn form-button" style="height: 45px; font-weight: 500;">Create</button>
+                                    <button type="submit" class="btn px-5 submit-btn form-button" style="height:45px;font-weight:500;">Create</button>
                                 </div>
                             </form>
                         </div>
@@ -206,7 +239,7 @@
                                     <select id="filter_year" class="form-select border-primary" style="height: 45px; border-radius: 5px;">
                                         <option value="">Select Year</option>
                                         @for ($i = date('Y'); $i >= 2025; $i--)
-                                            <option value="{{ $i }}">{{ $i }}</option>
+                                            <option value="{{ $i }}" {{ isset($year) && $year == $i ? 'selected' : '' }}>{{ $i }}</option>
                                         @endfor
                                     </select>
                                 </div>
@@ -214,17 +247,23 @@
                                     <select id="filter_month" class="form-select border-primary" style="height: 45px; border-radius: 5px;">
                                         <option value="">Select Month</option>
                                         @for ($m = 1; $m <= 12; $m++)
-                                            <option value="{{ sprintf('%02d', $m) }}">{{ date('F', mktime(0, 0, 0, $m, 1)) }}</option>
+                                            <option value="{{ sprintf('%02d', $m) }}" {{ isset($month) && $month == sprintf('%02d', $m) ? 'selected' : '' }}>{{ date('F', mktime(0, 0, 0, $m, 1)) }}</option>
                                         @endfor
                                     </select>
                                 </div>
-                                <div class="col-md-4 mb-2">
+                                <div class="col-md-3 mb-2">
                                     <div class="search-field">
                                         <input type="text" name="search" id="search"
-                                            placeholder="search..." required class="form-control rounded_search">
+                                            placeholder="search..." class="form-control rounded_search"
+                                            value="{{ $text ?? '' }}">
                                         <button class="submit_search" id="search-button"> <span class=""><i
                                                     class="fa fa-search"></i></span></button>
                                     </div>
+                                </div>
+                                <div class="col-md-1 mb-2">
+                                    <button type="button" id="reset-filter-btn" class="btn btn-secondary w-100" style="height:45px;border-radius:5px;" title="Reset Filter">
+                                        <i class="fa fa-times"></i>
+                                    </button>
                                 </div>
                             </div>
 
@@ -248,88 +287,118 @@
     <script>
         $(document).on("click", ".edit-data", function() {
             var route = $(this).data('route');
-            // add loader
+            var role  = $(this).data('role');
+
             $('#loading').addClass('loading');
             $('#loading-content').addClass('loading-content');
-            var role = $(this).data('role');
-            if (role == 'SALES_MANAGER') {
-                $('#goals_type').html(
-                    '<option value="">Select a goal type</option><option value="1">Gross</option><option value="2">Net</option>'
-                );
-            } else {
-                $('#goals_type').html(
-                    '<option value="">Select a goal type</option><option value="2">Net</option>'
-                );
-            }
+
             $.ajax({
                 url: route,
                 type: "GET",
-                data: {
-                    role: role
-                },
+                data: { role: role },
                 success: function(resp) {
-                    // space remove
-                    role = role.replace(/\s/g, '');
-                    if (role == 'SALES_MANAGER') {
-                        // select user type
-                        $('#user_type').val('SALES_MANAGER');
-                        console.log('sales manager');
-                    } else if (role == 'ACCOUNT_MANAGER') {
-                        // select user type
-                        $('#user_type').val('ACCOUNT_MANAGER');
-                        console.log('account manager');
-                    } else if (role == 'SALES_EXCUETIVE') {
-                        // select user type
-                        $('#user_type').val('SALES_EXCUETIVE');
-                        console.log('sales excuetive');
-                    } else if (role == 'BUSINESS_DEVELOPMENT_MANAGER') {
-                        console.log('business development manager');
-                        // select user type
-                        $('#user_type').val('BUSINESS_DEVELOPMENT_MANAGER');
-                    } else {
-                        // select user type
-                        $('#user_type').val('BUSINESS_DEVELOPMENT_EXCECUTIVE');
-                        console.log('business development excuetive');
+                    if (resp.status !== 'success') {
+                        $('#loading').removeClass('loading');
+                        $('#loading-content').removeClass('loading-content');
+                        toastr.error(resp.message || 'Failed to load goal.');
+                        return;
                     }
 
-                    console.log(resp.users);
+                    // Populate user dropdown
                     var html = '<option value="">Select a user</option>';
                     $.each(resp.users, function(key, value) {
-                        html += '<option value="' + value.id + '">' + value
-                            .name +
-                            '</option>';
+                        html += '<option value="' + value.id + '">' + value.name + '</option>';
                     });
-
                     $('#user_id').html(html);
-                    $('#se-distribution').hide();
-                    $('#goal-create').show();
+
+                    // Set user_type and apply correct field visibility
+                    $('#user_type').val(role);
+                    resetGoalFormLayout();
+                    if (role === 'BUSINESS_DEVELOPMENT_MANAGER' || role === 'BUSINESS_DEVELOPMENT_EXCECUTIVE') {
+                        $('#meetings_onboard_row').show();
+                    } else if (role === 'TENDER_USER') {
+                        $('#goals_date_wrap').hide();
+                        $('#goals_year_wrap').show();
+                        $('#goals_quarter_wrap').show();
+                    }
+
+                    // Populate common fields
                     $('#id').val(resp.data.id);
                     $('#user_id').val(resp.data.user_id);
-                    $('#goals_type').val(resp.data.goals_type);
                     $('#goals_amount').val(resp.data.goals_amount);
-                    $('#goals_date').val(resp.data.goals_date);
+
+                    // Period: month for regular roles, year+quarter for TenderUser
+                    if (role === 'TENDER_USER') {
+                        $('#goals_year').val(resp.data.goals_year);
+                        $('#goals_quarter').val(resp.data.quarter);
+                    } else {
+                        $('#goals_date').val(resp.data.goals_date);
+                    }
+
+                    // Meetings / OnBoard fields (BDM and BDE only)
+                    if (role === 'BUSINESS_DEVELOPMENT_MANAGER' || role === 'BUSINESS_DEVELOPMENT_EXCECUTIVE') {
+                        $('#meetings_amount').val(resp.meetings_goal ? resp.meetings_goal.goals_amount : '');
+                        $('#onboard_amount').val(resp.onboard_goal ? resp.onboard_goal.goals_amount : '');
+                    } else {
+                        $('#meetings_amount').val('');
+                        $('#onboard_amount').val('');
+                    }
+
+                    $('#se-distribution').hide();
+                    $('#goal-create').show();
                     $('.form-button').html('Update');
                     $('#loading').removeClass('loading');
                     $('#loading-content').removeClass('loading-content');
+                },
+                error: function() {
+                    $('#loading').removeClass('loading');
+                    $('#loading-content').removeClass('loading-content');
+                    toastr.error('Failed to load goal data.');
                 }
             });
         });
     </script>
     <script>
+        function resetGoalFormLayout() {
+            $('#goals_amount_wrap').show();
+            $('#goals_date_wrap').show();
+            $('#goals_year_wrap').hide();
+            $('#goals_quarter_wrap').hide();
+            $('#meetings_onboard_row').hide();
+        }
+
         $(document).ready(function() {
-            //Default data table
             $('#goal-create').hide();
-            // toogle create goal
+
+            // Toggle create-goal panel
             $('#add-btn').click(function() {
                 $('#id').val('');
                 $('#user_type').val('');
-                $('#user_id').val('');
-                $('#goals_type').val('');
+                $('#user_id').html('<option value="">Select a User</option>');
                 $('#goals_amount').val('');
                 $('#goals_date').val('');
+                $('#meetings_amount').val('');
+                $('#onboard_amount').val('');
+                $('#goals_quarter').val('');
                 $('.form-button').html('Create');
-                $('#se-distribution').hide(); // Hide distribution when opening create
+                $('#se-distribution').hide();
+                resetGoalFormLayout();
                 $('#goal-create').toggle();
+            });
+
+            // Show/hide fields based on user type
+            $('#user_type').on('change', function() {
+                var ut = $(this).val();
+                resetGoalFormLayout();
+                if (ut === 'BUSINESS_DEVELOPMENT_MANAGER') {
+                    $('#meetings_onboard_row').show();
+                } else if (ut === 'BUSINESS_DEVELOPMENT_EXCECUTIVE') {
+                    $('#meetings_onboard_row').show();
+                } else if (ut === 'TENDER_USER') {
+                    $('#goals_date_wrap').hide();
+                    $('#goals_year_wrap').show();
+                    $('#goals_quarter_wrap').show();
+                }
             });
         });
     </script>
@@ -340,26 +409,49 @@
 
             $('#createGoals').validate({ // initialize the plugin
                 rules: {
+                    user_type: {
+                        required: true,
+                    },
                     user_id: {
                         required: true,
                     },
                     goals_amount: {
-                        required: true,
+                        required: {
+                            depends: function() {
+                                var ut = $('#user_type').val();
+                                return ut !== 'BUSINESS_DEVELOPMENT_EXCECUTIVE';
+                            }
+                        },
                         number: true,
                     },
                     goals_date: {
-                        required: true,
+                        required: {
+                            depends: function() {
+                                return $('#user_type').val() !== 'TENDER_USER';
+                            }
+                        },
                     },
-                    user_type: {
-                        required: true,
+                    goals_year: {
+                        required: {
+                            depends: function() {
+                                return $('#user_type').val() === 'TENDER_USER';
+                            }
+                        },
+                    },
+                    goals_quarter: {
+                        required: {
+                            depends: function() {
+                                return $('#user_type').val() === 'TENDER_USER';
+                            }
+                        },
                     },
                 },
                 messages: {
-                    user_id: {
-                        required: "Please select a user",
-                    },
                     user_type: {
                         required: "Please select a user type",
+                    },
+                    user_id: {
+                        required: "Please select a user",
                     },
                     goals_amount: {
                         required: "Please enter a target amount",
@@ -367,6 +459,12 @@
                     },
                     goals_date: {
                         required: "Please select a goal month",
+                    },
+                    goals_year: {
+                        required: "Please select a year",
+                    },
+                    goals_quarter: {
+                        required: "Please select a quarter",
                     },
                 }
             });
@@ -397,34 +495,6 @@
     </script>
     <script>
         $(document).ready(function() {
-            $('#user_id').on('change', function() {
-                var user_id = $(this).val();
-                // add loader
-                $('#loading').addClass('loading');
-                $('#loading-content').addClass('loading-content');
-                $.ajax({
-                    url: "{{ route('goals.get.user') }}",
-                    type: "POST",
-                    data: {
-                        user_id: user_id,
-                        _token: "{{ csrf_token() }}",
-                    },
-                    success: function(data) {
-                        if (data.role == 'SALES_MANAGER') {
-                            $('#goals_type').html(
-                                '<option value="">Select a goal type</option><option value="1">Gross</option><option value="2">Net</option>'
-                            );
-                        } else {
-                            $('#goals_type').html(
-                                '<option value="">Select a goal type</option><option value="2">Net</option>'
-                            );
-                        }
-                        $('#loading').removeClass('loading');
-                        $('#loading-content').removeClass('loading-content');
-                    }
-                });
-            });
-
             $('#user_type').on('change', function() {
                 var user_type = $(this).val();
                 $('#loading').addClass('loading');
@@ -501,6 +571,13 @@
             });
 
             $('#filter_year, #filter_month').on('change', function() {
+                fetch_goals();
+            });
+
+            $('#reset-filter-btn').on('click', function() {
+                $('#filter_year').val('');
+                $('#filter_month').val('');
+                $('#search').val('');
                 fetch_goals();
             });
         });

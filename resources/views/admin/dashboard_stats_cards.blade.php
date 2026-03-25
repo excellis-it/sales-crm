@@ -91,7 +91,7 @@
 </div>
 <div class="row">
     @if ($goal['gross_goals'] > 0)
-        <div class="col-lg-20 col-lg-3 col-sm-6">
+        <div class="col-lg-25 col-lg-3 col-sm-6">
             <a href="{{ route('sales-projects.index') }}?duration={{ $type }}" class="dash-card-link">
                 <div class="stats-card-one dash-card card-primary mb-30" style="min-height: 180px;">
                     <div class="d-flex justify-content-between align-items-center mb-10">
@@ -128,7 +128,7 @@
             </a>
         </div>
     @else
-        <div class="col-lg-20 col-lg-3 col-sm-6">
+        <div class="col-lg-25 col-lg-3 col-sm-6">
             <a href="{{ route('sales-projects.index') }}?duration={{ $type }}" class="dash-card-link">
                 <div class="stats-card-one dash-card mb-30" style="min-height: 180px;">
                     <div class="d-flex justify-content-between align-items-center mb-10">
@@ -153,7 +153,7 @@
     @endif
 
     @if ($goal['net_goals'] > 0)
-        <div class="col-lg-20 col-lg-3 col-sm-6">
+        <div class="col-lg-25 col-lg-3 col-sm-6">
             <a href="{{ route('sales-projects.index') }}?duration={{ $type }}" class="dash-card-link">
                 <div class="stats-card-one dash-card card-danger mb-30" style="min-height: 180px;">
                     <div class="d-flex justify-content-between align-items-center mb-10">
@@ -190,7 +190,7 @@
             </a>
         </div>
     @else
-        <div class="col-lg-20 col-lg-3 col-sm-6">
+        <div class="col-lg-25 col-lg-3 col-sm-6">
             <a href="{{ route('sales-projects.index') }}?duration={{ $type }}" class="dash-card-link">
                 <div class="stats-card-one dash-card mb-30" style="min-height: 180px;">
                     <div class="d-flex justify-content-between align-items-center mb-10">
@@ -214,7 +214,7 @@
         </div>
     @endif
 
-    <div class="col-lg-20 col-lg-3 col-sm-6">
+    <div class="col-lg-25 col-lg-3 col-sm-6">
         <a href="{{ route('sales-projects.index') }}?duration={{ $type }}" class="dash-card-link">
             <div class="stats-card-one dash-card card-info mb-30" style="min-height: 180px;">
                 <div class="d-flex justify-content-between align-items-center mb-10">
@@ -245,7 +245,7 @@
             </div>
         </a>
     </div>
-    <div class="col-lg-20 col-lg-3 col-sm-6">
+    <div class="col-lg-25 col-lg-3 col-sm-6">
         <a href="{{ route('admin.bdm-projects.index') }}?duration={{ $type }}" class="dash-card-link">
             <div class="stats-card-one dash-card card-black mb-30" style="min-height: 180px;">
                 <div class="d-flex justify-content-between align-items-center mb-10">
@@ -275,7 +275,7 @@
         </a>
     </div>
 
-    <div class="col-lg-20 col-lg-3 col-sm-6">
+    {{-- <div class="col-lg-20 col-lg-3 col-sm-6">
         <a href="{{ route('admin.tender-projects.index') }}?duration={{ $type }}" class="dash-card-link">
             <div class="stats-card-one dash-card card-info mb-30" style="min-height: 180px;">
                 <div class="d-flex justify-content-between align-items-center mb-10">
@@ -286,15 +286,119 @@
                         </div>
                         <p class="dash-title mb-0">Tender Projects</p>
                     </div>
-...                    <span class="badge badge-cyan fs-12">
+                    <span class="badge badge-cyan fs-12">
                         <span class="fw-600">{{ $count['tender_projects'] ?? 0 }}</span>
                     </span>
                 </div>
-                <h3 class="fs-22 mb-10">₹{{ number_format($count['tender_projects_value'] ?? 0, 2) }}L
-                </h3>
+                <h3 class="fs-22 mb-10">₹{{ number_format($count['tender_projects_value'] ?? 0, 2) }}L</h3>
                 <div class="mt-15">
                     <div class="progress progress-sm" style="height: 6px;">
                         <div class="progress-bar bg-info" style="width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div> --}}
+</div>
+
+{{-- BDM Meetings / OnBoard / Tender Quarterly Goal row --}}
+<div class="row">
+    {{-- BDM Meetings Goal --}}
+    <div class="col-lg-4 col-sm-6">
+        <a href="{{ route('admin.bdm-projects.index') }}" class="dash-card-link">
+            @php
+                $bdmMtgGoal  = $count['bdm_meetings_goal']    ?? 0;
+                $bdmMtgAch   = $count['bdm_meetings_achieve'] ?? 0;
+                $bdmMtgPct   = $count['bdm_meetings_percentage'] ?? 0;
+                $bdmMtgColor = $bdmMtgPct >= 80 ? 'success' : ($bdmMtgPct >= 50 ? 'warning' : 'danger');
+            @endphp
+            <div class="stats-card-one dash-card card-purple mb-30" style="min-height: 180px;">
+                <div class="d-flex justify-content-between align-items-center mb-10">
+                    <div class="d-flex align-items-center">
+                        <div class="dash-icon-box bg-pale-purple mr-2" style="width:35px;height:35px;font-size:16px;">
+                            <i class="la la-handshake"></i>
+                        </div>
+                        <p class="dash-title mb-0">BDM Meetings</p>
+                    </div>
+                    <span class="badge bg-pale-purple fs-12"><span class="fw-600">{{ $bdmMtgPct }}%</span></span>
+                </div>
+                @if($bdmMtgGoal > 0)
+                    <h3 class="fs-22 mb-10">{{ $bdmMtgAch }} / {{ $bdmMtgGoal }}</h3>
+                @else
+                    <h3 class="fs-22 mb-10 text-muted" style="font-size:16px!important;">No Goal Set</h3>
+                @endif
+                <div class="mt-15">
+                    <span class="dash-title">This Month</span>
+                    <div class="progress progress-sm mt-1" style="height:6px;">
+                        <div class="progress-bar bg-{{ $bdmMtgColor }}" style="width:{{ min($bdmMtgPct,100) }}%"></div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    {{-- BDM OnBoard Goal --}}
+    <div class="col-lg-4 col-sm-6">
+        <a href="{{ route('admin.bdm-projects.index') }}" class="dash-card-link">
+            @php
+                $bdmObGoal  = $count['bdm_onboard_goal']    ?? 0;
+                $bdmObAch   = $count['bdm_onboard_achieve'] ?? 0;
+                $bdmObPct   = $count['bdm_onboard_percentage'] ?? 0;
+                $bdmObColor = $bdmObPct >= 80 ? 'success' : ($bdmObPct >= 50 ? 'warning' : 'danger');
+            @endphp
+            <div class="stats-card-one dash-card card-success mb-30" style="min-height: 180px;">
+                <div class="d-flex justify-content-between align-items-center mb-10">
+                    <div class="d-flex align-items-center">
+                        <div class="dash-icon-box bg-pale-green mr-2" style="width:35px;height:35px;font-size:16px;">
+                            <i class="la la-user-check"></i>
+                        </div>
+                        <p class="dash-title mb-0">BDM On Board</p>
+                    </div>
+                    <span class="badge bg-pale-green fs-12"><span class="fw-600">{{ $bdmObPct }}%</span></span>
+                </div>
+                @if($bdmObGoal > 0)
+                    <h3 class="fs-22 mb-10">{{ $bdmObAch }} / {{ $bdmObGoal }}</h3>
+                @else
+                    <h3 class="fs-22 mb-10 text-muted" style="font-size:16px!important;">No Goal Set</h3>
+                @endif
+                <div class="mt-15">
+                    <span class="dash-title">This Month</span>
+                    <div class="progress progress-sm mt-1" style="height:6px;">
+                        <div class="progress-bar bg-{{ $bdmObColor }}" style="width:{{ min($bdmObPct,100) }}%"></div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    {{-- Tender Quarterly Goal --}}
+    <div class="col-lg-4 col-sm-6">
+        <a href="{{ route('admin.tender-projects.index') }}" class="dash-card-link">
+            @php
+                $tQtrGoal  = $count['tender_quarterly_goal']    ?? 0;
+                $tQtrAch   = $count['tender_quarterly_achieve'] ?? 0;
+                $tQtrPct   = $count['tender_quarterly_percentage'] ?? 0;
+                $tQtrColor = $tQtrPct >= 80 ? 'success' : ($tQtrPct >= 50 ? 'warning' : 'danger');
+            @endphp
+            <div class="stats-card-one dash-card card-black mb-30" style="min-height: 180px;">
+                <div class="d-flex justify-content-between align-items-center mb-10">
+                    <div class="d-flex align-items-center">
+                        <div class="dash-icon-box bg-pale-black mr-2" style="width:35px;height:35px;font-size:16px;">
+                            <i class="la la-file-contract"></i>
+                        </div>
+                        <p class="dash-title mb-0">Tender Goal</p>
+                    </div>
+                    <span class="badge bg-pale-black fs-12"><span class="fw-600">{{ $tQtrPct }}%</span></span>
+                </div>
+                @if($tQtrGoal > 0)
+                    <h3 class="fs-22 mb-10">₹{{ number_format($tQtrAch, 2) }}L / ₹{{ number_format($tQtrGoal, 2) }}L</h3>
+                @else
+                    <h3 class="fs-22 mb-10 text-muted" style="font-size:16px!important;">No Goal Set</h3>
+                @endif
+                <div class="mt-15">
+                    <span class="dash-title">{{ $count['tender_current_quarter'] ?? '' }}</span>
+                    <div class="progress progress-sm mt-1" style="height:6px;">
+                        <div class="progress-bar bg-{{ $tQtrColor }}" style="width:{{ min($tQtrPct,100) }}%"></div>
                     </div>
                 </div>
             </div>
@@ -373,7 +477,7 @@
             </div>
         </a>
     </div>
-    
+
     <div class="col-lg-20 col-lg-3 col-md-6">
         <a href="{{ route('admin.prospects.index') }}?status=Follow+Up&duration={{ $type }}" class="dash-card-link">
             <div class="card dash-card mb-30" style="min-height: 100px;">

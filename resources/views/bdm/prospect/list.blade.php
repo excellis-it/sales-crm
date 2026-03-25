@@ -64,31 +64,36 @@
                     <div class="card-title">
                         <div class="row filter-gap align-items-center">
                             <div class="col">
-                                <a href="javascript:void(0);" data-value="All" class="desin-filter {{ (!isset($status_filter) || $status_filter == 'All' || $status_filter == '') ? 'active-filter' : '' }}">
+                                <a href="javascript:void(0);" data-value="All"
+                                    class="desin-filter {{ !isset($status_filter) || $status_filter == 'All' || $status_filter == '' ? 'active-filter' : '' }}">
                                     <p>All</p>
                                     <h5>{{ $count['total'] }}</h5>
                                 </a>
                             </div>
                             <div class="col">
-                                <a href="javascript:void(0);" data-value="Win" class="desin-filter {{ (isset($status_filter) && $status_filter == 'Win') ? 'active-filter' : '' }}">
+                                <a href="javascript:void(0);" data-value="Win"
+                                    class="desin-filter {{ isset($status_filter) && $status_filter == 'Win' ? 'active-filter' : '' }}">
                                     <p>On Board</p>
                                     <h5>{{ $count['win'] }}</h5>
                                 </a>
                             </div>
                             <div class="col">
-                                <a href="javascript:void(0);" data-value="Follow Up" class="desin-filter {{ (isset($status_filter) && $status_filter == 'Follow Up') ? 'active-filter' : '' }}">
+                                <a href="javascript:void(0);" data-value="Follow Up"
+                                    class="desin-filter {{ isset($status_filter) && $status_filter == 'Follow Up' ? 'active-filter' : '' }}">
                                     <p>Follow Up</p>
                                     <h5>{{ $count['follow_up'] }}</h5>
                                 </a>
                             </div>
                             <div class="col">
-                                <a href="javascript:void(0);" data-value="Sent Proposal" class="desin-filter {{ (isset($status_filter) && $status_filter == 'Sent Proposal') ? 'active-filter' : '' }}">
+                                <a href="javascript:void(0);" data-value="Sent Proposal"
+                                    class="desin-filter {{ isset($status_filter) && $status_filter == 'Sent Proposal' ? 'active-filter' : '' }}">
                                     <p>Sent Proposal</p>
                                     <h5>{{ $count['sent_proposal'] }}</h5>
                                 </a>
                             </div>
                             <div class="col">
-                                <a href="javascript:void(0);" data-value="Close" class="desin-filter {{ (isset($status_filter) && $status_filter == 'Close') ? 'active-filter' : '' }}">
+                                <a href="javascript:void(0);" data-value="Close"
+                                    class="desin-filter {{ isset($status_filter) && $status_filter == 'Close' ? 'active-filter' : '' }}">
                                     <p>Cancel</p>
                                     <h5>{{ $count['close'] }}</h5>
                                 </a>
@@ -101,8 +106,8 @@
                             <div class="row g-1 justify-content-end">
                                 <div class="col-md-6 pr-0">
                                     <div class="search-field">
-                                        <input type="text" name="search" id="search" placeholder="search..." required value="{{ $search ?? '' }}"
-                                            class="form-control rounded_search">
+                                        <input type="text" name="search" id="search" placeholder="search..." required
+                                            value="{{ $search ?? '' }}" class="form-control rounded_search">
                                         <button class="submit_search" id="search-button"> <span class=""><i
                                                     class="fa fa-search"></i></span></button>
                                     </div>
@@ -203,8 +208,8 @@
                                         {{-- offer for --}}
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Service
-                                                Offered <span style="color: red;">*</span></label>
-                                            <select name="offered_for" id="project_type" required
+                                                Offered </label>
+                                            <select name="offered_for" id="project_type" 
                                                 data-parsley-trigger="keyup" class="form-control">
                                                 <option value="">Select Project Type</option>
                                                 <option value="Website Design & Development">Website Design &
@@ -224,8 +229,8 @@
                                         {{--  price_quote --}}
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Price Quote
-                                                <span style="color: red;">*</span></label>
-                                            <input type="text" name="price_quote" id="price_quote" required
+                                                </label>
+                                            <input type="text" name="price_quote" id="price_quote" 
                                                 data-parsley-trigger="keyup" data-parsley-type="number"
                                                 data-parsley-type-message="Please enter a valid number."
                                                 class="form-control" value="{{ old('price_quote') }}"
@@ -255,11 +260,17 @@
                                                 @endforeach
                                             </select>
                                         </div>
+                                        {{-- meeting_date --}}
+                                        <div class="col-md-4 mb-3">
+                                            <label class="col-form-label">Meeting Date</label>
+                                            <input type="date" name="meeting_date" id="meeting_date"
+                                                class="form-control">
+                                        </div>
                                         {{-- followup_date --}}
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Followup
-                                                Date <span style="color: red;">*</span></label>
-                                            <input type="date" name="followup_date" id="followup_date" required
+                                                Date </label>
+                                            <input type="date" name="followup_date" id="followup_date" 
                                                 class="form-control picker" placeholder="Enter Followup Date">
                                         </div>
                                         {{-- followup_time --}}
@@ -276,10 +287,16 @@
                                             <select name="status" id="status" class="form-control" required
                                                 data-parsley-trigger="keyup">
                                                 <option value="">Select Status</option>
-                                                <option value="Win">On board</option>
+                                                {{-- in meeting --}}
+                                                <option value="In Meeting">In Meeting</option>
+                                                <option value="Not Interested">Not Interested</option>
+                                                <option value="No Answer">No Answer</option>
+                                                <option value="Wrong Number">Wrong Number</option>
                                                 <option value="Follow Up">Follow Up</option>
                                                 <option value="Sent Proposal">Sent Proposal</option>
+                                                <option value="Win">On board</option>
                                                 <option value="Close">Cancel</option>
+                                                
                                             </select>
                                         </div>
                                     </div>
@@ -288,8 +305,8 @@
                                     </div>
                                     {{-- comments --}}
                                     <div class="col-md-12 mb-3">
-                                        <label for="inputEnterYourName" class="col-form-label">Comments</label>
-                                        <textarea name="comments" id="comments" cols="30" rows="10" class="form-control"
+                                        <label for="inputEnterYourName" class="col-form-label">Comments <span style="color: red;">*</span></label>
+                                        <textarea name="comments" id="comments" cols="30" rows="10" class="form-control" required
                                             placeholder="Enter Comments">{{ old('comments') }}</textarea>
                                     </div>
                                     <div class="d-flex alin-items-center w-100 text-end">
@@ -311,13 +328,9 @@
                         <table id="myTable" class="dd table table-striped  table-hover" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>Date</th>
-                                    <th>Added By</th>
-                                    <th>Prospect By</th>
-
+                                    <th>Created Date</th>
                                     <th>Business Name</th>
-
-                                    <th>Transfer Taken By</th>
+                                    <th>Added By</th>
                                     <th>Status</th>
                                     <th>Service Offered</th>
                                     <th>Followup Date <input type="text" class="datepicker" id="followup_date_filter"
@@ -325,7 +338,6 @@
                                         <label for="followup_date_filter" class="datepik" style="font-size: 22px"><i
                                                 class="las la-calendar"></i></label>
                                     </th>
-                                    <th>Price Quoted</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -341,11 +353,10 @@
         </div>
 
     </div>
-
 @endsection
 
 @push('scripts')
-@include('bdm.includes.followup_modal')
+    @include('bdm.includes.followup_modal')
     <script>
         $(document).on('click', '#delete', function(e) {
             swal({
@@ -572,7 +583,7 @@
                 var status = $(this).val();
                 if (status.includes('Win')) {
                     $('#upfront_value_show').html(
-                        '<div class="col-md-12 mb-3"><label for="inputEnterYourName" data-parsley-type="number" class="col-form-label">Upfront Value <span style="color: red;">*</span></label><input type="text" name="upfront_value" id="upfront_value"  required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number." class="form-control" value="{{ old('upfront_value') }}" placeholder="Enter Upfront Value"></div><div class="col-md-12 mb-3"><label class="col-form-label">Payment Mode <span style="color: red;">*</span></label><select name="payment_mode" class="form-control" required data-parsley-trigger="keyup"><option value="">Select Mode</option><option value="Paypal">Paypal</option><option value="Stripe">Stripe</option><option value="Bank Transfer">Bank Transfer</option><option value="Payoneer">Payoneer</option></select></div><div class="col-md-12 mb-3"> <label for = "inputEnterYourName" class="col-form-label"> Sale Date <span style="color: red;">*</span></label></label> <input type="date" name ="sale_date" id ="sale_date" class="form-control picker"></div><h3 class="mt-4 text-uppercase">Milestone</h3><hr><div class="row"><div class="col-md-12 mb-3 pb-3"><div style="display: flex"><input type="text" name="milestone_name[]" class="form-control" value="" placeholder="Milestone name" id="" required data-parsley-trigger="keyup"></div></div><div class="col-md-12 mb-3 pb-3"><div style="display: flex"><input type="text" name="milestone_value[]" class="form-control" value="" placeholder="Milestone value" id="" required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number."></div></div><div class="col-md-12 mb-3 pb-3"><div style="display: flex"><textarea name="milestone_comment[]" class="form-control" placeholder="Milestone Comment" id="" cols="3" rows="2" ></textarea></div></div></div><div class="col-md-12 mb-3"><button type="button" class="btn btn-primary milestone-print"><i class="fas fa-plus"></i> Add Milestone</button></div><div class="add-milestone"></div></div>'
+                        '<div class="col-md-12 mb-3"><label for="inputEnterYourName" data-parsley-type="number" class="col-form-label">Upfront Value <span style="color: red;">*</span></label><input type="text" name="upfront_value" id="upfront_value"   data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number." class="form-control" value="{{ old('upfront_value') }}" placeholder="Enter Upfront Value"></div><div class="col-md-12 mb-3"><label class="col-form-label">Payment Mode <span style="color: red;">*</span></label><select name="payment_mode" class="form-control"  data-parsley-trigger="keyup"><option value="">Select Mode</option><option value="Paypal">Paypal</option><option value="Stripe">Stripe</option><option value="Bank Transfer">Bank Transfer</option><option value="Payoneer">Payoneer</option></select></div><div class="col-md-12 mb-3"> <label for = "inputEnterYourName" class="col-form-label"> Sale Date <span style="color: red;">*</span></label></label> <input type="date" name ="sale_date" id ="sale_date" class="form-control picker"></div><h3 class="mt-4 text-uppercase">Milestone</h3><hr><div class="row"><div class="col-md-12 mb-3 pb-3"><div style="display: flex"><input type="text" name="milestone_name[]" class="form-control" value="" placeholder="Milestone name" id=""  data-parsley-trigger="keyup"></div></div><div class="col-md-12 mb-3 pb-3"><div style="display: flex"><input type="text" name="milestone_value[]" class="form-control" value="" placeholder="Milestone value" id=""  data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number."></div></div><div class="col-md-12 mb-3 pb-3"><div style="display: flex"><textarea name="milestone_comment[]" class="form-control" placeholder="Milestone Comment" id="" cols="3" rows="2" ></textarea></div></div></div><div class="col-md-12 mb-3"><button type="button" class="btn btn-primary milestone-print"><i class="fas fa-plus"></i> Add Milestone</button></div><div class="add-milestone"></div></div>'
                     );
                 } else {
                     $('#upfront_value_show').html('');

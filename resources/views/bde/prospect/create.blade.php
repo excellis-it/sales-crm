@@ -98,10 +98,9 @@
                                                 placeholder="Enter Offer For">
                                         </div> --}}
                                         <div class="col-md-4 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Service Offered <span
-                                                    style="color: red;">*</span></label>
-                                            <select name="offered_for" id="project_type" required
-                                                data-parsley-trigger="keyup" class="form-control">
+                                            <label for="inputEnterYourName" class="col-form-label">Service Offered</label>
+                                            <select name="offered_for" id="project_type" data-parsley-trigger="keyup"
+                                                class="form-control">
                                                 <option value="">Select Project Type</option>
                                                 <option value="Website Design & Development">Website Design &
                                                     Development</option>
@@ -120,8 +119,8 @@
                                         {{--  price_quote --}}
                                         <div class="col-md-4 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Price Quote
-                                                <span style="color: red;">*</span></label>
-                                            <input type="text" name="price_quote" id="price_quote" required
+                                            </label>
+                                            <input type="text" name="price_quote" id="price_quote"
                                                 data-parsley-trigger="keyup" data-parsley-type="number"
                                                 data-parsley-type-message="Please enter a valid number."
                                                 class="form-control" value="{{ old('price_quote') }}"
@@ -130,8 +129,7 @@
 
                                         {{-- transfer_token_by --}}
                                         <div class="col-md-4 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Transfer Taken By <span
-                                                    style="color: red;">*</span>
+                                            <label for="inputEnterYourName" class="col-form-label">Transfer Taken By
                                             </label>
                                             <select name="transfer_token_by" id="transfer_token_by"
                                                 class="form-control select2" required>
@@ -143,11 +141,16 @@
                                                 @endforeach
                                             </select>
                                         </div>
+                                        {{-- meeting_date --}}
+                                        <div class="col-md-4 mb-3">
+                                            <label class="col-form-label">Meeting Date</label>
+                                            <input type="date" name="meeting_date" id="meeting_date"
+                                                class="form-control">
+                                        </div>
                                         {{-- followup_date --}}
                                         <div class="col-md-4 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Followup Date <span
-                                                    style="color: red;">*</span></label>
-                                            <input type="date" name="followup_date" id="followup_date" required
+                                            <label for="inputEnterYourName" class="col-form-label">Followup Date </label>
+                                            <input type="date" name="followup_date" id="followup_date"
                                                 class="form-control picker" placeholder="Enter Followup Date">
                                         </div>
                                         {{-- followup_time --}}
