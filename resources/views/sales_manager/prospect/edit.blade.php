@@ -105,7 +105,7 @@
                                 Other</option>
                         </select>
                     </div>
-                    <div id="other-value" class="col-md-12 mb-3">
+                    <div class="col-md-12 mb-3 other-value">
                         @if (
                             $prospect->offered_for != 'SMO' &&
                                 $prospect->offered_for != 'SEO' &&
@@ -257,9 +257,9 @@
                     '<label for="inputEnterYourName" class="col-form-label">Others Service <span style="color: red;">*</span></label>';
                 html +=
                     '<input type="text" name="other_value" id="other_value" class="form-control" value="{{ old('other_value') }}" placeholder="Enter Other Value" required data-parsley-trigger="keyup">';
-                $('#other-value').html(html);
+                $('.other-value').html(html);
             } else {
-                $('#other-value').html('');
+                $('.other-value').html('');
             }
         });
     });
