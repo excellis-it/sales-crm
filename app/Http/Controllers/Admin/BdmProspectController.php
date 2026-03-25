@@ -131,6 +131,7 @@ class BdmProspectController extends Controller
         $prospect->business_address = $data['business_address'];
         $prospect->website = $data['website'];
         $prospect->status = $data['status'];
+        $prospect->last_call_status = $data['last_call_status'] ?? null;
         $prospect->followup_date = $data['followup_date'];
         $prospect->followup_time = $data['followup_time'];
         $prospect->meeting_date = !empty($data['meeting_date']) ? $data['meeting_date'] : null;
@@ -157,6 +158,7 @@ class BdmProspectController extends Controller
             $followup->bdm_prospect_id = $prospect->id;
             $followup->remark = $data['comments'];
             $followup->status = $data['status'];
+            $followup->last_call_status = $data['last_call_status'] ?? null;
             $followup->meeting_date = !empty($data['meeting_date']) ? $data['meeting_date'] : null;
             $followup->save();
         }
@@ -354,6 +356,7 @@ class BdmProspectController extends Controller
             $followup->bdm_prospect_id = $prospect->id;
             $followup->remark = $data['comments'];
             $followup->status = $data['status'];
+            $followup->last_call_status = $data['last_call_status'] ?? null;
             $followup->meeting_date = !empty($data['meeting_date']) ? $data['meeting_date'] : null;
             $followup->save();
         }

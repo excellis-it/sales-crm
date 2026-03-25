@@ -23,6 +23,7 @@ class BdmProspect extends Model
         'source',
         'website',
         'status',
+        'last_call_status',
         'followup_date',
         'followup_time',
         'meeting_date',

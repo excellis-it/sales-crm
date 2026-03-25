@@ -14,6 +14,7 @@ class BdmFollowup extends Model
         'bdm_project_id',
         'remark',
         'status',
+        'last_call_status',
         'meeting_date',
         'next_followup_date',
         'user_id'

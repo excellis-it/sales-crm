@@ -30,6 +30,13 @@
                              @endif
                              <p>{{ $followup->remark }}</p>
                              <div class="mt-2 d-flex flex-wrap gap-2">
+                                 @if ($followup->last_call_status)
+                                     <span
+                                         style="font-size: 11px; color: #dc3545; background: #fde8ea; padding: 2px 8px; border-radius: 4px;">
+                                         <i class="fas fa-phone-slash me-1"></i> Last Call:
+                                         {{ $followup->last_call_status }}
+                                     </span>
+                                 @endif
                                  @if ($followup->meeting_date)
                                      <span
                                          style="font-size: 11px; color: #0dcaf0; background: #e0faff; padding: 2px 8px; border-radius: 4px;">
@@ -87,6 +94,15 @@
                                 <input type="date" name="meeting_date" id="followup_meeting_date" class="form-control border-0 shadow-sm" style="border-radius: 10px;">
                             </div> --}}
 
+             {{-- <div class="form-group mb-3">
+                 <label class="form-label fw-bold"><i class="fas fa-phone-slash me-1"></i> Last Call Status</label>
+                 <select name="last_call_status" class="form-control border-0 shadow-sm" style="border-radius: 10px;">
+                     <option value="">-- Select Last Call Status --</option>
+                     <option value="Not Interested">Not Interested</option>
+                     <option value="No Answer">No Answer</option>
+                     <option value="Wrong Number">Wrong Number</option>
+                 </select>
+             </div> --}}
              <div class="form-group mb-3">
                  <label class="form-label fw-bold"><i class="fas fa-pencil-alt me-1"></i> Add New Remark <span
                          class="text-danger">*</span></label>

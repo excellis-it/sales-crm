@@ -120,11 +120,13 @@ class ProspectController extends Controller
         $prospect->business_address = $data['business_address'];
         $prospect->website = $data['website'];
         $prospect->status = $data['status'];
+        $prospect->last_call_status = $data['last_call_status'] ?? null;
         $prospect->followup_date = $data['followup_date'];
         $prospect->meeting_date = !empty($data['meeting_date']) ? $data['meeting_date'] : null;
         $prospect->sale_date = $data['sale_date'] ?? '';
         $prospect->upfront_value = $data['upfront_value'] ?? '';
         $prospect->comments = $data['comments'];
+        $prospect->added_by = Auth::user()->id;
         $prospect->price_quote = $data['price_quote'];
         $prospect->payment_mode = $data['payment_mode'] ?? null;
         if ($data['offered_for'] == 'Other') {
@@ -144,6 +146,7 @@ class ProspectController extends Controller
             $followup->bdm_prospect_id = $prospect->id;
             $followup->remark = $data['comments'];
             $followup->status = $data['status'];
+            $followup->last_call_status = $data['last_call_status'] ?? null;
             $followup->meeting_date = !empty($data['meeting_date']) ? $data['meeting_date'] : null;
             $followup->save();
         }
@@ -317,10 +320,12 @@ class ProspectController extends Controller
         $prospect->business_address = $data['business_address'];
         $prospect->website = $data['website'];
         $prospect->status = $data['status'];
+        $prospect->last_call_status = $data['last_call_status'] ?? null;
         $prospect->followup_date = $data['followup_date'];
         $prospect->upfront_value = $data['upfront_value'] ?? '';
         $prospect->payment_mode = $data['payment_mode'] ?? null;
         $prospect->sale_date = $data['sale_date'] ?? '';
+       
          $prospect->meeting_date = !empty($data['meeting_date']) ? $data['meeting_date'] : null;
         // $prospect->comments = $data['comments'];
         $prospect->price_quote = $data['price_quote'];
@@ -342,6 +347,7 @@ class ProspectController extends Controller
             $followup->bdm_prospect_id = $prospect->id;
             $followup->remark = $data['comments'];
             $followup->status = $data['status'];
+            $followup->last_call_status = $data['last_call_status'] ?? null;
             $followup->meeting_date = !empty($data['meeting_date']) ? $data['meeting_date'] : null;
             $followup->save();
         }

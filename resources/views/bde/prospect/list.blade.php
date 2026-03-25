@@ -258,10 +258,6 @@
                                                 data-parsley-trigger="keyup">
                                                 <option value="">Select Status</option>
                                                 <option value="In Meeting">In Meeting</option>
-                                              {{-- Not Interested, No Answer, Wrong Number --}}
-                                                <option value="Not Interested">Not Interested</option>
-                                                <option value="No Answer">No Answer</option>
-                                                <option value="Wrong Number">Wrong Number</option>
                                                 <option value="Win">On board</option>
                                                 <option value="Follow Up">Follow Up</option>
                                                 <option value="Sent Proposal">Sent Proposal</option>
@@ -293,6 +289,16 @@
                                     <div class="row" id="upfront_value_show">
                                     </div>
 
+                                    {{-- last_call_status --}}
+                                    <div class="col-md-12 mb-3">
+                                        <label for="last_call_status" class="col-form-label">Last Call Status</label>
+                                        <select name="last_call_status" id="last_call_status" class="form-control">
+                                            <option value="">-- Select Last Call Status --</option>
+                                            <option value="Not Interested">Not Interested</option>
+                                            <option value="No Answer">No Answer</option>
+                                            <option value="Wrong Number">Wrong Number</option>
+                                        </select>
+                                    </div>
                                     {{-- comments --}}
                                     <div class="col-md-12 mb-3">
                                         <label for="inputEnterYourName" class="col-form-label">Comments<span style="color: red;">*</span></label>

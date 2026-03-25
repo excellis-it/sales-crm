@@ -29,6 +29,7 @@ class BdmFollowupController extends Controller
             'bdm_prospect_id' => 'required|exists:bdm_prospects,id',
             'comment' => 'required|string',
             'status' => 'nullable|string',
+            'last_call_status' => 'nullable|string',
             'meeting_date' => 'nullable|date',
             'next_followup_date' => 'nullable|date',
         ]);
@@ -39,6 +40,7 @@ class BdmFollowupController extends Controller
             'bdm_prospect_id' => $request->bdm_prospect_id,
             'remark' => $request->comment,
             'status' => $request->status ?? ($prospect ? $prospect->status : null),
+            'last_call_status' => $request->last_call_status,
             'meeting_date' => $request->meeting_date ?? ($prospect ? $prospect->meeting_date : null),
             'next_followup_date' => $request->next_followup_date,
             'user_id' => Auth::id(),

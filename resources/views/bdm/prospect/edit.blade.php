@@ -5,6 +5,9 @@
                 <i class="fa fa-chevron-right" aria-hidden="true"></i>
             </button>
             <h4 id="offcanvasEditLabel">Edit Prospect Details</h4>
+            <button type="button" class="btn btn-sm btn-outline-primary view-followups ms-auto" data-id="{{ $prospect->id }}">
+                <i class="fas fa-comments"></i> Remarks
+            </button>
         </div>
         <div class="offcanvas-body">
             <form action="{{ route('bdm.prospects.update', $prospect->id) }}" method="POST" data-parsley-validate=""
@@ -170,46 +173,48 @@
                     <div class="col-md-12 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Status
                             <span style="color: red;">*</span></label>
-                        <select name="status" id="status_edit" class="form-control" required
+                        <select name="status" id="prospect-status" class="form-control" required
                             data-parsley-trigger="keyup">
                             <option value="">Select Status</option>
-                            <option value="In Meeting">In Meeting
+                            <option value="In Meeting" {{ $prospect->status == 'In Meeting' ? 'selected' : '' }}>In
+                                Meeting
                             </option>
-                            {{-- Not Interested, No Answer, Wrong Number --}}
-                            <option value="Not Interested">Not Interested
+                            <option value="Win" {{ $prospect->status == 'Win' ? 'selected' : '' }}>On board
                             </option>
-                            <option value="No Answer">No Answer</option>
-                            <option value="Wrong Number">Wrong Number
-                            </option>
-                            <option value="Win">On board
-                            </option>
-                            <option value="Follow Up">
+                            <option value="Follow Up" {{ $prospect->status == 'Follow Up' ? 'selected' : '' }}>
                                 Follow Up</option>
-                            <option value="Sent Proposal">
+                            <option value="Sent Proposal" {{ $prospect->status == 'Sent Proposal' ? 'selected' : '' }}>
                                 Sent Proposal</option>
-                            <option value="Close">Cancel
+                            <option value="Close" {{ $prospect->status == 'Close' ? 'selected' : '' }}>Cancel
                             </option>
                         </select>
                     </div>
                     {{-- meeting_date --}}
-                    <div class="col-md-12 mb-3" id="meeting_date_div_edit" style="display: none;">
-                        <label class="col-form-label">Meeting Date <span style="color: red;">*</span></label>
+                    <div class="col-md-12 mb-3" id="meeting_date_div_edit"
+                        style="{{ $prospect->status == 'In Meeting' ? 'display: block;' : 'display: none;' }}">
+                        <label for="inputEnterYourName" class="col-form-label">Meeting
+                            Date <span style="color: red;">*</span></label>
                         <input type="date" name="meeting_date" id="meeting_date_edit" class="form-control"
-                            value="">
+                            value="{{ $prospect->meeting_date }}" placeholder="Enter Meeting Date"
+                            >
                     </div>
                     {{-- followup_date --}}
-                    <div class="col-md-12 mb-3" id="followup_date_div_edit" style="display: none;">
+                    <div class="col-md-12 mb-3" id="followup_date_div_edit"
+                        style="{{ $prospect->status == 'Follow Up' ? 'display: block;' : 'display: none;' }}">
                         <label for="inputEnterYourName" class="col-form-label">Followup
                             Date <span style="color: red;">*</span></label>
-                        <input type="date" name="followup_date" id="followup_date_edit"
-                            class="form-control picker" value="" placeholder="Enter Followup Date">
+                        <input type="date" name="followup_date" id="followup_date_edit" class="form-control"
+                            value="{{ $prospect->followup_date }}" placeholder="Enter Followup Date"
+                            >
                     </div>
                     {{-- followup_time --}}
-                    <div class="col-md-12 mb-3" id="followup_time_div_edit" style="display: none;">
+                    <div class="col-md-12 mb-3" id="followup_time_div_edit"
+                        style="{{ $prospect->status == 'Follow Up' ? 'display: block;' : 'display: none;' }}">
                         <label for="inputEnterYourName" class="col-form-label">Followup
                             Time <span style="color: red;">*</span></label>
                         <input type="time" name="followup_time" id="followup_time_edit" class="form-control"
-                            value="" placeholder="Enter Followup Time">
+                            value="{{ $prospect->followup_time }}" placeholder="Enter Followup Time"
+                            >
                     </div>
                     <div class="row" id="upfront_value_show_edit">
                         @if ($prospect->status == 'Win')
@@ -244,6 +249,16 @@
                                     value="{{ $prospect->sale_date ?? '' }}" placeholder="Enter Sale Date">
                             </div>
                         @endif
+                    </div>
+                    {{-- last_call_status --}}
+                    <div class="col-md-12 mb-3">
+                        <label for="last_call_status" class="col-form-label">Last Call Status</label>
+                        <select name="last_call_status" id="last_call_status" class="form-control">
+                            <option value="">-- Select Last Call Status --</option>
+                            <option value="Not Interested">Not Interested</option>
+                            <option value="No Answer">No Answer</option>
+                            <option value="Wrong Number">Wrong Number</option>
+                        </select>
                     </div>
                     {{-- comments --}}
                     <div class="col-md-12 mb-3">
