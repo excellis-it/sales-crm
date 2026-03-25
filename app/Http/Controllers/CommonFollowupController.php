@@ -11,14 +11,15 @@ use Illuminate\Support\Facades\Auth;
 
 class CommonFollowupController extends Controller
 {
-    public function getProspectFollowups($id)
+    public function getProspectFollowups(Request $request)
     {
         $followups = Followup::with('user')
-            ->where('prospect_id', $id)
+            ->where('prospect_id', $request->id)
             ->orderBy('created_at', 'desc')
             ->get();
+        $project = false;
         return response()->json([
-            'view' => view('common.followups_modal_content', compact('followups'))->render()
+            'view' => view('common.followups_modal_content', compact('followups', 'project'))->render()
         ]);
     }
 
@@ -51,14 +52,20 @@ class CommonFollowupController extends Controller
         return response()->json(['success' => 'Follow-up added successfully.']);
     }
 
-    public function getProjectFollowups($id)
+    public function getProjectFollowups(Request $request)
     {
         $followups = Followup::with('user')
-            ->where('project_id', $id)
+            ->where('project_id', $request->id)
             ->orderBy('created_at', 'desc')
             ->get();
+        $project = true;
+        $id = $request->id;
+        $type = $request->type;
+        $prefix = $request->url;
+        $add_url = $request->add_url;
+        $id_field = $request->id_field;
         return response()->json([
-            'view' => view('common.followups_modal_content', compact('followups'))->render()
+            'view' => view('common.followups_modal_content', compact('followups', 'project', 'id', 'type', 'prefix', 'add_url', 'id_field'  ))->render()
         ]);
     }
 

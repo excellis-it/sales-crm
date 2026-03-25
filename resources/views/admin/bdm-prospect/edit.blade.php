@@ -5,7 +5,8 @@
                 <i class="fa fa-chevron-right" aria-hidden="true"></i>
             </button>
             <h4 id="offcanvasEditLabel">Edit Prospect Details</h4>
-            <button type="button" class="btn btn-sm btn-outline-primary view-followups ms-auto" data-id="{{ $prospect->id }}">
+            <button type="button" class="btn btn-sm btn-outline-primary view-followups ms-auto"
+                data-id="{{ $prospect->id }}">
                 <i class="fas fa-comments"></i> Remarks
             </button>
         </div>
@@ -182,7 +183,8 @@
                             </option>
                             <option value="Follow Up" {{ $prospect->status == 'Follow Up' ? 'selected' : '' }}>
                                 Follow Up</option>
-                            <option value="Sent Proposal" {{ $prospect->status == 'Sent Proposal' ? 'selected' : '' }}>
+                            <option value="Sent Proposal"
+                                {{ $prospect->status == 'Sent Proposal' ? 'selected' : '' }}>
                                 Sent Proposal</option>
                             <option value="Close" {{ $prospect->status == 'Close' ? 'selected' : '' }}>Cancel
                             </option>
@@ -194,8 +196,7 @@
                         <label for="inputEnterYourName" class="col-form-label">Meeting
                             Date <span style="color: red;">*</span></label>
                         <input type="date" name="meeting_date" id="meeting_date_edit" class="form-control"
-                            value="{{ $prospect->meeting_date }}" placeholder="Enter Meeting Date"
-                            >
+                            value="{{ $prospect->meeting_date }}" placeholder="Enter Meeting Date">
                     </div>
                     {{-- followup_date --}}
                     <div class="col-md-12 mb-3" id="followup_date_div_edit"
@@ -203,8 +204,7 @@
                         <label for="inputEnterYourName" class="col-form-label">Followup
                             Date <span style="color: red;">*</span></label>
                         <input type="date" name="followup_date" id="followup_date_edit" class="form-control"
-                            value="{{ $prospect->followup_date }}" placeholder="Enter Followup Date"
-                            >
+                            value="{{ $prospect->followup_date }}" placeholder="Enter Followup Date">
                     </div>
                     {{-- followup_time --}}
                     <div class="col-md-12 mb-3" id="followup_time_div_edit"
@@ -212,10 +212,9 @@
                         <label for="inputEnterYourName" class="col-form-label">Followup
                             Time <span style="color: red;">*</span></label>
                         <input type="time" name="followup_time" id="followup_time_edit" class="form-control"
-                            value="{{ $prospect->followup_time }}" placeholder="Enter Followup Time"
-                            >
+                            value="{{ $prospect->followup_time }}" placeholder="Enter Followup Time">
                     </div>
-                    
+
                     <div class="row" id="upfront_value_show_edit">
                         @if ($prospect->status == 'Win')
                             <div class="col-md-12 mb-3">
@@ -226,7 +225,8 @@
                             </div>
                             <div class="col-md-12 mb-3">
                                 <label class="col-form-label">Payment Mode</label>
-                                <select name="payment_mode" class="form-control" required data-parsley-trigger="keyup">
+                                <select name="payment_mode" class="form-control" required
+                                    data-parsley-trigger="keyup">
                                     <option value="">Select Mode</option>
                                     <option value="Paypal"
                                         {{ isset($prospect) && $prospect->payment_mode == 'Paypal' ? 'selected' : '' }}>
@@ -245,39 +245,41 @@
                             <div class="col-md-12 mb-3">
                                 <label for="inputEnterYourName" class="col-form-label">Sale
                                     Date</label>
-                                <input type="date" name="sale_date" id="sale_date" required data-parsley-trigger="keyup"
-                                    data-parsley-type="date" data-parsley-type-message="Please enter a valid date."
-                                    class="form-control" value="{{ $prospect->sale_date ?? '' }}"
-                                    placeholder="Enter Sale Date">
+                                <input type="date" name="sale_date" id="sale_date" required
+                                    data-parsley-trigger="keyup" data-parsley-type="date"
+                                    data-parsley-type-message="Please enter a valid date." class="form-control"
+                                    value="{{ $prospect->sale_date ?? '' }}" placeholder="Enter Sale Date">
                             </div>
                         @endif
                     </div>
-{{-- last_call_status --}}
-<div class="col-md-12 mb-3">
-    <label for="last_call_status" class="col-form-label">Last Call Status</label>
-    <select name="last_call_status" id="last_call_status" class="form-control">
-        <option value="">-- Select Last Call Status --</option>
-        <option value="Not Interested">Not Interested</option>
-        <option value="No Answer">No Answer</option>
-        <option value="Wrong Number">Wrong Number</option>
-    </select>
-</div>
-{{-- comments --}}
-<div class="col-md-12 mb-3">
-    <label for="inputEnterYourName" class="col-form-label">Comments <span style="color: red;">*</span></label>
-    <textarea name="comments" id="comments" cols="30" rows="5" class="form-control" required
-        data-parsley-trigger="keyup" placeholder="Enter Comments"> </textarea>
-</div>
-</div>
-<div class="d-flex alin-items-center w-100 text-end">
-    <button class="print_btn cancel_btn me-3" type="reset"><i class="far fa-times-circle"></i>
-        Cancel</button>
-    <button class="print_btn" type="submit"><i class="far fa-check-circle"></i>
-        Update</button>
-</div>
-</form>
-</div>
-</div>
+                    {{-- last_call_status --}}
+                    <div class="col-md-12 mb-3">
+                        <label for="last_call_status" class="col-form-label">Last Call Status</label>
+                        <select name="last_call_status" id="last_call_status" class="form-control">
+                            <option value="">-- Select Last Call Status --</option>
+                            <option value="Not Interested">Not Interested</option>
+                            <option value="No Answer">No Answer</option>
+                            <option value="Wrong Number">Wrong Number</option>
+                            <option value="Connected">Connected</option>
+                        </select>
+                    </div>
+                    {{-- comments --}}
+                    <div class="col-md-12 mb-3">
+                        <label for="inputEnterYourName" class="col-form-label">Comments <span
+                                style="color: red;">*</span></label>
+                        <textarea name="comments" id="comments" cols="30" rows="5" class="form-control" required
+                            data-parsley-trigger="keyup" placeholder="Enter Comments"> </textarea>
+                    </div>
+                </div>
+                <div class="d-flex alin-items-center w-100 text-end">
+                    <button class="print_btn cancel_btn me-3" type="reset"><i class="far fa-times-circle"></i>
+                        Cancel</button>
+                    <button class="print_btn" type="submit"><i class="far fa-check-circle"></i>
+                        Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
 @endif
 <script src="http://parsleyjs.org/dist/parsley.js"></script>

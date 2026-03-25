@@ -239,7 +239,7 @@
                                                 Taken By
                                             </label>
                                             <select name="transfer_token_by" id="transfer_token_by"
-                                                class="form-control select2" >
+                                                class="form-control select2">
                                                 <option value="">Select Transfer Token By
                                                 </option>
                                                 @foreach ($users as $user)
@@ -249,7 +249,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                      
+
                                         {{-- status --}}
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Status
@@ -264,9 +264,10 @@
                                                 <option value="Close">Cancel</option>
                                             </select>
                                         </div>
-                                          {{-- meeting_date --}}
+                                        {{-- meeting_date --}}
                                         <div class="col-md-12 mb-3" id="meeting_date_div" style="display: none;">
-                                            <label class="col-form-label">Meeting Date <span style="color: red;">*</span></label>
+                                            <label class="col-form-label">Meeting Date <span
+                                                    style="color: red;">*</span></label>
                                             <input type="date" name="meeting_date" id="meeting_date"
                                                 class="form-control">
                                         </div>
@@ -274,7 +275,7 @@
                                         <div class="col-md-12 mb-3" id="followup_date_div" style="display: none;">
                                             <label for="inputEnterYourName" class="col-form-label">Followup
                                                 Date <span style="color: red;">*</span></label>
-                                            <input type="date" name="followup_date" id="followup_date" 
+                                            <input type="date" name="followup_date" id="followup_date"
                                                 class="form-control picker" placeholder="Enter Followup Date">
                                         </div>
                                         {{-- followup_time --}}
@@ -297,11 +298,13 @@
                                             <option value="Not Interested">Not Interested</option>
                                             <option value="No Answer">No Answer</option>
                                             <option value="Wrong Number">Wrong Number</option>
+                                            <option value="Connected">Connected</option>
                                         </select>
                                     </div>
                                     {{-- comments --}}
                                     <div class="col-md-12 mb-3">
-                                        <label for="inputEnterYourName" class="col-form-label">Comments<span style="color: red;">*</span></label>
+                                        <label for="inputEnterYourName" class="col-form-label">Comments<span
+                                                style="color: red;">*</span></label>
                                         <textarea name="comments" id="comments" cols="30" rows="5" class="form-control" required
                                             placeholder="Enter Comments ...">{{ old('comments') }}</textarea>
                                     </div>
@@ -328,11 +331,11 @@
                                     <th>Date</th>
                                     <th>Business Name</th>
 
-                                 
+
                                     <th>Status</th>
                                     <th>Service Offered</th>
-                                    <th>Last Followup Date <input type="text" class="datepicker" id="followup_date_filter"
-                                            style="width: 0; padding:0; border:none" />
+                                    <th>Last Followup Date <input type="text" class="datepicker"
+                                            id="followup_date_filter" style="width: 0; padding:0; border:none" />
                                         <label for="followup_date_filter" class="datepik" style="font-size: 22px"><i
                                                 class="las la-calendar"></i></label>
                                     </th>
@@ -353,7 +356,6 @@
         </div>
 
     </div>
-
 @endsection
 
 @push('scripts')

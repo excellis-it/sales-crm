@@ -339,14 +339,15 @@
                                         <option value="Not Interested">Not Interested</option>
                                         <option value="No Answer">No Answer</option>
                                         <option value="Wrong Number">Wrong Number</option>
+                                        <option value="Connected">Connected</option>
                                     </select>
                                 </div>
                                 {{-- comments --}}
                                 <div class="col-md-12 mb-3">
-                                    <label for="inputEnterYourName" class="col-form-label">Comments <span style="color: red;">*</span></label>
-                                    <textarea name="comments" id="comments" cols="30" rows="5" class="form-control"
-                                        required data-parsley-trigger="keyup"
-                                        placeholder="Enter Comments ...">{{ old('comments') }}</textarea>
+                                    <label for="inputEnterYourName" class="col-form-label">Comments <span
+                                            style="color: red;">*</span></label>
+                                    <textarea name="comments" id="comments" cols="30" rows="5" class="form-control" required
+                                        data-parsley-trigger="keyup" placeholder="Enter Comments ...">{{ old('comments') }}</textarea>
                                 </div>
                                 <div class="d-flex alin-items-center w-100 text-end">
                                     <button class="print_btn cancel_btn me-3" type="reset"><i

@@ -1,3 +1,4 @@
+<div style="background: #fdfdfd;">
 <div class="timeline-container">
     @if(isset($followups) && count($followups) > 0)
         @foreach($followups as $followup)
@@ -35,7 +36,39 @@
         </div>
     @endif
 </div>
+</div>
+ @if ($project == true)
+     <div class="p-4 bg-light border-top">
+         <form id="add_followup_form">
+             @csrf
+             <input type="hidden" name="id" id="followup_item_id" value="{{ $id }}"
+                 data-add-url="{{ $add_url }}" data-id-field="{{ $id_field }}">
+             <input type="hidden" name="type" id="followup_item_type" value="{{ $type }}"
+                 data-add-url="{{ $add_url }}" data-id-field="{{ $id_field }}">
+             <!-- 'project' or 'prospect' -->
+             <input type="hidden" name="prefix" id="followup_prefix" value="{{ $prefix }}">
 
+            
+             <div class="form-group mb-3">
+                 <label class="form-label fw-bold"><i class="fas fa-pencil-alt me-1"></i> Add New Remark <span
+                         class="text-danger">*</span></label>
+                 <textarea name="comment" class="form-control border-0 shadow-sm" rows="3" required
+                     placeholder="Type your follow-up note here..." style="border-radius: 10px; resize: none;"></textarea>
+             </div>
+
+             {{-- <div class="form-group mb-3">
+                                <label class="form-label fw-bold"><i class="far fa-calendar-alt me-1"></i> Next Follow-up Date (Optional)</label>
+                                <input type="date" name="next_followup_date" class="form-control border-0 shadow-sm" style="border-radius: 10px;">
+                            </div> --}}
+
+             <div class="submit-section text-center mb-2">
+                 <button type="submit" class="btn btn-primary px-5 py-2"
+                     style="background: linear-gradient(135deg, #ff9b44 0%, #fc6075 100%); border: none; border-radius: 25px;">Submit
+                     Follow-up</button>
+             </div>
+         </form>
+     </div>
+ @endif
 <style>
     .timeline-container {
         position: relative;

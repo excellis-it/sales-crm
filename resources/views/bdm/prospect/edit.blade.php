@@ -5,7 +5,8 @@
                 <i class="fa fa-chevron-right" aria-hidden="true"></i>
             </button>
             <h4 id="offcanvasEditLabel">Edit Prospect Details</h4>
-            <button type="button" class="btn btn-sm btn-outline-primary view-followups ms-auto" data-id="{{ $prospect->id }}">
+            <button type="button" class="btn btn-sm btn-outline-primary view-followups ms-auto"
+                data-id="{{ $prospect->id }}">
                 <i class="fas fa-comments"></i> Remarks
             </button>
         </div>
@@ -82,8 +83,8 @@
                         <label for="inputEnterYourName" class="col-form-label">Business
                             Address <span style="color: red;">*</span></label>
                         <input type="text" name="business_address" id="business_address" required
-                            data-parsley-trigger="keyup" class="form-control" value="{{ $prospect->business_address }}"
-                            placeholder="Enter Address">
+                            data-parsley-trigger="keyup" class="form-control"
+                            value="{{ $prospect->business_address }}" placeholder="Enter Address">
                     </div>
 
                     {{-- website --}}
@@ -183,7 +184,8 @@
                             </option>
                             <option value="Follow Up" {{ $prospect->status == 'Follow Up' ? 'selected' : '' }}>
                                 Follow Up</option>
-                            <option value="Sent Proposal" {{ $prospect->status == 'Sent Proposal' ? 'selected' : '' }}>
+                            <option value="Sent Proposal"
+                                {{ $prospect->status == 'Sent Proposal' ? 'selected' : '' }}>
                                 Sent Proposal</option>
                             <option value="Close" {{ $prospect->status == 'Close' ? 'selected' : '' }}>Cancel
                             </option>
@@ -195,8 +197,7 @@
                         <label for="inputEnterYourName" class="col-form-label">Meeting
                             Date <span style="color: red;">*</span></label>
                         <input type="date" name="meeting_date" id="meeting_date_edit" class="form-control"
-                            value="{{ $prospect->meeting_date }}" placeholder="Enter Meeting Date"
-                            >
+                            value="{{ $prospect->meeting_date }}" placeholder="Enter Meeting Date">
                     </div>
                     {{-- followup_date --}}
                     <div class="col-md-12 mb-3" id="followup_date_div_edit"
@@ -204,8 +205,7 @@
                         <label for="inputEnterYourName" class="col-form-label">Followup
                             Date <span style="color: red;">*</span></label>
                         <input type="date" name="followup_date" id="followup_date_edit" class="form-control"
-                            value="{{ $prospect->followup_date }}" placeholder="Enter Followup Date"
-                            >
+                            value="{{ $prospect->followup_date }}" placeholder="Enter Followup Date">
                     </div>
                     {{-- followup_time --}}
                     <div class="col-md-12 mb-3" id="followup_time_div_edit"
@@ -213,8 +213,7 @@
                         <label for="inputEnterYourName" class="col-form-label">Followup
                             Time <span style="color: red;">*</span></label>
                         <input type="time" name="followup_time" id="followup_time_edit" class="form-control"
-                            value="{{ $prospect->followup_time }}" placeholder="Enter Followup Time"
-                            >
+                            value="{{ $prospect->followup_time }}" placeholder="Enter Followup Time">
                     </div>
                     <div class="row" id="upfront_value_show_edit">
                         @if ($prospect->status == 'Win')
@@ -258,6 +257,7 @@
                             <option value="Not Interested">Not Interested</option>
                             <option value="No Answer">No Answer</option>
                             <option value="Wrong Number">Wrong Number</option>
+                            <option value="Connected">Connected</option>
                         </select>
                     </div>
                     {{-- comments --}}

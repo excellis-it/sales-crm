@@ -20,13 +20,13 @@
                          </div>
                          <div class="timeline-card-body">
                              @if ($project == false)
-                             <div class="mb-2">
-                                 <span
-                                     class="badge {{ $followup->status == 'Win' ? 'bg-success' : ($followup->status == 'Follow Up' ? 'bg-warning' : ($followup->status == 'In Meeting' ? 'bg-info' : 'bg-secondary')) }}"
-                                     style="font-size: 10px;">
-                                     {{ $followup->status ?? 'No Status' }}
-                                 </span>
-                             </div>
+                                 <div class="mb-2">
+                                     <span
+                                         class="badge {{ $followup->status == 'Win' ? 'bg-success' : ($followup->status == 'Follow Up' ? 'bg-warning' : ($followup->status == 'In Meeting' ? 'bg-info' : 'bg-secondary')) }}"
+                                         style="font-size: 10px;">
+                                         {{ $followup->status ?? 'No Status' }}
+                                     </span>
+                                 </div>
                              @endif
                              <p>{{ $followup->remark }}</p>
                              <div class="mt-2 d-flex flex-wrap gap-2">
@@ -68,41 +68,14 @@
      <div class="p-4 bg-light border-top">
          <form id="add_followup_form">
              @csrf
-             <input type="hidden" name="id" id="followup_item_id" value="{{ $id }}" data-add-url="{{$add_url}}" data-id-field="{{$id_field}}">
-             <input type="hidden" name="type" id="followup_item_type" value="{{ $type }}"  data-add-url="{{$add_url}}" data-id-field="{{$id_field}}"> <!-- 'project' or 'prospect' -->
+             <input type="hidden" name="id" id="followup_item_id" value="{{ $id }}"
+                 data-add-url="{{ $add_url }}" data-id-field="{{ $id_field }}">
+             <input type="hidden" name="type" id="followup_item_type" value="{{ $type }}"
+                 data-add-url="{{ $add_url }}" data-id-field="{{ $id_field }}">
+             <!-- 'project' or 'prospect' -->
              <input type="hidden" name="prefix" id="followup_prefix" value="{{ $prefix }}">
 
-             {{-- <!-- Status Field (Conditional for Prospects) -->
-                            <div class="form-group mb-3 prospect-only-fields" style="display: none;">
-                                <label class="form-label fw-bold"><i class="fas fa-tasks me-1"></i> Update Status</label>
-                                <select name="status" id="followup_status" class="form-control border-0 shadow-sm" style="border-radius: 10px;">
-                                    <option value="">Select Status (Optional)</option>
-                                    <option value="In Meeting">In Meeting</option>
-                                    <option value="Follow Up">Follow Up</option>
-                                    <option value="Not Interested">Not Interested</option>
-                                    <option value="No Answer">No Answer</option>
-                                    <option value="Wrong Number">Wrong Number</option>
-                                    <option value="Win">On board</option>
-                                    <option value="Sent Proposal">Sent Proposal</option>
-                                    <option value="Close">Cancel</option>
-                                </select>
-                            </div> --}}
-
-             <!-- Meeting Date Field (Conditional for In Meeting) -->
-             {{-- <div class="form-group mb-3" id="followup_meeting_date_div" style="display: none;">
-                                <label class="form-label fw-bold"><i class="fas fa-handshake me-1"></i> Meeting Date <span class="text-danger">*</span></label>
-                                <input type="date" name="meeting_date" id="followup_meeting_date" class="form-control border-0 shadow-sm" style="border-radius: 10px;">
-                            </div> --}}
-
-             {{-- <div class="form-group mb-3">
-                 <label class="form-label fw-bold"><i class="fas fa-phone-slash me-1"></i> Last Call Status</label>
-                 <select name="last_call_status" class="form-control border-0 shadow-sm" style="border-radius: 10px;">
-                     <option value="">-- Select Last Call Status --</option>
-                     <option value="Not Interested">Not Interested</option>
-                     <option value="No Answer">No Answer</option>
-                     <option value="Wrong Number">Wrong Number</option>
-                 </select>
-             </div> --}}
+            
              <div class="form-group mb-3">
                  <label class="form-label fw-bold"><i class="fas fa-pencil-alt me-1"></i> Add New Remark <span
                          class="text-danger">*</span></label>
