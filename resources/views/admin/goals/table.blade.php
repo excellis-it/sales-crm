@@ -65,8 +65,9 @@
                     $onboard_percentage = $onboardGoal && $onboardGoal->goals_amount > 0 ? min(round(($onboard_achieved / $onboardGoal->goals_amount) * 100, 1), 100) : 0;
                     $onboardProgressColor = $onboard_percentage >= 80 ? '#28a745' : ($onboard_percentage >= 50 ? '#f37e20' : '#dc3545');
 
-                    // Role
+                    // Role and Currency
                     $roleName = ''; $roleBadge = '';
+                    $currencySymbol = '$';
                     if ($goal->user->hasRole('SALES_MANAGER')) {
                         $roleName = 'Sales Manager';
                         $roleBadge = 'background:linear-gradient(135deg,#f37e20,#e06c10);color:#fff;';
@@ -85,6 +86,7 @@
                     } elseif ($goal->user->hasRole('TENDER_USER')) {
                         $roleName = 'Tender Manager';
                         $roleBadge = 'background:linear-gradient(135deg,#6610f2,#520dc2);color:#fff;';
+                        $currencySymbol = '₹';
                     } else {
                         $roleName = 'Other';
                         $roleBadge = 'background:#6c757d;color:#fff;';
@@ -100,14 +102,14 @@
                     <td>
                         <span style="font-weight: 500;">{{ $goal->user->name }}</span>
                     </td>
-
+ 
                     <!-- Gross Goal Columns -->
                     @if ($grossGoal)
                         <td>
-                            <span style="font-weight: 600; color: #334257;">${{ number_format($grossGoal->goals_amount, 2) }}</span>
+                            <span style="font-weight: 600; color: #334257;">{{ $currencySymbol }}{{ number_format($grossGoal->goals_amount, 2) }}</span>
                         </td>
                         <td>
-                            <span style="font-weight: 600; color: {{ $gross_percentage >= 80 ? '#28a745' : ($gross_percentage >= 50 ? '#f37e20' : '#dc3545') }};">${{ number_format($gross_achieved, 2) }}</span>
+                            <span style="font-weight: 600; color: {{ $gross_percentage >= 80 ? '#28a745' : ($gross_percentage >= 50 ? '#f37e20' : '#dc3545') }};">{{ $currencySymbol }}{{ number_format($gross_achieved, 2) }}</span>
                         </td>
                         <td style="width: 100px;">
                             <div style="display: flex; align-items: center; gap: 8px;">
@@ -122,11 +124,11 @@
                         <td class="text-muted">-</td>
                         <td class="text-muted">-</td>
                     @endif
-
+ 
                     <!-- Net Goal Columns -->
                     @if ($netGoal)
-                        <td><span style="font-weight:600;color:#334257;">${{ number_format($netGoal->goals_amount, 2) }}</span></td>
-                        <td><span style="font-weight:600;color:{{ $net_percentage >= 80 ? '#28a745' : ($net_percentage >= 50 ? '#f37e20' : '#dc3545') }};">${{ number_format($net_achieved, 2) }}</span></td>
+                        <td><span style="font-weight:600;color:#334257;">{{ $currencySymbol }}{{ number_format($netGoal->goals_amount, 2) }}</span></td>
+                        <td><span style="font-weight:600;color:{{ $net_percentage >= 80 ? '#28a745' : ($net_percentage >= 50 ? '#f37e20' : '#dc3545') }};">{{ $currencySymbol }}{{ number_format($net_achieved, 2) }}</span></td>
                         <td>
                             <div style="display:flex;align-items:center;gap:8px;">
                                 <div style="flex:1;background:#e9ecef;border-radius:10px;height:8px;overflow:hidden;">

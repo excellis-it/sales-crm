@@ -50,4 +50,14 @@ class Project extends Model
     {
         return $this->hasMany(ProjectDocument::class);
     }
+
+    public function upsales()
+    {
+        return $this->hasMany(Upsale::class);
+    }
+
+    public function allProjectMilestones()
+    {
+        return $this->hasMany(ProjectMilestone::class);
+    }
 }

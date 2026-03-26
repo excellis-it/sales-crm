@@ -91,7 +91,7 @@
 </div>
 <div class="row">
     @if ($goal['gross_goals'] > 0)
-        <div class="col-lg-25 col-lg-3 col-sm-6">
+        <div class="col-lg-20 col-lg-3 col-sm-6">
             <a href="{{ route('sales-projects.index') }}?duration={{ $type }}" class="dash-card-link">
                 <div class="stats-card-one dash-card card-primary mb-30" style="min-height: 180px;">
                     <div class="d-flex justify-content-between align-items-center mb-10">
@@ -100,7 +100,7 @@
                                 style="width: 35px; height: 35px; font-size: 16px;">
                                 <i class="la la-chart-bar"></i>
                             </div>
-                            <p class="dash-title mb-0">Gross Sales</p>
+                            <p class="dash-title mb-0">Tele Caller Gross Sales</p>
                         </div>
                         @php
                             $target = $goal['gross_goals'] ?? 0;
@@ -128,7 +128,7 @@
             </a>
         </div>
     @else
-        <div class="col-lg-25 col-lg-3 col-sm-6">
+        <div class="col-lg-20 col-lg-3 col-sm-6">
             <a href="{{ route('sales-projects.index') }}?duration={{ $type }}" class="dash-card-link">
                 <div class="stats-card-one dash-card mb-30" style="min-height: 180px;">
                     <div class="d-flex justify-content-between align-items-center mb-10">
@@ -137,7 +137,7 @@
                                 style="width: 35px; height: 35px; font-size: 16px;">
                                 <i class="la la-chart-bar"></i>
                             </div>
-                            <p class="dash-title mb-0">Gross Sales</p>
+                            <p class="dash-title mb-0">Tele Caller Gross Sales</p>
                         </div>
                         <span class="badge badge-cyan fs-12">0%</span>
                     </div>
@@ -153,7 +153,7 @@
     @endif
 
     @if ($goal['net_goals'] > 0)
-        <div class="col-lg-25 col-lg-3 col-sm-6">
+        <div class="col-lg-20 col-lg-3 col-sm-6">
             <a href="{{ route('sales-projects.index') }}?duration={{ $type }}" class="dash-card-link">
                 <div class="stats-card-one dash-card card-danger mb-30" style="min-height: 180px;">
                     <div class="d-flex justify-content-between align-items-center mb-10">
@@ -162,7 +162,7 @@
                                 style="width: 35px; height: 35px; font-size: 16px;">
                                 <i class="la la-money-bill"></i>
                             </div>
-                            <p class="dash-title mb-0">Revenue (Net)</p>
+                            <p class="dash-title mb-0">Tele Caller Revenue (Net)</p>
                         </div>
                         @php
                             $target = $goal['net_goals'] ?? 0;
@@ -190,7 +190,7 @@
             </a>
         </div>
     @else
-        <div class="col-lg-25 col-lg-3 col-sm-6">
+        <div class="col-lg-20 col-lg-3 col-sm-6">
             <a href="{{ route('sales-projects.index') }}?duration={{ $type }}" class="dash-card-link">
                 <div class="stats-card-one dash-card mb-30" style="min-height: 180px;">
                     <div class="d-flex justify-content-between align-items-center mb-10">
@@ -199,7 +199,7 @@
                                 style="width: 35px; height: 35px; font-size: 16px;">
                                 <i class="la la-money-bill"></i>
                             </div>
-                            <p class="dash-title mb-0">Revenue (Net)</p>
+                            <p class="dash-title mb-0">Tele Caller Revenue (Net)</p>
                         </div>
                         <span class="badge badge-red fs-12">0%</span>
                     </div>
@@ -214,7 +214,7 @@
         </div>
     @endif
 
-    <div class="col-lg-25 col-lg-3 col-sm-6">
+    <div class="col-lg-20 col-lg-3 col-sm-6">
         <a href="{{ route('sales-projects.index') }}?duration={{ $type }}" class="dash-card-link">
             <div class="stats-card-one dash-card card-info mb-30" style="min-height: 180px;">
                 <div class="d-flex justify-content-between align-items-center mb-10">
@@ -245,22 +245,22 @@
             </div>
         </a>
     </div>
-    <div class="col-lg-25 col-lg-3 col-sm-6">
+    <div class="col-lg-20 col-lg-3 col-sm-6">
         <a href="{{ route('admin.bdm-projects.index') }}?duration={{ $type }}" class="dash-card-link">
             <div class="stats-card-one dash-card card-black mb-30" style="min-height: 180px;">
                 <div class="d-flex justify-content-between align-items-center mb-10">
                     <div class="d-flex align-items-center">
                         <div class="dash-icon-box bg-pale-black mr-2"
                             style="width: 35px; height: 35px; font-size: 16px;">
-                            <i class="la la-briefcase"></i>
+                            <i class="la la-chart-bar"></i>
                         </div>
-                        <p class="dash-title mb-0">BDM Revenue</p>
+                        <p class="dash-title mb-0">BDM Gross Sales</p>
                     </div>
                     <span class="badge bg-pale-black fs-12">
                         <span class="fw-600">{{ $count['bdm_percentage'] }}%</span>
                     </span>
                 </div>
-                <h3 class="fs-22 mb-10">${{ $count['bdm_revenue'] }} / ${{ $count['bdm_goals'] ?? 0 }}</h3>
+                <h3 class="fs-22 mb-10">${{ $count['bdm_gross'] }} / ${{ $count['bdm_gross_goals'] ?? 0 }}</h3>
 
                 <div class="mt-15">
                     <div class="d-flex justify-content-between mb-1">
@@ -269,6 +269,36 @@
                     <div class="progress progress-sm" style="height: 6px;">
                         <div class="progress-bar bg-black"
                             style="width: {{ min($count['bdm_percentage'], 100) }}%"></div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-lg-20 col-lg-3 col-sm-6">
+        <a href="{{ route('admin.bdm-projects.index') }}?duration={{ $type }}" class="dash-card-link">
+            <div class="stats-card-one dash-card card-success mb-30" style="min-height: 180px;">
+                <div class="d-flex justify-content-between align-items-center mb-10">
+                    <div class="d-flex align-items-center">
+                        <div class="dash-icon-box bg-pale-green mr-2"
+                            style="width: 35px; height: 35px; font-size: 16px;">
+                            <i class="la la-money-bill"></i>
+                        </div>
+                        <p class="dash-title mb-0">BDM Revenue (Net)</p>
+                    </div>
+                    <span class="badge bg-pale-green fs-12">
+                        <span class="fw-600">{{ $count['bdm_net_percentage'] }}%</span>
+                    </span>
+                </div>
+                <h3 class="fs-22 mb-10">${{ $count['bdm_net'] }} / ${{ $count['bdm_net_goals'] ?? 0 }}</h3>
+
+                <div class="mt-15">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span class="dash-title">Goal Period</span>
+                    </div>
+                    <div class="progress progress-sm" style="height: 6px;">
+                        <div class="progress-bar bg-success"
+                            style="width: {{ min($count['bdm_net_percentage'], 100) }}%"></div>
                     </div>
                 </div>
             </div>

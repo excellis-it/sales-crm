@@ -87,38 +87,26 @@ class Helper
 
         // --- ACCOUNT MANAGER ---
         else if ($user->hasRole('ACCOUNT_MANAGER')) {
-            // Gross usually does not apply the same way to Account Manager (or it's zero),
-            // but we'll sum Net from Milestones and Upfronts where they are openers.
             $gross_amount = 0;
 
-            // From regular projects milestone
             $projectIds = Project::where('assigned_to', $userId)->pluck('id');
+
+            // Regular milestones (milestone + upsale_milestone + upsale_upfront — anything that isn't the base 'upfront')
             $net_milestones = ProjectMilestone::whereIn('project_id', $projectIds)
                                               ->where('payment_status', 'Paid')
                                               ->where('milestone_type', '!=', 'upfront')
                                               ->whereBetween('payment_date', [$startDate, $endDate])
                                               ->sum('milestone_value');
 
-            // From BDM projects milestone
-            $bdmProjectIds = BdmProject::where('assigned_to', $userId)->pluck('id');
-            $net_bdm_milestones = ProjectMilestone::whereIn('bdm_project_id', $bdmProjectIds)
-                                                  ->where('payment_status', 'Paid')
-                                                  ->where('milestone_type', '!=', 'upfront')
-                                                  ->whereBetween('payment_date', [$startDate, $endDate])
-                                                  ->sum('milestone_value');
 
-            // As account manager they also get net if they were the project opener
+            // Base project upfront (when opener = account manager)
             $net_upfront = Project::where('assigned_to', $userId)
                                   ->where('project_opener', $userId)
                                   ->whereBetween('sale_date', [$startDate, $endDate])
                                   ->sum('project_upfront');
 
-            $net_bdm_upfront = BdmProject::where('assigned_to', $userId)
-                                         ->where('project_opener', $userId)
-                                         ->whereBetween('sale_date', [$startDate, $endDate])
-                                         ->sum('project_upfront');
 
-            $net_amount = $net_milestones + $net_bdm_milestones + $net_upfront + $net_bdm_upfront;
+            $net_amount = $net_milestones  + $net_upfront ;
         }
 
         return [

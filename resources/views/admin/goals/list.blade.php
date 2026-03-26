@@ -103,7 +103,7 @@
                                     </div>
                                     {{-- Target Amount (hidden for BDE) --}}
                                     <div class="col-md-3" id="goals_amount_wrap">
-                                        <label class="form-label fw-bold">Target Amount</label>
+                                        <label class="form-label fw-bold" id="goals_amount_label">Target Amount</label>
                                         <input type="text" name="goals_amount" id="goals_amount" class="form-control border-primary"
                                             style="height:45px;border-radius:5px;" placeholder="Enter Target Amount">
                                     </div>
@@ -390,6 +390,10 @@
             $('#user_type').on('change', function() {
                 var ut = $(this).val();
                 resetGoalFormLayout();
+                
+                var currency = (ut === 'TENDER_USER') ? '(₹)' : '($)';
+                $('#goals_amount_label').text('Target Amount ' + currency);
+
                 if (ut === 'BUSINESS_DEVELOPMENT_MANAGER') {
                     $('#meetings_onboard_row').show();
                 } else if (ut === 'BUSINESS_DEVELOPMENT_EXCECUTIVE') {

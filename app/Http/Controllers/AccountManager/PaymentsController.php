@@ -16,22 +16,22 @@ class PaymentsController extends Controller
 
     public function accountManagerPayments()
     {
-        
+
         $project_milestones = ProjectMilestone::where('payment_status', 'Paid')
                 ->whereHas('project', function ($query) {
                     // Add a condition to check if the project's user_id matches the authenticated user's ID
-                    $query->where('user_id', Auth::user()->id);
+                    $query->where('user_id', Auth::user()->id)->orWhere('assigned_to', Auth::user()->id);
                 })
                 ->with('project')
                 ->paginate(10);
-  
+
         return view('account_manager.payments.list', compact('project_milestones'));
 
     }
 
     public function accountManagerPaymentsFilter(Request $request)
     {
-        
+
         if ($request->ajax()) {
             $sort_by = $request->get('sortby');
             $sort_type = $request->get('sorttype');
@@ -47,8 +47,8 @@ class PaymentsController extends Controller
                 ->orWhere('milestone_value', 'like', '%' . $query . '%')
                 ->orWhere('payment_mode', 'like', '%' . $query . '%')
                 ->orWhere('payment_date', 'like', '%' . $query . '%')
-                ->paginate(10);    
-            
+                ->paginate(10);
+
         }
 
         return response()->json(['data' => view('account_manager.payments.table', compact('project_milestones'))->render()]);
@@ -56,12 +56,12 @@ class PaymentsController extends Controller
 
     public function accountManagerInvoicedownload($id)
     {
-        
+
         $milestone_detail = ProjectMilestone::where('id', $id)->with('project','user')->first();
         $pdf = PDF::loadView('account_manager.payments.invoice_download',array('milestone_detail' => $milestone_detail));
 
-   
-    
+
+
         return $pdf->download('account-manager-invoice.pdf');
 
         // return view('account_manager.payments.invoice_download', compact('milestone_detail'));

@@ -282,6 +282,20 @@
                         <div id="edit-project-model">
                             @include('account_manager.project.edit')
                         </div>
+                        {{-- Upsale offcanvas loaded via AJAX --}}
+                        <div id="upsale-panel-container"></div>
+                        {{-- Edit upsale offcanvas --}}
+                        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasUpsaleEdit" style="width:600px;">
+                            <div class="offcanvas-header bg-light border-bottom">
+                                <button type="button" class="text-reset cls_btn_left" data-bs-dismiss="offcanvas" aria-label="Close">
+                                    <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                                </button>
+                                <h4 class="text-dark mb-0">Edit Upsale</h4>
+                            </div>
+                            <div class="offcanvas-body p-0" id="upsale-edit-body">
+                                <div class="p-4 text-center text-muted">Loading...</div>
+                            </div>
+                        </div>
                     </div>
 
 
@@ -290,16 +304,17 @@
                             <thead class="table-light">
                                 <tr>
                                     <th class="sorting" data-column_name="sale_date">Sale Date <i class="fa fa-sort ms-1 text-muted"></i></th>
+                                    <th>Opened By</th>
                                     <th class="sorting" data-column_name="business_name">Business Name <i class="fa fa-sort ms-1 text-muted"></i></th>
-                                    <th class="sorting" data-column_name="client_name">Customer Name <i class="fa fa-sort ms-1 text-muted"></i></th>
-                                    <th class="sorting" data-column_name="phone_number">Phone <i class="fa fa-sort ms-1 text-muted"></i></th>
+                                    {{-- <th class="sorting" data-column_name="client_name">Customer Name <i class="fa fa-sort ms-1 text-muted"></i></th> --}}
+                                    {{-- <th class="sorting" data-column_name="phone_number">Phone <i class="fa fa-sort ms-1 text-muted"></i></th> --}}
                                     <th class="sorting" data-column_name="project_type">Project Type <i class="fa fa-sort ms-1 text-muted"></i></th>
-                                    <th class="sorting" data-column_name="project_value">Value <i class="fa fa-sort ms-1 text-muted"></i></th>
-                                    <th class="sorting" data-column_name="project_upfront">Upfront <i class="fa fa-sort ms-1 text-muted"></i></th>
+                                    <th class="sorting" data-column_name="project_value">Value (Base+Upsale) <i class="fa fa-sort ms-1 text-muted"></i></th>
+                                    <th class="sorting" data-column_name="project_upfront">Total Upfront <i class="fa fa-sort ms-1 text-muted"></i></th>
                                     <th class="sorting" data-column_name="currency">CCY <i class="fa fa-sort ms-1 text-muted"></i></th>
                                     <th class="sorting" data-column_name="payment_mode">Payment Mode <i class="fa fa-sort ms-1 text-muted"></i></th>
-                                    <th data-tippy-content="Cant't sort by Paid Milestone" style="cursor: pointer"> Paid Milestone </th>
-                                    <th> Due Amount</th>
+                                    <th style="cursor: pointer" title="Milestones received other than upfront">Milestone Received</th>
+                                    <th title="Calculation: (Value) - (Upfront) - (Milestone Received)">Balance Due</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -376,27 +391,23 @@
 
         $(document).on('click', '.sorting', function() {
             var column_name = $(this).data('column_name');
-            var order_type = $(this).data('sorting_type');
-            var reverse_order = '';
-            if (order_type == 'asc') {
-                $(this).data('sorting_type', 'desc');
-                reverse_order = 'desc';
-                clear_icon();
-                $('#' + column_name + '_icon').html(
-                    '<span class="fa fa-sort-down"></span>');
+            var order_type = $(this).data('sorting_type') || 'asc'; // Use existing, or default to asc
+            var reverse_order = (order_type == 'asc') ? 'desc' : 'asc';
+            
+            $(this).data('sorting_type', reverse_order);
+            clear_icon();
+            
+            if (reverse_order == 'desc') {
+                $('#' + column_name + '_icon').html('<span class="fa fa-sort-down"></span>');
+            } else {
+                $('#' + column_name + '_icon').html('<span class="fa fa-sort-up"></span>');
             }
-            if (order_type == 'desc') {
-                $(this).data('sorting_type', 'asc');
-                reverse_order = 'asc';
-                clear_icon();
-                $('#' + column_name + '_icon').html(
-                    '<span class="fa fa-sort-up"></span>');
-            }
+            
             $('#hidden_column_name').val(column_name);
             $('#hidden_sort_type').val(reverse_order);
             var page = $('#hidden_page').val();
             var query = $('#search').val();
-            fetch_data(page, reverse_order, column_name, query,call_status = "");
+            fetch_data(page, reverse_order, column_name, query, "");
         });
 
         $(document).on('click', '.pagination a', function(event) {
@@ -947,8 +958,74 @@
      <script>
         $(document).ready(function() {
             $('.mySelect').select2();
-
-
         });
+    </script>
+
+    {{-- Upsale panel handler --}}
+    <script>
+    $(document).ready(function () {
+        // Open upsale panel for a project
+        $(document).on('click', '.btn-open-upsale', function (e) {
+            e.stopPropagation();
+            var projectId = $(this).data('project-id');
+            $('#loading').addClass('loading');
+            $('#loading-content').addClass('loading-content');
+            $.ajax({
+                url: '{{ url("account-manager/projects") }}/' + projectId + '/upsale',
+                type: 'GET',
+                success: function (res) {
+                    $('#upsale-panel-container').html(res.view);
+                    $('#loading').removeClass('loading');
+                    $('#loading-content').removeClass('loading-content');
+                    var offcanvasEl = document.getElementById('offcanvasUpsale');
+                    if (offcanvasEl) {
+                        var bsOffcanvas = new bootstrap.Offcanvas(offcanvasEl);
+                        bsOffcanvas.show();
+                        // Init select2 inside offcanvas
+                        if (typeof $.fn.select2 !== 'undefined') {
+                            $('#upsale_project_type').select2({ dropdownParent: $('#offcanvasUpsale') });
+                        }
+                    }
+                },
+                error: function () {
+                    $('#loading').removeClass('loading');
+                    $('#loading-content').removeClass('loading-content');
+                }
+            });
+        });
+
+        // Edit upsale - load into separate edit offcanvas
+        $(document).on('click', '.btn-edit-upsale', function (e) {
+            e.stopPropagation();
+            var upsaleId = $(this).data('id');
+            // Close the upsale panel first
+            var panelEl = document.getElementById('offcanvasUpsale');
+            if (panelEl) {
+                var panelInstance = bootstrap.Offcanvas.getInstance(panelEl);
+                if (panelInstance) panelInstance.hide();
+            }
+            $('#loading').addClass('loading');
+            $('#loading-content').addClass('loading-content');
+            $.ajax({
+                url: '{{ url("account-manager/upsale") }}/' + upsaleId + '/edit',
+                type: 'GET',
+                success: function (res) {
+                    $('#upsale-edit-body').html(res.view);
+                    $('#loading').removeClass('loading');
+                    $('#loading-content').removeClass('loading-content');
+                    var editEl = document.getElementById('offcanvasUpsaleEdit');
+                    var bsEdit = new bootstrap.Offcanvas(editEl);
+                    bsEdit.show();
+                    if (typeof $.fn.select2 !== 'undefined') {
+                        $('#upsale_project_type_edit').select2({ dropdownParent: $('#offcanvasUpsaleEdit') });
+                    }
+                },
+                error: function () {
+                    $('#loading').removeClass('loading');
+                    $('#loading-content').removeClass('loading-content');
+                }
+            });
+        });
+    });
     </script>
 @endpush

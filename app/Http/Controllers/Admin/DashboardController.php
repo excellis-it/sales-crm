@@ -121,10 +121,14 @@ class DashboardController extends Controller
         }
 
         $count['bdm_revenue'] = 0;
+        $count['bdm_gross'] = 0;
+        $count['bdm_net'] = 0;
         foreach ($bdma_manager_id as $bdm_id) {
             $achievements = \App\Helpers\Helper::getUserAchievementDateRange($bdm_id, $startDate ?: '2000-01-01', $endDate ?: '2099-12-31');
-            $count['bdm_revenue'] += $achievements['gross_amount'];
+            $count['bdm_gross'] += $achievements['gross_amount'];
+            $count['bdm_net'] += $achievements['net_amount'];
         }
+        $count['bdm_revenue'] = $count['bdm_gross']; // Fallback for existing uses
 
         $goalQuery = Goal::query();
         if ($startDate && $endDate) {
@@ -133,13 +137,19 @@ class DashboardController extends Controller
         }
 
         $count['account_manager_goals'] = (clone $goalQuery)->whereIn('user_id', $account_manager_id)->sum('goals_amount');
-        $count['bdm_goals'] = (clone $goalQuery)->whereIn('user_id', $bdma_manager_id)->where('goals_type', 1)->sum('goals_amount');
-        if ($count['bdm_goals'] == 0) {
-            $count['bdm_goals'] = (clone $goalQuery)->whereIn('user_id', $bdma_manager_id)->sum('goals_amount');
+        
+        $count['bdm_gross_goals'] = (clone $goalQuery)->whereIn('user_id', $bdma_manager_id)->where('goals_type', 1)->sum('goals_amount');
+        $count['bdm_net_goals'] = (clone $goalQuery)->whereIn('user_id', $bdma_manager_id)->where('goals_type', 2)->sum('goals_amount');
+        
+        $count['bdm_goals'] = $count['bdm_gross_goals']; // Fallback
+
+        if ($count['bdm_gross_goals'] == 0) {
+            $count['bdm_gross_goals'] = (clone $goalQuery)->whereIn('user_id', $bdma_manager_id)->sum('goals_amount');
         }
 
         $count['account_manager_percentage'] = ($count['account_manager_goals'] > 0) ? round(($count['account_manager_revenue'] / $count['account_manager_goals']) * 100) : 0;
-        $count['bdm_percentage'] = ($count['bdm_goals'] > 0) ? round(($count['bdm_revenue'] / $count['bdm_goals']) * 100) : 0;
+        $count['bdm_percentage'] = ($count['bdm_gross_goals'] > 0) ? round(($count['bdm_gross'] / $count['bdm_gross_goals']) * 100) : 0;
+        $count['bdm_net_percentage'] = ($count['bdm_net_goals'] > 0) ? round(($count['bdm_net'] / $count['bdm_net_goals']) * 100) : 0;
 
         // BDM Meetings & OnBoard goals
         $count['bdm_meetings_goal']   = (clone $goalQuery)->whereIn('user_id', $bdma_manager_id)->where('goals_type', 3)->sum('goals_amount');

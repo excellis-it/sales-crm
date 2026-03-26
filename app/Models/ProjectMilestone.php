@@ -13,7 +13,9 @@ class ProjectMilestone extends Model
         'project_id',
         'tender_project_id',
         'bdm_project_id',
+        'upsale_id',
         'milestone_name',
+        'milestone_type',
         'milestone_value',
         'payment_status',
         'payment_date',
@@ -39,5 +41,10 @@ class ProjectMilestone extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function upsale()
+    {
+        return $this->belongsTo(Upsale::class);
     }
 }

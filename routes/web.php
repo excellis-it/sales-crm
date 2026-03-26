@@ -5,6 +5,7 @@ use App\Http\Controllers\AccountManager\FollowupController;
 use App\Http\Controllers\AccountManager\ProfileController as AccountManagerProfileController;
 use App\Http\Controllers\AccountManager\ProjectController as AccountManagerProjectController;
 use App\Http\Controllers\AccountManager\PaymentsController as AccountManagerPaymentsController;
+use App\Http\Controllers\AccountManager\UpsaleController as AccountManagerUpsaleController;
 use App\Http\Controllers\Admin\AccountManagerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController;
@@ -361,6 +362,13 @@ Route::group(['middleware' => ['AccountManager'], 'prefix' => 'account-manager']
 
     Route::get('projects/followups/{id}', [CommonFollowupController::class, 'getProjectFollowups'])->name('account-manager.projects.followups');
     Route::post('projects/add-followup', [CommonFollowupController::class, 'addProjectFollowup'])->name('account-manager.projects.add-followup');
+
+    // Upsale routes
+    Route::get('projects/{id}/upsale', [AccountManagerUpsaleController::class, 'upsaleForm'])->name('account-manager.projects.upsale');
+    Route::post('projects/upsale-store', [AccountManagerUpsaleController::class, 'store'])->name('account-manager.projects.upsale-store');
+    Route::get('upsale/{id}/edit', [AccountManagerUpsaleController::class, 'edit'])->name('account-manager.upsale.edit');
+    Route::post('upsale/{id}/update', [AccountManagerUpsaleController::class, 'update'])->name('account-manager.upsale.update');
+    Route::post('upsale/{id}/destroy', [AccountManagerUpsaleController::class, 'destroy'])->name('account-manager.upsale.destroy');
 });
 Route::group(['middleware' => ['BlockIpMiddleware']], function () {
     /**---------------------------------------------------------------Sales Excecutive ---------------------------------------------------------------------------------- */
