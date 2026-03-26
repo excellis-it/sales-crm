@@ -36,8 +36,8 @@
                 $upsales = $project->upsales()->with('milestones', 'upfrontMilestone')->get();
                 $totalUpsaleValue   = $upsales->sum('upsale_value');
                 $totalUpsaleUpfront = $upsales->sum('upsale_upfront');
-                $grandTotalValue    = $project->project_value + $totalUpsaleValue;
-                $totalUpfront       = $project->project_upfront + $totalUpsaleUpfront;
+                $grandTotalValue    = (float)$project->project_value + $totalUpsaleValue;
+                $totalUpfront       = (float)$project->project_upfront + $totalUpsaleUpfront;
 
                 $paidMilestones = $project->allProjectMilestones
                     ->where('payment_status', 'Paid')

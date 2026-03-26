@@ -7,8 +7,8 @@
         @php
             $upsaleTotal    = $project->upsales->sum('upsale_value');
             $upsaleUpfront  = $project->upsales->sum('upsale_upfront');
-            $grandTotal     = $project->project_value + $upsaleTotal;
-            $totalUpfront   = $project->project_upfront + $upsaleUpfront;
+            $grandTotal     = (float)$project->project_value + $upsaleTotal;
+            $totalUpfront   = (float)$project->project_upfront + $upsaleUpfront;
 
             // Paid milestones: exclude upfront records (by type or name) to avoid double counting
             $paidMilestones = $project->allProjectMilestones

@@ -314,8 +314,8 @@
                                         @php
                                             $upsaleTotal = $project->upsales->sum('upsale_value');
                                             $upsaleUpfront = $project->upsales->sum('upsale_upfront');
-                                            $grandTotal = $project->project_value + $upsaleTotal;
-                                            $totalUpfront = $project->project_upfront + $upsaleUpfront;
+                                            $grandTotal = (float)$project->project_value + $upsaleTotal;
+                                            $totalUpfront = (float)$project->project_upfront + $upsaleUpfront;
                                             $paidMs = $project->allProjectMilestones
                                                 ->where('payment_status', 'Paid')
                                                 ->whereIn('milestone_type', ['milestone', 'upsale_milestone'])
