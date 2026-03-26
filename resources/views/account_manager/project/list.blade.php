@@ -45,6 +45,194 @@
         .toggle-paid {
             cursor: pointer;
         }
+
+        /* Enhanced project page styles */
+        .project-main-card {
+            border: none;
+            border-radius: 0.75rem;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+        .project-main-card .card-body {
+            padding: 1.5rem;
+        }
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0;
+        }
+        .project-header h4 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .project-header h4 i {
+            color: #ff9b44;
+            font-size: 20px;
+        }
+        .project-header .btn-add-project {
+            background: linear-gradient(135deg, #ff9b44 0%, #fc6075 100%);
+            border: none;
+            color: #fff;
+            font-weight: 600;
+            font-size: 13px;
+            padding: 8px 24px;
+            border-radius: 50px;
+            transition: all 0.3s;
+            box-shadow: 0 3px 10px rgba(255, 155, 68, 0.3);
+        }
+        .project-header .btn-add-project:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 155, 68, 0.4);
+        }
+
+        /* Filter bar */
+        .filter-bar {
+            background: #f8f9fc;
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin-top: 16px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-end;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .filter-bar .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .filter-bar .filter-group label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #8898aa;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0;
+        }
+        .filter-bar .form-control {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 13px;
+            padding: 6px 12px;
+            height: 38px;
+            transition: border-color 0.2s;
+        }
+        .filter-bar .form-control:focus {
+            border-color: #ff9b44;
+            box-shadow: 0 0 0 3px rgba(255, 155, 68, 0.1);
+        }
+        .filter-bar .search-wrapper {
+            position: relative;
+            flex: 1;
+            min-width: 200px;
+        }
+        .filter-bar .search-wrapper input {
+            padding-right: 40px;
+        }
+        .filter-bar .search-wrapper .search-icon {
+            position: absolute;
+            right: 10px;
+            top: 67%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #ff9b44 0%, #fc6075 100%);
+            border: none;
+            color: #fff;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .filter-bar .btn-reset {
+            border: 1px solid #e2e8f0;
+            background: #fff;
+            color: #dc3545;
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .filter-bar .btn-reset:hover {
+            background: #dc3545;
+            color: #fff;
+            border-color: #dc3545;
+        }
+
+        /* Table styles */
+        .project-table {
+            margin-top: 8px;
+        }
+        .project-table .table {
+            margin-bottom: 0;
+        }
+        .project-table .table thead th {
+            background: #f1f4f9;
+            border: none;
+            font-size: 11px;
+            font-weight: 700;
+            color: #5a6a85;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 10px 12px;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .project-table .table thead th:hover {
+            background: #e4e9f2;
+        }
+        .project-table .table thead th:first-child {
+            border-radius: 8px 0 0 8px;
+        }
+        .project-table .table thead th:last-child {
+            border-radius: 0 8px 8px 0;
+        }
+        .project-table .table tbody td {
+            font-size: 13px;
+            padding: 10px 12px;
+            vertical-align: middle;
+            border-bottom: 1px solid #f0f2f5;
+            color: #4a5568;
+        }
+        .project-table .table tbody tr {
+            transition: all 0.2s;
+        }
+        .project-table .table tbody tr:hover {
+            background: #f7f9ff;
+        }
+        .project-table .table tbody tr .edit-route {
+            cursor: pointer;
+        }
+
+        /* Active filter indicator */
+        .filter-active-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: #fff3e0;
+            color: #e65100;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-left: 10px;
+        }
+        .filter-active-badge i {
+            font-size: 10px;
+        }
     </style>
 @endpush
 
@@ -59,51 +247,51 @@
             <div class="page-header">
                 <div class="row align-items-center">
                     <div class="col">
-                        <h3 class="page-title">Projects Information</h3>
+                        <h3 class="page-title">Projects</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('account-manager.projects.index') }}">Projects</a>
-                            </li>
-                            <li class="breadcrumb-item active">List</li>
+                            <li class="breadcrumb-item"><a href="{{ route('account-manager.dashboard') }}">Dashboard</a></li>
+                            <li class="breadcrumb-item active">Projects</li>
                         </ul>
                     </div>
                 </div>
             </div>
 
-            <div class="card">
+            <div class="card project-main-card">
                 <div class="card-body">
-                    <div class="card-title">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h4 class="mb-0">Projects Details</h4>
-                            </div>
-                            <div class="col-md-6 text-end">
-                                <a href="javascript:void(0);" class="btn px-5 submit-btn" data-bs-toggle="offcanvas"
-                                data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"><i
-                                        class="fa fa-plus"></i> Add Project</a>
-
-                            </div>
-                        </div>
+                    <div class="project-header">
+                        <h4>
+                            <i class="la la-briefcase"></i> Projects Details
+                            @if(!empty($start_date) && !empty($end_date))
+                                <span class="filter-active-badge">
+                                    <i class="fa fa-filter"></i>
+                                    {{ date('d M', strtotime($start_date)) }} - {{ date('d M Y', strtotime($end_date)) }}
+                                </span>
+                            @endif
+                        </h4>
+                        <a href="javascript:void(0);" class="btn btn-add-project" data-bs-toggle="offcanvas"
+                            data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                            <i class="fa fa-plus"></i> Add Project
+                        </a>
                     </div>
 
-                    <hr />
-
-                    <div class="row justify-content-end">
-                        <div class="col-md-6">
-                            <div class="row g-1 justify-content-end">
-                                <div class="col-md-8 pr-0">
-                                    <div class="search-field">
-                                        <input type="text" name="search" id="search" placeholder="search..." required
-                                            class="form-control rounded_search">
-                                        <button class="submit_search" id="search-button"> <span class=""><i
-                                                    class="fa fa-search"></i></span></button>
-                                    </div>
-                                </div>
-                                {{-- <div class="col-md-3 pl-0 ml-2">
-                                    <button class="btn btn-primary button-search" id="search-button"> <span class=""><i
-                                                class="ph ph-magnifying-glass"></i></span> Search</button>
-                                </div> --}}
-                            </div>
+                    <div class="filter-bar">
+                        <div class="filter-group">
+                            <label>Start Date</label>
+                            <input type="date" id="start_date_filter" value="{{ $start_date ?? '' }}" class="form-control">
                         </div>
+                        <div class="filter-group">
+                            <label>End Date</label>
+                            <input type="date" id="end_date_filter" value="{{ $end_date ?? '' }}" class="form-control">
+                        </div>
+                        <div class="filter-group search-wrapper" style="flex:1;">
+                            <label>Search</label>
+                            <input type="text" id="search" value="{{ $query ?? '' }}" placeholder="Search projects..." class="form-control">
+                            <button class="search-icon" id="search-button"><i class="fa fa-search"></i></button>
+                        </div>
+                        <button type="button" id="reset-filters" class="btn-reset" title="Reset Filters">
+                            <i class="fa fa-undo"></i>
+                        </button>
+                    </div>
                         <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
                             aria-labelledby="offcanvasRightLabel" style="width: 600px;">
                             <div class="offcanvas-header bg-light border-bottom">
@@ -299,22 +487,20 @@
                     </div>
 
 
-                    <div class="table-responsive mt-3" id="project-data">
-                        <table id="myTable" class="table table-hover align-middle" style="width:100%">
-                            <thead class="table-light">
+                    <div class="table-responsive project-table" id="project-data">
+                        <table id="myTable" class="table align-middle" style="width:100%">
+                            <thead>
                                 <tr>
-                                    <th class="sorting" data-column_name="sale_date">Sale Date <i class="fa fa-sort ms-1 text-muted"></i></th>
+                                    <th class="sorting" data-column_name="sale_date">Sale Date <i class="fa fa-sort ms-1"></i></th>
                                     <th>Opened By</th>
-                                    <th class="sorting" data-column_name="business_name">Business Name <i class="fa fa-sort ms-1 text-muted"></i></th>
-                                    {{-- <th class="sorting" data-column_name="client_name">Customer Name <i class="fa fa-sort ms-1 text-muted"></i></th> --}}
-                                    {{-- <th class="sorting" data-column_name="phone_number">Phone <i class="fa fa-sort ms-1 text-muted"></i></th> --}}
-                                    <th class="sorting" data-column_name="project_type">Project Type <i class="fa fa-sort ms-1 text-muted"></i></th>
-                                    <th class="sorting" data-column_name="project_value">Value (Base+Upsale) <i class="fa fa-sort ms-1 text-muted"></i></th>
-                                    <th class="sorting" data-column_name="project_upfront">Total Upfront <i class="fa fa-sort ms-1 text-muted"></i></th>
-                                    <th class="sorting" data-column_name="currency">CCY <i class="fa fa-sort ms-1 text-muted"></i></th>
-                                    <th class="sorting" data-column_name="payment_mode">Payment Mode <i class="fa fa-sort ms-1 text-muted"></i></th>
-                                    <th style="cursor: pointer" title="Milestones received other than upfront">Milestone Received</th>
-                                    <th title="Calculation: (Value) - (Upfront) - (Milestone Received)">Balance Due</th>
+                                    <th class="sorting" data-column_name="business_name">Business Name <i class="fa fa-sort ms-1"></i></th>
+                                    <th class="sorting" data-column_name="project_type">Project Type <i class="fa fa-sort ms-1"></i></th>
+                                    <th class="sorting" data-column_name="project_value">Value (Base+Upsale) <i class="fa fa-sort ms-1"></i></th>
+                                    <th class="sorting" data-column_name="project_upfront">Total Upfront <i class="fa fa-sort ms-1"></i></th>
+                                    <th class="sorting" data-column_name="currency">CCY <i class="fa fa-sort ms-1"></i></th>
+                                    <th class="sorting" data-column_name="payment_mode">Payment Mode <i class="fa fa-sort ms-1"></i></th>
+                                    <th title="Milestones received other than upfront">Milestone Received</th>
+                                    <th title="Value - Upfront - Milestone Received">Balance Due</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -364,7 +550,9 @@
             $('#business_name_icon').html('');
         }
 
-        function fetch_data(page, sort_type, sort_by, query,call_status = "") {
+        function fetch_data(page, sort_type, sort_by, query, call_status = "") {
+            var start_date = $('#start_date_filter').val();
+            var end_date = $('#end_date_filter').val();
 
             $.ajax({
                 url: "{{ route('account-manager.project.filter') }}",
@@ -373,6 +561,8 @@
                     sortby: sort_by,
                     sorttype: sort_type,
                     query: query,
+                    start_date: start_date,
+                    end_date: end_date,
                     call_status: call_status
                 },
                 success: function(data) {
@@ -380,6 +570,23 @@
                 }
             });
         }
+
+        $(document).on('change', '#start_date_filter, #end_date_filter', function() {
+            var query = $('#search').val();
+            var column_name = $('#hidden_column_name').val();
+            var sort_type = $('#hidden_sort_type').val();
+            var page = 1;
+            fetch_data(page, sort_type, column_name, query, "");
+        });
+
+        $(document).on('click', '#reset-filters', function() {
+            $('#start_date_filter').val('');
+            $('#end_date_filter').val('');
+            $('#search').val('');
+            var column_name = $('#hidden_column_name').val();
+            var sort_type = $('#hidden_sort_type').val();
+            fetch_data(1, sort_type, column_name, '', "");
+        });
 
         $(document).on('keyup', '#search', function() {
             var query = $('#search').val();
@@ -393,16 +600,16 @@
             var column_name = $(this).data('column_name');
             var order_type = $(this).data('sorting_type') || 'asc'; // Use existing, or default to asc
             var reverse_order = (order_type == 'asc') ? 'desc' : 'asc';
-            
+
             $(this).data('sorting_type', reverse_order);
             clear_icon();
-            
+
             if (reverse_order == 'desc') {
                 $('#' + column_name + '_icon').html('<span class="fa fa-sort-down"></span>');
             } else {
                 $('#' + column_name + '_icon').html('<span class="fa fa-sort-up"></span>');
             }
-            
+
             $('#hidden_column_name').val(column_name);
             $('#hidden_sort_type').val(reverse_order);
             var page = $('#hidden_page').val();

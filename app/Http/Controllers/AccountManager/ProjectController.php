@@ -24,11 +24,49 @@ class ProjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $projects = Project::with(['upsales', 'allProjectMilestones', 'projectMilestones', 'projectTypes', 'projectOpener', 'projectCloser'])->where('assigned_to', Auth::user()->id)->orderBy('sale_date', 'desc')->paginate(15);
-        $users = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->orderBy('id', 'desc')->get();
-        return view('account_manager.project.list', compact('projects', 'users'));
+        // URL query params take priority (for dashboard redirects), then session
+        $query      = $request->get('query', Session::get('am_project_filter_query', ''));
+        $start_date = $request->get('start_date', Session::get('am_project_filter_start_date', ''));
+        $end_date   = $request->get('end_date', Session::get('am_project_filter_end_date', ''));
+
+        // Persist to session so AJAX filter calls keep the same dates
+        if ($request->has('start_date') || $request->has('end_date')) {
+            Session::put('am_project_filter_start_date', $start_date);
+            Session::put('am_project_filter_end_date', $end_date);
+            Session::put('am_project_filter_query', $query);
+        }
+
+        $query_p    = str_replace(" ", "%", $query);
+        $date_query = null;
+        if (preg_match('/^\d{1,2}-\d{1,2}-\d{4}$/', $query)) {
+            $date_query = date('Y-m-d', strtotime($query));
+        }
+
+        $projects = Project::with(['upsales', 'allProjectMilestones', 'projectMilestones', 'projectTypes', 'projectOpener', 'projectCloser'])
+            ->where('assigned_to', Auth::user()->id);
+
+        if ($start_date && $end_date) {
+            $projects->whereBetween('sale_date', [$start_date, $end_date]);
+        }
+
+        if ($query) {
+            $projects->where(function ($q) use ($query_p, $date_query) {
+                $q->orWhere('sale_date', 'like', '%' . $query_p . '%')
+                  ->orWhere('business_name', 'like', '%' . $query_p . '%')
+                  ->orWhere('client_name', 'like', '%' . $query_p . '%')
+                  ->orWhere('client_phone', 'like', '%' . $query_p . '%')
+                  ->orWhere('project_value', 'like', '%' . $query_p . '%')
+                  ->orWhere('project_upfront', 'like', '%' . $query_p . '%');
+                if ($date_query) $q->orWhere('sale_date', 'like', '%' . $date_query . '%');
+            });
+        }
+
+        $projects = $projects->orderBy('id', 'desc')->paginate(15);
+        $users    = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->orderBy('id', 'desc')->get();
+
+        return view('account_manager.project.list', compact('projects', 'users', 'query', 'start_date', 'end_date'));
     }
     /**
      * Show the form for creating a new resource.
@@ -372,51 +410,59 @@ class ProjectController extends Controller
 
             $query_p = str_replace(" ", "%", $query);
 
+            $start_date = $request->get('start_date');
+            $end_date = $request->get('end_date');
+
             $projects = Project::with(['upsales', 'allProjectMilestones', 'projectMilestones', 'projectTypes', 'projectOpener', 'projectCloser'])
                 ->withSum('upsales as total_upsale_value', 'upsale_value')
                 ->withSum('upsales as total_upsale_upfront', 'upsale_upfront')
-                ->where('assigned_to', Auth::user()->id)
-                ->where(function ($q) use ($query_p, $date_query) {
-                    $q->orWhere('sale_date', 'like', '%' . $query_p . '%')
-                        ->orWhere('business_name', 'like', '%' . $query_p . '%')
-                        ->orWhere('client_name', 'like', '%' . $query_p . '%')
-                        ->orWhere('client_phone', 'like', '%' . $query_p . '%')
-                        ->orWhere('project_value', 'like', '%' . $query_p . '%')
-                        ->orWhere('project_upfront', 'like', '%' . $query_p . '%')
-                        ->orWhere('currency', 'like', '%' . $query_p . '%')
-                        ->orWhere('payment_mode', 'like', '%' . $query_p . '%')
-                        ->orWhereHas('projectTypes', function ($sq) use ($query_p) {
-                            $sq->where('type', 'like', '%' . $query_p . '%');
-                        })
-                        ->orWhereHas('projectOpener', function ($sq) use ($query_p) {
-                            $sq->where('name', 'like', '%' . $query_p . '%');
-                        });
-                    
-                    if ($date_query) {
-                        $q->orWhere('sale_date', 'like', '%' . $date_query . '%');
-                    }
+                ->where('assigned_to', Auth::user()->id);
 
-                    // Searching by Total Grand Total (Base + Upsale)
-                    $q->orWhereRaw("(project_value + (SELECT COALESCE(SUM(upsale_value), 0) FROM upsales WHERE upsales.project_id = projects.id)) LIKE ?", ["%{$query_p}%"]);
-                    
-                    // Searching by Total Upfront (Base + Upsale Upfront)
-                    $q->orWhereRaw("(project_upfront + (SELECT COALESCE(SUM(upsale_upfront), 0) FROM upsales WHERE upsales.project_id = projects.id)) LIKE ?", ["%{$query_p}%"]);
+            if ($start_date && $end_date) {
+                $projects->whereBetween('sale_date', [$start_date, $end_date]);
+            }
 
-                    // Searching by Milestone Received (Paid milestones excluding upfronts)
-                    $paidMilestoneSubquery = "(SELECT COALESCE(SUM(milestone_value), 0) FROM project_milestones 
-                                                WHERE project_milestones.project_id = projects.id 
-                                                AND payment_status = 'Paid' 
-                                                AND milestone_type NOT IN ('upfront', 'upsale_upfront') 
-                                                AND milestone_name NOT IN ('Upfront', 'Upsale Upfront'))";
-                    
-                    $q->orWhereRaw("{$paidMilestoneSubquery} LIKE ?", ["%{$query_p}%"]);
+            $projects->where(function ($q) use ($query_p, $date_query) {
+                $q->orWhere('sale_date', 'like', '%' . $query_p . '%')
+                    ->orWhere('business_name', 'like', '%' . $query_p . '%')
+                    ->orWhere('client_name', 'like', '%' . $query_p . '%')
+                    ->orWhere('client_phone', 'like', '%' . $query_p . '%')
+                    ->orWhere('project_value', 'like', '%' . $query_p . '%')
+                    ->orWhere('project_upfront', 'like', '%' . $query_p . '%')
+                    ->orWhere('currency', 'like', '%' . $query_p . '%')
+                    ->orWhere('payment_mode', 'like', '%' . $query_p . '%')
+                    ->orWhereHas('projectTypes', function ($sq) use ($query_p) {
+                        $sq->where('type', 'like', '%' . $query_p . '%');
+                    })
+                    ->orWhereHas('projectOpener', function ($sq) use ($query_p) {
+                        $sq->where('name', 'like', '%' . $query_p . '%');
+                    });
+                
+                if ($date_query) {
+                    $q->orWhere('sale_date', 'like', '%' . $date_query . '%');
+                }
 
-                    // Searching by Balance Due
-                    $grandTotalSubquery = "(project_value + (SELECT COALESCE(SUM(upsale_value), 0) FROM upsales WHERE upsales.project_id = projects.id))";
-                    $totalUpfrontSubquery = "(project_upfront + (SELECT COALESCE(SUM(upsale_upfront), 0) FROM upsales WHERE upsales.project_id = projects.id))";
-                    
-                    $q->orWhereRaw("({$grandTotalSubquery} - {$totalUpfrontSubquery} - {$paidMilestoneSubquery}) LIKE ?", ["%{$query_p}%"]);
-                });
+                // Searching by Total Grand Total (Base + Upsale)
+                $q->orWhereRaw("(project_value + (SELECT COALESCE(SUM(upsale_value), 0) FROM upsales WHERE upsales.project_id = projects.id)) LIKE ?", ["%{$query_p}%"]);
+                
+                // Searching by Total Upfront (Base + Upsale Upfront)
+                $q->orWhereRaw("(project_upfront + (SELECT COALESCE(SUM(upsale_upfront), 0) FROM upsales WHERE upsales.project_id = projects.id)) LIKE ?", ["%{$query_p}%"]);
+
+                // Searching by Milestone Received (Paid milestones excluding upfronts)
+                $paidMilestoneSubquery = "(SELECT COALESCE(SUM(milestone_value), 0) FROM project_milestones 
+                                            WHERE project_milestones.project_id = projects.id 
+                                            AND payment_status = 'Paid' 
+                                            AND milestone_type NOT IN ('upfront', 'upsale_upfront') 
+                                            AND milestone_name NOT IN ('Upfront', 'Upsale Upfront'))";
+                
+                $q->orWhereRaw("{$paidMilestoneSubquery} LIKE ?", ["%{$query_p}%"]);
+
+                // Searching by Balance Due
+                $grandTotalSubquery = "(project_value + (SELECT COALESCE(SUM(upsale_value), 0) FROM upsales WHERE upsales.project_id = projects.id))";
+                $totalUpfrontSubquery = "(project_upfront + (SELECT COALESCE(SUM(upsale_upfront), 0) FROM upsales WHERE upsales.project_id = projects.id))";
+                
+                $q->orWhereRaw("({$grandTotalSubquery} - {$totalUpfrontSubquery} - {$paidMilestoneSubquery}) LIKE ?", ["%{$query_p}%"]);
+            });
 
             // Handle sorting by calculated totals
             if ($sort_by == 'project_value') {
@@ -428,6 +474,10 @@ class ProjectController extends Controller
             }
 
             $projects = $projects->paginate(15);
+
+            Session::put('am_project_filter_query', $query);
+            Session::put('am_project_filter_start_date', $start_date);
+            Session::put('am_project_filter_end_date', $end_date);
 
             Session::put('call_status', $request->get('call_status'));
             if ($request->get('call_status') == '') {
