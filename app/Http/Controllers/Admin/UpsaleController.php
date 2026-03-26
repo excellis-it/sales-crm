@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\AccountManager;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Goal;
@@ -15,8 +15,9 @@ class UpsaleController extends Controller
     public function upsaleForm($projectId)
     {
         $project = Project::with(['upsales.milestones', 'upsales.upfrontMilestone'])->findOrFail($projectId);
+        $account_managers = \App\Models\User::role('ACCOUNT_MANAGER')->where('status', 1)->orderBy('name', 'ASC')->get();
         return response()->json([
-            'view' => view('account_manager.upsale.panel', compact('project'))->render()
+            'view' => view('admin.upsale.panel', compact('project', 'account_managers'))->render()
         ]);
     }
 
@@ -38,9 +39,12 @@ class UpsaleController extends Controller
 
         $data = $request->all();
 
+        $project = Project::findOrFail($data['project_id']);
+        $goalUserId = $request->assigned_to ?: $project->assigned_to; // Use selected AM or default to project's AM
+
         $upsale = new Upsale();
         $upsale->project_id        = $data['project_id'];
-        $upsale->user_id           = Auth::user()->id;
+        $upsale->user_id           = $goalUserId; // Attribution goes to AM as user_id
         $upsale->upsale_project_type = isset($data['upsale_project_type']) ? $data['upsale_project_type'] : [];
         $upsale->other_project_type  = $data['other_project_type'] ?? null;
         $upsale->upsale_value        = $data['upsale_value'];
@@ -63,15 +67,17 @@ class UpsaleController extends Controller
             $upfront->payment_date    = $upsale->upsale_date;
             $upfront->save();
 
-            // Update goals achievement
-            $net_goals = Goal::where('user_id', Auth::user()->id)
-                ->whereMonth('goals_date', date('m', strtotime($upsale->upsale_date)))
-                ->whereYear('goals_date', date('Y', strtotime($upsale->upsale_date)))
-                ->where('goals_type', 2)
-                ->first();
-            if ($net_goals) {
-                $net_goals->goals_achieve = $net_goals->goals_achieve + $upsale->upsale_upfront;
-                $net_goals->save();
+            // Update goals achievement for AM
+            if ($goalUserId) {
+                $net_goals = Goal::where('user_id', $goalUserId)
+                    ->whereMonth('goals_date', date('m', strtotime($upsale->upsale_date)))
+                    ->whereYear('goals_date', date('Y', strtotime($upsale->upsale_date)))
+                    ->where('goals_type', 2)
+                    ->first();
+                if ($net_goals) {
+                    $net_goals->goals_achieve = $net_goals->goals_achieve + $upsale->upsale_upfront;
+                    $net_goals->save();
+                }
             }
         }
 
@@ -91,8 +97,8 @@ class UpsaleController extends Controller
                     $milestone->milestone_comment = $data['milestone_comment'][$key] ?? null;
                     $milestone->save();
 
-                    if ($data['payment_status'][$key] == 'Paid' && !empty($data['milestone_payment_date'][$key])) {
-                        $net_goals = Goal::where('user_id', Auth::user()->id)
+                    if ($data['payment_status'][$key] == 'Paid' && !empty($data['milestone_payment_date'][$key]) && $goalUserId) {
+                        $net_goals = Goal::where('user_id', $goalUserId)
                             ->whereMonth('goals_date', date('m', strtotime($data['milestone_payment_date'][$key])))
                             ->whereYear('goals_date', date('Y', strtotime($data['milestone_payment_date'][$key])))
                             ->where('goals_type', 2)
@@ -113,8 +119,9 @@ class UpsaleController extends Controller
     {
         $upsale = Upsale::with('milestones', 'upfrontMilestone')->findOrFail($id);
         $project = $upsale->project;
+        $account_managers = \App\Models\User::role('ACCOUNT_MANAGER')->where('status', 1)->orderBy('name', 'ASC')->get();
         return response()->json([
-            'view' => view('account_manager.upsale.edit', compact('upsale', 'project'))->render()
+            'view' => view('admin.upsale.edit', compact('upsale', 'project', 'account_managers'))->render()
         ]);
     }
 
@@ -135,7 +142,29 @@ class UpsaleController extends Controller
 
         $data = $request->all();
         $upsale = Upsale::findOrFail($id);
+        $project = Project::findOrFail($upsale->project_id);
+        $oldGoalUserId = $upsale->user_id; // Capture the old user_id for goal reversal
+        $goalUserId = $request->assigned_to ?: $project->assigned_to; 
 
+        // Reverse old milestone goals from the OLD user
+        if ($oldGoalUserId) {
+            $oldMilestones = ProjectMilestone::where('upsale_id', $upsale->id)->where('payment_status', 'Paid')->get();
+            foreach ($oldMilestones as $om) {
+                if ($om->payment_date) {
+                    $goal = Goal::where('user_id', $oldGoalUserId)
+                        ->whereMonth('goals_date', date('m', strtotime($om->payment_date)))
+                        ->whereYear('goals_date', date('Y', strtotime($om->payment_date)))
+                        ->where('goals_type', 2)
+                        ->first();
+                    if ($goal) {
+                        $goal->goals_achieve = $goal->goals_achieve - $om->milestone_value;
+                        $goal->save();
+                    }
+                }
+            }
+        }
+
+        $upsale->user_id               = $goalUserId; // Update attribution to the new AM
         $upsale->upsale_project_type   = isset($data['upsale_project_type']) ? $data['upsale_project_type'] : [];
         $upsale->other_project_type    = $data['other_project_type'] ?? null;
         $upsale->upsale_value          = $data['upsale_value'];
@@ -146,17 +175,19 @@ class UpsaleController extends Controller
         $upsale->save();
 
         // Reverse old milestone goals
-        $oldMilestones = ProjectMilestone::where('upsale_id', $upsale->id)->where('payment_status', 'Paid')->get();
-        foreach ($oldMilestones as $om) {
-            if ($om->payment_date) {
-                $goal = Goal::where('user_id', Auth::user()->id)
-                    ->whereMonth('goals_date', date('m', strtotime($om->payment_date)))
-                    ->whereYear('goals_date', date('Y', strtotime($om->payment_date)))
-                    ->where('goals_type', 2)
-                    ->first();
-                if ($goal) {
-                    $goal->goals_achieve = $goal->goals_achieve - $om->milestone_value;
-                    $goal->save();
+        if ($goalUserId) {
+            $oldMilestones = ProjectMilestone::where('upsale_id', $upsale->id)->where('payment_status', 'Paid')->get();
+            foreach ($oldMilestones as $om) {
+                if ($om->payment_date) {
+                    $goal = Goal::where('user_id', $goalUserId)
+                        ->whereMonth('goals_date', date('m', strtotime($om->payment_date)))
+                        ->whereYear('goals_date', date('Y', strtotime($om->payment_date)))
+                        ->where('goals_type', 2)
+                        ->first();
+                    if ($goal) {
+                        $goal->goals_achieve = $goal->goals_achieve - $om->milestone_value;
+                        $goal->save();
+                    }
                 }
             }
         }
@@ -177,14 +208,16 @@ class UpsaleController extends Controller
             $upfront->payment_date    = $upsale->upsale_date;
             $upfront->save();
 
-            $net_goals = Goal::where('user_id', Auth::user()->id)
-                ->whereMonth('goals_date', date('m', strtotime($upsale->upsale_date)))
-                ->whereYear('goals_date', date('Y', strtotime($upsale->upsale_date)))
-                ->where('goals_type', 2)
-                ->first();
-            if ($net_goals) {
-                $net_goals->goals_achieve = $net_goals->goals_achieve + $upsale->upsale_upfront;
-                $net_goals->save();
+            if ($goalUserId) {
+                $net_goals = Goal::where('user_id', $goalUserId)
+                    ->whereMonth('goals_date', date('m', strtotime($upsale->upsale_date)))
+                    ->whereYear('goals_date', date('Y', strtotime($upsale->upsale_date)))
+                    ->where('goals_type', 2)
+                    ->first();
+                if ($net_goals) {
+                    $net_goals->goals_achieve = $net_goals->goals_achieve + $upsale->upsale_upfront;
+                    $net_goals->save();
+                }
             }
         }
 
@@ -204,8 +237,8 @@ class UpsaleController extends Controller
                     $milestone->milestone_comment = $data['milestone_comment'][$key] ?? null;
                     $milestone->save();
 
-                    if ($data['payment_status'][$key] == 'Paid' && !empty($data['milestone_payment_date'][$key])) {
-                        $net_goals = Goal::where('user_id', Auth::user()->id)
+                    if ($data['payment_status'][$key] == 'Paid' && !empty($data['milestone_payment_date'][$key]) && $goalUserId) {
+                        $net_goals = Goal::where('user_id', $goalUserId)
                             ->whereMonth('goals_date', date('m', strtotime($data['milestone_payment_date'][$key])))
                             ->whereYear('goals_date', date('Y', strtotime($data['milestone_payment_date'][$key])))
                             ->where('goals_type', 2)
@@ -225,20 +258,23 @@ class UpsaleController extends Controller
     public function destroy($id)
     {
         $upsale = Upsale::findOrFail($id);
-        $projectId = $upsale->project_id;
+        $project = Project::findOrFail($upsale->project_id);
+        $goalUserId = $upsale->user_id; // Goal achievement was attributed to this AM
 
         // Reverse goals from paid milestones
-        $milestones = ProjectMilestone::where('upsale_id', $upsale->id)->where('payment_status', 'Paid')->get();
-        foreach ($milestones as $m) {
-            if ($m->payment_date) {
-                $goal = Goal::where('user_id', Auth::user()->id)
-                    ->whereMonth('goals_date', date('m', strtotime($m->payment_date)))
-                    ->whereYear('goals_date', date('Y', strtotime($m->payment_date)))
-                    ->where('goals_type', 2)
-                    ->first();
-                if ($goal) {
-                    $goal->goals_achieve = $goal->goals_achieve - $m->milestone_value;
-                    $goal->save();
+        if ($goalUserId) {
+            $milestones = ProjectMilestone::where('upsale_id', $upsale->id)->where('payment_status', 'Paid')->get();
+            foreach ($milestones as $m) {
+                if ($m->payment_date) {
+                    $goal = Goal::where('user_id', $goalUserId)
+                        ->whereMonth('goals_date', date('m', strtotime($m->payment_date)))
+                        ->whereYear('goals_date', date('Y', strtotime($m->payment_date)))
+                        ->where('goals_type', 2)
+                        ->first();
+                    if ($goal) {
+                        $goal->goals_achieve = $goal->goals_achieve - $m->milestone_value;
+                        $goal->save();
+                    }
                 }
             }
         }
@@ -246,7 +282,7 @@ class UpsaleController extends Controller
         // Milestones deleted via cascade from FK
         $upsale->delete();
 
-        return redirect()->route('account-manager.projects.index')
+        return redirect()->route('sales-projects.index')
             ->with('message', 'Upsale deleted successfully.');
     }
 }

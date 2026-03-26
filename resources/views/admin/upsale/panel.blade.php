@@ -22,7 +22,7 @@
                         <button class="btn btn-sm btn-outline-primary btn-edit-upsale" data-id="{{ $upsale->id }}" title="Edit">
                             <i class="fa fa-edit"></i>
                         </button>
-                        <form action="{{ route('account-manager.upsale.destroy', $upsale->id) }}" method="POST" class="d-inline"
+                        <form action="{{ route('admin.upsale.destroy', $upsale->id) }}" method="POST" class="d-inline"
                             onsubmit="return confirm('Are you sure you want to delete this upsale?')">
                             @csrf
                             <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
@@ -86,10 +86,19 @@
         {{-- Add New Upsale Form --}}
         <h3 class="mt-4 text-uppercase">Add New Upsale</h3>
         <hr>
-        <form action="{{ route('account-manager.projects.upsale-store') }}" method="POST" id="upsale-form">
+        <form action="{{ route('admin.sales-projects.upsale-store') }}" method="POST" id="upsale-form">
             @csrf
             <input type="hidden" name="project_id" value="{{ $project->id }}">
             <div class="row">
+                <div class="col-md-12 mb-3">
+                    <label class="col-form-label">Assign To Account Manager <small class="text-muted">(Goal will be credited to this AM)</small></label>
+                    <select name="assigned_to" class="form-control" id="upsale_assigned_to">
+                        <option value="">-- Use Project's AM ({{ $project->accountManager->name ?? 'None' }}) --</option>
+                        @foreach($account_managers as $am)
+                            <option value="{{ $am->id }}">{{ $am->name }} ({{ $am->email }})</option>
+                        @endforeach
+                    </select>
+                </div>
                 <div class="col-md-12 mb-3">
                     <label class="col-form-label">Upsale Project Type <span style="color:red;">*</span></label>
                     <select name="upsale_project_type[]" id="upsale_project_type" class="form-control" multiple >
@@ -142,9 +151,10 @@
                 </div>
                 <div class="col-md-6 mb-3">
                     <label class="col-form-label">Upsale Date <span style="color:red;">*</span></label>
-                    <input type="date" name="upsale_date" class="form-control" max="{{ date('Y-m-d') }}" >
+                    <input type="date" name="upsale_date" class="form-control" max="{{ date('Y-m-d') }}" required>
                 </div>
             </div>
+            <div id="upsale-errors" class="alert alert-danger" style="display:none;"></div>
 
             {{-- Upsale Milestones --}}
             <h3 class="mt-2 text-uppercase">Upsale Milestones</h3>
@@ -166,6 +176,7 @@
     // Select2
     if (typeof $.fn.select2 !== 'undefined') {
         $('#upsale_project_type').select2({ dropdownParent: $('#offcanvasUpsale') });
+        $('#upsale_assigned_to').select2({ dropdownParent: $('#offcanvasUpsale') });
     }
 
     // AJAX Form Submit
@@ -174,7 +185,7 @@
         var $form = $(this);
         var $btn = $('#btn-save-upsale');
         $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Saving...');
-        $('.error-msg').remove(); // Clear previous errors
+        $('.error-msg').remove();
 
         $.ajax({
             url: $form.attr('action'),
@@ -187,7 +198,7 @@
                 if (response.status === 'success') {
                     toastr.success(response.message);
                     bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasUpsale')).hide();
-                    location.reload();
+                    location.reload(); // Reload to update table
                 }
             },
             error: function(xhr) {
@@ -195,7 +206,6 @@
                 if (xhr.status === 422) {
                     var errors = xhr.responseJSON.errors;
                     $.each(errors, function(key, val) {
-                        // Handle array fields like milestone_name.0
                         var fieldName = key;
                         if (key.includes('.')) {
                             var parts = key.split('.');
@@ -204,12 +214,11 @@
                             var $field = $form.find('[name="' + fieldName + '"]').eq(index);
                         } else if (key === 'upsale_project_type') {
                              var $field = $form.find('[name="upsale_project_type[]"]');
-                        } else {
+                         } else {
                             var $field = $form.find('[name="' + fieldName + '"]');
                         }
 
                         if ($field.length) {
-                             // Append error message after the input or its parent container if grouped
                              var $parent = $field.closest('.mb-3');
                              $parent.append('<div class="text-danger mt-1 error-msg" style="font-size: 13px;">' + val[0] + '</div>');
                         }
@@ -223,6 +232,10 @@
     });
 
     // Other type toggle
+    $('#upsale_project_type').on('change', function () {
+        var vals = $(this).val() || [];
+        $('#upsale-other-type').toggle(vals.includes('Other'));
+    });
 
     // Add milestone
     var upsaleMsIdx = 0;
@@ -277,19 +290,13 @@
         var status = $(this).val();
         if (status == 'Paid') {
             $('.upsale-payment-hide-' + id).show();
-            $('#upsale-ms-date-' + id).prop('required', true);
-            $('#upsale-ms-mode-' + id).prop('required', true);
+            $('#upsale-ms-date-' + id).prop('', true);
+            $('#upsale-ms-mode-' + id).prop('', true);
         } else {
             $('.upsale-payment-hide-' + id).hide();
-            $('#upsale-ms-date-' + id).prop('required', false);
-            $('#upsale-ms-mode-' + id).prop('required', false);
+            $('#upsale-ms-date-' + id).prop('', false);
+            $('#upsale-ms-mode-' + id).prop('', false);
         }
-    });
-
-    // Other type toggle
-    $('#upsale_project_type').on('change', function () {
-        var vals = $(this).val() || [];
-        $('#upsale-other-type').toggle(vals.includes('Other'));
     });
 })();
 </script>

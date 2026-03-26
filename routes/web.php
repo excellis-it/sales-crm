@@ -175,6 +175,13 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
         Route::post('prospects/add-followup', [CommonFollowupController::class, 'addProspectFollowup'])->name('prospects.add-followup');
         Route::get('sales-projects/followups/{id}', [CommonFollowupController::class, 'getProjectFollowups'])->name('sales-projects.followups');
         Route::post('sales-projects/add-followup', [CommonFollowupController::class, 'addProjectFollowup'])->name('sales-projects.add-followup');
+
+        // Upsale routes for Admin
+        Route::get('sales-projects/{id}/upsale', [\App\Http\Controllers\Admin\UpsaleController::class, 'upsaleForm'])->name('sales-projects.upsale');
+        Route::post('sales-projects/upsale-store', [\App\Http\Controllers\Admin\UpsaleController::class, 'store'])->name('sales-projects.upsale-store');
+        Route::get('upsale/{id}/edit', [\App\Http\Controllers\Admin\UpsaleController::class, 'edit'])->name('upsale.edit');
+        Route::post('upsale/{id}/update', [\App\Http\Controllers\Admin\UpsaleController::class, 'update'])->name('upsale.update');
+        Route::post('upsale/{id}/destroy', [\App\Http\Controllers\Admin\UpsaleController::class, 'destroy'])->name('upsale.destroy');
     });
     //list goals
     Route::get('/goals-list', [GoalsController::class, 'goalsList'])->name('goals.ajax-list');

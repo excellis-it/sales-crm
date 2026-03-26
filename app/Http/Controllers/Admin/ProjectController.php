@@ -79,10 +79,24 @@ class ProjectController extends Controller
                     ->orWhereHas('salesManager', function ($q2) use ($query_str) {
                         $q2->where('name', 'like', '%' . $query_str . '%');
                     });
+
+                // Financial searching
+                $q->orWhereRaw("(project_value + (SELECT COALESCE(SUM(upsale_value), 0) FROM upsales WHERE upsales.project_id = projects.id)) LIKE ?", ["%{$query_str}%"]);
+                $q->orWhereRaw("(project_upfront + (SELECT COALESCE(SUM(upsale_upfront), 0) FROM upsales WHERE upsales.project_id = projects.id)) LIKE ?", ["%{$query_str}%"]);
+                
+                $paidMilestoneSubquery = "(SELECT COALESCE(SUM(milestone_value), 0) FROM project_milestones 
+                                            WHERE project_milestones.project_id = projects.id 
+                                            AND payment_status = 'Paid' 
+                                            AND milestone_type NOT IN ('upfront', 'upsale_upfront'))";
+                $q->orWhereRaw("{$paidMilestoneSubquery} LIKE ?", ["%{$query_str}%"]);
             });
         }
 
-        $projects = $query->orderBy('sale_date', 'desc')->paginate(15);
+        $projects = $query->with(['upsales', 'allProjectMilestones', 'projectMilestones', 'projectTypes', 'projectOpener', 'projectCloser'])
+            ->withSum('upsales as total_upsale_value', 'upsale_value')
+            ->withSum('upsales as total_upsale_upfront', 'upsale_upfront')
+            ->orderBy('sale_date', 'desc')
+            ->paginate(15);
         
         return view('admin.project.list')->with(compact('projects', 'sales_managers', 'users', 'account_managers', 'project_openers', 'startDate', 'endDate', 'search'));
     }
@@ -552,6 +566,16 @@ class ProjectController extends Controller
                         ->orWhereHas('salesManager', function ($q2) use ($query_str) {
                             $q2->where('name', 'like', '%' . $query_str . '%');
                         });
+
+                    // Financial searching
+                    $q->orWhereRaw("(project_value + (SELECT COALESCE(SUM(upsale_value), 0) FROM upsales WHERE upsales.project_id = projects.id)) LIKE ?", ["%{$query_str}%"]);
+                    $q->orWhereRaw("(project_upfront + (SELECT COALESCE(SUM(upsale_upfront), 0) FROM upsales WHERE upsales.project_id = projects.id)) LIKE ?", ["%{$query_str}%"]);
+                    
+                    $paidMilestoneSubquery = "(SELECT COALESCE(SUM(milestone_value), 0) FROM project_milestones 
+                                                WHERE project_milestones.project_id = projects.id 
+                                                AND payment_status = 'Paid' 
+                                                AND milestone_type NOT IN ('upfront', 'upsale_upfront'))";
+                    $q->orWhereRaw("{$paidMilestoneSubquery} LIKE ?", ["%{$query_str}%"]);
                 });
             }
 
@@ -559,7 +583,20 @@ class ProjectController extends Controller
                 $projects->whereBetween('sale_date', [$start_date, $end_date]);
             }
 
-            $projects = $projects->orderBy($sort_by, $sort_type)->paginate(15);
+            $projects = $projects->with(['upsales', 'allProjectMilestones', 'projectMilestones', 'projectTypes', 'projectOpener', 'projectCloser'])
+                ->withSum('upsales as total_upsale_value', 'upsale_value')
+                ->withSum('upsales as total_upsale_upfront', 'upsale_upfront');
+
+            // Handle sorting by calculated totals
+            if ($sort_by == 'project_value') {
+                $projects = $projects->orderByRaw('project_value + (SELECT COALESCE(SUM(upsale_value), 0) FROM upsales WHERE upsales.project_id = projects.id) ' . $sort_type);
+            } elseif ($sort_by == 'project_upfront') {
+                $projects = $projects->orderByRaw('project_upfront + (SELECT COALESCE(SUM(upsale_upfront), 0) FROM upsales WHERE upsales.project_id = projects.id) ' . $sort_type);
+            } else {
+                $projects = $projects->orderBy($sort_by, $sort_type);
+            }
+
+            $projects = $projects->paginate(15);
 
             Session::put('call_status', $request->get('call_status'));
             if ($request->get('call_status') == '') {

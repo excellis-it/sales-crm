@@ -522,6 +522,20 @@
                         <div id="edit-project-model">
                             @include('admin.project.edit')
                         </div>
+                        {{-- Upsale offcanvas loaded via AJAX --}}
+                        <div id="upsale-panel-container"></div>
+                        {{-- Edit upsale offcanvas --}}
+                        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasUpsaleEdit" style="width:600px;">
+                            <div class="offcanvas-header bg-light border-bottom">
+                                <button type="button" class="text-reset cls_btn_left" data-bs-dismiss="offcanvas" aria-label="Close">
+                                    <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                                </button>
+                                <h4 class="text-dark mb-0">Edit Upsale</h4>
+                            </div>
+                            <div class="offcanvas-body p-0" id="upsale-edit-body">
+                                <div class="p-4 text-center text-muted">Loading...</div>
+                            </div>
+                        </div>
 
                     </div>
                     <div class="table-responsive">
@@ -541,13 +555,13 @@
                                     <th class="sorting" data-tippy-content="Sort by Phone" data-sorting_type="asc"
                                         data-column_name="client_phone" style="cursor: pointer"> Phone <span
                                             id="phone_icon"><span class="fa fa-sort-down"></span></span></th>
-                                    <th class="sorting" data-tippy-content="Sort by Project Value"
+                                    <th class="sorting" data-tippy-content="Sort by Project Value (Base + Upsale)"
                                         data-sorting_type="asc" data-column_name="project_value" style="cursor: pointer">
-                                        Project Value <span id="project_value_icon"><span
+                                        Value (Base+Upsale) <span id="project_value_icon"><span
                                                 class="fa fa-sort-down"></span></span></th>
-                                    <th class="sorting" data-tippy-content="Sort by Project Upfront"
+                                    <th class="sorting" data-tippy-content="Sort by Project Upfront (Base + Upsale)"
                                         data-sorting_type="asc" data-column_name="project_upfront"
-                                        style="cursor: pointer"> Project Upfront <span id="project_upfront_icon"><span
+                                        style="cursor: pointer"> Total Upfront <span id="project_upfront_icon"><span
                                                 class="fa fa-sort-down"></span></span>
                                     </th>
                                     {{-- <th> </th> --}}
@@ -891,6 +905,63 @@
                 $('li').removeClass('active');
                 $(this).parent().addClass('active');
                 fetch_data(page, sort_type, column_name, query);
+            });
+
+            // Open upsale panel for a project
+            $(document).on('click', '.btn-open-upsale', function (e) {
+                e.stopPropagation();
+                var projectId = $(this).data('project-id');
+                $('#loading').addClass('loading');
+                $.ajax({
+                    url: '{{ url("admin/sales-projects") }}/' + projectId + '/upsale',
+                    type: 'GET',
+                    success: function (res) {
+                        $('#upsale-panel-container').html(res.view);
+                        $('#loading').removeClass('loading');
+                        var offcanvasEl = document.getElementById('offcanvasUpsale');
+                        if (offcanvasEl) {
+                            var bsOffcanvas = new bootstrap.Offcanvas(offcanvasEl);
+                            bsOffcanvas.show();
+                            // Init select2 inside offcanvas
+                            if (typeof $.fn.select2 !== 'undefined') {
+                                $('#upsale_project_type').select2({ dropdownParent: $('#offcanvasUpsale') });
+                            }
+                        }
+                    },
+                    error: function () {
+                        $('#loading').removeClass('loading');
+                    }
+                });
+            });
+
+            // Edit upsale - load into separate edit offcanvas
+            $(document).on('click', '.btn-edit-upsale', function (e) {
+                e.stopPropagation();
+                var upsaleId = $(this).data('id');
+                // Close the upsale panel first
+                var panelEl = document.getElementById('offcanvasUpsale');
+                if (panelEl) {
+                    var panelInstance = bootstrap.Offcanvas.getInstance(panelEl);
+                    if (panelInstance) panelInstance.hide();
+                }
+                $('#loading').addClass('loading');
+                $.ajax({
+                    url: '{{ url("admin/upsale") }}/' + upsaleId + '/edit',
+                    type: 'GET',
+                    success: function (res) {
+                        $('#upsale-edit-body').html(res.view);
+                        $('#loading').removeClass('loading');
+                        var editEl = document.getElementById('offcanvasUpsaleEdit');
+                        var bsEdit = new bootstrap.Offcanvas(editEl);
+                        bsEdit.show();
+                        if (typeof $.fn.select2 !== 'undefined') {
+                            $('#upsale_project_type_edit').select2({ dropdownParent: $('#offcanvasUpsaleEdit') });
+                        }
+                    },
+                    error: function () {
+                        $('#loading').removeClass('loading');
+                    }
+                });
             });
         });
     </script>

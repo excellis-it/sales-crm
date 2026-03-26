@@ -1,12 +1,21 @@
 <div class="p-4">
-    <form action="{{ route('account-manager.upsale.update', $upsale->id) }}" method="POST" id="upsale-edit-form">
+    <form action="{{ route('admin.upsale.update', $upsale->id) }}" method="POST" id="upsale-edit-form">
         @csrf
         <input type="hidden" name="project_id" value="{{ $project->id }}">
         <div class="row">
             <div class="col-md-12 mb-3">
+                <label class="col-form-label">Assign To Account Manager <small class="text-muted">(Goal will be credited to this AM)</small></label>
+                <select name="assigned_to" class="form-control" id="upsale_assigned_to_edit">
+                    <option value="">-- Use Project's AM ({{ $project->accountManager->name ?? 'None' }}) --</option>
+                    @foreach($account_managers as $am)
+                        <option value="{{ $am->id }}" {{ $upsale->user_id == $am->id ? 'selected' : '' }}>{{ $am->name }} ({{ $am->email }})</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-12 mb-3">
                 <label class="col-form-label">Upsale Project Type <span style="color:red;">*</span></label>
                 @php $selectedTypes = $upsale->upsale_project_type ?? []; @endphp
-                <select name="upsale_project_type[]" id="upsale_project_type_edit" class="form-control" multiple>
+                <select name="upsale_project_type[]" id="upsale_project_type_edit" class="form-control" multiple required>
                     @foreach(['Website Design & Development','Mobile Application Development','Digital Marketing','Logo Design','SEO','SMO','Other'] as $opt)
                         <option value="{{ $opt }}" {{ in_array($opt, $selectedTypes) ? 'selected' : '' }}>{{ $opt }}</option>
                     @endforeach
@@ -19,15 +28,15 @@
 
             <div class="col-md-6 mb-3">
                 <label class="col-form-label">Upsale Value <span style="color:red;">*</span></label>
-                <input type="text" name="upsale_value" class="form-control" value="{{ $upsale->upsale_value }}">
+                <input type="text" name="upsale_value" required data-parsley-trigger="keyup" data-parsley-type="number" class="form-control" value="{{ $upsale->upsale_value }}">
             </div>
             <div class="col-md-6 mb-3">
                 <label class="col-form-label">Upsale Upfront</label>
-                <input type="text" name="upsale_upfront" class="form-control" value="{{ $upsale->upsale_upfront }}">
+                <input type="text" name="upsale_upfront" data-parsley-trigger="keyup" data-parsley-type="number" class="form-control" value="{{ $upsale->upsale_upfront }}">
             </div>
             <div class="col-md-6 mb-3">
                 <label class="col-form-label">Currency <span style="color:red;">*</span></label>
-                <select name="upsale_currency" class="form-control">
+                <select name="upsale_currency" class="form-control" required>
                     @foreach(['INR','USD','EUR','GBP','AUD','CAD'] as $cur)
                         <option value="{{ $cur }}" {{ $upsale->upsale_currency == $cur ? 'selected' : '' }}>{{ $cur }}</option>
                     @endforeach
@@ -35,7 +44,7 @@
             </div>
             <div class="col-md-6 mb-3">
                 <label class="col-form-label">Payment Method <span style="color:red;">*</span></label>
-                <select name="upsale_payment_method" class="form-control">
+                <select name="upsale_payment_method" class="form-control" required>
                     <option value="">Select Payment Method</option>
                     @foreach(['Bank Transfer','PayPal','Stripe','Wise','Payoneer','Crypto','Cash','Other'] as $pm)
                         <option value="{{ $pm }}" {{ $upsale->upsale_payment_method == $pm ? 'selected' : '' }}>{{ $pm }}</option>
@@ -44,7 +53,7 @@
             </div>
             <div class="col-md-6 mb-3">
                 <label class="col-form-label">Upsale Date <span style="color:red;">*</span></label>
-                <input type="date" name="upsale_date" class="form-control" value="{{ $upsale->upsale_date }}" max="{{ date('Y-m-d') }}">
+                <input type="date" name="upsale_date" class="form-control" value="{{ $upsale->upsale_date }}" max="{{ date('Y-m-d') }}" required>
             </div>
         </div>
 
@@ -55,17 +64,17 @@
             <div class="row" id="edit-upsale-ms-row-{{ $idx }}">
                 <div class="col-md-12 mb-3">
                     <div style="display: flex">
-                        <input type="text" name="milestone_name[]" class="form-control" value="{{ $ms->milestone_name }}" placeholder="Milestone name">
+                        <input type="text" name="milestone_name[]" class="form-control" value="{{ $ms->milestone_name }}" placeholder="Milestone name" required>
                     </div>
                 </div>
                 <div class="col-md-12 mb-3">
                     <div style="display: flex">
-                        <input type="text" name="milestone_value[]" class="form-control" value="{{ $ms->milestone_value }}" placeholder="Milestone value">
+                        <input type="text" name="milestone_value[]" class="form-control" value="{{ $ms->milestone_value }}" placeholder="Milestone value" required>
                     </div>
                 </div>
                 <div class="col-md-12 mb-3">
                     <div style="display: flex">
-                        <select name="payment_status[]" class="form-control edit-upsale-payment-status" data-id="{{ $idx }}">
+                        <select name="payment_status[]" class="form-control edit-upsale-payment-status" data-id="{{ $idx }}" required>
                             <option value="">Select Payment Status</option>
                             <option value="Paid" {{ $ms->payment_status == 'Paid' ? 'selected' : '' }}>Paid</option>
                             <option value="Due" {{ $ms->payment_status != 'Paid' ? 'selected' : '' }}>Due</option>
@@ -115,14 +124,9 @@
 (function () {
     if (typeof $.fn.select2 !== 'undefined') {
         $('#upsale_project_type_edit').select2({ dropdownParent: $('#offcanvasUpsaleEdit') });
+        $('#upsale_assigned_to_edit').select2({ dropdownParent: $('#offcanvasUpsaleEdit') });
     }
 
-    $('#upsale_project_type_edit').on('change', function () {
-        var vals = $(this).val() || [];
-        $('#upsale-other-type-edit').toggle(vals.includes('Other'));
-    });
-
-    // AJAX Form Submit
     $('#upsale-edit-form').on('submit', function(e) {
         e.preventDefault();
         var $form = $(this);
@@ -174,14 +178,23 @@
         });
     });
 
+    $('#upsale_project_type_edit').on('change', function () {
+        var vals = $(this).val() || [];
+        $('#upsale-other-type-edit').toggle(vals.includes('Other'));
+    });
+
     // Existing milestone status toggle
     $(document).on('change', '.edit-upsale-payment-status', function () {
         var id = $(this).data('id');
         var status = $(this).val();
         if (status == 'Paid') {
             $('.edit-upsale-payment-hide-' + id).show();
+            $('#edit-upsale-ms-date-' + id).prop('required', true);
+            $('#edit-upsale-ms-mode-' + id).prop('required', true);
         } else {
             $('.edit-upsale-payment-hide-' + id).hide();
+            $('#edit-upsale-ms-date-' + id).prop('required', false);
+            $('#edit-upsale-ms-mode-' + id).prop('required', false);
         }
     });
 
@@ -197,13 +210,13 @@
         var html = '';
         html += '<div class="row" id="edit-upsale-ms-row-' + editMsIdx + '">';
         html += '<div class="col-md-12 mb-3"><div style="display: flex">';
-        html += '<input type="text" name="milestone_name[]" class="form-control" placeholder="Milestone name">';
+        html += '<input type="text" name="milestone_name[]" class="form-control" placeholder="Milestone name" required>';
         html += '</div></div>';
         html += '<div class="col-md-12 mb-3"><div style="display: flex">';
-        html += '<input type="text" name="milestone_value[]" class="form-control" placeholder="Milestone value">';
+        html += '<input type="text" name="milestone_value[]" class="form-control" placeholder="Milestone value" required>';
         html += '</div></div>';
         html += '<div class="col-md-12 mb-3"><div style="display: flex">';
-        html += '<select name="payment_status[]" class="form-control edit-upsale-payment-status" data-id="' + editMsIdx + '">';
+        html += '<select name="payment_status[]" class="form-control edit-upsale-payment-status" data-id="' + editMsIdx + '" required>';
         html += '<option value="">Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
         html += '</div></div>';
         html += '<div class="edit-upsale-payment-hide-' + editMsIdx + '" style="display:none;">';
