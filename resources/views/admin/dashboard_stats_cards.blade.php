@@ -488,7 +488,7 @@
                         </div>
                         <div>
                             <p class="dash-title mb-0" style="white-space: nowrap;">No of Customers</p>
-                            <h4 class="dash-count mb-0">{{ $top_customers->count() }}</h4>
+                            <h4 class="dash-count mb-0">{{ $count['customers']}}</h4>
                         </div>
                     </div>
                 </div>

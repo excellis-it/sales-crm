@@ -31,6 +31,14 @@ class ProjectController extends Controller
         $start_date = $request->get('start_date', Session::get('am_project_filter_start_date', ''));
         $end_date   = $request->get('end_date', Session::get('am_project_filter_end_date', ''));
 
+        // Handle role filter from dashboard
+        if ($request->role) {
+            Session::put('am_project_filter_role', $request->role);
+            Session::forget('am_project_filter_query');
+            $query = '';
+        }
+        $filterRole = Session::get('am_project_filter_role');
+
         // Persist to session so AJAX filter calls keep the same dates
         if ($request->has('start_date') || $request->has('end_date')) {
             Session::put('am_project_filter_start_date', $start_date);
@@ -44,10 +52,24 @@ class ProjectController extends Controller
             $date_query = date('Y-m-d', strtotime($query));
         }
 
+        $userId = Auth::user()->id;
         $projects = Project::with(['upsales', 'allProjectMilestones', 'projectMilestones', 'projectTypes', 'projectOpener', 'projectCloser'])
-            ->where('assigned_to', Auth::user()->id);
+            ->where('assigned_to', $userId);
 
-        if ($start_date && $end_date) {
+        // AM Revenue filter — match Helper::getUserAchievementDateRange() for ACCOUNT_MANAGER
+        // Revenue comes from: sale_date (gross/upfront) + milestone payment_date (net)
+        if ($filterRole == 'account_manager' && $start_date && $end_date) {
+            $projects->where(function ($q) use ($start_date, $end_date, $userId) {
+                // Gross: sale_date in range
+                $q->whereBetween('sale_date', [$start_date, $end_date]);
+                // Net milestones: paid milestones (non-upfront) with payment_date in range
+                $q->orWhereHas('allProjectMilestones', function ($mq) use ($start_date, $end_date) {
+                    $mq->where('payment_status', 'Paid')
+                       ->where('milestone_type', '!=', 'upfront')
+                       ->whereBetween('payment_date', [$start_date, $end_date]);
+                });
+            });
+        } elseif ($start_date && $end_date) {
             $projects->whereBetween('sale_date', [$start_date, $end_date]);
         }
 
@@ -66,7 +88,7 @@ class ProjectController extends Controller
         $projects = $projects->orderBy('id', 'desc')->paginate(15);
         $users    = User::role(['SALES_MANAGER', 'ACCOUNT_MANAGER', 'SALES_EXCUETIVE'])->orderBy('id', 'desc')->get();
 
-        return view('account_manager.project.list', compact('projects', 'users', 'query', 'start_date', 'end_date'));
+        return view('account_manager.project.list', compact('projects', 'users', 'query', 'start_date', 'end_date', 'filterRole'));
     }
     /**
      * Show the form for creating a new resource.
@@ -413,12 +435,31 @@ class ProjectController extends Controller
             $start_date = $request->get('start_date');
             $end_date = $request->get('end_date');
 
+            // Handle reset
+            if ($request->get('reset')) {
+                Session::forget('am_project_filter_start_date');
+                Session::forget('am_project_filter_end_date');
+                Session::forget('am_project_filter_query');
+                Session::forget('am_project_filter_role');
+            }
+
             $projects = Project::with(['upsales', 'allProjectMilestones', 'projectMilestones', 'projectTypes', 'projectOpener', 'projectCloser'])
                 ->withSum('upsales as total_upsale_value', 'upsale_value')
                 ->withSum('upsales as total_upsale_upfront', 'upsale_upfront')
                 ->where('assigned_to', Auth::user()->id);
 
-            if ($start_date && $end_date) {
+            // AM Revenue filter — match Helper logic (sale_date + milestone payment_date)
+            $filterRole = Session::get('am_project_filter_role');
+            if ($filterRole == 'account_manager' && $start_date && $end_date) {
+                $projects->where(function ($q) use ($start_date, $end_date) {
+                    $q->whereBetween('sale_date', [$start_date, $end_date]);
+                    $q->orWhereHas('allProjectMilestones', function ($mq) use ($start_date, $end_date) {
+                        $mq->where('payment_status', 'Paid')
+                           ->where('milestone_type', '!=', 'upfront')
+                           ->whereBetween('payment_date', [$start_date, $end_date]);
+                    });
+                });
+            } elseif ($start_date && $end_date) {
                 $projects->whereBetween('sale_date', [$start_date, $end_date]);
             }
 

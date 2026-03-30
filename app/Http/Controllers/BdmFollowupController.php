@@ -86,12 +86,14 @@ class BdmFollowupController extends Controller
             'bdm_project_id' => 'required|exists:bdm_projects,id',
             'comment' => 'required|string',
             'next_followup_date' => 'nullable|date',
+            'last_call_status' => 'nullable|string',
         ]);
 
         BdmFollowup::create([
             'bdm_project_id' => $request->bdm_project_id,
             'remark' => $request->comment,
             'next_followup_date' => $request->next_followup_date,
+            'last_call_status' => $request->last_call_status,
             'user_id' => Auth::id(),
         ]);
 

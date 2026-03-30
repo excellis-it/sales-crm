@@ -23,30 +23,30 @@ class DashboardController extends Controller
         $count['projects'] = $projects->count();
 
         // Total project value & upfront for assigned projects
-        $count['total_project_value'] = $projects->sum('project_value');
-        $count['total_upfront'] = $projects->sum('project_upfront');
+        $count['total_project_value'] = $projects->sum(fn($p) => (float) $p->project_value);
+        $count['total_upfront'] = $projects->sum(fn($p) => (float) $p->project_upfront);
 
         // Upsales for assigned projects
         $projectIds = $projects->pluck('id');
         $count['upsales'] = Upsale::whereIn('project_id', $projectIds)->count();
-        $count['upsale_value'] = Upsale::whereIn('project_id', $projectIds)->sum('upsale_value');
+        $count['upsale_value'] = (float) Upsale::whereIn('project_id', $projectIds)->sum('upsale_value');
 
         // Payments (paid milestones)
         $paidMilestones = ProjectMilestone::where('payment_status', 'Paid')
             ->whereIn('project_id', $projectIds)
             ->get();
         $count['total_payments'] = $paidMilestones->count();
-        $count['total_payment_amount'] = $paidMilestones->sum('milestone_value');
+        $count['total_payment_amount'] = $paidMilestones->sum(fn($m) => (float) $m->milestone_value);
 
         // Pending milestones
         $pendingMilestones = ProjectMilestone::where('payment_status', '!=', 'Paid')
             ->whereIn('project_id', $projectIds)
             ->get();
         $count['pending_milestones'] = $pendingMilestones->count();
-        $count['pending_amount'] = $pendingMilestones->sum('milestone_value');
+        $count['pending_amount'] = $pendingMilestones->sum(fn($m) => (float) $m->milestone_value);
 
         // This month's payments
-        $count['monthly_payments'] = ProjectMilestone::where('payment_status', 'Paid')
+        $count['monthly_payments'] = (float) ProjectMilestone::where('payment_status', 'Paid')
             ->whereIn('project_id', $projectIds)
             ->whereBetween('payment_date', [$currentStart, $currentEnd])
             ->sum('milestone_value');

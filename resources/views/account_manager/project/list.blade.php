@@ -274,6 +274,16 @@
                         </a>
                     </div>
 
+                    @if(isset($filterRole) && $filterRole == 'account_manager')
+                        <div class="mb-3">
+                            <span class="badge bg-info text-white px-3 py-2" style="font-size: 14px;">
+                                <i class="la la-user-tag me-1"></i> Account Manager Revenue
+                                <a href="{{ route('account-manager.projects.index') }}" class="text-white ms-2" title="Remove filter" style="text-decoration: none;">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                            </span>
+                        </div>
+                    @endif
                     <div class="filter-bar">
                         <div class="filter-group">
                             <label>Start Date</label>
@@ -583,6 +593,12 @@
             $('#start_date_filter').val('');
             $('#end_date_filter').val('');
             $('#search').val('');
+            // Clear server-side role filter
+            $.get("{{ route('account-manager.project.filter') }}", { reset: 1 }, function() {
+                var url = window.location.href.split('?')[0];
+                window.history.replaceState({}, document.title, url);
+                $('.badge.bg-info').parent().remove();
+            });
             var column_name = $('#hidden_column_name').val();
             var sort_type = $('#hidden_sort_type').val();
             fetch_data(1, sort_type, column_name, '', "");

@@ -26,11 +26,18 @@
                     </div>
                     <div class="timeline-card-body">
                         <p>{{ $followup->followup_description }}</p>
-                        @if($followup->next_followup_date)
-                            <p class="mt-2" style="font-size: 11px; color: #888;">
-                                <i class="far fa-calendar-alt"></i> Next Follow-up: {{ \Carbon\Carbon::parse($followup->next_followup_date)->format('d M Y') }}
-                            </p>
-                        @endif
+                        <div class="mt-2 d-flex flex-wrap gap-2">
+                            @if($followup->last_call_status)
+                                <span style="font-size: 11px; color: #dc3545; background: #fde8ea; padding: 2px 8px; border-radius: 4px;">
+                                    <i class="fas fa-phone-slash me-1"></i> Last Call: {{ $followup->last_call_status }}
+                                </span>
+                            @endif
+                            @if($followup->next_followup_date)
+                                <span style="font-size: 11px; color: #fd7e14; background: #fff4e6; padding: 2px 8px; border-radius: 4px;">
+                                    <i class="far fa-calendar-alt me-1"></i> Next Follow-up: {{ \Carbon\Carbon::parse($followup->next_followup_date)->format('d M Y') }}
+                                </span>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
@@ -62,10 +69,18 @@
                      placeholder="Type your follow-up note here..." style="border-radius: 10px; resize: none;"></textarea>
              </div>
 
-             {{-- <div class="form-group mb-3">
-                                <label class="form-label fw-bold"><i class="far fa-calendar-alt me-1"></i> Next Follow-up Date (Optional)</label>
-                                <input type="date" name="next_followup_date" class="form-control border-0 shadow-sm" style="border-radius: 10px;">
-                            </div> --}}
+             <div class="form-group mb-3">
+                 <label class="form-label fw-bold"><i class="fas fa-phone-alt me-1"></i> Last Call Status (Optional)</label>
+                 <select name="last_call_status" class="form-control border-0 shadow-sm" style="border-radius: 10px;">
+                     <option value="">-- Select --</option>
+                     <option value="Connected">Connected</option>
+                     <option value="Not Connected">Not Connected</option>
+                     <option value="Busy">Busy</option>
+                     <option value="No Answer">No Answer</option>
+                     <option value="Switched Off">Switched Off</option>
+                     <option value="Wrong Number">Wrong Number</option>
+                 </select>
+             </div>
 
              <div class="submit-section text-center mb-2">
                  <button type="submit" class="btn btn-primary px-5 py-2"

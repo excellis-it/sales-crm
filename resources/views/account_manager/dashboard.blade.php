@@ -181,7 +181,7 @@
                     $goalPercentage = $target > 0 ? round(($achieve / $target) * 100, 0) : 0;
                 @endphp
                 <div class="col-md-6 col-lg-4 col-xl-4 mb-3">
-                    <a href="{{ route('account-manager.projects.index', ['start_date' => date('Y-m-01'), 'end_date' => date('Y-m-t')]) }}" class="dash-card-link">
+                    <a href="{{ route('account-manager.projects.index', ['start_date' => date('Y-m-01'), 'end_date' => date('Y-m-t'), 'role' => 'account_manager']) }}" class="dash-card-link">
                         <div class="dash-card card-danger">
                             <div class="d-flex justify-content-between align-items-start">
                                 <div>
@@ -312,14 +312,14 @@
                                 <tbody>
                                     @forelse ($recentProjects as $project)
                                         @php
-                                            $upsaleTotal = $project->upsales->sum('upsale_value');
-                                            $upsaleUpfront = $project->upsales->sum('upsale_upfront');
-                                            $grandTotal = (float)$project->project_value + $upsaleTotal;
-                                            $totalUpfront = (float)$project->project_upfront + $upsaleUpfront;
+                                            $upsaleTotal = $project->upsales->sum(fn($u) => (float) $u->upsale_value);
+                                            $upsaleUpfront = $project->upsales->sum(fn($u) => (float) $u->upsale_upfront);
+                                            $grandTotal = (float) $project->project_value + $upsaleTotal;
+                                            $totalUpfront = (float) $project->project_upfront + $upsaleUpfront;
                                             $paidMs = $project->allProjectMilestones
                                                 ->where('payment_status', 'Paid')
                                                 ->whereIn('milestone_type', ['milestone', 'upsale_milestone'])
-                                                ->sum('milestone_value');
+                                                ->sum(fn($m) => (float) $m->milestone_value);
                                             $dueAmount = $grandTotal - ($totalUpfront + $paidMs);
                                         @endphp
                                         <tr onclick="window.location='{{ route('account-manager.projects.edit', $project->id) }}'">
@@ -378,7 +378,7 @@
                                         <tr onclick="window.location='{{ route('account-manager.projects.edit', $payment->project_id) }}'">
                                             <td>{{ $payment->payment_date ? date('d M Y', strtotime($payment->payment_date)) : '-' }}</td>
                                             <td>{{ Str::limit($payment->project->business_name ?? 'N/A', 20) }}</td>
-                                            <td><span class="badge-paid">${{ number_format($payment->milestone_value, 2) }}</span></td>
+                                            <td><span class="badge-paid">${{ number_format((float) $payment->milestone_value, 2) }}</span></td>
                                         </tr>
                                     @empty
                                         <tr>
@@ -409,7 +409,7 @@
                                         <tr onclick="window.location='{{ route('account-manager.projects.edit', $milestone->project_id) }}'">
                                             <td>{{ Str::limit($milestone->milestone_name, 18) }}</td>
                                             <td>{{ Str::limit($milestone->project->business_name ?? 'N/A', 18) }}</td>
-                                            <td><span class="badge-pending-custom">${{ number_format($milestone->milestone_value, 2) }}</span></td>
+                                            <td><span class="badge-pending-custom">${{ number_format((float) $milestone->milestone_value, 2) }}</span></td>
                                         </tr>
                                     @empty
                                         <tr>

@@ -35,6 +35,7 @@ class DashboardController extends Controller
         $yearStats = $this->getYearlyChartData();
         $goal = array_merge($goal, $yearStats);
 
+
         $top_customers = Customer::with('projects')->get();
         $top_customers = $top_customers->sortByDesc(function ($customer) {
             return $customer->projects->sum('project_value');
@@ -82,6 +83,19 @@ class DashboardController extends Controller
             $endDate = date('Y-m-d', strtotime('next saturday'));
         }
         // for 'overall', dates remain null
+
+        $customers = Customer::query();
+        if ($startDate && $endDate) {
+            $customers->whereDate('created_at', '>=', $startDate)
+                ->whereDate('created_at', '<=', $endDate);
+        } elseif ($startDate) {
+            $customers->whereDate('created_at', '>=', $startDate);
+        } elseif ($endDate) {
+            $customers->whereDate('created_at', '<=', $endDate);
+        }
+
+        $count['customers'] = $customers->count();
+
 
         $count['sales_managers'] = User::Role('SALES_MANAGER')->where('status', 1)->count();
         $count['account_managers'] = User::Role('ACCOUNT_MANAGER')->where('status', 1)->count();

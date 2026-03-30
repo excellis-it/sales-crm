@@ -75,12 +75,14 @@ class CommonFollowupController extends Controller
             'project_id' => 'required|exists:projects,id',
             'comment' => 'required|string',
             'next_followup_date' => 'nullable|date',
+            'last_call_status' => 'nullable|string',
         ]);
 
         Followup::create([
             'project_id' => $request->project_id,
             'followup_description' => $request->comment,
             'next_followup_date' => $request->next_followup_date,
+            'last_call_status' => $request->last_call_status,
             'user_id' => Auth::id(),
             'followup_date' => now(),
             'followup_type' => 'other'

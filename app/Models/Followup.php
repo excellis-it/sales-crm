@@ -18,7 +18,8 @@ class Followup extends Model
         'followup_description',
         'followup_date',
         'next_followup_date',
-        'status'
+        'status',
+        'last_call_status'
     ];
 
     public function user()
