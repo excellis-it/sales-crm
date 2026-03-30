@@ -24,4 +24,14 @@ class BdmFollowup extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function bdmProject()
+    {
+        return $this->belongsTo(BdmProject::class, 'bdm_project_id');
+    }
+
+    public function bdmProspect()
+    {
+        return $this->belongsTo(BdmProspect::class, 'bdm_prospect_id');
+    }
 }

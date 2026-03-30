@@ -36,6 +36,7 @@ use App\Http\Controllers\Admin\TenderProjectController as AdminTenderProjectCont
 use App\Http\Controllers\TenderUser\TenderProjectController as TenderUserTenderProjectController;
 use App\Http\Controllers\TenderUser\PaymentController as TenderUserPaymentController;
 use App\Http\Controllers\Admin\TenderStatusController as AdminTenderStatusController;
+use App\Http\Controllers\Admin\UserActivityController;
 use App\Http\Controllers\BDM\DashboardController as BDMDashboardController;
 use App\Http\Controllers\BDM\ProfileController as BDMProfileController;
 use App\Http\Controllers\BDM\ProjectController as BDMProjectController;
@@ -267,6 +268,10 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
         Route::get('tender-projects/followups/{id}', [AdminTenderProjectController::class, 'getFollowups'])->name('tender-projects.followups');
         Route::post('tender-projects/add-followup', [AdminTenderProjectController::class, 'addFollowup'])->name('tender-projects.add-followup');
     });
+
+    // User Activity Management
+    Route::get('/user-activity', [UserActivityController::class, 'index'])->name('admin.user-activity.index');
+    Route::get('/user-activity-filter', [UserActivityController::class, 'filter'])->name('admin.user-activity.filter');
 });
 
 /**---------------------------------------------------------------Sales Manager ---------------------------------------------------------------------------------- */

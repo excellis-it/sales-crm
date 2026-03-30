@@ -101,6 +101,10 @@
                         <span>Payments</span></a>
                 </li>
 
+                <li class="{{ Request::is('admin/user-activity*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.user-activity.index') }}"><i class="la la-history"></i> <span>User Activity</span></a>
+                </li>
+
                 <li class="menu-title">
                     <span>System Settings</span>
                 </li>
