@@ -1,6 +1,9 @@
 <table id="myTable" class="dd table table-striped table-hover" style="width:100%">
     <thead>
         <tr>
+            <th>
+                Created Date
+            </th>
             <th> Name</th>
             <th> Email</th>
             <th> Phone</th>
@@ -18,14 +21,16 @@
         @else
             @foreach ($customers as $key => $customer)
                 <tr>
+                    <td class="edit-route" data-route="{{ route('customers.edit', $customer['id']) }}">{{ $customer->created_at->format('d-m-Y') }}</td>
                     <td class="edit-route" data-route="{{ route('customers.edit', $customer['id']) }}">{{ $customer->customer_name }}</td>
                     <td class="edit-route" data-route="{{ route('customers.edit', $customer['id']) }}">{{ $customer->customer_email }}</td>
                     <td class="edit-route" data-route="{{ route('customers.edit', $customer['id']) }}">{{ $customer->customer_phone }}</td>
                     <td class="edit-route" data-route="{{ route('customers.edit', $customer['id']) }}">{{ $customer->customer_address }}</td>
                     <td>
-                       ${{ $customer->projects()->sum('project_value') }}
+                        {{-- project value with upsale value --}}
+                       ${{ $customer->projects()->sum('project_value') + $customer->upsales()->sum('upsale_value')+ $customer->bdmProjects()->sum('project_value')}}
                     </td>
-                    <td> {{ $customer->projects->count() }}</td>
+                    <td> {{ $customer->projects->count() + $customer->bdmProjects->count() }}</td>
 
 
                     <td>

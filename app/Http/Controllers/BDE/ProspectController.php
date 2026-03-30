@@ -7,6 +7,7 @@ use App\Models\BdmFollowup;
 use App\Models\Goal;
 use App\Models\BdmProject;
 use App\Models\BdmProjectType;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Models\BdmProspect;
 use App\Models\User;
@@ -182,7 +183,21 @@ class ProspectController extends Controller
                 $gross_goal->save();
             }
 
+            $customer_exist = Customer::where('customer_email', $prospect->client_email)->first();
+            if ($customer_exist) {
+                $customer_id = $customer_exist->id;
+            } else {
+                $customer = new Customer();
+                $customer->customer_name = $prospect->client_name;
+                $customer->customer_email = $prospect->client_email;
+                $customer->customer_phone = $prospect->client_phone;
+                $customer->customer_address = $prospect->business_address;
+                $customer->save();
+                $customer_id = $customer->id;
+            }
+
             $project = new BdmProject();
+            $project->customer_id = $customer_id ?? null;
             $project->user_id = Auth::user()->bdm_id;
             $project->client_name = $prospect->client_name;
             $project->business_name = $prospect->business_name;
@@ -382,7 +397,21 @@ class ProspectController extends Controller
                 $gross_goal->save();
             }
 
+            $customer_exist = Customer::where('customer_email', $prospect->client_email)->first();
+            if ($customer_exist) {
+                $customer_id = $customer_exist->id;
+            } else {
+                $customer = new Customer();
+                $customer->customer_name = $prospect->client_name;
+                $customer->customer_email = $prospect->client_email;
+                $customer->customer_phone = $prospect->client_phone;
+                $customer->customer_address = $prospect->business_address;
+                $customer->save();
+                $customer_id = $customer->id;
+            }
+
             $project = new BdmProject();
+            $project->customer_id = $customer_id ?? null;
             $project->user_id = Auth::user()->bdm_id;
             $project->client_name = $prospect->client_name;
             $project->business_name = $prospect->business_name;

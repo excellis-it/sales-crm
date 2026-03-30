@@ -128,11 +128,27 @@ class UserController extends Controller
     {
         if ($request->ajax()) {
             $customers = Customer::query();
+
+            if ($request->text) {
+                $text = $request->text;
                 $columns = ['customer_name','customer_email','customer_phone', 'customer_address'];
-                foreach ($columns as $column) {
-                    $customers->orWhere($column, 'LIKE', '%' . $request->text . '%');
-                }
-            $customers = $customers->orderBy('customer_name', 'desc')->paginate(15);
+                $customers->where(function ($q) use ($columns, $text) {
+                    foreach ($columns as $column) {
+                        $q->orWhere($column, 'LIKE', '%' . $text . '%');
+                    }
+                });
+            }
+
+            if ($request->from_date && $request->to_date) {
+                $customers->whereDate('created_at', '>=', $request->from_date)
+                          ->whereDate('created_at', '<=', $request->to_date);
+            } elseif ($request->from_date) {
+                $customers->whereDate('created_at', '>=', $request->from_date);
+            } elseif ($request->to_date) {
+                $customers->whereDate('created_at', '<=', $request->to_date);
+            }
+
+            $customers = $customers->orderBy('id', 'desc')->paginate(15);
             return response()->json(['view' => (string)View::make('admin.customer.table')->with(compact('customers'))]);
         }
     }

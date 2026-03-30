@@ -83,10 +83,10 @@ class ProjectController extends Controller
                 // Financial searching
                 $q->orWhereRaw("(project_value + (SELECT COALESCE(SUM(upsale_value), 0) FROM upsales WHERE upsales.project_id = projects.id)) LIKE ?", ["%{$query_str}%"]);
                 $q->orWhereRaw("(project_upfront + (SELECT COALESCE(SUM(upsale_upfront), 0) FROM upsales WHERE upsales.project_id = projects.id)) LIKE ?", ["%{$query_str}%"]);
-                
-                $paidMilestoneSubquery = "(SELECT COALESCE(SUM(milestone_value), 0) FROM project_milestones 
-                                            WHERE project_milestones.project_id = projects.id 
-                                            AND payment_status = 'Paid' 
+
+                $paidMilestoneSubquery = "(SELECT COALESCE(SUM(milestone_value), 0) FROM project_milestones
+                                            WHERE project_milestones.project_id = projects.id
+                                            AND payment_status = 'Paid'
                                             AND milestone_type NOT IN ('upfront', 'upsale_upfront'))";
                 $q->orWhereRaw("{$paidMilestoneSubquery} LIKE ?", ["%{$query_str}%"]);
             });
@@ -97,7 +97,7 @@ class ProjectController extends Controller
             ->withSum('upsales as total_upsale_upfront', 'upsale_upfront')
             ->orderBy('sale_date', 'desc')
             ->paginate(15);
-        
+
         return view('admin.project.list')->with(compact('projects', 'sales_managers', 'users', 'account_managers', 'project_openers', 'startDate', 'endDate', 'search'));
     }
 
@@ -331,8 +331,9 @@ class ProjectController extends Controller
         $data = $request->all();
 
         // dd($data);
-        if ($data['customer'] == 0) {  //new customer == 1 and existing customer == 0
-            $data['customer'] = $request->customer_id;
+        $customer_exist = Customer::where('customer_email', $data['client_email'])->first();
+        if ($customer_exist) {
+            $data['customer_id'] = $customer_exist->id;
         } else {
             $customer = new Customer();
             $customer->customer_name = $data['client_name'];
@@ -340,12 +341,13 @@ class ProjectController extends Controller
             $customer->customer_phone = $data['client_phone'];
             $customer->customer_address = $data['client_address'];
             $customer->save();
-            $data['customer'] = $customer->id;
+            $data['customer_id'] = $customer->id;
         }
 
         $project = Project::findOrfail($id);
         $user_id = $project->user_id;
         $project->user_id = $data['user_id'];
+        $project->customer_id = $data['customer_id'];
         $project->assigned_to = $data['assigned_to'] ?? null;
         $project->assigned_date = date('Y-m-d');
         $project->client_name = $data['client_name'];
@@ -570,10 +572,10 @@ class ProjectController extends Controller
                     // Financial searching
                     $q->orWhereRaw("(project_value + (SELECT COALESCE(SUM(upsale_value), 0) FROM upsales WHERE upsales.project_id = projects.id)) LIKE ?", ["%{$query_str}%"]);
                     $q->orWhereRaw("(project_upfront + (SELECT COALESCE(SUM(upsale_upfront), 0) FROM upsales WHERE upsales.project_id = projects.id)) LIKE ?", ["%{$query_str}%"]);
-                    
-                    $paidMilestoneSubquery = "(SELECT COALESCE(SUM(milestone_value), 0) FROM project_milestones 
-                                                WHERE project_milestones.project_id = projects.id 
-                                                AND payment_status = 'Paid' 
+
+                    $paidMilestoneSubquery = "(SELECT COALESCE(SUM(milestone_value), 0) FROM project_milestones
+                                                WHERE project_milestones.project_id = projects.id
+                                                AND payment_status = 'Paid'
                                                 AND milestone_type NOT IN ('upfront', 'upsale_upfront'))";
                     $q->orWhereRaw("{$paidMilestoneSubquery} LIKE ?", ["%{$query_str}%"]);
                 });

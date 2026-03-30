@@ -13,4 +13,14 @@ class Customer extends Model
     {
         return $this->hasMany(Project::class, 'customer_id', 'id');
     }
+
+    public function bdmProjects()
+    {
+        return $this->hasMany(BdmProject::class, 'customer_id', 'id');
+    }
+
+    public function upsales()
+    {
+        return $this->hasManyThrough(Upsale::class, Project::class, 'customer_id', 'project_id');
+    }
 }

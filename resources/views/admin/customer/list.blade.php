@@ -50,6 +50,21 @@
 
                     <hr />
                     <div class="row justify-content-end">
+                        <div class="col-md-4">
+                            <div class="row g-1 align-items-center justify-content-end">
+                                <div class="col-auto">
+                                    <input type="date" id="from_date" class="form-control date-filter">
+                                </div>
+                                <div class="col-auto">
+                                    <input type="date" id="to_date" class="form-control date-filter">
+                                </div>
+                                <div class="col-auto">
+                                    <button type="button" id="reset-filter" class="btn btn-outline-danger btn-sm" title="Reset Filters">
+                                        <i class="fas fa-sync-alt"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-md-6">
                             <div class="row g-1 justify-content-end">
                                 <div class="col-md-8 pr-0">
@@ -187,9 +202,30 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
-            $('#search').on('keyup', function() {
+            // Save filters to session
+            function saveFiltersToSession() {
+                sessionStorage.setItem('customer_from_date', $('#from_date').val());
+                sessionStorage.setItem('customer_to_date', $('#to_date').val());
+                sessionStorage.setItem('customer_search', $('#search').val());
+            }
+
+            // Restore filters from session
+            function restoreFiltersFromSession() {
+                var from = sessionStorage.getItem('customer_from_date');
+                var to = sessionStorage.getItem('customer_to_date');
+                var search = sessionStorage.getItem('customer_search');
+                if (from) $('#from_date').val(from);
+                if (to) $('#to_date').val(to);
+                if (search) $('#search').val(search);
+                return (from || to || search);
+            }
+
+            function fetchCustomers() {
                 var text = $('#search').val();
-                url = "{{ route('customers.search') }}"
+                var from_date = $('#from_date').val();
+                var to_date = $('#to_date').val();
+                saveFiltersToSession();
+                var url = "{{ route('customers.search') }}";
                 $('#loading').addClass('loading');
                 $('#loading-content').addClass('loading-content');
                 $.ajax({
@@ -197,6 +233,8 @@
                     type: 'GET',
                     data: {
                         text: text,
+                        from_date: from_date,
+                        to_date: to_date,
                     },
                     success: function(response) {
                         $('#customers_data').html(response.view);
@@ -204,7 +242,60 @@
                         $('#loading-content').removeClass('loading-content');
                     }
                 });
+            }
+
+            $('#search').on('keyup', function() {
+                fetchCustomers();
             });
+
+            $('.date-filter').on('change', function() {
+                fetchCustomers();
+            });
+
+            $('#reset-filter').on('click', function() {
+                $('#from_date').val('');
+                $('#to_date').val('');
+                $('#search').val('');
+                sessionStorage.removeItem('customer_from_date');
+                sessionStorage.removeItem('customer_to_date');
+                sessionStorage.removeItem('customer_search');
+                // Remove duration param from URL without reload
+                var url = window.location.href.split('?')[0];
+                window.history.replaceState({}, document.title, url);
+                fetchCustomers();
+            });
+
+            // Check for dashboard duration param first, then session
+            var urlParams = new URLSearchParams(window.location.search);
+            var duration = urlParams.get('duration');
+            if (duration) {
+                var today = new Date();
+                var from, to;
+                if (duration === 'today') {
+                    from = to = today.toISOString().split('T')[0];
+                } else if (duration === 'this_week') {
+                    var day = today.getDay();
+                    var diff = today.getDate() - day;
+                    from = new Date(today.setDate(diff));
+                    today = new Date();
+                    to = new Date(today.setDate(today.getDate() + (6 - today.getDay())));
+                    from = from.toISOString().split('T')[0];
+                    to = to.toISOString().split('T')[0];
+                } else if (duration === 'this_month') {
+                    from = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-01';
+                    to = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+                } else if (duration === 'this_year') {
+                    from = today.getFullYear() + '-01-01';
+                    to = today.getFullYear() + '-12-31';
+                }
+                if (from && to) {
+                    $('#from_date').val(from);
+                    $('#to_date').val(to);
+                    fetchCustomers();
+                }
+            } else if (restoreFiltersFromSession()) {
+                fetchCustomers();
+            }
         });
     </script>
     <script>

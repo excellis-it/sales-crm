@@ -67,17 +67,19 @@
                             <div class="row g-2">
                                 <div class="col-md-3">
                                     <label class="form-label mb-0">Start Date</label>
-                                    <input type="date" name="start_date" id="start_date" class="form-control" value="{{ $startDate }}">
+                                    <input type="date" name="start_date" id="start_date" class="form-control"
+                                        value="{{ $startDate }}">
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label mb-0">End Date</label>
-                                    <input type="date" name="end_date" id="end_date" class="form-control" value="{{ $endDate }}">
+                                    <input type="date" name="end_date" id="end_date" class="form-control"
+                                        value="{{ $endDate }}">
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label mb-0">Search</label>
                                     <div class="search-field prod-search">
-                                        <input type="text" name="search" id="search" placeholder="search..." required value="{{ $search ?? '' }}"
-                                            class="form-control rounded_search">
+                                        <input type="text" name="search" id="search" placeholder="search..." required
+                                            value="{{ $search ?? '' }}" class="form-control rounded_search">
                                         <a href="javascript:void(0)" class="prod-search-icon submit_search"><i
                                                 class="fa fa-search"></i></a>
                                     </div>
@@ -97,253 +99,254 @@
                         <div class="row filter-gap align-items-center">
                             <div class="col">
                                 <a href="javascript:void(0);" data-value="All"
-                                    class="desin-filter {{ (!isset($status_filter) || !$status_filter || $status_filter == 'All') ? 'active-filter' : '' }}">
+                                    class="desin-filter {{ !isset($status_filter) || !$status_filter || $status_filter == 'All' ? 'active-filter' : '' }}">
                                     <p>All</p>
                                     <h5 id="count-all">{{ $count['prospect'] }}</h5>
                                 </a>
                             </div>
                             <div class="col">
                                 <a href="javascript:void(0);" data-value="Win"
-                                    class="desin-filter {{ (isset($status_filter) && $status_filter == 'Win') ? 'active-filter' : '' }}">
+                                    class="desin-filter {{ isset($status_filter) && $status_filter == 'Win' ? 'active-filter' : '' }}">
                                     <p>On Board</p>
                                     <h5 id="count-win">{{ $count['win'] }}</h5>
                                 </a>
                             </div>
                             <div class="col">
                                 <a href="javascript:void(0);" data-value="Follow Up"
-                                    class="desin-filter {{ (isset($status_filter) && $status_filter == 'Follow Up') ? 'active-filter' : '' }}">
+                                    class="desin-filter {{ isset($status_filter) && $status_filter == 'Follow Up' ? 'active-filter' : '' }}">
                                     <p>Follow Up</p>
                                     <h5 id="count-follow-up">{{ $count['follow_up'] }}</h5>
                                 </a>
                             </div>
                             <div class="col">
-                                <a href="javascript:void(0);" data-value="Sent Proposal" class="desin-filter {{ (isset($status_filter) && $status_filter == 'Sent Proposal') ? 'active-filter' : '' }}">
+                                <a href="javascript:void(0);" data-value="Sent Proposal"
+                                    class="desin-filter {{ isset($status_filter) && $status_filter == 'Sent Proposal' ? 'active-filter' : '' }}">
                                     <p>Sent Proposal</p>
                                     <h5 id="count-sent-proposal">{{ $count['sent_proposal'] }}</h5>
                                 </a>
                             </div>
                             <div class="col">
-                                <a href="javascript:void(0);" data-value="Close" class="desin-filter {{ (isset($status_filter) && $status_filter == 'Close') ? 'active-filter' : '' }}">
+                                <a href="javascript:void(0);" data-value="Close"
+                                    class="desin-filter {{ isset($status_filter) && $status_filter == 'Close' ? 'active-filter' : '' }}">
                                     <p>Cancel</p>
                                     <h5 id="count-close">{{ $count['close'] }}</h5>
                                 </a>
                             </div>
                         </div>
                     </div>
-                        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
-                            aria-labelledby="offcanvasRightLabel">
-                            <div class="offcanvas-header">
-                                <button type="button" class="text-reset cls_btn_left" data-bs-dismiss="offcanvas"
-                                    aria-label="Close">
-                                    <i class="fa fa-chevron-right" aria-hidden="true"></i>
-                                </button>
-                                <h4 id="offcanvasEditLabel">Add Prospect Details</h4>
-                            </div>
-                            <div class="offcanvas-body">
-                                <form action="{{ route('admin.prospects.store') }}" method="post" data-parsley-validate=""
-                                    enctype="multipart/form-data">
-                                    @csrf
-                                    <div class="row">
-                                        <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label"> Prospect By
-                                                <span style="color: red;">*</span></label>
-                                            <select name="user_id" id="user_id" class="form-control select2" required
-                                                data-parsley-trigger="keyup">
-                                                <option value="">Select Prospect By</option>
-                                                @foreach ($sales_executives as $sales_executive)
-                                                    <option value="{{ $sales_executive->id }}">
-                                                        {{ $sales_executive->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label"> Client Name
-                                                <span style="color: red;">*</span></label>
-                                            <input type="text" name="client_name" id="client_name" required
-                                                data-parsley-trigger="keyup" class="form-control"
-                                                value="{{ old('client_name') }}" placeholder="Enter Client Name">
-                                        </div>
-                                        <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Business Name
-                                                <span style="color: red;">*</span></label>
-                                            <input type="text" name="business_name" id="business_name" required
-                                                data-parsley-trigger="keyup" class="form-control"
-                                                value="{{ old('business_name') }}" placeholder="Enter Business Name">
-                                        </div>
-                                        <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Client Email
-                                                <span style="color: red;">*</span></label>
-                                            <input type="text" name="client_email" id="client_email" required
-                                                data-parsley-trigger="keyup" data-parsley-type="email"
-                                                data-parsley-type-message="Please enter a valid email address."
-                                                class="form-control" value="{{ old('client_email') }}"
-                                                placeholder="Enter Client Email">
-                                        </div>
-                                        <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Client Phone
-                                                <span style="color: red;">*</span></label>
-                                            <input type="text" name="client_phone" id="client_phone" required
-                                                data-parsley-trigger="keyup" data-parsley-type="number"
-                                                data-parsley-type-message="Please enter a valid phone number."
-                                                class="form-control" value="{{ old('client_phone') }}"
-                                                placeholder="Enter Client Phone Number">
-                                        </div>
-
-                                        {{-- clinent address --}}
-                                        <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Business
-                                                Address <span style="color: red;">*</span></label>
-                                            <input type="text" name="business_address" id="business_address" required
-                                                data-parsley-trigger="keyup" class="form-control"
-                                                value="{{ old('business_address') }}" placeholder="Enter Address">
-                                        </div>
-
-                                        {{-- website --}}
-                                        <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Website
-                                                Link</label>
-                                            <input type="text" name="website" id="website"
-                                                data-parsley-required="false" data-parsley-trigger="keyup"
-                                                data-parsley-type="url"
-                                                data-parsley-type-message="Please enter a valid url." class="form-control"
-                                                value="{{ old('website') }}" placeholder="Enter Website">
-                                        </div>
-                                        {{-- offer for --}}
-                                        <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Service
-                                                Offered <span style="color: red;">*</span></label>
-                                            <select name="offered_for" id="project_type" required
-                                                data-parsley-trigger="keyup" class="form-control">
-                                                <option value="">Select Project Type</option>
-                                                <option value="Website Design & Development">Website Design &
-                                                    Development</option>
-                                                <option value="Mobile Application Development">Mobile
-                                                    Application Development</option>
-                                                <option value="Digital Marketing">Digital Marketing</option>
-                                                <option value="Logo Design">Logo Design</option>
-                                                <option value="SEO">SEO</option>
-                                                <option value="SMO">SMO</option>
-                                                <option value="Other">Other</option>
-                                            </select>
-                                        </div>
-                                        <div id="other-value" class="col-md-12 mb-3">
-
-                                        </div>
-                                        {{--  price_quote --}}
-                                        <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Price Quote
-                                                <span style="color: red;">*</span></label>
-                                            <input type="text" name="price_quote" id="price_quote" required
-                                                data-parsley-trigger="keyup" data-parsley-type="number"
-                                                data-parsley-type-message="Please enter a valid number."
-                                                class="form-control" value="{{ old('price_quote') }}"
-                                                placeholder="Enter Price Quote">
-                                        </div>
-
-                                        {{-- transfer_token_by --}}
-                                        <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Transfer
-                                                Taken By <span style="color: red;">*</span>
-                                            </label>
-                                            <select name="transfer_token_by" id="transfer_token_by"
-                                                class="form-control select2" required>
-                                                <option value="">Select Transfer Token By
-                                                </option>
-                                                @foreach ($users as $user)
-                                                    <option value="{{ $user->id }}">{{ $user->name }}
-                                                        ({{ $user->email }})
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        {{-- followup_date --}}
-                                        <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Followup
-                                                Date <span style="color: red;">*</span></label>
-                                            <input type="date" name="followup_date" id="followup_date" required
-                                                class="form-control picker" placeholder="Enter Followup Date">
-                                        </div>
-                                        {{-- followup_time --}}
-                                        <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Followup
-                                                Time</label>
-                                            <input type="time" name="followup_time" id="followup_time"
-                                                class="form-control" placeholder="Enter Followup Time">
-                                        </div>
-                                        {{-- status --}}
-                                        <div class="col-md-12 mb-3">
-                                            <label for="inputEnterYourName" class="col-form-label">Status
-                                                <span style="color: red;">*</span></label>
-                                            <select name="status" id="status" class="form-control" required
-                                                data-parsley-trigger="keyup">
-                                                <option value="">Select Status</option>
-                                                <option value="Win">On board</option>
-                                                <option value="Follow Up">Follow Up</option>
-                                                <option value="Sent Proposal">Sent Proposal</option>
-                                                <option value="Close">Cancel</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    {{-- upfront_value --}}
-                                    <div class="row" id="upfront_value_show">
-                                    </div>
-
-                                    {{-- comments --}}
-                                    <div class="col-md-12 mb-3">
-                                        <label for="inputEnterYourName" class="col-form-label">Comments</label>
-                                        <textarea name="comments" id="comments" cols="30" rows="5" class="form-control"
-                                            placeholder="Enter Comments ...">{{ old('comments') }}</textarea>
-                                    </div>
-                                    <div class="d-flex alin-items-center w-100 text-end">
-                                        <button class="print_btn cancel_btn me-3" type="reset"><i
-                                                class="far fa-times-circle"></i>
-                                            Cancel</button>
-                                        <button class="print_btn" type="submit"><i class="far fa-check-circle"></i>
-                                            Create</button>
-                                    </div>
-                                </form>
-                            </div>
+                    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
+                        aria-labelledby="offcanvasRightLabel">
+                        <div class="offcanvas-header">
+                            <button type="button" class="text-reset cls_btn_left" data-bs-dismiss="offcanvas"
+                                aria-label="Close">
+                                <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                            </button>
+                            <h4 id="offcanvasEditLabel">Add Prospect Details</h4>
                         </div>
-                        <div id="edit-prospect-model">
-                            @include('admin.prospect.edit')
+                        <div class="offcanvas-body">
+                            <form action="{{ route('admin.prospects.store') }}" method="post" data-parsley-validate=""
+                                enctype="multipart/form-data">
+                                @csrf
+                                <div class="row">
+                                    <div class="col-md-12 mb-3">
+                                        <label for="inputEnterYourName" class="col-form-label"> Prospect By
+                                            <span style="color: red;">*</span></label>
+                                        <select name="user_id" id="user_id" class="form-control select2" required
+                                            data-parsley-trigger="keyup">
+                                            <option value="">Select Prospect By</option>
+                                            @foreach ($sales_executives as $sales_executive)
+                                                <option value="{{ $sales_executive->id }}">
+                                                    {{ $sales_executive->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <label for="inputEnterYourName" class="col-form-label"> Client Name
+                                            <span style="color: red;">*</span></label>
+                                        <input type="text" name="client_name" id="client_name" required
+                                            data-parsley-trigger="keyup" class="form-control"
+                                            value="{{ old('client_name') }}" placeholder="Enter Client Name">
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <label for="inputEnterYourName" class="col-form-label">Business Name
+                                            <span style="color: red;">*</span></label>
+                                        <input type="text" name="business_name" id="business_name" required
+                                            data-parsley-trigger="keyup" class="form-control"
+                                            value="{{ old('business_name') }}" placeholder="Enter Business Name">
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <label for="inputEnterYourName" class="col-form-label">Client Email
+                                            <span style="color: red;">*</span></label>
+                                        <input type="text" name="client_email" id="client_email" required
+                                            data-parsley-trigger="keyup" data-parsley-type="email"
+                                            data-parsley-type-message="Please enter a valid email address."
+                                            class="form-control" value="{{ old('client_email') }}"
+                                            placeholder="Enter Client Email">
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <label for="inputEnterYourName" class="col-form-label">Client Phone
+                                            <span style="color: red;">*</span></label>
+                                        <input type="text" name="client_phone" id="client_phone" required
+                                            data-parsley-trigger="keyup" data-parsley-type="number"
+                                            data-parsley-type-message="Please enter a valid phone number."
+                                            class="form-control" value="{{ old('client_phone') }}"
+                                            placeholder="Enter Client Phone Number">
+                                    </div>
+
+                                    {{-- clinent address --}}
+                                    <div class="col-md-12 mb-3">
+                                        <label for="inputEnterYourName" class="col-form-label">Business
+                                            Address <span style="color: red;">*</span></label>
+                                        <input type="text" name="business_address" id="business_address" required
+                                            data-parsley-trigger="keyup" class="form-control"
+                                            value="{{ old('business_address') }}" placeholder="Enter Address">
+                                    </div>
+
+                                    {{-- website --}}
+                                    <div class="col-md-12 mb-3">
+                                        <label for="inputEnterYourName" class="col-form-label">Website
+                                            Link</label>
+                                        <input type="text" name="website" id="website"
+                                            data-parsley-required="false" data-parsley-trigger="keyup"
+                                            data-parsley-type="url" data-parsley-type-message="Please enter a valid url."
+                                            class="form-control" value="{{ old('website') }}"
+                                            placeholder="Enter Website">
+                                    </div>
+                                    {{-- offer for --}}
+                                    <div class="col-md-12 mb-3">
+                                        <label for="inputEnterYourName" class="col-form-label">Service
+                                            Offered <span style="color: red;">*</span></label>
+                                        <select name="offered_for" id="project_type" required
+                                            data-parsley-trigger="keyup" class="form-control">
+                                            <option value="">Select Project Type</option>
+                                            <option value="Website Design & Development">Website Design &
+                                                Development</option>
+                                            <option value="Mobile Application Development">Mobile
+                                                Application Development</option>
+                                            <option value="Digital Marketing">Digital Marketing</option>
+                                            <option value="Logo Design">Logo Design</option>
+                                            <option value="SEO">SEO</option>
+                                            <option value="SMO">SMO</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div id="other-value" class="col-md-12 mb-3">
+
+                                    </div>
+                                    {{--  price_quote --}}
+                                    <div class="col-md-12 mb-3">
+                                        <label for="inputEnterYourName" class="col-form-label">Price Quote
+                                            <span style="color: red;">*</span></label>
+                                        <input type="text" name="price_quote" id="price_quote" required
+                                            data-parsley-trigger="keyup" data-parsley-type="number"
+                                            data-parsley-type-message="Please enter a valid number." class="form-control"
+                                            value="{{ old('price_quote') }}" placeholder="Enter Price Quote">
+                                    </div>
+
+                                    {{-- transfer_token_by --}}
+                                    <div class="col-md-12 mb-3">
+                                        <label for="inputEnterYourName" class="col-form-label">Transfer
+                                            Taken By <span style="color: red;">*</span>
+                                        </label>
+                                        <select name="transfer_token_by" id="transfer_token_by"
+                                            class="form-control select2" required>
+                                            <option value="">Select Transfer Token By
+                                            </option>
+                                            @foreach ($users as $user)
+                                                <option value="{{ $user->id }}">{{ $user->name }}
+                                                    ({{ $user->email }})
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    {{-- followup_date --}}
+                                    <div class="col-md-12 mb-3">
+                                        <label for="inputEnterYourName" class="col-form-label">Followup
+                                            Date <span style="color: red;">*</span></label>
+                                        <input type="date" name="followup_date" id="followup_date" required
+                                            class="form-control picker" placeholder="Enter Followup Date">
+                                    </div>
+                                    {{-- followup_time --}}
+                                    <div class="col-md-12 mb-3">
+                                        <label for="inputEnterYourName" class="col-form-label">Followup
+                                            Time</label>
+                                        <input type="time" name="followup_time" id="followup_time"
+                                            class="form-control" placeholder="Enter Followup Time">
+                                    </div>
+                                    {{-- status --}}
+                                    <div class="col-md-12 mb-3">
+                                        <label for="inputEnterYourName" class="col-form-label">Status
+                                            <span style="color: red;">*</span></label>
+                                        <select name="status" id="status" class="form-control" required
+                                            data-parsley-trigger="keyup">
+                                            <option value="">Select Status</option>
+                                            <option value="Win">On board</option>
+                                            <option value="Follow Up">Follow Up</option>
+                                            <option value="Sent Proposal">Sent Proposal</option>
+                                            <option value="Close">Cancel</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                {{-- upfront_value --}}
+                                <div class="row" id="upfront_value_show">
+                                </div>
+
+                                {{-- comments --}}
+                                <div class="col-md-12 mb-3">
+                                    <label for="inputEnterYourName" class="col-form-label">Comments</label>
+                                    <textarea name="comments" id="comments" cols="30" rows="5" class="form-control"
+                                        placeholder="Enter Comments ...">{{ old('comments') }}</textarea>
+                                </div>
+                                <div class="d-flex alin-items-center w-100 text-end">
+                                    <button class="print_btn cancel_btn me-3" type="reset"><i
+                                            class="far fa-times-circle"></i>
+                                        Cancel</button>
+                                    <button class="print_btn" type="submit"><i class="far fa-check-circle"></i>
+                                        Create</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                    <div class="table-responsive" id="show-prospect">
-
-                        <table id="myTable" class="dd table table-striped  table-hover" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Tele Caller / Prospect By</th>
-                                    <th>Client Name</th>
-                                    <th>Business Name</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
-                                    <th>Transfer Taken By</th>
-                                    <th>BDM / Manager</th>
-                                    <th>Status</th>
-                                    <th>Service Offered</th>
-                                    <th>Followup Date
-                                        <input type="text" class="datepicker" id="followup_date_filter"
-                                            style="width: 0; padding:0; border:none" />
-                                        <label for="followup_date_filter" class="datepik" style="font-size: 22px"><i
-                                                class="las la-calendar"></i></label>
-                                    </th>
-                                    <th>Price Quoted</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody id="prospect-body">
-                                @include('admin.prospect.table')
-
-                            </tbody>
-                        </table>
-
+                    <div id="edit-prospect-model">
+                        @include('admin.prospect.edit')
                     </div>
                 </div>
-            </div>
+                <div class="table-responsive" id="show-prospect">
 
+                    <table id="myTable" class="dd table table-striped  table-hover" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Tele Sales / Prospect By</th>
+                                <th>Client Name</th>
+                                <th>Business Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Transfer Taken By</th>
+                                <th>BDM / Manager</th>
+                                <th>Status</th>
+                                <th>Service Offered</th>
+                                <th>Followup Date
+                                    <input type="text" class="datepicker" id="followup_date_filter"
+                                        style="width: 0; padding:0; border:none" />
+                                    <label for="followup_date_filter" class="datepik" style="font-size: 22px"><i
+                                            class="las la-calendar"></i></label>
+                                </th>
+                                <th>Price Quoted</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="prospect-body">
+                            @include('admin.prospect.table')
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
         </div>
+
+    </div>
 
     </div>
 @endsection
