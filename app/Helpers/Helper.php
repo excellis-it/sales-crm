@@ -87,7 +87,9 @@ class Helper
 
         // --- ACCOUNT MANAGER ---
         else if ($user->hasRole('ACCOUNT_MANAGER')) {
-            $gross_amount = 0;
+            $gross_amount = Project::where('user_id', $userId)
+                                  ->whereBetween('sale_date', [$startDate, $endDate])
+                                  ->sum('project_value');
 
             $projectIds = Project::where('assigned_to', $userId)->pluck('id');
 

@@ -132,15 +132,15 @@ class DashboardController extends Controller
 
         $goalQuery = Goal::query();
         if ($startDate && $endDate) {
-             // Goals are usually month-based in this system, so we check if goals_date falls in range
-             $goalQuery->whereBetween('goals_date', [$startDate, $endDate]);
+            // Goals are usually month-based in this system, so we check if goals_date falls in range
+            $goalQuery->whereBetween('goals_date', [$startDate, $endDate]);
         }
 
         $count['account_manager_goals'] = (clone $goalQuery)->whereIn('user_id', $account_manager_id)->sum('goals_amount');
-        
+
         $count['bdm_gross_goals'] = (clone $goalQuery)->whereIn('user_id', $bdma_manager_id)->where('goals_type', 1)->sum('goals_amount');
         $count['bdm_net_goals'] = (clone $goalQuery)->whereIn('user_id', $bdma_manager_id)->where('goals_type', 2)->sum('goals_amount');
-        
+
         $count['bdm_goals'] = $count['bdm_gross_goals']; // Fallback
 
         if ($count['bdm_gross_goals'] == 0) {
@@ -184,7 +184,16 @@ class DashboardController extends Controller
         $goal['gross_goals'] = (clone $goalQuery)->where('goals_type', 1)->whereIn('user_id', $sales_manager_id)->sum('goals_amount');
         $goal['net_goals'] = (clone $goalQuery)->where('goals_type', 2)->whereIn('user_id', $sales_manager_id)->sum('goals_amount');
 
-        $goal['gross_goals_achieve'] = 0;
+
+        // account manager gross achieve
+        $account_manager_id = User::Role('ACCOUNT_MANAGER')->pluck('id');
+        $goal['account_manager_gross_achieve'] = 0;
+        foreach ($account_manager_id as $acc_m_id) {
+            $achievements = \App\Helpers\Helper::getUserAchievementDateRange($acc_m_id, $startDate ?: '2000-01-01', $endDate ?: '2099-12-31');
+            $goal['account_manager_gross_achieve'] += $achievements['gross_amount'];
+        }
+
+        $goal['gross_goals_achieve'] = $goal['account_manager_gross_achieve'];
         $goal['net_goals_achieve'] = 0;
         foreach ($sales_manager_id as $sm_id) {
             $achievements = \App\Helpers\Helper::getUserAchievementDateRange($sm_id, $startDate ?: '2000-01-01', $endDate ?: '2099-12-31');
@@ -198,13 +207,21 @@ class DashboardController extends Controller
     private function getYearlyChartData()
     {
         $sales_manager_id = User::Role('SALES_MANAGER')->pluck('id');
+        $account_manager_id = User::Role('ACCOUNT_MANAGER')->pluck('id');
+
         $data = [];
         for ($m = 1; $m <= 12; $m++) {
             $monthName = strtolower(date('F', mktime(0, 0, 0, $m, 1)));
             $startOfMonth = date('Y-m-01', mktime(0, 0, 0, $m, 1));
             $endOfMonth = date('Y-m-t', mktime(0, 0, 0, $m, 1));
 
-            $gross_sum = 0;
+            $goal['account_manager_gross_achieve'] = 0;
+            foreach ($account_manager_id as $acc_m_id) {
+                $achievements = \App\Helpers\Helper::getUserAchievementDateRange($acc_m_id, $startOfMonth, $endOfMonth);
+                $goal['account_manager_gross_achieve'] += $achievements['gross_amount'];
+            }
+
+            $gross_sum = $goal['account_manager_gross_achieve'];
             $net_sum = 0;
 
             foreach ($sales_manager_id as $sm_id) {
@@ -245,6 +262,8 @@ class DashboardController extends Controller
     {
         $type = $request->type;
         $sales_manager_id = User::Role('SALES_MANAGER')->pluck('id');
+        $account_manager_id = User::Role('ACCOUNT_MANAGER')->pluck('id');
+
 
         if ($type == 'yearEarn') {
             $goal = $this->getYearlyChartData();
@@ -263,7 +282,13 @@ class DashboardController extends Controller
                 $labels[] = $i;
                 $date = date('Y-m-') . sprintf('%02d', $i);
 
-                $gross_sum = 0;
+                $goal['account_manager_gross_achieve'] = 0;
+                foreach ($account_manager_id as $acc_m_id) {
+                    $achievements = \App\Helpers\Helper::getUserAchievementDateRange($acc_m_id, $date, $date);
+                    $goal['account_manager_gross_achieve'] += $achievements['gross_amount'];
+                }
+
+                $gross_sum = $goal['account_manager_gross_achieve'];
                 $net_sum = 0;
                 foreach ($sales_manager_id as $sm_id) {
                     $achievements = \App\Helpers\Helper::getUserAchievementDateRange($sm_id, $date, $date);
@@ -286,7 +311,14 @@ class DashboardController extends Controller
 
             for ($i = 0; $i < 7; $i++) {
                 $date = (clone $startOfWeek)->addDays($i)->format('Y-m-d');
-                $gross_sum = 0;
+
+                $goal['account_manager_gross_achieve'] = 0;
+                foreach ($account_manager_id as $acc_m_id) {
+                    $achievements = \App\Helpers\Helper::getUserAchievementDateRange($acc_m_id, $date, $date);
+                    $goal['account_manager_gross_achieve'] += $achievements['gross_amount'];
+                }
+
+                $gross_sum = $goal['account_manager_gross_achieve'];
                 $net_sum = 0;
                 foreach ($sales_manager_id as $sm_id) {
                     $achievements = \App\Helpers\Helper::getUserAchievementDateRange($sm_id, $date, $date);
