@@ -291,9 +291,9 @@
                                 <tr>
                                     <th>Date</th>
                                     <th>Business Name</th>
-                                    <th>Client Name</th>
+                                    {{-- <th>Client Name</th>
                                     <th>Email</th>
-                                    <th>Phone</th>
+                                    <th>Phone</th> --}}
                                     <th>Transfer Taken By</th>
                                     <th>Status</th>
                                     <th>Service Offered</th>

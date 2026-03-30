@@ -11,12 +11,12 @@
             <td class="edit-route" data-route="{{ route('projects.edit', $project->id) }}">
                 {{ $project->business_name }}
             </td>
-            <td class="edit-route" data-route="{{ route('projects.edit', $project->id) }}">
+            {{-- <td class="edit-route" data-route="{{ route('projects.edit', $project->id) }}">
                 {{ $project->client_name }}
             </td>
             <td class="edit-route" data-route="{{ route('projects.edit', $project->id) }}">
                 {{ $project->client_phone }}
-            </td>
+            </td> --}}
             <td class="edit-route" data-route="{{ route('projects.edit', $project->id) }}">
                 @foreach ($project->projectTypes as $index => $projectType)
                 <span class="">{{ Str::limit($projectType->type, 20) }}</span>
@@ -51,7 +51,7 @@
         </tr>
     @endforeach
     <tr>
-        
+
     <td colspan="12">
         <div class="d-flex justify-content-between align-items-center">
             <div class="">

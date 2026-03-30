@@ -13,12 +13,12 @@
             <td>
                 {{ $project->business_name }}
             </td>
-            <td>
+            {{-- <td>
                 {{ $project->client_name }}
             </td>
             <td>
                 {{ $project->client_phone }}
-            </td>
+            </td> --}}
             <td>
                 @foreach ($project->projectTypes as $index => $projectType)
                 <span class="">{{ Str::limit($projectType->type, 20) }}</span>
@@ -59,7 +59,7 @@
     @endforeach
 
     <tr>
-       
+
     <td colspan="12">
         <div class="d-flex justify-content-between align-items-center">
             <div class="">
@@ -72,4 +72,4 @@
         </div>
     </td>
     </tr>
-@endif    
+@endif

@@ -13,7 +13,7 @@
                 @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->business_name }}
             </td>
-            <td
+            {{-- <td
                 @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->client_name }}
             </td>
@@ -24,7 +24,7 @@
             <td
                 @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->client_phone }}
-            </td>
+            </td> --}}
             <td
                 @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('prospects.edit', $prospect->id) }}" @endif>
                 {{ $prospect->transferTakenBy->name ?? '' }}

@@ -16,7 +16,7 @@
                 <td   @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('sales-manager.prospects.edit-route',['prospect_id'=> $prospect->id, 'sales_executive_id' => $sales_executive_id ?? null]) }}" @endif>
                     {{ $prospect->business_name }}
                 </td>
-                <td   @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('sales-manager.prospects.edit-route',['prospect_id'=> $prospect->id, 'sales_executive_id' => $sales_executive_id ?? null]) }}" @endif>
+                {{-- <td   @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('sales-manager.prospects.edit-route',['prospect_id'=> $prospect->id, 'sales_executive_id' => $sales_executive_id ?? null]) }}" @endif>
                     {{ $prospect->client_name }}
                 </td>
                 <td   @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('sales-manager.prospects.edit-route',['prospect_id'=> $prospect->id, 'sales_executive_id' => $sales_executive_id ?? null]) }}" @endif>
@@ -24,7 +24,7 @@
                 </td>
                 <td   @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('sales-manager.prospects.edit-route',['prospect_id'=> $prospect->id, 'sales_executive_id' => $sales_executive_id ?? null]) }}" @endif>
                     {{ $prospect->client_phone }}
-                </td>
+                </td> --}}
                 <td   @if ($prospect->status != 'Win') class="edit-route" data-route="{{ route('sales-manager.prospects.edit-route',['prospect_id'=> $prospect->id, 'sales_executive_id' => $sales_executive_id ?? null]) }}" @endif>
                     {{ $prospect->transferTakenBy->name ?? '' }}
                 </td>

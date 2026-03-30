@@ -389,13 +389,13 @@
                                         data-sorting_type="asc" data-column_name="business_name" style="cursor: pointer">
                                         Business Name <span id="business_name_icon"><span
                                                 class="fa fa-sort-down"></span></span></th>
-                                    <th class="sorting" data-tippy-content="Sort by Customer Name"
+                                    {{-- <th class="sorting" data-tippy-content="Sort by Customer Name"
                                         data-sorting_type="asc" data-column_name="customer_name" style="cursor: pointer">
                                         Customer Name <span id="customer_name_icon"><span
                                                 class="fa fa-sort-down"></span></span></th>
                                     <th class="sorting" data-tippy-content="Sort by Phone" data-sorting_type="asc"
                                         data-column_name="phone" style="cursor: pointer"> Phone Number <span
-                                            id="phone_icon"><span class="fa fa-sort-down"></span></span></th>
+                                            id="phone_icon"><span class="fa fa-sort-down"></span></span></th> --}}
                                     <th class="sorting" data-tippy-content="Sort by Project Type" data-sorting_type="asc"
                                         data-column_name="project_type" style="cursor: pointer"> Project Type <span
                                             id="project_type_icon"><span class="fa fa-sort-down"></span></span></th>

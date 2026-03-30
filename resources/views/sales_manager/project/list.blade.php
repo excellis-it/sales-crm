@@ -478,10 +478,10 @@
                                             class="fa fa-sort ms-1 text-muted"></i></th>
                                     <th class="sorting" data-column_name="business_name">Business Name <i
                                             class="fa fa-sort ms-1 text-muted"></i></th>
-                                    <th class="sorting" data-column_name="customer_name">Customer Name <i
+                                    {{-- <th class="sorting" data-column_name="customer_name">Customer Name <i
                                             class="fa fa-sort ms-1 text-muted"></i></th>
                                     <th class="sorting" data-column_name="phone_number">Phone <i
-                                            class="fa fa-sort ms-1 text-muted"></i></th>
+                                            class="fa fa-sort ms-1 text-muted"></i></th> --}}
                                     <th class="sorting" data-column_name="project_type">Project Type <i
                                             class="fa fa-sort ms-1 text-muted"></i></th>
                                     <th class="sorting" data-column_name="project_value">Value <i
