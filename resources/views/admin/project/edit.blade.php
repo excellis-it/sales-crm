@@ -5,6 +5,10 @@
                 <i class="fa fa-chevron-right" aria-hidden="true"></i>
             </button>
             <h4 id="offcanvasEditLabel" class="text-dark">Edit Project: {{ $project->business_name }}</h4>
+            <button type="button" class="btn btn-sm btn-outline-primary view-followups ms-auto"
+                data-id="{{ $project->id }}">
+                <i class="fas fa-comments"></i> Remarks
+            </button>
         </div>
 
         <div class="offcanvas-body">
