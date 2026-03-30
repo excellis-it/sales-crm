@@ -238,6 +238,16 @@
                     </div>
 
                     <hr />
+                    @if(isset($filterRole) && $filterRole == 'account_manager')
+                        <div class="mb-3">
+                            <span class="badge bg-info text-white px-3 py-2" style="font-size: 14px;">
+                                <i class="la la-user-tag me-1"></i> Account Manager Revenue
+                                <a href="{{ route('sales-projects.index') }}" class="text-white ms-2" title="Remove filter" style="text-decoration: none;">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                            </span>
+                        </div>
+                    @endif
                     <div class="row align-items-center">
                         <div class="col-md-9">
                             <div class="row g-2">
@@ -870,6 +880,13 @@
                 $('#start_date').val('');
                 $('#end_date').val('');
                 $('#search').val('');
+                // Clear server-side role filter
+                $.get("{{ route('sales-projects.fetch-data') }}", { reset: 1 }, function() {
+                    // Remove URL params and role badge
+                    var url = window.location.href.split('?')[0];
+                    window.history.replaceState({}, document.title, url);
+                    $('.badge.bg-info').parent().remove();
+                });
                 fetch_data(1, 'desc', 'sale_date', '');
             });
 

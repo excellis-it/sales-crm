@@ -35,10 +35,11 @@ class ProjectController extends Controller
         $query = Project::query();
 
         // When coming from user list or dashboard, clear stale session filters
-        if ($request->sales_manager_id || $request->account_manager_id || $request->duration) {
+        if ($request->sales_manager_id || $request->account_manager_id || $request->duration || $request->role) {
             Session::forget('project_filter_start_date');
             Session::forget('project_filter_end_date');
             Session::forget('project_filter_search');
+            Session::forget('project_filter_role');
         }
 
         if ($request->sales_manager_id) {
@@ -49,6 +50,12 @@ class ProjectController extends Controller
             $query->where('assigned_to', $request->account_manager_id);
         }
 
+        // Filter by role (from dashboard revenue cards)
+        if ($request->role) {
+            Session::put('project_filter_role', $request->role);
+        }
+        $filterRole = Session::get('project_filter_role');
+
         $startDate = Session::get('project_filter_start_date', $request->start_date);
         $endDate = Session::get('project_filter_end_date', $request->end_date);
         $search = Session::get('project_filter_search');
@@ -58,10 +65,53 @@ class ProjectController extends Controller
             if ($startDate && $endDate) {
                 Session::put('project_filter_start_date', $startDate);
                 Session::put('project_filter_end_date', $endDate);
-                $query->whereBetween('sale_date', [$startDate, $endDate]);
             }
+        }
+
+        // Auto-default to this_month when role filter arrives without dates
+        if ($filterRole == 'account_manager' && !$startDate && !$endDate) {
+            $startDate = date('Y-m-01');
+            $endDate = date('Y-m-t');
+            Session::put('project_filter_start_date', $startDate);
+            Session::put('project_filter_end_date', $endDate);
+        }
+
+        // AM Revenue filter — match Helper::getUserAchievementDateRange() for ACCOUNT_MANAGER
+        // Gross: Project where user_id=AM, sale_date in range
+        // Net milestones: Project where assigned_to=AM, has paid milestones (non-upfront) with payment_date in range
+        // Net upfront: Project where assigned_to=AM AND project_opener=AM, sale_date in range
+        if ($filterRole == 'account_manager') {
+            $amUserIds = User::role('ACCOUNT_MANAGER')->pluck('id');
+            $query->where(function ($q) use ($amUserIds, $startDate, $endDate) {
+                // Gross: projects created by AM with sale_date in range
+                $q->where(function ($q1) use ($amUserIds, $startDate, $endDate) {
+                    $q1->whereIn('user_id', $amUserIds);
+                    if ($startDate && $endDate) {
+                        $q1->whereBetween('sale_date', [$startDate, $endDate]);
+                    }
+                });
+                // Net milestones: projects assigned to AM with paid milestones/upsale_milestone/upsale_upfront in date range
+                $q->orWhere(function ($q2) use ($amUserIds, $startDate, $endDate) {
+                    $q2->whereIn('assigned_to', $amUserIds);
+                    if ($startDate && $endDate) {
+                        $q2->whereHas('allProjectMilestones', function ($mq) use ($startDate, $endDate) {
+                            $mq->where('payment_status', 'Paid')
+                               ->where('milestone_type', '!=', 'upfront')
+                               ->whereBetween('payment_date', [$startDate, $endDate]);
+                        });
+                    }
+                });
+                // Net upfront: projects where assigned_to=AM and project_opener=AM with sale_date in range
+                $q->orWhere(function ($q3) use ($amUserIds, $startDate, $endDate) {
+                    $q3->whereIn('assigned_to', $amUserIds)
+                        ->whereColumn('project_opener', 'assigned_to');
+                    if ($startDate && $endDate) {
+                        $q3->whereBetween('sale_date', [$startDate, $endDate]);
+                    }
+                });
+            });
         } elseif ($startDate && $endDate) {
-            $query->whereBetween('sale_date', [$startDate, $endDate]);
+            $query->whereBetween('sale_date', [$starDate, $endDate]);
         }
 
         if ($search) {
@@ -98,7 +148,7 @@ class ProjectController extends Controller
             ->orderBy('sale_date', 'desc')
             ->paginate(15);
 
-        return view('admin.project.list')->with(compact('projects', 'sales_managers', 'users', 'account_managers', 'project_openers', 'startDate', 'endDate', 'search'));
+        return view('admin.project.list')->with(compact('projects', 'sales_managers', 'users', 'account_managers', 'project_openers', 'startDate', 'endDate', 'search', 'filterRole'));
     }
 
 
@@ -547,11 +597,52 @@ class ProjectController extends Controller
             $start_date = $request->get('start_date');
             $end_date = $request->get('end_date');
 
+            // Handle reset
+            if ($request->get('reset')) {
+                Session::forget('project_filter_start_date');
+                Session::forget('project_filter_end_date');
+                Session::forget('project_filter_search');
+                Session::forget('project_filter_role');
+            }
+
             Session::put('project_filter_search', $query_str);
             Session::put('project_filter_start_date', $start_date);
             Session::put('project_filter_end_date', $end_date);
 
             $projects = Project::query();
+
+            // Apply AM Revenue filter from session — match Helper logic
+            $filterRole = Session::get('project_filter_role');
+            $applyDefaultDateFilter = true;
+            if ($filterRole == 'account_manager') {
+                $applyDefaultDateFilter = false;
+                $amUserIds = User::role('ACCOUNT_MANAGER')->pluck('id');
+                $projects->where(function ($q) use ($amUserIds, $start_date, $end_date) {
+                    $q->where(function ($q1) use ($amUserIds, $start_date, $end_date) {
+                        $q1->whereIn('user_id', $amUserIds);
+                        if ($start_date && $end_date) {
+                            $q1->whereBetween('sale_date', [$start_date, $end_date]);
+                        }
+                    });
+                    $q->orWhere(function ($q2) use ($amUserIds, $start_date, $end_date) {
+                        $q2->whereIn('assigned_to', $amUserIds);
+                        if ($start_date && $end_date) {
+                            $q2->whereHas('allProjectMilestones', function ($mq) use ($start_date, $end_date) {
+                                $mq->where('payment_status', 'Paid')
+                                   ->where('milestone_type', '!=', 'upfront')
+                                   ->whereBetween('payment_date', [$start_date, $end_date]);
+                            });
+                        }
+                    });
+                    $q->orWhere(function ($q3) use ($amUserIds, $start_date, $end_date) {
+                        $q3->whereIn('assigned_to', $amUserIds)
+                            ->whereColumn('project_opener', 'assigned_to');
+                        if ($start_date && $end_date) {
+                            $q3->whereBetween('sale_date', [$start_date, $end_date]);
+                        }
+                    });
+                });
+            }
 
             if ($query_str) {
                 $query_str = str_replace(" ", "%", $query_str);
@@ -581,7 +672,7 @@ class ProjectController extends Controller
                 });
             }
 
-            if ($start_date && $end_date) {
+            if ($applyDefaultDateFilter && $start_date && $end_date) {
                 $projects->whereBetween('sale_date', [$start_date, $end_date]);
             }
 

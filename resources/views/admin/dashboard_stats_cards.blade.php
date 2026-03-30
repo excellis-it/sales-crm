@@ -215,7 +215,7 @@
     @endif
 
     <div class="col-lg-20 col-lg-3 col-sm-6">
-        <a href="{{ route('sales-projects.index') }}?duration={{ $type }}" class="dash-card-link">
+        <a href="{{ route('sales-projects.index') }}?role=account_manager" class="dash-card-link">
             <div class="stats-card-one dash-card card-info mb-30" style="min-height: 180px;">
                 <div class="d-flex justify-content-between align-items-center mb-10">
                     <div class="d-flex align-items-center">
