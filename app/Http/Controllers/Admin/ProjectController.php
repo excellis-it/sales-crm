@@ -111,7 +111,7 @@ class ProjectController extends Controller
                 });
             });
         } elseif ($startDate && $endDate) {
-            $query->whereBetween('sale_date', [$starDate, $endDate]);
+            $query->whereBetween('sale_date', [$startDate, $endDate]);
         }
 
         if ($search) {
