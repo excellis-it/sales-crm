@@ -17,15 +17,15 @@ class PaymentController extends Controller
 
     public function salesManagerPayments()
     {
-        
+
         $project_milestones = ProjectMilestone::where('payment_status', 'Paid')
         ->whereHas('project', function ($query) {
-            $query->where('user_id', auth()->id())  
-                ->orderBy('id', 'DESC');
+            $query->where('user_id', auth()->id());
         })
         ->with('project')
+        ->orderBy('id', 'DESC')
         ->paginate(10);
-            
+
         return view('sales_manager.payments.list',compact('project_milestones'));
     }
 
@@ -33,7 +33,7 @@ class PaymentController extends Controller
     {
         $milestone_detail = ProjectMilestone::where('id', $id)->with('project','user')->first();
         $pdf = PDF::loadView('sales_manager.invoicePdf',array('milestone_detail' => $milestone_detail));
-    
+
         return $pdf->download('sales-manager-invoice.pdf');
     }
 
@@ -43,10 +43,9 @@ class PaymentController extends Controller
             $query = $request->get('query');
             $query = str_replace(" ", "%", $query);
             $project_milestones = ProjectMilestone::query();
-            
+
             $project_milestones = $project_milestones->where('payment_status', 'Paid')->whereHas('project', function ($query) {
-                $query->where('user_id', auth()->id())  
-                    ->orderBy('id', 'DESC');
+                $query->where('user_id', auth()->id());
             })->where(function ($q) use ($query) {
                 $q->orWhere('milestone_name', 'like', '%' . $query . '%')
                     ->orWhere('milestone_value', 'like', '%' . $query . '%')
@@ -54,12 +53,13 @@ class PaymentController extends Controller
                     ->orWhere('payment_status', 'like', '%' . $query . '%')
                     ->orWhere('payment_date', 'like', '%' . $query . '%')
                     ->orWhereHas('project', function ($q) use ($query) {
-                        $q->where('user_id', auth()->id())  
+                        $q->where('user_id', auth()->id())
                             ->where('business_name', 'like', '%' . $query . '%');
                     });
             })
+            ->orderBy('id', 'DESC')
             ->paginate(10);
-            
+
             return response()->json(['data' => view('admin.payments.table', compact('project_milestones'))->render()]);
         }
     }

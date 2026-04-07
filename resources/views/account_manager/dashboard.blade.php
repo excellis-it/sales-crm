@@ -157,7 +157,7 @@
             {{-- Stats Cards Row 1 --}}
             <div class="row">
                 {{-- Total Projects --}}
-                <div class="col-md-6 col-lg-4 col-xl-4 mb-3">
+                <div class="col-md-6 col-lg-3 col-xl-3 mb-3">
                     <a href="{{ route('account-manager.projects.index') }}" class="dash-card-link">
                         <div class="dash-card card-info">
                             <div class="d-flex justify-content-between align-items-start">
@@ -180,7 +180,7 @@
                     $achieve = isset($count['net_target']['goals_achieve']) ? $count['net_target']['goals_achieve'] : 0;
                     $goalPercentage = $target > 0 ? round(($achieve / $target) * 100, 0) : 0;
                 @endphp
-                <div class="col-md-6 col-lg-4 col-xl-4 mb-3">
+                <div class="col-md-6 col-lg-3 col-xl-3 mb-3">
                     <a href="{{ route('account-manager.projects.index', ['start_date' => date('Y-m-01'), 'end_date' => date('Y-m-t'), 'role' => 'account_manager']) }}" class="dash-card-link">
                         <div class="dash-card card-danger">
                             <div class="d-flex justify-content-between align-items-start">
@@ -214,7 +214,7 @@
                 </div>
 
                 {{-- Total Payments Received --}}
-                <div class="col-md-6 col-lg-4 col-xl-4 mb-3">
+                <div class="col-md-6 col-lg-3 col-xl-3 mb-3">
                     <a href="{{ route('account-manager.payments.list') }}" class="dash-card-link">
                         <div class="dash-card card-success">
                             <div class="d-flex justify-content-between align-items-start">
@@ -230,48 +230,8 @@
                         </div>
                     </a>
                 </div>
-            </div>
 
-            {{-- Stats Cards Row 2 --}}
-            <div class="row">
-                {{-- This Month Collections --}}
-                <div class="col-md-6 col-lg-4 col-xl-4 mb-3">
-                    <a href="{{ route('account-manager.payments.list') }}" class="dash-card-link">
-                        <div class="dash-card card-primary">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div>
-                                    <p class="dash-title mb-0">This Month Collections</p>
-                                    <div class="dash-value">${{ number_format($count['monthly_payments'], 2) }}</div>
-                                    <span class="dash-sub">{{ date('F Y') }}</span>
-                                </div>
-                                <div class="dash-icon-box bg-pale-primary">
-                                    <i class="la la-calendar-check"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                {{-- Pending Milestones --}}
-                <div class="col-md-6 col-lg-4 col-xl-4 mb-3">
-                    <a href="{{ route('account-manager.payments.list') }}" class="dash-card-link">
-                        <div class="dash-card card-warning">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div>
-                                    <p class="dash-title mb-0">Pending Milestones</p>
-                                    <div class="dash-value">{{ $count['pending_milestones'] }}</div>
-                                    <span class="dash-sub">Worth ${{ number_format($count['pending_amount'], 2) }}</span>
-                                </div>
-                                <div class="dash-icon-box bg-pale-orange">
-                                    <i class="la la-clock"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                {{-- Upsales --}}
-                <div class="col-md-6 col-lg-4 col-xl-4 mb-3">
+                 <div class="col-md-6 col-lg-3 col-xl-3 mb-3">
                     <a href="{{ route('account-manager.projects.index') }}" class="dash-card-link">
                         <div class="dash-card card-purple">
                             <div class="d-flex justify-content-between align-items-start">
@@ -287,7 +247,52 @@
                         </div>
                     </a>
                 </div>
+
             </div>
+
+            {{-- Stats Cards Row 2 --}}
+            {{-- <div class="row"> --}}
+                {{-- This Month Collections --}}
+                {{-- <div class="col-md-6 col-lg-4 col-xl-4 mb-3">
+                    <a href="{{ route('account-manager.payments.list') }}" class="dash-card-link">
+                        <div class="dash-card card-primary">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <p class="dash-title mb-0">This Month Collections</p>
+                                    <div class="dash-value">${{ number_format($count['monthly_payments'], 2) }}</div>
+                                    <span class="dash-sub">{{ date('F Y') }}</span>
+                                </div>
+                                <div class="dash-icon-box bg-pale-primary">
+                                    <i class="la la-calendar-check"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div> --}}
+
+
+
+                {{-- Pending Milestones --}}
+                {{-- <div class="col-md-6 col-lg-4 col-xl-4 mb-3">
+                    <a href="{{ route('account-manager.payments.list') }}" class="dash-card-link">
+                        <div class="dash-card card-warning">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <p class="dash-title mb-0">Pending Milestones</p>
+                                    <div class="dash-value">{{ $count['pending_milestones'] }}</div>
+                                    <span class="dash-sub">Worth ${{ number_format($count['pending_amount'], 2) }}</span>
+                                </div>
+                                <div class="dash-icon-box bg-pale-orange">
+                                    <i class="la la-clock"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div> --}}
+
+                {{-- Upsales --}}
+
+            {{-- </div> --}}
 
             {{-- Tables Section --}}
             <div class="row">
@@ -322,7 +327,7 @@
                                                 ->sum(fn($m) => (float) $m->milestone_value);
                                             $dueAmount = $grandTotal - ($totalUpfront + $paidMs);
                                         @endphp
-                                        <tr onclick="window.location='{{ route('account-manager.projects.edit', $project->id) }}'">
+                                        <tr>
                                             <td>{{ $project->sale_date ? date('d M Y', strtotime($project->sale_date)) : '-' }}</td>
                                             <td>
                                                 <strong>{{ Str::limit($project->business_name, 25) }}</strong>

@@ -1,4 +1,3 @@
-
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Invoice - Excellis IT</title>
@@ -217,8 +216,13 @@
             font-size: 10px;
         }
 
-        .text-orange { color: #ff9b44; }
-        .text-right { text-align: right; }
+        .text-orange {
+            color: #ff9b44;
+        }
+
+        .text-right {
+            text-align: right;
+        }
     </style>
 </head>
 
@@ -241,11 +245,13 @@
             <table class="layout-table">
                 <tr>
                     <td style="width: 50%;">
-                        <img class="header-logo" src="https://webexstudio.com/crm/admin_assets/img/logopns.png" alt="Excellis IT">
+                        <img class="header-logo" src="https://webexstudio.com/crm/admin_assets/img/logopns.png"
+                            alt="Excellis IT">
                     </td>
                     <td style="width: 50%;" class="text-right">
                         <h1 class="invoice-title-text">INVOICE</h1>
-                        <div class="invoice-no-badge">#EXC-{{ date('y') }}-{{ str_pad($milestone_detail->id, 4, '0', STR_PAD_LEFT) }}</div>
+                        <div class="invoice-no-badge">
+                            #EXC-{{ date('y') }}-{{ str_pad($milestone_detail->id, 4, '0', STR_PAD_LEFT) }}</div>
                     </td>
                 </tr>
             </table>
@@ -256,9 +262,10 @@
                         <td style="width: 35%;">
                             <span class="section-label">Sender</span>
                             <p class="bold-heading">Excellis IT Private Ltd.</p>
-                            <p>Merlin Infinite, 9th Floor, Unit 907</p>
-                            <p>Sector V, Bidhannagar, Kolkata</p>
-                            <p>WB 700091, India</p>
+                            <p>Ecostation Business Tower CN-06,</p>
+                            <p>15th Floor-Unit-1501 &, Unit-1504, Street Number 9, BP Block</p>
+                            <p>Kolkata, West Bengal 700091</p>
+                            <p>India</p>
                             <p>GSTIN: 19AAFCE5666G1ZC</p>
                         </td>
                         <td style="width: 35%;">
@@ -266,19 +273,25 @@
                             <p class="bold-heading">
                                 {{ $milestone_detail->project->business_name ?? ($milestone_detail->bdmProject->business_name ?? ($milestone_detail->tenderProject->tender_name ?? 'Client Name')) }}
                             </p>
-                            <p>{{ $milestone_detail->project->client_email ?? ($milestone_detail->bdmProject->client_email ?? ($milestone_detail->tenderProject->email ?? '')) }}</p>
-                            <p>{{ $milestone_detail->project->client_phone ?? ($milestone_detail->bdmProject->client_phone ?? ($milestone_detail->tenderProject->phone ?? '')) }}</p>
+                            <p>{{ $milestone_detail->project->client_email ?? ($milestone_detail->bdmProject->client_email ?? ($milestone_detail->tenderProject->email ?? '')) }}
+                            </p>
+                            <p>{{ $milestone_detail->project->client_phone ?? ($milestone_detail->bdmProject->client_phone ?? ($milestone_detail->tenderProject->phone ?? '')) }}
+                            </p>
                             @php
-                                $client_address = $milestone_detail->project->address ?? ($milestone_detail->bdmProject->address ?? ($milestone_detail->tenderProject->address ?? ''));
+                                $client_address =
+                                    $milestone_detail->project->address ??
+                                    ($milestone_detail->bdmProject->address ??
+                                        ($milestone_detail->tenderProject->address ?? ''));
                             @endphp
-                            @if($client_address)
+                            @if ($client_address)
                                 <p>{{ $client_address }}</p>
                             @endif
                         </td>
                         <td style="width: 30%;">
                             <span class="section-label">Metadata</span>
                             <p><strong>Issued:</strong> {{ date('d M, Y') }}</p>
-                            <p><strong>Due by:</strong> {{ date('d M, Y', strtotime($milestone_detail->payment_date)) }}</p>
+                            <p><strong>Due by:</strong> {{ date('d M, Y', strtotime($milestone_detail->payment_date)) }}
+                            </p>
                             <p><strong>Status:</strong> <span style="color: #27ae60; font-weight: 700;">Paid</span></p>
                         </td>
                     </tr>
@@ -299,8 +312,11 @@
                     <tr>
                         <td style="text-align: center; color: #95a5a6;">01</td>
                         <td>
-                            <div class="bold-heading" style="margin-bottom: 3px;">{{ $milestone_detail->project->business_name ?? ($milestone_detail->tenderProject->tender_name ?? $milestone_detail->bdmProject->business_name ?? 'Project Name') }}</div>
-                            <span style="font-size: 9px; color: #999;">Reference ID: #MT-{{ $milestone_detail->id }}</span>
+                            <div class="bold-heading" style="margin-bottom: 3px;">
+                                {{ $milestone_detail->project->business_name ?? ($milestone_detail->tenderProject->tender_name ?? ($milestone_detail->bdmProject->business_name ?? 'Project Name')) }}
+                            </div>
+                            <span style="font-size: 9px; color: #999;">Reference ID:
+                                #MT-{{ $milestone_detail->id }}</span>
                         </td>
                         <td>{{ $milestone_detail->milestone_name }}</td>
                         <td>{{ $milestone_detail->payment_mode }}</td>
@@ -320,15 +336,17 @@
                             <div style="margin-top: 5px; color: #555;">
                                 <p style="margin: 2px 0;"><strong>A/C Name:</strong> Excellis IT Pvt Ltd</p>
                                 <p style="margin: 2px 0;"><strong>Bank:</strong> ICICI BANK (Acc: 193405000720)</p>
-                                <p style="margin: 2px 0;"><strong>IFSC:</strong> ICIC0001934 | <strong>Swift:</strong> ICICINBBCTS</p>
+                                <p style="margin: 2px 0;"><strong>IFSC:</strong> ICIC0001934 | <strong>Swift:</strong>
+                                    ICICINBBCTS</p>
                                 <p style="margin: 2px 0;"><strong>Branch:</strong> New Town, Kolkata, WB 700156</p>
                             </div>
                         </div>
-                        
+
                         <div style="margin-top: 25px;">
                             <span class="section-label">Terms & Notes</span>
                             <p style="font-style: italic; color: #7f8c8d; font-size: 10px; margin-top: 5px;">
-                                Payment terms are 100% on milestone completion. The currency of payment is {{ $currency == 'INR' ? 'Indian Rupees' : 'United States Dollars' }}.
+                                Payment terms are 100% on milestone completion. The currency of payment is
+                                {{ $currency == 'INR' ? 'Indian Rupees' : 'United States Dollars' }}.
                             </p>
                         </div>
                     </td>
@@ -336,7 +354,8 @@
                         <table class="totals-block">
                             <tr class="totals-row">
                                 <td class="totals-label">Sub Total</td>
-                                <td class="totals-value">{{ $currency }} {{ number_format($milestone_detail->milestone_value, 2) }}</td>
+                                <td class="totals-value">{{ $currency }}
+                                    {{ number_format($milestone_detail->milestone_value, 2) }}</td>
                             </tr>
                             <tr class="totals-row">
                                 <td class="totals-label">Tax (0.00%)</td>
@@ -347,7 +366,8 @@
                                     <table style="width: 100%;">
                                         <tr>
                                             <td class="grand-total-label">Grand Total</td>
-                                            <td class="grand-total-value">{{ $currency }} {{ number_format($milestone_detail->milestone_value, 2) }}</td>
+                                            <td class="grand-total-value">{{ $currency }}
+                                                {{ number_format($milestone_detail->milestone_value, 2) }}</td>
                                         </tr>
                                     </table>
                                 </td>
@@ -355,10 +375,12 @@
                         </table>
 
                         <div class="signature-wrap">
-                            <img class="signature-image" src="https://webexstudio.com/crm/admin_assets/img/sign.png" alt="Signature">
+                            <img class="signature-image" src="https://webexstudio.com/crm/admin_assets/img/sign.png"
+                                alt="Signature">
                             <div class="signature-line-fixed"></div>
                             <div style="font-weight: 800; color: #2c3e50;">Zulfiquar Ali</div>
-                            <div style="font-size: 9px; color: #bdc3c7; text-transform: uppercase;">Authorized Signatory</div>
+                            <div style="font-size: 9px; color: #bdc3c7; text-transform: uppercase;">Authorized Signatory
+                            </div>
                         </div>
                     </td>
                 </tr>
@@ -371,4 +393,5 @@
         </div>
     </div>
 </body>
+
 </html>

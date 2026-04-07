@@ -23,6 +23,7 @@ class PaymentsController extends Controller
                     $query->where('user_id', Auth::user()->id)->orWhere('assigned_to', Auth::user()->id);
                 })
                 ->with('project')
+                ->orderBy('id', 'desc')
                 ->paginate(10);
 
         return view('account_manager.payments.list', compact('project_milestones'));
@@ -47,6 +48,7 @@ class PaymentsController extends Controller
                 ->orWhere('milestone_value', 'like', '%' . $query . '%')
                 ->orWhere('payment_mode', 'like', '%' . $query . '%')
                 ->orWhere('payment_date', 'like', '%' . $query . '%')
+                ->orderBy('id', 'desc')
                 ->paginate(10);
 
         }

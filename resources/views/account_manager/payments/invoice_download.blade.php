@@ -253,10 +253,12 @@
                     <tr>
                         <td style="width: 35%;">
                             <span class="section-label">Sender</span>
+
                             <p class="bold-heading">Excellis IT Private Ltd.</p>
-                            <p>Merlin Infinite, 9th Floor, Unit 907</p>
-                            <p>Sector V, Bidhannagar, Kolkata</p>
-                            <p>WB 700091, India</p>
+                            <p>Ecostation Business Tower CN-06,</p>
+                            <p>15th Floor-Unit-1501 &, Unit-1504, Street Number 9, BP Block</p>
+                            <p>Kolkata, West Bengal 700091</p>
+                            <p>India</p>
                             <p>GSTIN: 19AAFCE5666G1ZC</p>
                         </td>
                         <td style="width: 35%;">
@@ -356,6 +358,7 @@
             </table>
             @else
             <div style="padding: 100px; text-align: center;">
+                
                 <h3>No Invoice Data Available</h3>
             </div>
             @endif
