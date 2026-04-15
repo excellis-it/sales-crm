@@ -93,17 +93,19 @@
                             <div class="row g-2">
                                 <div class="col-md-3">
                                     <label class="form-label mb-0">Start Date</label>
-                                    <input type="date" name="start_date" id="start_date" class="form-control" value="{{ $start_date }}">
+                                    <input type="date" name="start_date" id="start_date" class="form-control"
+                                        value="{{ $start_date }}">
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label mb-0">End Date</label>
-                                    <input type="date" name="end_date" id="end_date" class="form-control" value="{{ $end_date }}">
+                                    <input type="date" name="end_date" id="end_date" class="form-control"
+                                        value="{{ $end_date }}">
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label mb-0">Search</label>
                                     <div class="search-field">
-                                        <input type="text" name="search" id="search" placeholder="search..." required value="{{ $search ?? '' }}"
-                                            class="form-control rounded_search">
+                                        <input type="text" name="search" id="search" placeholder="search..." required
+                                            value="{{ $search ?? '' }}" class="form-control rounded_search">
                                         <button class="submit_search" id="search-button"> <span class=""><i
                                                     class="fa fa-search"></i></span></button>
                                     </div>
@@ -412,7 +414,8 @@
                                             id="currency_icon"><span class="fa fa-sort-down"></span></span></th>
                                     <th data-tippy-content="Cant't sort by Payment Mode" style="cursor: pointer"> Payment
                                         Mode</th>
-                                    <th data-tippy-content="Cant't sort by Paid Milestone" style="cursor: pointer"> Paid Milestone </th>
+                                    <th data-tippy-content="Cant't sort by Paid Milestone" style="cursor: pointer"> Paid
+                                        Milestone </th>
                                     <th data-tippy-content="Cant't sort by Due Amount" style="cursor: pointer"> Due Amount
                                     </th>
                                     <th>Action</th>
@@ -467,7 +470,7 @@
                 var query = $('#search').val();
                 var column_name = $('#hidden_column_name').val();
                 var sort_type = $('#hidden_sort_type').val();
-                var page = @php echo Session::get('page_number') @endphp;
+                var page = {{ Session::get('page_number') ?? 1 }};
 
                 fetch_data(page, sort_type, column_name, query, "Yes");
             @endif

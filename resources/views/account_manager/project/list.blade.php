@@ -7,6 +7,7 @@
         .dataTables_filter {
             margin-bottom: 10px !important;
         }
+
         /* Custom styles for the enhanced project form */
         .premium-card {
             border: none;
@@ -14,6 +15,7 @@
             border-radius: 0.75rem;
             margin-bottom: 1.5rem;
         }
+
         .section-header {
             background-color: #f8f9fa;
             padding: 0.75rem 1.25rem;
@@ -23,6 +25,7 @@
             border-top-left-radius: 0.75rem;
             border-top-right-radius: 0.75rem;
         }
+
         .milestone-item {
             background: #fff;
             border: 1px solid #edf2f9;
@@ -31,7 +34,9 @@
             margin-bottom: 1rem;
             position: relative;
         }
-        .remove-milestone, .remove-pdf {
+
+        .remove-milestone,
+        .remove-pdf {
             position: absolute;
             top: 0.5rem;
             right: 0.5rem;
@@ -39,9 +44,12 @@
             cursor: pointer;
             transition: all 0.2s;
         }
-        .remove-milestone:hover, .remove-pdf:hover {
+
+        .remove-milestone:hover,
+        .remove-pdf:hover {
             transform: scale(1.1);
         }
+
         .toggle-paid {
             cursor: pointer;
         }
@@ -53,15 +61,18 @@
             box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
             overflow: hidden;
         }
+
         .project-main-card .card-body {
             padding: 1.5rem;
         }
+
         .project-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 0;
         }
+
         .project-header h4 {
             font-size: 18px;
             font-weight: 700;
@@ -71,10 +82,12 @@
             align-items: center;
             gap: 8px;
         }
+
         .project-header h4 i {
             color: #ff9b44;
             font-size: 20px;
         }
+
         .project-header .btn-add-project {
             background: linear-gradient(135deg, #ff9b44 0%, #fc6075 100%);
             border: none;
@@ -86,6 +99,7 @@
             transition: all 0.3s;
             box-shadow: 0 3px 10px rgba(255, 155, 68, 0.3);
         }
+
         .project-header .btn-add-project:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(255, 155, 68, 0.4);
@@ -103,11 +117,13 @@
             gap: 12px;
             flex-wrap: wrap;
         }
+
         .filter-bar .filter-group {
             display: flex;
             flex-direction: column;
             gap: 4px;
         }
+
         .filter-bar .filter-group label {
             font-size: 11px;
             font-weight: 600;
@@ -116,6 +132,7 @@
             letter-spacing: 0.5px;
             margin: 0;
         }
+
         .filter-bar .form-control {
             border: 1px solid #e2e8f0;
             border-radius: 8px;
@@ -124,18 +141,22 @@
             height: 38px;
             transition: border-color 0.2s;
         }
+
         .filter-bar .form-control:focus {
             border-color: #ff9b44;
             box-shadow: 0 0 0 3px rgba(255, 155, 68, 0.1);
         }
+
         .filter-bar .search-wrapper {
             position: relative;
             flex: 1;
             min-width: 200px;
         }
+
         .filter-bar .search-wrapper input {
             padding-right: 40px;
         }
+
         .filter-bar .search-wrapper .search-icon {
             position: absolute;
             right: 10px;
@@ -153,6 +174,7 @@
             font-size: 12px;
             cursor: pointer;
         }
+
         .filter-bar .btn-reset {
             border: 1px solid #e2e8f0;
             background: #fff;
@@ -165,6 +187,7 @@
             justify-content: center;
             transition: all 0.2s;
         }
+
         .filter-bar .btn-reset:hover {
             background: #dc3545;
             color: #fff;
@@ -175,9 +198,11 @@
         .project-table {
             margin-top: 8px;
         }
+
         .project-table .table {
             margin-bottom: 0;
         }
+
         .project-table .table thead th {
             background: #f1f4f9;
             border: none;
@@ -191,15 +216,19 @@
             cursor: pointer;
             transition: background 0.2s;
         }
+
         .project-table .table thead th:hover {
             background: #e4e9f2;
         }
+
         .project-table .table thead th:first-child {
             border-radius: 8px 0 0 8px;
         }
+
         .project-table .table thead th:last-child {
             border-radius: 0 8px 8px 0;
         }
+
         .project-table .table tbody td {
             font-size: 13px;
             padding: 10px 12px;
@@ -207,12 +236,15 @@
             border-bottom: 1px solid #f0f2f5;
             color: #4a5568;
         }
+
         .project-table .table tbody tr {
             transition: all 0.2s;
         }
+
         .project-table .table tbody tr:hover {
             background: #f7f9ff;
         }
+
         .project-table .table tbody tr .edit-route {
             cursor: pointer;
         }
@@ -230,6 +262,7 @@
             border-radius: 20px;
             margin-left: 10px;
         }
+
         .filter-active-badge i {
             font-size: 10px;
         }
@@ -261,7 +294,7 @@
                     <div class="project-header">
                         <h4>
                             <i class="la la-briefcase"></i> Projects Details
-                            @if(!empty($start_date) && !empty($end_date))
+                            @if (!empty($start_date) && !empty($end_date))
                                 <span class="filter-active-badge">
                                     <i class="fa fa-filter"></i>
                                     {{ date('d M', strtotime($start_date)) }} - {{ date('d M Y', strtotime($end_date)) }}
@@ -274,11 +307,12 @@
                         </a>
                     </div>
 
-                    @if(isset($filterRole) && $filterRole == 'account_manager')
+                    @if (isset($filterRole) && $filterRole == 'account_manager')
                         <div class="mb-3">
                             <span class="badge bg-info text-white px-3 py-2" style="font-size: 14px;">
                                 <i class="la la-user-tag me-1"></i> Account Manager Revenue
-                                <a href="{{ route('account-manager.projects.index') }}" class="text-white ms-2" title="Remove filter" style="text-decoration: none;">
+                                <a href="{{ route('account-manager.projects.index') }}" class="text-white ms-2"
+                                    title="Remove filter" style="text-decoration: none;">
                                     <i class="fas fa-times"></i>
                                 </a>
                             </span>
@@ -287,7 +321,8 @@
                     <div class="filter-bar">
                         <div class="filter-group">
                             <label>Start Date</label>
-                            <input type="date" id="start_date_filter" value="{{ $start_date ?? '' }}" class="form-control">
+                            <input type="date" id="start_date_filter" value="{{ $start_date ?? '' }}"
+                                class="form-control">
                         </div>
                         <div class="filter-group">
                             <label>End Date</label>
@@ -295,359 +330,411 @@
                         </div>
                         <div class="filter-group search-wrapper" style="flex:1;">
                             <label>Search</label>
-                            <input type="text" id="search" value="{{ $query ?? '' }}" placeholder="Search projects..." class="form-control">
+                            <input type="text" id="search" value="{{ $query ?? '' }}"
+                                placeholder="Search projects..." class="form-control">
                             <button class="search-icon" id="search-button"><i class="fa fa-search"></i></button>
                         </div>
                         <button type="button" id="reset-filters" class="btn-reset" title="Reset Filters">
                             <i class="fa fa-undo"></i>
                         </button>
                     </div>
-                        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
-                            aria-labelledby="offcanvasRightLabel" style="width: 600px;">
-                            <div class="offcanvas-header bg-light border-bottom">
-                                <button type="button" class="text-reset cls_btn_left" data-bs-dismiss="offcanvas"
-                                    aria-label="Close">
-                                    <i class="fa fa-chevron-right" aria-hidden="true"></i>
-                                </button>
-                                <h4 id="offcanvasRightLabel" class="text-dark mb-0">Add Project Details</h4>
-                            </div>
-                            <div class="offcanvas-body p-0">
-                                <form action="{{ route('account-manager.projects.store') }}" method="post" id="form-validation"
-                                    data-parsley-validate="" enctype="multipart/form-data">
-                                    @csrf
-                                    <div class="p-4">
-                                        <!-- Section: Customer Information -->
-                                        <div class="premium-card bg-light-soft border mb-4">
-                                            <div class="section-header">Customer Information</div>
-                                            <div class="p-3">
-                                                <div class="row">
-                                                    <div class="col-md-12 mb-3">
-                                                        <label class="form-label">Type of customer <span class="text-danger">*</span></label>
-                                                        <div class="d-flex gap-3">
-                                                            <div class="form-check">
-                                                                <input class="form-check-input customer" type="radio" name="customer" id="new_user" value="1" checked required>
-                                                                <label class="form-check-label" for="new_user">New User</label>
-                                                            </div>
-                                                            <div class="form-check">
-                                                                <input class="form-check-input customer" type="radio" name="customer" id="existing_user" value="0" required>
-                                                                <label class="form-check-label" for="existing_user">Existing User</label>
-                                                            </div>
+                    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
+                        aria-labelledby="offcanvasRightLabel" style="width: 600px;">
+                        <div class="offcanvas-header bg-light border-bottom">
+                            <button type="button" class="text-reset cls_btn_left" data-bs-dismiss="offcanvas"
+                                aria-label="Close">
+                                <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                            </button>
+                            <h4 id="offcanvasRightLabel" class="text-dark mb-0">Add Project Details</h4>
+                        </div>
+                        <div class="offcanvas-body p-0">
+                            <form action="{{ route('account-manager.projects.store') }}" method="post" id="form-validation"
+                                data-parsley-validate="" enctype="multipart/form-data">
+                                @csrf
+                                <div class="p-4">
+                                    <!-- Section: Customer Information -->
+                                    <div class="premium-card bg-light-soft border mb-4">
+                                        <div class="section-header">Customer Information</div>
+                                        <div class="p-3">
+                                            <div class="row">
+                                                <div class="col-md-12 mb-3">
+                                                    <label class="form-label">Type of customer <span
+                                                            class="text-danger">*</span></label>
+                                                    <div class="d-flex gap-3">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input customer" type="radio"
+                                                                name="customer" id="new_user" value="1" checked
+                                                                required>
+                                                            <label class="form-check-label" for="new_user">New User</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input customer" type="radio"
+                                                                name="customer" id="existing_user" value="0"
+                                                                required>
+                                                            <label class="form-check-label" for="existing_user">Existing
+                                                                User</label>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-12 mb-3" id="select_user"></div>
-
-                                                    <div class="col-md-6 mb-3">
-                                                        <label class="form-label">Client Name <span class="text-danger">*</span></label>
-                                                        <input type="text" name="client_name" id="client_name" required data-parsley-trigger="keyup" class="form-control" placeholder="Enter name">
-                                                    </div>
-                                                    <div class="col-md-6 mb-3">
-                                                        <label class="form-label">Client Email <span class="text-danger">*</span></label>
-                                                        <input type="email" name="client_email" id="client_email" required data-parsley-trigger="keyup" class="form-control" placeholder="Enter email">
-                                                        <span class="client_email_error text-danger small"></span>
-                                                    </div>
-                                                    <div class="col-md-6 mb-3">
-                                                        <label class="form-label">Client Phone <span class="text-danger">*</span></label>
-                                                        <input type="text" name="client_phone" id="client_phone" required data-parsley-trigger="keyup" data-parsley-type="number" class="form-control" placeholder="Enter phone">
-                                                    </div>
-                                                    <div class="col-md-6 mb-3">
-                                                        <label class="form-label">Business Name <span class="text-danger">*</span></label>
-                                                        <input type="text" name="business_name" id="business_name" required data-parsley-trigger="keyup" class="form-control" placeholder="Enter business name">
-                                                    </div>
-                                                    <div class="col-md-12">
-                                                        <label class="form-label">Client Address <span class="text-danger">*</span></label>
-                                                        <input type="text" name="client_address" id="client_address" required data-parsley-trigger="keyup" class="form-control" placeholder="Enter address">
-                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
+                                                <div class="col-md-12 mb-3" id="select_user"></div>
 
-                                        <!-- Section: Project Details -->
-                                        <div class="premium-card bg-light-soft border mb-4">
-                                            <div class="section-header">Project Details</div>
-                                            <div class="p-3">
-                                                <div class="row">
-                                                    <div class="col-md-12 mb-3">
-                                                        <label class="form-label">Project Type <span class="text-danger">*</span></label>
-                                                        <select name="project_type[]" id="project_type" required class="form-control select2" multiple="multiple">
-                                                            <option value="Website Design & Development">Website Design & Development</option>
-                                                            <option value="Mobile Application Development">Mobile Application Development</option>
-                                                            <option value="Digital Marketing">Digital Marketing</option>
-                                                            <option value="Logo Design">Logo Design</option>
-                                                            <option value="SEO">SEO</option>
-                                                            <option value="SMO">SMO</option>
-                                                            <option value="Other">Other</option>
-                                                        </select>
-                                                    </div>
-                                                    <div id="other-value" class="col-md-12 mb-3"></div>
-
-                                                    <div class="col-md-6 mb-3">
-                                                        <label class="form-label">Project Value <span class="text-danger">*</span></label>
-                                                        <input type="text" name="project_value" id="project_value" required data-parsley-trigger="keyup" data-parsley-type="number" class="form-control" placeholder="0.00">
-                                                    </div>
-                                                    <div class="col-md-6 mb-3">
-                                                        <label class="form-label">Project Upfront <span class="text-danger">*</span></label>
-                                                        <input type="text" name="project_upfront" id="project_upfront" required data-parsley-trigger="keyup" data-parsley-type="number" class="form-control" placeholder="0.00">
-                                                    </div>
-                                                    <div class="col-md-6 mb-3">
-                                                        <label class="form-label">Currency <span class="text-danger">*</span></label>
-                                                        <select name="currency" id="currency" class="form-control" required>
-                                                            <option value="INR">INR</option>
-                                                            <option value="USD">USD</option>
-                                                            <option value="EUR">EUR</option>
-                                                            <option value="GBP">GBP</option>
-                                                            <option value="AUD">AUD</option>
-                                                            <option value="CAD">CAD</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-md-6 mb-3">
-                                                        <label class="form-label">Payment Mode <span class="text-danger">*</span></label>
-                                                        <input type="text" name="payment_mode" required id="payment_mode" class="form-control" placeholder="e.g. PayPal, Stripe">
-                                                    </div>
-                                                    <div class="col-md-12 mb-3">
-                                                        <label class="form-label">Project Closer <span class="text-danger">*</span></label>
-                                                        <select name="project_closer" id="project_closer" required class="form-control select2">
-                                                            <option value="">Select Closer</option>
-                                                            @foreach ($users as $user)
-                                                                <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->email }})</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-md-6 mb-3">
-                                                        <label class="form-label">Sale Date <span class="text-danger">*</span></label>
-                                                        <input type="date" name="sale_date" id="sale_date" required max="{{ date('Y-m-d') }}" class="form-control">
-                                                    </div>
-                                                    <div class="col-md-6 mb-3">
-                                                        <label class="form-label">Delivery TAT</label>
-                                                        <input type="date" name="delivery_tat" id="delivery_tat" min="{{ date('Y-m-d') }}" class="form-control">
-                                                    </div>
-                                                    <div class="col-md-12 mb-3">
-                                                        <label class="form-label">Website (Optional)</label>
-                                                        <input type="text" name="website" id="website" data-parsley-type="url" class="form-control" placeholder="https://example.com">
-                                                    </div>
-                                                    <div class="col-md-12 mb-3">
-                                                        <label class="form-label">Project Description</label>
-                                                        <textarea name="project_description" rows="3" class="form-control" placeholder="Brief project summary..."></textarea>
-                                                    </div>
-                                                    <div class="col-md-12 mb-3">
-                                                        <label class="form-label">Comment</label>
-                                                        <textarea name="comment" rows="2" class="form-control" placeholder="Internal notes..."></textarea>
-                                                    </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label class="form-label">Client Name <span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="text" name="client_name" id="client_name" required
+                                                        data-parsley-trigger="keyup" class="form-control"
+                                                        placeholder="Enter name">
                                                 </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Section: Milestones -->
-                                        <div class="premium-card bg-light-soft border mb-4">
-                                            <div class="section-header d-flex justify-content-between align-items-center">
-                                                <span>Project Milestones</span>
-                                                <button type="button" class="btn btn-sm btn-primary add-milestone-btn">
-                                                    <i class="fas fa-plus me-1"></i> Add
-                                                </button>
-                                            </div>
-                                            <div class="p-3">
-                                                <div id="milestone-container">
-                                                    <!-- Milestones will be appended here -->
+                                                <div class="col-md-6 mb-3">
+                                                    <label class="form-label">Client Email <span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="email" name="client_email" id="client_email" required
+                                                        data-parsley-trigger="keyup" class="form-control"
+                                                        placeholder="Enter email">
+                                                    <span class="client_email_error text-danger small"></span>
                                                 </div>
-                                                <div class="text-center mt-2 no-milestones-msg">
-                                                    <p class="text-muted small mb-0">No milestones added yet.</p>
+                                                <div class="col-md-6 mb-3">
+                                                    <label class="form-label">Client Phone <span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="text" name="client_phone" id="client_phone" required
+                                                        data-parsley-trigger="keyup" data-parsley-type="number"
+                                                        class="form-control" placeholder="Enter phone">
                                                 </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Section: Documents -->
-                                        <div class="premium-card bg-light-soft border mb-4">
-                                            <div class="section-header d-flex justify-content-between align-items-center">
-                                                <span>Project Documents (PDF)</span>
-                                                <button type="button" class="btn btn-sm btn-secondary add-pdf-btn">
-                                                    <i class="fas fa-plus me-1"></i> Add
-                                                </button>
-                                            </div>
-                                            <div class="p-3">
-                                                <div id="pdf-container">
-                                                    <!-- PDF inputs will be appended here -->
+                                                <div class="col-md-6 mb-3">
+                                                    <label class="form-label">Business Name <span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="text" name="business_name" id="business_name"
+                                                        required data-parsley-trigger="keyup" class="form-control"
+                                                        placeholder="Enter business name">
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <label class="form-label">Client Address <span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="text" name="client_address" id="client_address"
+                                                        required data-parsley-trigger="keyup" class="form-control"
+                                                        placeholder="Enter address">
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="offcanvas-footer border-top p-3 bg-light text-end">
-                                        <button type="reset" class="btn btn-outline-secondary me-2" data-bs-dismiss="offcanvas">Cancel</button>
-                                        <button type="submit" class="btn btn-primary px-4">Create Project</button>
+                                    <!-- Section: Project Details -->
+                                    <div class="premium-card bg-light-soft border mb-4">
+                                        <div class="section-header">Project Details</div>
+                                        <div class="p-3">
+                                            <div class="row">
+                                                <div class="col-md-12 mb-3">
+                                                    <label class="form-label">Project Type <span
+                                                            class="text-danger">*</span></label>
+                                                    <select name="project_type[]" id="project_type" required
+                                                        class="form-control select2" multiple="multiple">
+                                                        <option value="Website Design & Development">Website Design &
+                                                            Development</option>
+                                                        <option value="Mobile Application Development">Mobile Application
+                                                            Development</option>
+                                                        <option value="Digital Marketing">Digital Marketing</option>
+                                                        <option value="Logo Design">Logo Design</option>
+                                                        <option value="SEO">SEO</option>
+                                                        <option value="SMO">SMO</option>
+                                                        <option value="Other">Other</option>
+                                                    </select>
+                                                </div>
+                                                <div id="other-value" class="col-md-12 mb-3"></div>
+
+                                                <div class="col-md-6 mb-3">
+                                                    <label class="form-label">Project Value <span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="text" name="project_value" id="project_value"
+                                                        required data-parsley-trigger="keyup" data-parsley-type="number"
+                                                        class="form-control" placeholder="0.00">
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label class="form-label">Project Upfront <span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="text" name="project_upfront" id="project_upfront"
+                                                        required data-parsley-trigger="keyup" data-parsley-type="number"
+                                                        class="form-control" placeholder="0.00">
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label class="form-label">Currency <span
+                                                            class="text-danger">*</span></label>
+                                                    <select name="currency" id="currency" class="form-control" required>
+                                                        <option value="INR">INR</option>
+                                                        <option value="USD">USD</option>
+                                                        <option value="EUR">EUR</option>
+                                                        <option value="GBP">GBP</option>
+                                                        <option value="AUD">AUD</option>
+                                                        <option value="CAD">CAD</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label class="form-label">Payment Mode <span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="text" name="payment_mode" required id="payment_mode"
+                                                        class="form-control" placeholder="e.g. PayPal, Stripe">
+                                                </div>
+                                                <div class="col-md-12 mb-3">
+                                                    <label class="form-label">Project Closer <span
+                                                            class="text-danger">*</span></label>
+                                                    <select name="project_closer" id="project_closer" required
+                                                        class="form-control select2">
+                                                        <option value="">Select Closer</option>
+                                                        @foreach ($users as $user)
+                                                            <option value="{{ $user->id }}">{{ $user->name }}
+                                                                ({{ $user->email }})</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label class="form-label">Sale Date <span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="date" name="sale_date" id="sale_date" required
+                                                        max="{{ date('Y-m-d') }}" class="form-control">
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label class="form-label">Delivery TAT</label>
+                                                    <input type="date" name="delivery_tat" id="delivery_tat"
+                                                        min="{{ date('Y-m-d') }}" class="form-control">
+                                                </div>
+                                                <div class="col-md-12 mb-3">
+                                                    <label class="form-label">Website (Optional)</label>
+                                                    <input type="text" name="website" id="website"
+                                                        data-parsley-type="url" class="form-control"
+                                                        placeholder="https://example.com">
+                                                </div>
+                                                <div class="col-md-12 mb-3">
+                                                    <label class="form-label">Project Description</label>
+                                                    <textarea name="project_description" rows="3" class="form-control" placeholder="Brief project summary..."></textarea>
+                                                </div>
+                                                <div class="col-md-12 mb-3">
+                                                    <label class="form-label">Comment</label>
+                                                    <textarea name="comment" rows="2" class="form-control" placeholder="Internal notes..."></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </form>
-                            </div>
-                        </div>
-                        <div id="edit-project-model">
-                            @include('account_manager.project.edit')
-                        </div>
-                        {{-- Upsale offcanvas loaded via AJAX --}}
-                        <div id="upsale-panel-container"></div>
-                        {{-- Edit upsale offcanvas --}}
-                        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasUpsaleEdit" style="width:600px;">
-                            <div class="offcanvas-header bg-light border-bottom">
-                                <button type="button" class="text-reset cls_btn_left" data-bs-dismiss="offcanvas" aria-label="Close">
-                                    <i class="fa fa-chevron-right" aria-hidden="true"></i>
-                                </button>
-                                <h4 class="text-dark mb-0">Edit Upsale</h4>
-                            </div>
-                            <div class="offcanvas-body p-0" id="upsale-edit-body">
-                                <div class="p-4 text-center text-muted">Loading...</div>
-                            </div>
+
+                                    <!-- Section: Milestones -->
+                                    <div class="premium-card bg-light-soft border mb-4">
+                                        <div class="section-header d-flex justify-content-between align-items-center">
+                                            <span>Project Milestones</span>
+                                            <button type="button" class="btn btn-sm btn-primary add-milestone-btn">
+                                                <i class="fas fa-plus me-1"></i> Add
+                                            </button>
+                                        </div>
+                                        <div class="p-3">
+                                            <div id="milestone-container">
+                                                <!-- Milestones will be appended here -->
+                                            </div>
+                                            <div class="text-center mt-2 no-milestones-msg">
+                                                <p class="text-muted small mb-0">No milestones added yet.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Section: Documents -->
+                                    <div class="premium-card bg-light-soft border mb-4">
+                                        <div class="section-header d-flex justify-content-between align-items-center">
+                                            <span>Project Documents (PDF)</span>
+                                            <button type="button" class="btn btn-sm btn-secondary add-pdf-btn">
+                                                <i class="fas fa-plus me-1"></i> Add
+                                            </button>
+                                        </div>
+                                        <div class="p-3">
+                                            <div id="pdf-container">
+                                                <!-- PDF inputs will be appended here -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="offcanvas-footer border-top p-3 bg-light text-end">
+                                    <button type="reset" class="btn btn-outline-secondary me-2"
+                                        data-bs-dismiss="offcanvas">Cancel</button>
+                                    <button type="submit" class="btn btn-primary px-4">Create Project</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
-
-
-                    <div class="table-responsive project-table" id="project-data">
-                        <table id="myTable" class="table align-middle" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th class="sorting" data-column_name="sale_date">Sale Date <i class="fa fa-sort ms-1"></i></th>
-                                    <th>Opened By</th>
-                                    <th class="sorting" data-column_name="business_name">Business Name <i class="fa fa-sort ms-1"></i></th>
-                                    <th class="sorting" data-column_name="project_type">Project Type <i class="fa fa-sort ms-1"></i></th>
-                                    <th class="sorting" data-column_name="project_value">Value (Base+Upsale) <i class="fa fa-sort ms-1"></i></th>
-                                    <th class="sorting" data-column_name="project_upfront">Total Upfront <i class="fa fa-sort ms-1"></i></th>
-                                    <th class="sorting" data-column_name="currency">CCY <i class="fa fa-sort ms-1"></i></th>
-                                    <th class="sorting" data-column_name="payment_mode">Payment Mode <i class="fa fa-sort ms-1"></i></th>
-                                    <th title="Milestones received other than upfront">Milestone Received</th>
-                                    <th title="Value - Upfront - Milestone Received">Balance Due</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @include('account_manager.project.table')
-                            </tbody>
-                        </table>
-                        <input type="hidden" name="hidden_page" id="hidden_page" value="1" />
-                        <input type="hidden" name="hidden_column_name" id="hidden_column_name" value="id" />
-                        <input type="hidden" name="hidden_sort_type" id="hidden_sort_type" value="desc" />
+                    <div id="edit-project-model">
+                        @include('account_manager.project.edit')
+                    </div>
+                    {{-- Upsale offcanvas loaded via AJAX --}}
+                    <div id="upsale-panel-container"></div>
+                    {{-- Edit upsale offcanvas --}}
+                    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasUpsaleEdit" style="width:600px;">
+                        <div class="offcanvas-header bg-light border-bottom">
+                            <button type="button" class="text-reset cls_btn_left" data-bs-dismiss="offcanvas"
+                                aria-label="Close">
+                                <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                            </button>
+                            <h4 class="text-dark mb-0">Edit Upsale</h4>
+                        </div>
+                        <div class="offcanvas-body p-0" id="upsale-edit-body">
+                            <div class="p-4 text-center text-muted">Loading...</div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
+
+                <div class="table-responsive project-table" id="project-data">
+                    <table id="myTable" class="table align-middle" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th class="sorting" data-column_name="sale_date">Sale Date <i
+                                        class="fa fa-sort ms-1"></i></th>
+                                <th>Opened By</th>
+                                <th class="sorting" data-column_name="business_name">Business Name <i
+                                        class="fa fa-sort ms-1"></i></th>
+                                <th class="sorting" data-column_name="project_type">Project Type <i
+                                        class="fa fa-sort ms-1"></i></th>
+                                <th class="sorting" data-column_name="project_value">Value (Base+Upsale) <i
+                                        class="fa fa-sort ms-1"></i></th>
+                                <th class="sorting" data-column_name="project_upfront">Total Upfront <i
+                                        class="fa fa-sort ms-1"></i></th>
+                                <th class="sorting" data-column_name="currency">CCY <i class="fa fa-sort ms-1"></i></th>
+                                <th class="sorting" data-column_name="payment_mode">Payment Mode <i
+                                        class="fa fa-sort ms-1"></i></th>
+                                <th title="Milestones received other than upfront">Milestone Received</th>
+                                <th title="Value - Upfront - Milestone Received">Balance Due</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @include('account_manager.project.table')
+                        </tbody>
+                    </table>
+                    <input type="hidden" name="hidden_page" id="hidden_page" value="1" />
+                    <input type="hidden" name="hidden_column_name" id="hidden_column_name" value="id" />
+                    <input type="hidden" name="hidden_sort_type" id="hidden_sort_type" value="desc" />
+                </div>
+            </div>
         </div>
 
     </div>
 
+    </div>
 @endsection
 
 @push('scripts')
-  @include('bdm.includes.followup_modal')
-<script>
-    $(document).ready(function() {
+    @include('bdm.includes.followup_modal')
+    <script>
+        $(document).ready(function() {
 
-        @if(Session::get('update_success') == true)
+            @if (Session::get('update_success') == true)
 
-            var query = $('#search').val();
-            var column_name = $('#hidden_column_name').val();
-            var sort_type = $('#hidden_sort_type').val();
-            var page = @php echo Session::get('page_number') @endphp;
+                var query = $('#search').val();
+                var column_name = $('#hidden_column_name').val();
+                var sort_type = $('#hidden_sort_type').val();
+                var page = {{ Session::get('page_number') ?? 1 }};
 
-            fetch_data(page, sort_type, column_name, query,"Yes");
-        @endif
+                fetch_data(page, sort_type, column_name, query, "Yes");
+            @endif
 
-        function clear_icon() {
-            $('#date_icon').html('');
-            $('#project_name_icon').html('');
-            $('#customer_name_icon').html('');
-            $('#phone_number_icon').html('');
-            $('#project_type_icon').html('');
-            $('#project_value_icon').html('');
-            $('#project_upfront_icon').html('');
-            $('#currency_icon').html('');
-            $('#payment_mode_icon').html('');
-            $('#due_amount_icon').html('');
-            $('#business_name_icon').html('');
-        }
-
-        function fetch_data(page, sort_type, sort_by, query, call_status = "") {
-            var start_date = $('#start_date_filter').val();
-            var end_date = $('#end_date_filter').val();
-
-            $.ajax({
-                url: "{{ route('account-manager.project.filter') }}",
-                data: {
-                    page: page,
-                    sortby: sort_by,
-                    sorttype: sort_type,
-                    query: query,
-                    start_date: start_date,
-                    end_date: end_date,
-                    call_status: call_status
-                },
-                success: function(data) {
-                    $('tbody').html(data.data);
-                }
-            });
-        }
-
-        $(document).on('change', '#start_date_filter, #end_date_filter', function() {
-            var query = $('#search').val();
-            var column_name = $('#hidden_column_name').val();
-            var sort_type = $('#hidden_sort_type').val();
-            var page = 1;
-            fetch_data(page, sort_type, column_name, query, "");
-        });
-
-        $(document).on('click', '#reset-filters', function() {
-            $('#start_date_filter').val('');
-            $('#end_date_filter').val('');
-            $('#search').val('');
-            // Clear server-side role filter
-            $.get("{{ route('account-manager.project.filter') }}", { reset: 1 }, function() {
-                var url = window.location.href.split('?')[0];
-                window.history.replaceState({}, document.title, url);
-                $('.badge.bg-info').parent().remove();
-            });
-            var column_name = $('#hidden_column_name').val();
-            var sort_type = $('#hidden_sort_type').val();
-            fetch_data(1, sort_type, column_name, '', "");
-        });
-
-        $(document).on('keyup', '#search', function() {
-            var query = $('#search').val();
-            var column_name = $('#hidden_column_name').val();
-            var sort_type = $('#hidden_sort_type').val();
-            var page = $('#hidden_page').val();
-            fetch_data(page, sort_type, column_name, query,call_status = "");
-        });
-
-        $(document).on('click', '.sorting', function() {
-            var column_name = $(this).data('column_name');
-            var order_type = $(this).data('sorting_type') || 'asc'; // Use existing, or default to asc
-            var reverse_order = (order_type == 'asc') ? 'desc' : 'asc';
-
-            $(this).data('sorting_type', reverse_order);
-            clear_icon();
-
-            if (reverse_order == 'desc') {
-                $('#' + column_name + '_icon').html('<span class="fa fa-sort-down"></span>');
-            } else {
-                $('#' + column_name + '_icon').html('<span class="fa fa-sort-up"></span>');
+            function clear_icon() {
+                $('#date_icon').html('');
+                $('#project_name_icon').html('');
+                $('#customer_name_icon').html('');
+                $('#phone_number_icon').html('');
+                $('#project_type_icon').html('');
+                $('#project_value_icon').html('');
+                $('#project_upfront_icon').html('');
+                $('#currency_icon').html('');
+                $('#payment_mode_icon').html('');
+                $('#due_amount_icon').html('');
+                $('#business_name_icon').html('');
             }
 
-            $('#hidden_column_name').val(column_name);
-            $('#hidden_sort_type').val(reverse_order);
-            var page = $('#hidden_page').val();
-            var query = $('#search').val();
-            fetch_data(page, reverse_order, column_name, query, "");
+            function fetch_data(page, sort_type, sort_by, query, call_status = "") {
+                var start_date = $('#start_date_filter').val();
+                var end_date = $('#end_date_filter').val();
+
+                $.ajax({
+                    url: "{{ route('account-manager.project.filter') }}",
+                    data: {
+                        page: page,
+                        sortby: sort_by,
+                        sorttype: sort_type,
+                        query: query,
+                        start_date: start_date,
+                        end_date: end_date,
+                        call_status: call_status
+                    },
+                    success: function(data) {
+                        $('tbody').html(data.data);
+                    }
+                });
+            }
+
+            $(document).on('change', '#start_date_filter, #end_date_filter', function() {
+                var query = $('#search').val();
+                var column_name = $('#hidden_column_name').val();
+                var sort_type = $('#hidden_sort_type').val();
+                var page = 1;
+                fetch_data(page, sort_type, column_name, query, "");
+            });
+
+            $(document).on('click', '#reset-filters', function() {
+                $('#start_date_filter').val('');
+                $('#end_date_filter').val('');
+                $('#search').val('');
+                // Clear server-side role filter
+                $.get("{{ route('account-manager.project.filter') }}", {
+                    reset: 1
+                }, function() {
+                    var url = window.location.href.split('?')[0];
+                    window.history.replaceState({}, document.title, url);
+                    $('.badge.bg-info').parent().remove();
+                });
+                var column_name = $('#hidden_column_name').val();
+                var sort_type = $('#hidden_sort_type').val();
+                fetch_data(1, sort_type, column_name, '', "");
+            });
+
+            $(document).on('keyup', '#search', function() {
+                var query = $('#search').val();
+                var column_name = $('#hidden_column_name').val();
+                var sort_type = $('#hidden_sort_type').val();
+                var page = $('#hidden_page').val();
+                fetch_data(page, sort_type, column_name, query, call_status = "");
+            });
+
+            $(document).on('click', '.sorting', function() {
+                var column_name = $(this).data('column_name');
+                var order_type = $(this).data('sorting_type') || 'asc'; // Use existing, or default to asc
+                var reverse_order = (order_type == 'asc') ? 'desc' : 'asc';
+
+                $(this).data('sorting_type', reverse_order);
+                clear_icon();
+
+                if (reverse_order == 'desc') {
+                    $('#' + column_name + '_icon').html('<span class="fa fa-sort-down"></span>');
+                } else {
+                    $('#' + column_name + '_icon').html('<span class="fa fa-sort-up"></span>');
+                }
+
+                $('#hidden_column_name').val(column_name);
+                $('#hidden_sort_type').val(reverse_order);
+                var page = $('#hidden_page').val();
+                var query = $('#search').val();
+                fetch_data(page, reverse_order, column_name, query, "");
+            });
+
+            $(document).on('click', '.pagination a', function(event) {
+                event.preventDefault();
+                var page = $(this).attr('href').split('page=')[1];
+                $('#hidden_page').val(page);
+                var column_name = $('#hidden_column_name').val();
+                var sort_type = $('#hidden_sort_type').val();
+
+                var query = $('#search').val();
+
+                $('li').removeClass('active');
+                $(this).parent().addClass('active');
+                fetch_data(page, sort_type, column_name, query, call_status = "");
+            });
+
         });
-
-        $(document).on('click', '.pagination a', function(event) {
-            event.preventDefault();
-            var page = $(this).attr('href').split('page=')[1];
-            $('#hidden_page').val(page);
-            var column_name = $('#hidden_column_name').val();
-            var sort_type = $('#hidden_sort_type').val();
-
-            var query = $('#search').val();
-
-            $('li').removeClass('active');
-            $(this).parent().addClass('active');
-            fetch_data(page, sort_type, column_name, query,call_status = "");
-        });
-
-    });
     </script>
 
 
@@ -674,217 +761,38 @@
                 })
         });
     </script>
-<script src="http://parsleyjs.org/dist/parsley.js"></script>
-<!-- PARSLEY -->
-<script>
-    window.ParsleyConfig = {
-        errorsWrapper: '<div></div>',
-        errorTemplate: '<div class="alert alert-danger parsley" role="alert"></div>',
-        errorClass: 'has-error',
-        successClass: 'has-success'
-    };
-</script>
+    <script src="http://parsleyjs.org/dist/parsley.js"></script>
+    <!-- PARSLEY -->
+    <script>
+        window.ParsleyConfig = {
+            errorsWrapper: '<div></div>',
+            errorTemplate: '<div class="alert alert-danger parsley" role="alert"></div>',
+            errorClass: 'has-error',
+            successClass: 'has-success'
+        };
+    </script>
 
-<script>
-    // add more functionality for milestone
-    $(document).ready(function() {
-          $('.select2').each(function() {
+    <script>
+        // add more functionality for milestone
+        $(document).ready(function() {
+            $('.select2').each(function() {
                 $(this).select2({
                     dropdownParent: $(this).parent()
                 });
             })
-        $('.add').click(function() {
-            var html = '';
-            html += '<div class="row">';
-            html += '<div class="col-md-12 mb-3">';
-            html += '<div style="display: flex">';
-            html +=
-                '<input type="text" name="milestone_name[]" class="form-control" value="" placeholder="Milestone name" id="" required data-parsley-trigger="keyup">';
-            html += '</div>';
-            html += '</div>';
-            html += '<div class="col-md-12 mb-3">';
-            html += '<div style="display: flex">';
-            html +=
-                '<input type="text" name="milestone_value[]" class="form-control" value="" placeholder="Milestone value" id="" required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number.">';
-            html += '</div>';
-            html += '</div>';
-            html += '<div class="col-md-12 mb-3">';
-            html += '<div style="display: flex">';
-            html += '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value=""  >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
-            html += '</div>';
-            html += '</div>';
-            // html += '<div class="col-md-12 mb-3">';
-            // html += '<div style="display: flex">';
-            // html +=
-            //     '<input type="date" name="payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
-            // html += '</div>';
-            // html += '</div>';
-            html += '<div class="col-md-12 mb-3">';
-            html += '<div style="display: flex">';
-            html += '<input type="date" name="milestone_payment_date[]" class="form-control picker" value="" id="" required data-parsley-trigger="keyup">';
-            html += '</div>';
-            html += '</div>';
-            html += '<div class="col-md-12 mb-3">';
-            html += '<div style="display: flex">';
-            html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" placeholder="Milestone payment mode" id="" required data-parsley-trigger="keyup">';
-            html += '</div>';
-            html += '</div>';
-            html += '<div class="col-md-12 mb-3">';
-            html += '<div style="display: flex">';
-            html +='<textarea name="milestone_comment[]" class="form-control" placeholder="Milestone Comment" id="" cols="3" rows="2" ></textarea>';
-            html += '</div>';
-            html += '</div>';
-            html += '<div class="col-md-12 mb-3">';
-            html +=
-                '<button type="button" class="btn btn-danger remove"><i class="fas fa-minus"></i> Remove</button>';
-            html += '</div>';
-            html += '</div>';
-            $('.add-milestone').append(html);
-        });
-        $(document).on('click', '.remove', function() {
-            $(this).closest('.row').remove();
-            // no of milestone count minus 1
-            var number_of_milestone = $('#number_of_milestone').val();
-            var new_number_of_milestone = number_of_milestone - 1;
-            $('#number_of_milestone').val(new_number_of_milestone);
-        });
-
-        // when select2 other option in project type then show other value
-        $('#project_type').on('change', function() {
-            //    select 2 value get and seo,other value check
-            var project_type = $(this).val();
-            if (project_type.includes('Other')) {
-                var html = '';
-                html +=
-                    '<label for="inputEnterYourName" class="col-form-label">Other Value <span style="color: red;">*</span></label>';
-                html +=
-                    '<input type="text" name="other_value" id="other_value" class="form-control" value="{{ old('other_value') }}" placeholder="Enter Other Value" required data-parsley-trigger="keyup">';
-                $('#other-value').html(html);
-            } else {
-                $('#other-value').html('');
-            }
-        });
-    });
-</script>
-<script>
-    $('.add-pdf-button').click(function() {
-        var html = '';
-        html += '<div class="row">';
-        html += '<div class="col-md-12 mb-3">';
-        html += '<div style="display: flex">';
-        html +=
-            '<input type="file" name="pdf[]" class="form-control" value="" id="" data-parsley-required="false" data-parsley-trigger="keyup" accept="application/pdf">';
-        html += '</div>';
-        html += '</div>';
-        html += '<div class="col-md-12 mb-3">';
-        html +=
-            '<button type="button" class="btn btn-danger remove-pdf"><i class="fas fa-minus"></i> Remove</button>';
-        html += '</div>';
-        html += '</div>';
-        $('.add-pdf').append(html);
-    });
-    $(document).on('click', '.remove-pdf', function() {
-        $(this).closest('.row').remove();
-    });
-</script>
-
-<script>
-    //when payment_type milestone monthly field arenot required
-    $('#payment_type').on('change', function() {
-        var payment_type = $(this).val();
-        if (payment_type.includes('Milestone')) {
-            $('#milestone_field').show();
-            $('#monthly_field').hide();
-            $('#milestone_name').prop('required', true);
-            $('#milestone_value').prop('required', true);
-            $('#payment_status').prop('required', true);
-
-            //monthly field required false
-            $('#start_date').prop('required', false);
-            $('#end_date').prop('required', false);
-        } else if (payment_type.includes('Monthly')) {
-            $('#monthly_field').show();
-            $('#milestone_field').hide();
-            $('#start_date').prop('required', true);
-            $('#end_date').prop('required', true);
-            //milestone filed required false
-            $('#milestone_name').prop('required', false);
-            $('#milestone_value').prop('required', false);
-            $('#payment_status').prop('required', false);
-
-        } else {
-            $('#milestone_name').prop('required', false);
-            $('#milestone_value').prop('required', false);
-            $('#payment_status').prop('required', false);
-
-            $('#start_date').prop('required', false);
-            $('#end_date').prop('required', false);
-            $('#milestone_field').hide();
-            $('#monthly_field').hide();
-        }
-    });
-</script>
-
-<script>
-    $(document).ready(function() {
-        $('.calculate_date').on('click', function() {
-
-            $('#fetch_month').html('');
-            //
-            var startDate = new Date($('#start_date').val());
-            var endDate = new Date($('#end_date').val());
-            var project_value = $('#project_value').val();
-            //validation start date and end date
-            $('#end_date').next('span').remove();
-            $('#start_date').next('span').remove();
-            $('#project_value').next('span').remove();
-            //if start_datewiil be blank
-            if (startDate == 'Invalid Date') {
-                $('#start_date').after(
-                    '<span class="error" style="color:red;">Start date is required</span>');
-                return false;
-            }
-            if (endDate == 'Invalid Date') {
-                $('#end_date').after(
-                    '<span class="error" style="color:red;">Start date is required</span>');
-                return false;
-            }
-            if (startDate > endDate || startDate == endDate) {
-                $('#end_date').after(
-                    '<span class="error" style="color:red;">End date must be greater than to start date</span>');
-                return false;
-            }
-            if (project_value == '') {
-                $('#project_value').after(
-                    '<span class="error" style="color:red;">Project value is required</span>');
-                return false;
-            }
-
-            $('#loading').addClass('loading');
-            $('#loading-content').addClass('loading-content');
-            // count month between two dates
-            var months = (endDate.getFullYear() - startDate.getFullYear()) * 12;
-            months -= startDate.getMonth();
-            months += endDate.getMonth();
-            months = months <= 0 ? 0 : months;
-            var total = months + 1;
-            var new_project_value = project_value / total;
-            console.log(project_value);
-            console.log(new_project_value);
-            //show amount in 2 decimal point
-            var update_project_value = new_project_value.toFixed(2);
-            console.log(total);
-
-            for (let index = 1; index <= total; index++) {
-            console.log(total);
+            $('.add').click(function() {
                 var html = '';
                 html += '<div class="row">';
                 html += '<div class="col-md-12 mb-3">';
                 html += '<div style="display: flex">';
                 html +=
-                    '<input type="text" name="milestone_value[]" class="form-control" value="' +
-                    update_project_value +
-                    '" placeholder="Milestone value" id="" required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number.">';
+                    '<input type="text" name="milestone_name[]" class="form-control" value="" placeholder="Milestone name" id="" required data-parsley-trigger="keyup">';
+                html += '</div>';
+                html += '</div>';
+                html += '<div class="col-md-12 mb-3">';
+                html += '<div style="display: flex">';
+                html +=
+                    '<input type="text" name="milestone_value[]" class="form-control" value="" placeholder="Milestone value" id="" required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number.">';
                 html += '</div>';
                 html += '</div>';
                 html += '<div class="col-md-12 mb-3">';
@@ -893,22 +801,24 @@
                     '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value=""  >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
                 html += '</div>';
                 html += '</div>';
-                html += '<div class="col-md-12 mb-3">';
-                html += '<div style="display: flex">';
-                html += '<input type="date" name="milestone_payment_date[]" class="form-control picker" value="" id="" required data-parsley-trigger="keyup">';
-                html += '</div>';
-                html += '</div>';
-                html += '<div class="col-md-12 mb-3">';
-                html += '<div style="display: flex">';
-                html += '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" placeholder="Milestone payment mode" required data-parsley-trigger="keyup">';
-                html += '</div>';
-                html += '</div>';
                 // html += '<div class="col-md-12 mb-3">';
                 // html += '<div style="display: flex">';
                 // html +=
-                //     '<input type="date" name="payment_date[]" class="form-control"  id="" required data-parsley-trigger="keyup" >';
+                //     '<input type="date" name="payment_date[]" class="form-control" value="" id="" required data-parsley-trigger="keyup">';
                 // html += '</div>';
                 // html += '</div>';
+                html += '<div class="col-md-12 mb-3">';
+                html += '<div style="display: flex">';
+                html +=
+                    '<input type="date" name="milestone_payment_date[]" class="form-control picker" value="" id="" required data-parsley-trigger="keyup">';
+                html += '</div>';
+                html += '</div>';
+                html += '<div class="col-md-12 mb-3">';
+                html += '<div style="display: flex">';
+                html +=
+                    '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" placeholder="Milestone payment mode" id="" required data-parsley-trigger="keyup">';
+                html += '</div>';
+                html += '</div>';
                 html += '<div class="col-md-12 mb-3">';
                 html += '<div style="display: flex">';
                 html +=
@@ -920,265 +830,461 @@
                     '<button type="button" class="btn btn-danger remove"><i class="fas fa-minus"></i> Remove</button>';
                 html += '</div>';
                 html += '</div>';
+                $('.add-milestone').append(html);
+            });
+            $(document).on('click', '.remove', function() {
+                $(this).closest('.row').remove();
+                // no of milestone count minus 1
+                var number_of_milestone = $('#number_of_milestone').val();
+                var new_number_of_milestone = number_of_milestone - 1;
+                $('#number_of_milestone').val(new_number_of_milestone);
+            });
 
-                $('#fetch_month').append(html);
-            }
-
-            $('#loading').removeClass('loading');
-            $('#loading-content').removeClass('loading-content');
-
+            // when select2 other option in project type then show other value
+            $('#project_type').on('change', function() {
+                //    select 2 value get and seo,other value check
+                var project_type = $(this).val();
+                if (project_type.includes('Other')) {
+                    var html = '';
+                    html +=
+                        '<label for="inputEnterYourName" class="col-form-label">Other Value <span style="color: red;">*</span></label>';
+                    html +=
+                        '<input type="text" name="other_value" id="other_value" class="form-control" value="{{ old('other_value') }}" placeholder="Enter Other Value" required data-parsley-trigger="keyup">';
+                    $('#other-value').html(html);
+                } else {
+                    $('#other-value').html('');
+                }
+            });
         });
-    });
-</script>
-<script>
-    $('.milestone-print').on('click', function() {
-        var number_of_milestone = $('#number_of_milestone').val();
-        if (number_of_milestone == '') {
-            $('#number_of_milestone').html('');
-            console.log(number_of_milestone);
-            $('#number_of_milestone').after(
-                '<span class="error" style="color:red;">Number of milestone is required</span>');
-            return false;
-        }
-        $('.add-milestone').html('');
-        // show milestone field as per number of milestone
-        for (let index = 1; index <= number_of_milestone; index++) {
-            console.log(number_of_milestone);
+    </script>
+    <script>
+        $('.add-pdf-button').click(function() {
             var html = '';
             html += '<div class="row">';
             html += '<div class="col-md-12 mb-3">';
             html += '<div style="display: flex">';
             html +=
-                '<input type="text" name="milestone_name[]" class="form-control" value="" placeholder="Milestone name" id="" required data-parsley-trigger="keyup">';
+                '<input type="file" name="pdf[]" class="form-control" value="" id="" data-parsley-required="false" data-parsley-trigger="keyup" accept="application/pdf">';
             html += '</div>';
             html += '</div>';
             html += '<div class="col-md-12 mb-3">';
-            html += '<div style="display: flex">';
             html +=
-                '<input type="text" name="milestone_value[]" class="form-control" value="" placeholder="Milestone value" id="" required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number.">';
+                '<button type="button" class="btn btn-danger remove-pdf"><i class="fas fa-minus"></i> Remove</button>';
             html += '</div>';
             html += '</div>';
-            html += '<div class="col-md-12 mb-3">';
-            html += '<div style="display: flex">';
-            html +=
-                '<select name="payment_status[]" id="payment_status" class="form-control payment-status" data-id="' + index +'" required data-parsley-trigger="keyup"><option value=""  >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
-            html += '</div>';
-            html += '</div>';
-            html += '<div class="edit-payment-hide-'+index+'" style="display:none;">';
-            html += '<div class="col-md-12 mb-3">';
-            html += '<div style="display: flex">';
-            html += '<input type="date" name="milestone_payment_date[]" class="form-control picker" value="" id="milestone-date-'+index+'"  data-parsley-trigger="keyup">';
-            html += '</div>';
-            html += '</div>';
-            html += '<div class="col-md-12 mb-3">';
-            html += '<div style="display: flex">';
-            html += '<select name="milestone_payment_mode[]" class="form-control" id="milestone-mode-'+index+'" data-parsley-trigger="keyup">';
-            html += '<option value="">Select Payment Mode</option>';
-            html += '<option value="Paypal">Paypal</option>';
-            html += '<option value="Stripe">Stripe</option>';
-            html += '<option value="Bank Transfer">Bank Transfer</option>';
-            html += '<option value="Payoneer">Payoneer</option>';
-            html += '</select>';
-            html += '</div>';
-            html += '</div>';
-            html +='</div>';
-            html += '<div class="col-md-12 mb-3">';
-            html += '<div style="display: flex">';
-            html += '<textarea name="milestone_comment[]" class="form-control" placeholder="Comment" id="" cols="3" rows="2" ></textarea>';
-            html += '</div>';
-            html += '</div>';
-            html += '<div class="col-md-12 mb-3">';
-            html += '<button type="button" class="btn btn-danger remove"><i class="fas fa-minus"></i> Remove</button>';
-            html += '</div>';
-            html += '</div>';
-            console.log(html);
-            $('.add-milestone').append(html);
-        }
-    });
-</script>
-<script>
-    $(document).ready(function() {
-        // Handle the click event for the edit-route button
-        $(document).on('click', '.edit-route', function() {
-            var route = $(this).data('route');
-            // Make an AJAX request to fetch the priceRequest details
-            $('#loading').addClass('loading');
-            $('#loading-content').addClass('loading-content');
-            var page = $('#hidden_page').val();
-            $.ajax({
-                url: route,
-                type: 'GET',
-                success: function(response) {
-                    console.log(response.view);
-                    $('#edit-project-model').html(response.view);
-                    $('#loading').removeClass('loading');
-                    $('#loading-content').removeClass('loading-content');
-                    $('#offcanvasEdit').offcanvas('show');
-                    $('#edit-page-no').val(page);
-                },
-                error: function(xhr) {
-                    // Handle errors
-                    $('#loading').removeClass('loading');
-                    $('#loading-content').removeClass('loading-content');
-                    console.log(xhr);
-                }
-            });
+            $('.add-pdf').append(html);
         });
-    });
-</script>
-<script>
-    // check new user or existing user
-   $('.customer').on('change', function() {
-        var customer = $(this).val();
-        if (customer == 0) {
-            $('#loading').addClass('loading');
-            $('#loading-content').addClass('loading-content');
-            $.ajax({
-                url: "{{ route('account-manager.projects.new-customer') }}",
-                type: 'GET',
-                success: function(response) {
-                    // console.log(response.data);
-                   $('#select_user').append(' <label for="inputEnterYourName" class="col-form-label"> Select customer <span style="color: red;">*</span></label> <select name="customer_id" id="customer_id" required data-parsley-trigger="keyup" class="form-control select2"> <option value="">Select a user</option>')
-                    $.each(response, function(key, value) {
-                        $('#customer_id').append('<option value="' + value.id + '">' + value.customer_name +
-                            '(' + value.customer_email + ')' + '</option>');
-                    });
-                    $('#select_user').append('</select>');
-                    $('#loading').removeClass('loading');
-                    $('#loading-content').removeClass('loading-content');
-                },
-                error: function(xhr) {
-                    // Handle errors
-                    console.log(xhr);
-                    $('#loading').removeClass('loading');
-                    $('#loading-content').removeClass('loading-content');
-                }
-            })
-        } else {
-            $('#select_user').html('');
-        //    remove pointer event attr
-            $('#client_email').removeAttr("style");
-            $('#client_phone').removeAttr("style");
-            $('#client_address').removeAttr("style");
-            $('#client_name').removeAttr("style");
-            $('#client_email').val('');
-            $('#client_phone').val('');
-            $('#client_address').val('');
-            $('#client_name').val('');
-
-        }
-    });
-</script>
-
-<script>
-    $(document).ready(function(){
-        $(document).on('change','#customer_id',function(){
-            var customer_id = $(this).val();
-
-            $.ajax({
-                url: "{{ route('account-manager.projects.customer-details') }}",
-                type: 'GET',
-                data:{customer_id:customer_id},
-                success: function(response) {
-                    // console.log(response);
-                    $('#client_email').attr("style", "pointer-events: none;");
-                    $('#client_phone').attr("style", "pointer-events: none;");
-                    $('#client_address').attr("style", "pointer-events: none;");
-                    $('#client_name').attr("style", "pointer-events: none;");
-                    $('#client_email').val(response.customer_email);
-                    $('#client_phone').val(response.customer_phone);
-                    $('#client_address').val(response.customer_address);
-                    $('#client_name').val(response.customer_name);
-                },
-                error: function(xhr) {
-                    // Handle errors
-                    console.log(xhr);
-                }
-            });
+        $(document).on('click', '.remove-pdf', function() {
+            $(this).closest('.row').remove();
         });
-    });
-</script>
-<script>
-    // email validation
-    $(document).ready(function() {
-        var isFormSubmitted = false;
-
-        $(document).on('submit', '#form-validation', function(e) {
-            if (isFormSubmitted) {
-                // If the form is already submitted, do nothing
-                return;
-            }
-
-            e.preventDefault();
-
-            var client_email = $('#client_email').val();
-            var customer_id = $('#customer_id').val() || 0;
-            // alert(customer_id)
-            $.ajax({
-                url: "{{ route('email-validation') }}",
-                type: 'GET',
-                data: {
-                    client_email: client_email,
-                    customer_id: customer_id
-                },
-                success: function(response) {
-                    if (response.status === false) {
-                        $('.client_email_error').html(response.message);
-                    } else {
-                        // No validation errors, allow the form to submit
-                        $('.client_email_error').html('');
-                        isFormSubmitted = true;
-                        $('#form-validation').submit();
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
-        });
-    });
-</script>
-<script>
-    $(document).ready(function() {
-        // Attach an event listener to the Sale Date input
-        $('#sale_date').on('change', function() {
-            // Get the selected Sale Date
-            var saleDate = $(this).val();
-
-            // Set the minimum date for Delivery TAT to be one day after the Sale Date
-            $('#delivery_tat').attr('min', incrementDate(saleDate, 1));
-        });
-
-        // Function to increment date by a specified number of days
-        function incrementDate(date, days) {
-            var result = new Date(date);
-            result.setDate(result.getDate() + days);
-            return result.toISOString().split('T')[0];
-        }
-    });
-</script>
-<script>
-     $(document).on('change', '.payment-status', function() {
-
-           var id = $(this).data('id');
-           var payment_status = $(this).val();
-
-           // $('#milestone_payment_date').prop('required', false);
-           $('#milestone-date-'+id).prop('required', false);
-           $('#milestone-mode-'+id).prop('required', false);
-           if (payment_status == 'Paid') {
-
-               $('.edit-payment-hide-'+id).show();
-               $('#milestone-date-'+id).prop('required', true);
-               $('#milestone-mode-'+id).prop('required', true);
-           } else {
-               $('.edit-payment-hide-'+id).hide();
-               $('#milestone-date-'+id).prop('required', false);
-               $('#milestone-mode-'+id).prop('required', false);
-           }
-       });
     </script>
-     <script>
+
+    <script>
+        //when payment_type milestone monthly field arenot required
+        $('#payment_type').on('change', function() {
+            var payment_type = $(this).val();
+            if (payment_type.includes('Milestone')) {
+                $('#milestone_field').show();
+                $('#monthly_field').hide();
+                $('#milestone_name').prop('required', true);
+                $('#milestone_value').prop('required', true);
+                $('#payment_status').prop('required', true);
+
+                //monthly field required false
+                $('#start_date').prop('required', false);
+                $('#end_date').prop('required', false);
+            } else if (payment_type.includes('Monthly')) {
+                $('#monthly_field').show();
+                $('#milestone_field').hide();
+                $('#start_date').prop('required', true);
+                $('#end_date').prop('required', true);
+                //milestone filed required false
+                $('#milestone_name').prop('required', false);
+                $('#milestone_value').prop('required', false);
+                $('#payment_status').prop('required', false);
+
+            } else {
+                $('#milestone_name').prop('required', false);
+                $('#milestone_value').prop('required', false);
+                $('#payment_status').prop('required', false);
+
+                $('#start_date').prop('required', false);
+                $('#end_date').prop('required', false);
+                $('#milestone_field').hide();
+                $('#monthly_field').hide();
+            }
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $('.calculate_date').on('click', function() {
+
+                $('#fetch_month').html('');
+                //
+                var startDate = new Date($('#start_date').val());
+                var endDate = new Date($('#end_date').val());
+                var project_value = $('#project_value').val();
+                //validation start date and end date
+                $('#end_date').next('span').remove();
+                $('#start_date').next('span').remove();
+                $('#project_value').next('span').remove();
+                //if start_datewiil be blank
+                if (startDate == 'Invalid Date') {
+                    $('#start_date').after(
+                        '<span class="error" style="color:red;">Start date is required</span>');
+                    return false;
+                }
+                if (endDate == 'Invalid Date') {
+                    $('#end_date').after(
+                        '<span class="error" style="color:red;">Start date is required</span>');
+                    return false;
+                }
+                if (startDate > endDate || startDate == endDate) {
+                    $('#end_date').after(
+                        '<span class="error" style="color:red;">End date must be greater than to start date</span>'
+                        );
+                    return false;
+                }
+                if (project_value == '') {
+                    $('#project_value').after(
+                        '<span class="error" style="color:red;">Project value is required</span>');
+                    return false;
+                }
+
+                $('#loading').addClass('loading');
+                $('#loading-content').addClass('loading-content');
+                // count month between two dates
+                var months = (endDate.getFullYear() - startDate.getFullYear()) * 12;
+                months -= startDate.getMonth();
+                months += endDate.getMonth();
+                months = months <= 0 ? 0 : months;
+                var total = months + 1;
+                var new_project_value = project_value / total;
+                console.log(project_value);
+                console.log(new_project_value);
+                //show amount in 2 decimal point
+                var update_project_value = new_project_value.toFixed(2);
+                console.log(total);
+
+                for (let index = 1; index <= total; index++) {
+                    console.log(total);
+                    var html = '';
+                    html += '<div class="row">';
+                    html += '<div class="col-md-12 mb-3">';
+                    html += '<div style="display: flex">';
+                    html +=
+                        '<input type="text" name="milestone_value[]" class="form-control" value="' +
+                        update_project_value +
+                        '" placeholder="Milestone value" id="" required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number.">';
+                    html += '</div>';
+                    html += '</div>';
+                    html += '<div class="col-md-12 mb-3">';
+                    html += '<div style="display: flex">';
+                    html +=
+                        '<select name="payment_status[]" id="payment_status" class="form-control" required data-parsley-trigger="keyup"><option value=""  >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
+                    html += '</div>';
+                    html += '</div>';
+                    html += '<div class="col-md-12 mb-3">';
+                    html += '<div style="display: flex">';
+                    html +=
+                        '<input type="date" name="milestone_payment_date[]" class="form-control picker" value="" id="" required data-parsley-trigger="keyup">';
+                    html += '</div>';
+                    html += '</div>';
+                    html += '<div class="col-md-12 mb-3">';
+                    html += '<div style="display: flex">';
+                    html +=
+                        '<input type="text" name="milestone_payment_mode[]" class="form-control" value="" id="" placeholder="Milestone payment mode" required data-parsley-trigger="keyup">';
+                    html += '</div>';
+                    html += '</div>';
+                    // html += '<div class="col-md-12 mb-3">';
+                    // html += '<div style="display: flex">';
+                    // html +=
+                    //     '<input type="date" name="payment_date[]" class="form-control"  id="" required data-parsley-trigger="keyup" >';
+                    // html += '</div>';
+                    // html += '</div>';
+                    html += '<div class="col-md-12 mb-3">';
+                    html += '<div style="display: flex">';
+                    html +=
+                        '<textarea name="milestone_comment[]" class="form-control" placeholder="Milestone Comment" id="" cols="3" rows="2" ></textarea>';
+                    html += '</div>';
+                    html += '</div>';
+                    html += '<div class="col-md-12 mb-3">';
+                    html +=
+                        '<button type="button" class="btn btn-danger remove"><i class="fas fa-minus"></i> Remove</button>';
+                    html += '</div>';
+                    html += '</div>';
+
+                    $('#fetch_month').append(html);
+                }
+
+                $('#loading').removeClass('loading');
+                $('#loading-content').removeClass('loading-content');
+
+            });
+        });
+    </script>
+    <script>
+        $('.milestone-print').on('click', function() {
+            var number_of_milestone = $('#number_of_milestone').val();
+            if (number_of_milestone == '') {
+                $('#number_of_milestone').html('');
+                console.log(number_of_milestone);
+                $('#number_of_milestone').after(
+                    '<span class="error" style="color:red;">Number of milestone is required</span>');
+                return false;
+            }
+            $('.add-milestone').html('');
+            // show milestone field as per number of milestone
+            for (let index = 1; index <= number_of_milestone; index++) {
+                console.log(number_of_milestone);
+                var html = '';
+                html += '<div class="row">';
+                html += '<div class="col-md-12 mb-3">';
+                html += '<div style="display: flex">';
+                html +=
+                    '<input type="text" name="milestone_name[]" class="form-control" value="" placeholder="Milestone name" id="" required data-parsley-trigger="keyup">';
+                html += '</div>';
+                html += '</div>';
+                html += '<div class="col-md-12 mb-3">';
+                html += '<div style="display: flex">';
+                html +=
+                    '<input type="text" name="milestone_value[]" class="form-control" value="" placeholder="Milestone value" id="" required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number.">';
+                html += '</div>';
+                html += '</div>';
+                html += '<div class="col-md-12 mb-3">';
+                html += '<div style="display: flex">';
+                html +=
+                    '<select name="payment_status[]" id="payment_status" class="form-control payment-status" data-id="' +
+                    index +
+                    '" required data-parsley-trigger="keyup"><option value=""  >Select Payment Status</option><option value="Paid">Paid</option><option value="Due" selected>Due</option></select>';
+                html += '</div>';
+                html += '</div>';
+                html += '<div class="edit-payment-hide-' + index + '" style="display:none;">';
+                html += '<div class="col-md-12 mb-3">';
+                html += '<div style="display: flex">';
+                html +=
+                    '<input type="date" name="milestone_payment_date[]" class="form-control picker" value="" id="milestone-date-' +
+                    index + '"  data-parsley-trigger="keyup">';
+                html += '</div>';
+                html += '</div>';
+                html += '<div class="col-md-12 mb-3">';
+                html += '<div style="display: flex">';
+                html += '<select name="milestone_payment_mode[]" class="form-control" id="milestone-mode-' + index +
+                    '" data-parsley-trigger="keyup">';
+                html += '<option value="">Select Payment Mode</option>';
+                html += '<option value="Paypal">Paypal</option>';
+                html += '<option value="Stripe">Stripe</option>';
+                html += '<option value="Bank Transfer">Bank Transfer</option>';
+                html += '<option value="Payoneer">Payoneer</option>';
+                html += '</select>';
+                html += '</div>';
+                html += '</div>';
+                html += '</div>';
+                html += '<div class="col-md-12 mb-3">';
+                html += '<div style="display: flex">';
+                html +=
+                    '<textarea name="milestone_comment[]" class="form-control" placeholder="Comment" id="" cols="3" rows="2" ></textarea>';
+                html += '</div>';
+                html += '</div>';
+                html += '<div class="col-md-12 mb-3">';
+                html +=
+                    '<button type="button" class="btn btn-danger remove"><i class="fas fa-minus"></i> Remove</button>';
+                html += '</div>';
+                html += '</div>';
+                console.log(html);
+                $('.add-milestone').append(html);
+            }
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            // Handle the click event for the edit-route button
+            $(document).on('click', '.edit-route', function() {
+                var route = $(this).data('route');
+                // Make an AJAX request to fetch the priceRequest details
+                $('#loading').addClass('loading');
+                $('#loading-content').addClass('loading-content');
+                var page = $('#hidden_page').val();
+                $.ajax({
+                    url: route,
+                    type: 'GET',
+                    success: function(response) {
+                        console.log(response.view);
+                        $('#edit-project-model').html(response.view);
+                        $('#loading').removeClass('loading');
+                        $('#loading-content').removeClass('loading-content');
+                        $('#offcanvasEdit').offcanvas('show');
+                        $('#edit-page-no').val(page);
+                    },
+                    error: function(xhr) {
+                        // Handle errors
+                        $('#loading').removeClass('loading');
+                        $('#loading-content').removeClass('loading-content');
+                        console.log(xhr);
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        // check new user or existing user
+        $('.customer').on('change', function() {
+            var customer = $(this).val();
+            if (customer == 0) {
+                $('#loading').addClass('loading');
+                $('#loading-content').addClass('loading-content');
+                $.ajax({
+                    url: "{{ route('account-manager.projects.new-customer') }}",
+                    type: 'GET',
+                    success: function(response) {
+                        // console.log(response.data);
+                        $('#select_user').append(
+                            ' <label for="inputEnterYourName" class="col-form-label"> Select customer <span style="color: red;">*</span></label> <select name="customer_id" id="customer_id" required data-parsley-trigger="keyup" class="form-control select2"> <option value="">Select a user</option>'
+                            )
+                        $.each(response, function(key, value) {
+                            $('#customer_id').append('<option value="' + value.id + '">' + value
+                                .customer_name +
+                                '(' + value.customer_email + ')' + '</option>');
+                        });
+                        $('#select_user').append('</select>');
+                        $('#loading').removeClass('loading');
+                        $('#loading-content').removeClass('loading-content');
+                    },
+                    error: function(xhr) {
+                        // Handle errors
+                        console.log(xhr);
+                        $('#loading').removeClass('loading');
+                        $('#loading-content').removeClass('loading-content');
+                    }
+                })
+            } else {
+                $('#select_user').html('');
+                //    remove pointer event attr
+                $('#client_email').removeAttr("style");
+                $('#client_phone').removeAttr("style");
+                $('#client_address').removeAttr("style");
+                $('#client_name').removeAttr("style");
+                $('#client_email').val('');
+                $('#client_phone').val('');
+                $('#client_address').val('');
+                $('#client_name').val('');
+
+            }
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $(document).on('change', '#customer_id', function() {
+                var customer_id = $(this).val();
+
+                $.ajax({
+                    url: "{{ route('account-manager.projects.customer-details') }}",
+                    type: 'GET',
+                    data: {
+                        customer_id: customer_id
+                    },
+                    success: function(response) {
+                        // console.log(response);
+                        $('#client_email').attr("style", "pointer-events: none;");
+                        $('#client_phone').attr("style", "pointer-events: none;");
+                        $('#client_address').attr("style", "pointer-events: none;");
+                        $('#client_name').attr("style", "pointer-events: none;");
+                        $('#client_email').val(response.customer_email);
+                        $('#client_phone').val(response.customer_phone);
+                        $('#client_address').val(response.customer_address);
+                        $('#client_name').val(response.customer_name);
+                    },
+                    error: function(xhr) {
+                        // Handle errors
+                        console.log(xhr);
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        // email validation
+        $(document).ready(function() {
+            var isFormSubmitted = false;
+
+            $(document).on('submit', '#form-validation', function(e) {
+                if (isFormSubmitted) {
+                    // If the form is already submitted, do nothing
+                    return;
+                }
+
+                e.preventDefault();
+
+                var client_email = $('#client_email').val();
+                var customer_id = $('#customer_id').val() || 0;
+                // alert(customer_id)
+                $.ajax({
+                    url: "{{ route('email-validation') }}",
+                    type: 'GET',
+                    data: {
+                        client_email: client_email,
+                        customer_id: customer_id
+                    },
+                    success: function(response) {
+                        if (response.status === false) {
+                            $('.client_email_error').html(response.message);
+                        } else {
+                            // No validation errors, allow the form to submit
+                            $('.client_email_error').html('');
+                            isFormSubmitted = true;
+                            $('#form-validation').submit();
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            // Attach an event listener to the Sale Date input
+            $('#sale_date').on('change', function() {
+                // Get the selected Sale Date
+                var saleDate = $(this).val();
+
+                // Set the minimum date for Delivery TAT to be one day after the Sale Date
+                $('#delivery_tat').attr('min', incrementDate(saleDate, 1));
+            });
+
+            // Function to increment date by a specified number of days
+            function incrementDate(date, days) {
+                var result = new Date(date);
+                result.setDate(result.getDate() + days);
+                return result.toISOString().split('T')[0];
+            }
+        });
+    </script>
+    <script>
+        $(document).on('change', '.payment-status', function() {
+
+            var id = $(this).data('id');
+            var payment_status = $(this).val();
+
+            // $('#milestone_payment_date').prop('required', false);
+            $('#milestone-date-' + id).prop('required', false);
+            $('#milestone-mode-' + id).prop('required', false);
+            if (payment_status == 'Paid') {
+
+                $('.edit-payment-hide-' + id).show();
+                $('#milestone-date-' + id).prop('required', true);
+                $('#milestone-mode-' + id).prop('required', true);
+            } else {
+                $('.edit-payment-hide-' + id).hide();
+                $('#milestone-date-' + id).prop('required', false);
+                $('#milestone-mode-' + id).prop('required', false);
+            }
+        });
+    </script>
+    <script>
         $(document).ready(function() {
             $('.mySelect').select2();
         });
@@ -1186,69 +1292,73 @@
 
     {{-- Upsale panel handler --}}
     <script>
-    $(document).ready(function () {
-        // Open upsale panel for a project
-        $(document).on('click', '.btn-open-upsale', function (e) {
-            e.stopPropagation();
-            var projectId = $(this).data('project-id');
-            $('#loading').addClass('loading');
-            $('#loading-content').addClass('loading-content');
-            $.ajax({
-                url: '{{ url("account-manager/projects") }}/' + projectId + '/upsale',
-                type: 'GET',
-                success: function (res) {
-                    $('#upsale-panel-container').html(res.view);
-                    $('#loading').removeClass('loading');
-                    $('#loading-content').removeClass('loading-content');
-                    var offcanvasEl = document.getElementById('offcanvasUpsale');
-                    if (offcanvasEl) {
-                        var bsOffcanvas = new bootstrap.Offcanvas(offcanvasEl);
-                        bsOffcanvas.show();
-                        // Init select2 inside offcanvas
-                        if (typeof $.fn.select2 !== 'undefined') {
-                            $('#upsale_project_type').select2({ dropdownParent: $('#offcanvasUpsale') });
+        $(document).ready(function() {
+            // Open upsale panel for a project
+            $(document).on('click', '.btn-open-upsale', function(e) {
+                e.stopPropagation();
+                var projectId = $(this).data('project-id');
+                $('#loading').addClass('loading');
+                $('#loading-content').addClass('loading-content');
+                $.ajax({
+                    url: '{{ url('account-manager/projects') }}/' + projectId + '/upsale',
+                    type: 'GET',
+                    success: function(res) {
+                        $('#upsale-panel-container').html(res.view);
+                        $('#loading').removeClass('loading');
+                        $('#loading-content').removeClass('loading-content');
+                        var offcanvasEl = document.getElementById('offcanvasUpsale');
+                        if (offcanvasEl) {
+                            var bsOffcanvas = new bootstrap.Offcanvas(offcanvasEl);
+                            bsOffcanvas.show();
+                            // Init select2 inside offcanvas
+                            if (typeof $.fn.select2 !== 'undefined') {
+                                $('#upsale_project_type').select2({
+                                    dropdownParent: $('#offcanvasUpsale')
+                                });
+                            }
                         }
+                    },
+                    error: function() {
+                        $('#loading').removeClass('loading');
+                        $('#loading-content').removeClass('loading-content');
                     }
-                },
-                error: function () {
-                    $('#loading').removeClass('loading');
-                    $('#loading-content').removeClass('loading-content');
-                }
+                });
             });
-        });
 
-        // Edit upsale - load into separate edit offcanvas
-        $(document).on('click', '.btn-edit-upsale', function (e) {
-            e.stopPropagation();
-            var upsaleId = $(this).data('id');
-            // Close the upsale panel first
-            var panelEl = document.getElementById('offcanvasUpsale');
-            if (panelEl) {
-                var panelInstance = bootstrap.Offcanvas.getInstance(panelEl);
-                if (panelInstance) panelInstance.hide();
-            }
-            $('#loading').addClass('loading');
-            $('#loading-content').addClass('loading-content');
-            $.ajax({
-                url: '{{ url("account-manager/upsale") }}/' + upsaleId + '/edit',
-                type: 'GET',
-                success: function (res) {
-                    $('#upsale-edit-body').html(res.view);
-                    $('#loading').removeClass('loading');
-                    $('#loading-content').removeClass('loading-content');
-                    var editEl = document.getElementById('offcanvasUpsaleEdit');
-                    var bsEdit = new bootstrap.Offcanvas(editEl);
-                    bsEdit.show();
-                    if (typeof $.fn.select2 !== 'undefined') {
-                        $('#upsale_project_type_edit').select2({ dropdownParent: $('#offcanvasUpsaleEdit') });
-                    }
-                },
-                error: function () {
-                    $('#loading').removeClass('loading');
-                    $('#loading-content').removeClass('loading-content');
+            // Edit upsale - load into separate edit offcanvas
+            $(document).on('click', '.btn-edit-upsale', function(e) {
+                e.stopPropagation();
+                var upsaleId = $(this).data('id');
+                // Close the upsale panel first
+                var panelEl = document.getElementById('offcanvasUpsale');
+                if (panelEl) {
+                    var panelInstance = bootstrap.Offcanvas.getInstance(panelEl);
+                    if (panelInstance) panelInstance.hide();
                 }
+                $('#loading').addClass('loading');
+                $('#loading-content').addClass('loading-content');
+                $.ajax({
+                    url: '{{ url('account-manager/upsale') }}/' + upsaleId + '/edit',
+                    type: 'GET',
+                    success: function(res) {
+                        $('#upsale-edit-body').html(res.view);
+                        $('#loading').removeClass('loading');
+                        $('#loading-content').removeClass('loading-content');
+                        var editEl = document.getElementById('offcanvasUpsaleEdit');
+                        var bsEdit = new bootstrap.Offcanvas(editEl);
+                        bsEdit.show();
+                        if (typeof $.fn.select2 !== 'undefined') {
+                            $('#upsale_project_type_edit').select2({
+                                dropdownParent: $('#offcanvasUpsaleEdit')
+                            });
+                        }
+                    },
+                    error: function() {
+                        $('#loading').removeClass('loading');
+                        $('#loading-content').removeClass('loading-content');
+                    }
+                });
             });
         });
-    });
     </script>
 @endpush

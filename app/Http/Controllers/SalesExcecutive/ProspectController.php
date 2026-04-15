@@ -65,8 +65,56 @@ class ProspectController extends Controller
      */
     public function store(Request $request)
     {
-        // try {
+        $validator = \Validator::make($request->all(), [
+            'client_name' => 'required|string|max:255',
+            'business_name' => 'required|string|max:255',
+            'client_email' => 'required|email|max:255',
+            'client_phone' => 'required|string|max:20',
+            'business_address' => 'required|string|max:500',
+            'website' => 'nullable|url|max:255',
+            'offered_for' => 'required|string',
+            'other_value' => 'required_if:offered_for,Other|nullable|string|max:255',
+            'price_quote' => 'required|numeric|min:0',
+            'transfer_token_by' => 'required|exists:users,id',
+            'followup_date' => 'required|date',
+            'followup_time' => 'nullable',
+            'status' => 'required|in:Win,Follow Up,Sent Proposal,Close',
+            'upfront_value' => 'required_if:status,Win|nullable|numeric|min:0',
+            'payment_mode' => 'required_if:status,Win|nullable|string',
+            'sale_date' => 'required_if:status,Win|nullable|date',
+            'comments' => 'nullable|string',
+            'milestone_name' => 'nullable|array',
+            'milestone_name.*' => 'required_with:milestone_name|string|max:255',
+            'milestone_value' => 'nullable|array',
+            'milestone_value.*' => 'required_with:milestone_value|numeric|min:0',
+        ]);
+
+        if ($validator->fails()) {
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
+            }
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
         $data = $request->all();
+
+        // Milestone amount check
+        // if ($data['status'] == 'Win') {
+        //     $total_milestones = (float)($data['upfront_value'] ?? 0);
+        //     if (isset($data['milestone_value'])) {
+        //         foreach ($data['milestone_value'] as $mv) {
+        //             $total_milestones += (float)$mv;
+        //         }
+        //     }
+
+        //     if (round($total_milestones, 2) != round((float)$data['price_quote'], 2)) {
+        //         $error_msg = "The sum of upfront value ($data[upfront_value]) and milestones must equal the price quote ($data[price_quote]). Current sum: $total_milestones";
+        //         if ($request->ajax()) {
+        //             return response()->json(['success' => false, 'errors' => ['milestone_value' => [$error_msg]]], 422);
+        //         }
+        //         return redirect()->back()->withErrors(['milestone_value' => $error_msg])->withInput();
+        //     }
+        // }
 
         $prospect = new Prospect();
         $prospect->user_id = Auth::user()->id;
@@ -221,6 +269,10 @@ class ProspectController extends Controller
             $project_type->save();
         }
 
+        if ($request->ajax()) {
+            return response()->json(['success' => true, 'message' => 'Prospect created successfully.']);
+        }
+
         return redirect()->route('prospects.index')->with('message', 'Prospect created successfully.');
     }
 
@@ -268,7 +320,57 @@ class ProspectController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validator = \Validator::make($request->all(), [
+            'client_name' => 'required|string|max:255',
+            'business_name' => 'required|string|max:255',
+            'client_email' => 'required|email|max:255',
+            'client_phone' => 'required|string|max:20',
+            'business_address' => 'required|string|max:500',
+            'website' => 'nullable|url|max:255',
+            'offered_for' => 'required|string',
+            'other_value' => 'required_if:offered_for,Other|nullable|string|max:255',
+            'price_quote' => 'required|numeric|min:0',
+            'transfer_token_by' => 'required|exists:users,id',
+            'followup_date' => 'required_if:status,Follow Up|nullable|date',
+            'followup_time' => 'required_if:status,Follow Up|nullable',
+            'status' => 'required|in:Win,Follow Up,Sent Proposal,Close',
+            'upfront_value' => 'required_if:status,Win|nullable|numeric|min:0',
+            'payment_mode' => 'required_if:status,Win|nullable|string',
+            'sale_date' => 'required_if:status,Win|nullable|date',
+            'comments' => 'required|string',
+            'milestone_name' => 'nullable|array',
+            'milestone_name.*' => 'required_with:milestone_name|string|max:255',
+            'milestone_value' => 'nullable|array',
+            'milestone_value.*' => 'required_with:milestone_value|numeric|min:0',
+        ]);
+
+        if ($validator->fails()) {
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
+            }
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
         $data = $request->all();
+
+        // Milestone amount check
+        // if ($data['status'] == 'Win') {
+        //     $total_milestones = (float)($data['upfront_value'] ?? 0);
+        //     if (isset($data['milestone_value'])) {
+        //         foreach ($data['milestone_value'] as $mv) {
+        //             $total_milestones += (float)$mv;
+        //         }
+        //     }
+
+        //     if (round($total_milestones, 2) != round((float)$data['price_quote'], 2)) {
+        //         $error_msg = "The sum of upfront value ($data[upfront_value]) and milestones must equal the price quote ($data[price_quote]). Current sum: $total_milestones";
+        //         if ($request->ajax()) {
+        //             return response()->json(['success' => false, 'errors' => ['milestone_value' => [$error_msg]]], 422);
+        //         }
+        //         return redirect()->back()->withErrors(['milestone_value' => $error_msg])->withInput();
+        //     }
+        // }
+
         $prospect = Prospect::findOrfail($id);
         $prospect->user_id = Auth::user()->id;
         $prospect->report_to = Auth::user()->sales_manager_id;
@@ -426,6 +528,11 @@ class ProspectController extends Controller
             }
 
             $project_type->save();
+        }
+
+
+        if ($request->ajax()) {
+            return response()->json(['success' => true, 'message' => 'Prospect updated successfully.']);
         }
 
 

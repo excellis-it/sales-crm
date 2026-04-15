@@ -492,7 +492,8 @@
                                             class="fa fa-sort ms-1 text-muted"></i></th>
                                     <th class="sorting" data-column_name="payment_mode">Payment Mode <i
                                             class="fa fa-sort ms-1 text-muted"></i></th>
-                                    <th data-tippy-content="Cant't sort by Paid Milestone" style="cursor: pointer"> Paid Milestone </th>
+                                    <th data-tippy-content="Cant't sort by Paid Milestone" style="cursor: pointer"> Paid
+                                        Milestone </th>
                                     <th> Due Amount</th>
                                     <th>Action</th>
                                 </tr>
@@ -540,7 +541,7 @@
                 var query = $('#search').val();
                 var column_name = $('#hidden_column_name').val();
                 var sort_type = $('#hidden_sort_type').val();
-                var page = @php echo Session::get('page_number') @endphp;
+                var page = {{ Session::get('page_number') ?? 1 }};
                 fetch_data(page, sort_type, column_name, query, "Yes");
             @endif
 

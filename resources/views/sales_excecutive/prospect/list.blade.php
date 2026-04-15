@@ -120,7 +120,7 @@
                                 <h4 id="offcanvasEditLabel">Add Prospect Details</h4>
                             </div>
                             <div class="offcanvas-body">
-                                <form action="{{ route('prospects.store') }}" method="post" data-parsley-validate=""
+                                <form action="{{ route('prospects.store') }}" method="post"
                                     enctype="multipart/form-data">
                                     @csrf
                                     <div class="row">
@@ -128,32 +128,28 @@
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label"> Client Name
                                                 <span style="color: red;">*</span></label>
-                                            <input type="text" name="client_name" id="client_name" required
-                                                data-parsley-trigger="keyup" class="form-control"
+                                            <input type="text" name="client_name" id="client_name"
+                                                class="form-control"
                                                 value="{{ old('client_name') }}" placeholder="Enter Client Name">
                                         </div>
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Business Name
                                                 <span style="color: red;">*</span></label>
-                                            <input type="text" name="business_name" id="business_name" required
-                                                data-parsley-trigger="keyup" class="form-control"
+                                            <input type="text" name="business_name" id="business_name"
+                                                class="form-control"
                                                 value="{{ old('business_name') }}" placeholder="Enter Business Name">
                                         </div>
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Client Email
                                                 <span style="color: red;">*</span></label>
-                                            <input type="text" name="client_email" id="client_email" required
-                                                data-parsley-trigger="keyup" data-parsley-type="email"
-                                                data-parsley-type-message="Please enter a valid email address."
+                                            <input type="text" name="client_email" id="client_email"
                                                 class="form-control" value="{{ old('client_email') }}"
                                                 placeholder="Enter Client Email">
                                         </div>
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Client Phone
                                                 <span style="color: red;">*</span></label>
-                                            <input type="text" name="client_phone" id="client_phone" required
-                                                data-parsley-trigger="keyup" data-parsley-type="number"
-                                                data-parsley-type-message="Please enter a valid phone number."
+                                            <input type="text" name="client_phone" id="client_phone"
                                                 class="form-control" value="{{ old('client_phone') }}"
                                                 placeholder="Enter Client Phone Number">
                                         </div>
@@ -162,8 +158,8 @@
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Business
                                                 Address <span style="color: red;">*</span></label>
-                                            <input type="text" name="business_address" id="business_address" required
-                                                data-parsley-trigger="keyup" class="form-control"
+                                            <input type="text" name="business_address" id="business_address"
+                                                class="form-control"
                                                 value="{{ old('business_address') }}" placeholder="Enter Address">
                                         </div>
 
@@ -171,9 +167,7 @@
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Website Link</label>
                                             <input type="text" name="website" id="website"
-                                                data-parsley-required="false" data-parsley-trigger="keyup"
-                                                data-parsley-type="url"
-                                                data-parsley-type-message="Please enter a valid url." class="form-control"
+                                                class="form-control"
                                                 value="{{ old('website') }}" placeholder="Enter Website">
                                         </div>
                                         {{-- offer for --}}
@@ -187,8 +181,8 @@
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Service Offered <span
                                                     style="color: red;">*</span></label>
-                                            <select name="offered_for" id="project_type" required
-                                                data-parsley-trigger="keyup" class="form-control">
+                                            <select name="offered_for" id="project_type"
+                                                class="form-control">
                                                 <option value="">Select Prospect Type</option>
                                                 <option value="Website Design & Development">Website Design &
                                                     Development</option>
@@ -208,9 +202,7 @@
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Price Quote
                                                 <span style="color: red;">*</span></label>
-                                            <input type="text" name="price_quote" id="price_quote" required
-                                                data-parsley-trigger="keyup" data-parsley-type="number"
-                                                data-parsley-type-message="Please enter a valid number."
+                                            <input type="text" name="price_quote" id="price_quote"
                                                 class="form-control" value="{{ old('price_quote') }}"
                                                 placeholder="Enter Price Quote">
                                         </div>
@@ -221,7 +213,7 @@
                                                     style="color: red;">*</span>
                                             </label>
                                             <select name="transfer_token_by" id="transfer_token_by"
-                                                class="form-control select2" required>
+                                                class="form-control select2">
                                                 <option value="">Select Transfer Token By</option>
                                                 @foreach ($users as $user)
                                                     <option value="{{ $user->id }}">{{ $user->name }}
@@ -234,7 +226,7 @@
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Followup Date <span
                                                     style="color: red;">*</span></label>
-                                            <input type="date" name="followup_date" id="followup_date" required
+                                            <input type="date" name="followup_date" id="followup_date"
                                                 class="form-control picker" placeholder="Enter Followup Date">
                                         </div>
                                         {{-- followup_time --}}
@@ -248,8 +240,7 @@
                                         <div class="col-md-12 mb-3">
                                             <label for="inputEnterYourName" class="col-form-label">Status
                                                 <span style="color: red;">*</span></label>
-                                            <select name="status" id="status" class="form-control" required
-                                                data-parsley-trigger="keyup">
+                                            <select name="status" id="status" class="form-control">
                                                 <option value="">Select Status</option>
                                                 <option value="Win">On board</option>
                                                 <option value="Follow Up">Follow Up</option>
@@ -497,7 +488,7 @@
                     html +=
                         '<label for="inputEnterYourName" class="col-form-label">Others Service <span style="color: red;">*</span></label>';
                     html +=
-                        '<input type="text" name="other_value" id="other_value" class="form-control" value="{{ old('other_value') }}" placeholder="Enter Other Value" required data-parsley-trigger="keyup">';
+                        '<input type="text" name="other_value" id="other_value" class="form-control" value="{{ old('other_value') }}" placeholder="Enter Other Value">';
                     $('#other-value').html(html);
                 } else {
                     $('#other-value').html('');
@@ -513,7 +504,7 @@
                 var status = $(this).val();
                 if (status.includes('Win')) {
                     $('#upfront_value_show').html(
-                        '<div class="col-md-12 mb-3"><label for="inputEnterYourName" data-parsley-type="number" class="col-form-label">Upfront Value <span style="color: red;">*</span></label><input type="text" name="upfront_value" id="upfront_value"  required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number." class="form-control" value="{{ old('upfront_value') }}" placeholder="Enter Upfront Value"></div><div class="col-md-12 mb-3"><label class="col-form-label">Payment Mode <span style="color: red;">*</span></label><select name="payment_mode" class="form-control" required data-parsley-trigger="keyup"><option value="">Select Mode</option><option value="Paypal">Paypal</option><option value="Stripe">Stripe</option><option value="Bank Transfer">Bank Transfer</option><option value="Payoneer">Payoneer</option></select></div><div class="col-md-12 mb-3"> <label for = "inputEnterYourName" class="col-form-label"> Sale Date <span style="color: red;">*</span></label></label> <input type="date" name="sale_date" id ="sale_date" class="form-control picker"></div><h3 class="mt-4 text-uppercase">Milestone</h3><hr><div class="row"><div class="col-md-12 mb-3 pb-3"><div style="display: flex"><input type="text" name="milestone_name[]" class="form-control" value="" placeholder="Milestone name" id="" required data-parsley-trigger="keyup"></div></div><div class="col-md-12 mb-3 pb-3"><div style="display: flex"><input type="text" name="milestone_value[]" class="form-control" value="" placeholder="Milestone value" id="" required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number."></div></div><div class="col-md-12 mb-3 pb-3"><div style="display: flex"><textarea name="milestone_comment[]" class="form-control" placeholder="Milestone Comment" id="" cols="3" rows="2" ></textarea></div></div></div><div class="col-md-12 mb-3"><button type="button" class="btn btn-primary milestone-print"><i class="fas fa-plus"></i> Add Milestone</button></div><div class="add-milestone"></div></div>'
+                        '<div class="col-md-12 mb-3"><label for="inputEnterYourName" class="col-form-label">Upfront Value <span style="color: red;">*</span></label><input type="text" name="upfront_value" id="upfront_value" class="form-control" value="{{ old('upfront_value') }}" placeholder="Enter Upfront Value"></div><div class="col-md-12 mb-3"><label class="col-form-label">Payment Mode <span style="color: red;">*</span></label><select name="payment_mode" class="form-control"><option value="">Select Mode</option><option value="Paypal">Paypal</option><option value="Stripe">Stripe</option><option value="Bank Transfer">Bank Transfer</option><option value="Payoneer">Payoneer</option></select></div><div class="col-md-12 mb-3"> <label for = "inputEnterYourName" class="col-form-label"> Sale Date <span style="color: red;">*</span></label></label> <input type="date" name="sale_date" id ="sale_date" class="form-control picker"></div><h3 class="mt-4 text-uppercase">Milestone</h3><hr><div class="row"><div class="col-md-12 mb-3 pb-3"><div style="display: flex"><input type="text" name="milestone_name[]" class="form-control" value="" placeholder="Milestone name" id=""></div></div><div class="col-md-12 mb-3 pb-3"><div style="display: flex"><input type="text" name="milestone_value[]" class="form-control" value="" placeholder="Milestone value" id=""></div></div><div class="col-md-12 mb-3 pb-3"><div style="display: flex"><textarea name="milestone_comment[]" class="form-control" placeholder="Milestone Comment" id="" cols="3" rows="2" ></textarea></div></div></div><div class="col-md-12 mb-3"><button type="button" class="btn btn-primary milestone-print"><i class="fas fa-plus"></i> Add Milestone</button></div><div class="add-milestone"></div></div>'
                     );
                 } else {
                     $('#upfront_value_show').html('');
@@ -558,13 +549,13 @@
             html += '<div class="col-md-12 mb-3 pb-3">';
             html += '<div style="display: flex">';
             html +=
-                '<input type="text" name="milestone_name[]" class="form-control" value="" placeholder="Milestone name" id="" required data-parsley-trigger="keyup">';
+                '<input type="text" name="milestone_name[]" class="form-control" value="" placeholder="Milestone name" id="">';
             html += '</div>';
             html += '</div>';
             html += '<div class="col-md-12 mb-3 pb-3">';
             html += '<div style="display: flex">';
             html +=
-                '<input type="text" name="milestone_value[]" class="form-control" value="" placeholder="Milestone value" id="" required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number.">';
+                '<input type="text" name="milestone_value[]" class="form-control" value="" placeholder="Milestone value" id="">';
             html += '</div>';
             html += '</div>';
             // html += '<div class="col-md-12 mb-3 pb-3">';
@@ -607,6 +598,101 @@
 
         $(document).on('click', '.remove', function() {
             $(this).closest('.row').remove();
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $(document).on('submit', 'form', function(e) {
+                var form = $(this);
+                // Check if the form is for prospects.store or prospects.update
+                var action = form.attr('action');
+                var method = (form.attr('method') || '').toLowerCase();
+                var methodField = form.find('input[name="_method"]').val();
+
+                if (action && (action.toLowerCase().includes('prospects') && (method === 'post' || (methodField && methodField.toUpperCase() === 'PUT')))) {
+                    // It's a prospect form, handle with AJAX
+                    e.preventDefault();
+
+                    // Basic milestone check frontend (optional but good)
+                    var status = form.find('#status, #status-edit').val();
+                    if (status == 'Win') {
+                        var priceQuote = parseFloat(form.find('#price_quote').val()) || 0;
+                        var upfrontValue = parseFloat(form.find('#upfront_value').val()) || 0;
+                        var totalMilestones = upfrontValue;
+                        form.find('input[name="milestone_value[]"]').each(function() {
+                            totalMilestones += parseFloat($(this).val()) || 0;
+                        });
+
+                        
+                    }
+
+                    $('#loading').addClass('loading');
+                    $('#loading-content').addClass('loading-content');
+
+                    $.ajax({
+                        url: action,
+                        type: 'POST', // Always POST for Laravel if using _method
+                        data: new FormData(this),
+                        processData: false,
+                        contentType: false,
+                        success: function(resp) {
+                            $('#loading').removeClass('loading');
+                            $('#loading-content').removeClass('loading-content');
+                            if (resp.success) {
+                                swal({
+                                    title: "Success!",
+                                    text: resp.message,
+                                    type: "success"
+                                }).then(() => {
+                                    $('.offcanvas').offcanvas('hide');
+                                    location.reload(); // Refresh to see changes and counts
+                                });
+                            }
+                        },
+                        error: function(xhr) {
+                            $('#loading').removeClass('loading');
+                            $('#loading-content').removeClass('loading-content');
+                            if (xhr.status === 422) {
+                                var errors = xhr.responseJSON.errors;
+                                // Clear previous errors
+                                form.find('.text-danger.backend-error').remove();
+                                $.each(errors, function(key, messages) {
+                                    // Handle array keys like milestone_value.0
+                                    var fieldKey = key.replace(/\./g, '\\.');
+                                    var input = form.find('[name="' + key + '"]');
+                                    if (input.length === 0 && key.indexOf('.') !== -1) {
+                                        var parts = key.split('.');
+                                        var fieldName = parts[0];
+                                        var index = parts[1];
+                                        input = form.find('[name^="' + fieldName + '"]').eq(index);
+                                    }
+                                    if (input.length === 0) {
+                                        // Try finding by name prefix if it's an array
+                                        input = form.find('[name^="' + key.split('.')[0] + '"]').last();
+                                    }
+
+                                    if (input.length > 0) {
+                                        input.after('<div class="text-danger backend-error">' + messages[0] + '</div>');
+                                    } else {
+                                        // If no input found (like milestone_value check error), show swal
+                                        swal({
+                                            title: "Validation Error",
+                                            text: messages[0],
+                                            type: "error"
+                                        });
+                                    }
+                                });
+                            } else {
+                                swal({
+                                    title: "Error",
+                                    text: "Something went wrong. Please try again.",
+                                    type: "error"
+                                });
+                            }
+                        }
+                    });
+                }
+            });
         });
     </script>
 @endpush

@@ -20,36 +20,44 @@
                     <div class="col-md-12 mb-3">
                         <label for="inputEnterYourName" class="col-form-label"> Client Name
                             <span style="color: red;">*</span></label>
-                        <input type="text" name="client_name" id="client_name" required
-                            data-parsley-trigger="keyup" class="form-control"
+                        <input type="text" name="client_name" id="client_name"
+                            class="form-control"
                             value="{{ $prospect->client_name }}"
                             placeholder="Enter Client Name">
+                        @error('client_name')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="col-md-12 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Business Name
                             <span style="color: red;">*</span></label>
                         <input type="text" name="business_name" id="business_name"
-                            required data-parsley-trigger="keyup" class="form-control"
+                            class="form-control"
                             value="{{ $prospect->business_name }}"
                             placeholder="Enter Business Name">
+                        @error('business_name')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="col-md-12 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Client Email
                             <span style="color: red;">*</span></label>
-                        <input type="text" name="client_email" id="client_email" required
-                            data-parsley-trigger="keyup" data-parsley-type="email"
-                            data-parsley-type-message="Please enter a valid email address."
+                        <input type="text" name="client_email" id="client_email"
                             class="form-control" value="{{ $prospect->client_email }}"
                             placeholder="Enter Client Email">
+                        @error('client_email')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="col-md-12 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Client Phone
                             <span style="color: red;">*</span></label>
-                        <input type="text" name="client_phone" id="client_phone" required
-                            data-parsley-trigger="keyup" data-parsley-type="number"
-                            data-parsley-type-message="Please enter a valid phone number."
+                        <input type="text" name="client_phone" id="client_phone"
                             class="form-control" value="{{ $prospect->client_phone }}"
                             placeholder="Enter Client Phone Number">
+                        @error('client_phone')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     {{-- clinent address --}}
@@ -57,9 +65,12 @@
                         <label for="inputEnterYourName" class="col-form-label">Business
                             Address <span style="color: red;">*</span></label>
                         <input type="text" name="business_address" id="business_address"
-                            required data-parsley-trigger="keyup" class="form-control"
+                            class="form-control"
                             value="{{ $prospect->business_address }}"
                             placeholder="Enter Address">
+                        @error('business_address')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     {{-- website --}}
@@ -67,11 +78,11 @@
                         <label for="inputEnterYourName" class="col-form-label">Website
                             Link</label>
                         <input type="text" name="website" id="website"
-                            data-parsley-required="false" data-parsley-trigger="keyup"
-                            data-parsley-type="url"
-                            data-parsley-type-message="Please enter a valid url."
                             class="form-control" value="{{ $prospect->website }}"
                             placeholder="Enter Website">
+                        @error('website')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
                     {{-- offer for --}}
 
@@ -80,8 +91,7 @@
                         <label for="inputEnterYourName" class="col-form-label">Service
                             Offered
                             <span style="color: red;">*</span></label>
-                        <select name="offered_for" id="prospect_type" required
-                            data-parsley-trigger="keyup" class="form-control">
+                        <select name="offered_for" id="prospect_type" class="form-control">
                             <option value="">Select Service Offered </option>
                             <option value="Website Design & Development"
                                 {{ $prospect->offered_for == 'Website Design & Development' ? 'selected' : '' }}>
@@ -105,6 +115,9 @@
                                 {{ $prospect->offered_for != 'SMO' && $prospect->offered_for != 'SEO' && $prospect->offered_for != 'Logo Design' && $prospect->offered_for != 'Digital Marketing & SEO' && $prospect->offered_for != 'Mobile Application Development' && $prospect->offered_for != 'Website Design & Development' ? 'selected' : '' }}>
                                 Other</option>
                         </select>
+                        @error('offered_for')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="other-value col-md-12 mb-3">
                         @if (
@@ -117,7 +130,7 @@
                             <label for="inputEnterYourName" class="col-form-label">Other
                                 Value <span style="color: red;">*</span></label>
                             <input type="text" name="other_value" id="other_value"
-                                required data-parsley-trigger="keyup" class="form-control"
+                                class="form-control"
                                 value="{{ $prospect->offered_for }}"
                                 placeholder="Enter Other Value">
                         @endif
@@ -127,11 +140,11 @@
                         <label for="inputEnterYourName" class="col-form-label">Price Quote
                             <span style="color: red;">*</span></label>
                         <input type="text" name="price_quote" id="price_quote"
-                            required data-parsley-trigger="keyup"
-                            data-parsley-type="number"
-                            data-parsley-type-message="Please enter a valid number."
                             class="form-control" value="{{ $prospect->price_quote }}"
                             placeholder="Enter Price Quote">
+                        @error('price_quote')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     {{-- transfer_token_by --}}
@@ -140,7 +153,7 @@
                             Taken By <span style="color: red;">*</span>
                         </label>
                         <select name="transfer_token_by" id="transfer_token_by"
-                            class="form-control select2" required>
+                            class="form-control select2">
                             <option value="">Select Transfer Token By</option>
                             @foreach ($users as $user)
                                 <option value="{{ $user->id }}"
@@ -148,6 +161,9 @@
                                     {{ $user->name }}</option>
                             @endforeach
                         </select>
+                        @error('transfer_token_by')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
                     {{-- followup_date --}}
                     <div id="followup_date_div" style="display: {{ $prospect->status == 'Follow Up' ? 'block' : 'none' }};">
@@ -155,26 +171,30 @@
                             <label for="inputEnterYourName" class="col-form-label">Followup
                                 Date <span style="color: red;">*</span></label>
                             <input type="date" name="followup_date" id="followup_date"
-                                {{ $prospect->status == 'Follow Up' ? 'required' : '' }} class="form-control picker"
+                                class="form-control picker"
                                 value="{{ $prospect->followup_date }}"
                                 placeholder="Enter Followup Date">
+                            @error('followup_date')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
                         {{-- followup_time --}}
                         <div class="col-md-12 mb-3">
                             <label for="inputEnterYourName" class="col-form-label">Followup
                                 Time <span style="color: red;">*</span></label>
                             <input type="time" name="followup_time" id="followup_time"
-                                {{ $prospect->status == 'Follow Up' ? 'required' : '' }}
                                 class="form-control" value="{{ $prospect->followup_time }}"
                                 placeholder="Enter Followup Time">
+                            @error('followup_time')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
                     {{-- status --}}
                     <div class="col-md-12 mb-3">
                         <label for="inputEnterYourName" class="col-form-label">Status
                             <span style="color: red;">*</span></label>
-                        <select name="status" id="status-edit" class="form-control"
-                            required data-parsley-trigger="keyup">
+                        <select name="status" id="status-edit" class="form-control">
                             <option value="">Select Status</option>
                             <option value="Win"
                                 {{ $prospect->status == 'Win' ? 'selected' : '' }}>On board
@@ -189,6 +209,9 @@
                                 {{ $prospect->status == 'Close' ? 'selected' : '' }}>Cancel
                             </option>
                         </select>
+                        @error('status')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="row" id="upfront_value_show_edit">
                         @if ($prospect->status == 'Win')
@@ -204,7 +227,7 @@
 </div>
                             <div class="col-md-12 mb-3">
                                 <label class="col-form-label">Payment Mode</label>
-                                <select name="payment_mode" class="form-control" required data-parsley-trigger="keyup">
+                                <select name="payment_mode" class="form-control">
                                     <option value="">Select Mode</option>
                                     <option value="Paypal" {{ (isset($prospect) && $prospect->payment_mode == "Paypal") ? "selected" : "" }}>Paypal</option>
                                     <option value="Stripe" {{ (isset($prospect) && $prospect->payment_mode == "Stripe") ? "selected" : "" }}>Stripe</option>
@@ -227,8 +250,11 @@
                     <div class="col-md-12 mb-3">
                         <label for="inputEnterYourName"
                             class="col-form-label">Comments <span style="color: red;">*</span></label>
-                        <textarea name="comments" id="comments" cols="30" rows="5" class="form-control" required
+                        <textarea name="comments" id="comments" cols="30" rows="5" class="form-control"
                             placeholder="Enter Comments"></textarea>
+                        @error('comments')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
                 <div class="d-flex alin-items-center w-100 text-end">
@@ -268,7 +294,7 @@
                     html +=
                         '<label for="inputEnterYourName" class="col-form-label">Others Service <span style="color: red;">*</span></label>';
                     html +=
-                        '<input type="text" name="other_value" id="other_value" class="form-control" value="{{ old('other_value') }}" placeholder="Enter Other Value" required data-parsley-trigger="keyup">';
+                        '<input type="text" name="other_value" id="other_value" class="form-control" value="{{ old('other_value') }}" placeholder="Enter Other Value">';
                     $('.other-value').html(html);
                 } else {
                     $('.other-value').html('');
@@ -285,7 +311,7 @@
                 if (status.includes('Win')) {
                     var html = '';
                     html +=
-                        '<div class="col-md-12 mb-3"><label for="inputEnterYourName" data-parsley-type="number" class="col-form-label">Upfront Value <span style="color: red;">*</span></label><input type="text" name="upfront_value" id="upfront_value"  required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number." class="form-control" value="{{ old('upfront_value') }}" placeholder="Enter Upfront Value"></div><div class="col-md-12 mb-3"><label class="col-form-label">Payment Mode <span style="color: red;">*</span></label><select name="payment_mode" class="form-control" required data-parsley-trigger="keyup"><option value="">Select Mode</option><option value="Paypal">Paypal</option><option value="Stripe">Stripe</option><option value="Bank Transfer">Bank Transfer</option><option value="Payoneer">Payoneer</option></select></div><div class="col-md-12 mb-3"> <label for = "inputEnterYourName" class="col-form-label"> Sale Date <span style="color: red;">*</span></label></label> <input type="date" name ="sale_date" id ="sale_date" class ="form-control picker"></div><h3 class="mt-4 text-uppercase">Milestone</h3><hr><div class="row"><div class="col-md-12 mb-3 pb-3"><div style="display: flex"><input type="text" name="milestone_name[]" class="form-control" value="" placeholder="Milestone name" id="" required data-parsley-trigger="keyup"></div></div><div class="col-md-12 mb-3 pb-3"><div style="display: flex"><input type="text" name="milestone_value[]" class="form-control" value="" placeholder="Milestone value" id="" required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number."></div></div><div class="col-md-12 mb-3 pb-3"><div style="display: flex"><textarea name="milestone_comment[]" class="form-control" placeholder="Milestone Comment" id="" cols="3" rows="2" ></textarea></div></div></div><div class="col-md-12 mb-3"><button type="button" class="btn btn-primary milestone-print-edit"><i class="fas fa-plus"></i> Add Milestone</button></div><div class="add-milestone-edit"></div></div>';
+                        '<div class="col-md-12 mb-3"><label for="inputEnterYourName" class="col-form-label">Upfront Value <span style="color: red;">*</span></label><input type="text" name="upfront_value" id="upfront_value" class="form-control" value="{{ old('upfront_value') }}" placeholder="Enter Upfront Value"></div><div class="col-md-12 mb-3"><label class="col-form-label">Payment Mode <span style="color: red;">*</span></label><select name="payment_mode" class="form-control"><option value="">Select Mode</option><option value="Paypal">Paypal</option><option value="Stripe">Stripe</option><option value="Bank Transfer">Bank Transfer</option><option value="Payoneer">Payoneer</option></select></div><div class="col-md-12 mb-3"> <label for = "inputEnterYourName" class="col-form-label"> Sale Date <span style="color: red;">*</span></label></label> <input type="date" name ="sale_date" id ="sale_date" class ="form-control picker"></div><h3 class="mt-4 text-uppercase">Milestone</h3><hr><div class="row"><div class="col-md-12 mb-3 pb-3"><div style="display: flex"><input type="text" name="milestone_name[]" class="form-control" value="" placeholder="Milestone name" id=""></div></div><div class="col-md-12 mb-3 pb-3"><div style="display: flex"><input type="text" name="milestone_value[]" class="form-control" value="" placeholder="Milestone value" id=""></div></div><div class="col-md-12 mb-3 pb-3"><div style="display: flex"><textarea name="milestone_comment[]" class="form-control" placeholder="Milestone Comment" id="" cols="3" rows="2" ></textarea></div></div></div><div class="col-md-12 mb-3"><button type="button" class="btn btn-primary milestone-print-edit"><i class="fas fa-plus"></i> Add Milestone</button></div><div class="add-milestone-edit"></div></div>';
                     $('#upfront_value_show_edit').html(html);
                 } else {
                     $('#upfront_value_show_edit').html('');
@@ -312,13 +338,13 @@
     html += '<div class="col-md-12 mb-3 pb-3">';
     html += '<div style="display: flex">';
     html +=
-        '<input type="text" name="milestone_name[]" class="form-control" value="" placeholder="Milestone name" id="" required data-parsley-trigger="keyup">';
+        '<input type="text" name="milestone_name[]" class="form-control" value="" placeholder="Milestone name" id="">';
     html += '</div>';
     html += '</div>';
     html += '<div class="col-md-12 mb-3 pb-3">';
     html += '<div style="display: flex">';
     html +=
-        '<input type="text" name="milestone_value[]" class="form-control" value="" placeholder="Milestone value" id="" required data-parsley-trigger="keyup" data-parsley-type="number" data-parsley-type-message="Please enter a valid number.">';
+        '<input type="text" name="milestone_value[]" class="form-control" value="" placeholder="Milestone value" id="">';
     html += '</div>';
     html += '</div>';
     // html += '<div class="col-md-12 mb-3 pb-3">';
