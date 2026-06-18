@@ -285,7 +285,7 @@ class ProjectController extends Controller
         $project->project_value = $data['project_value'];
         $project->currency = $data['currency'];
         $project->payment_mode = $data['payment_mode'];
-        $project->project_opener = Auth::user()->id;
+        // $project->project_opener = Auth::user()->id;
         $project->project_closer = $data['project_closer'];
         $project->project_upfront = $data['project_upfront'];
         $project->website = $data['website'];
@@ -418,12 +418,12 @@ class ProjectController extends Controller
             $sort_by = $request->get('sortby', 'id');
             $sort_type = $request->get('sorttype', 'desc');
             $query = $request->get('query', '');
-            
+
             // Ensure sort_type is valid
             if (!in_array(strtolower($sort_type), ['asc', 'desc'])) {
                 $sort_type = 'desc';
             }
-            
+
             // Try to transform query if it looks like d-m-Y date
             $date_query = null;
             if (preg_match('/^\d{1,2}-\d{1,2}-\d{4}$/', $query)) {
@@ -478,30 +478,30 @@ class ProjectController extends Controller
                     ->orWhereHas('projectOpener', function ($sq) use ($query_p) {
                         $sq->where('name', 'like', '%' . $query_p . '%');
                     });
-                
+
                 if ($date_query) {
                     $q->orWhere('sale_date', 'like', '%' . $date_query . '%');
                 }
 
                 // Searching by Total Grand Total (Base + Upsale)
                 $q->orWhereRaw("(project_value + (SELECT COALESCE(SUM(upsale_value), 0) FROM upsales WHERE upsales.project_id = projects.id)) LIKE ?", ["%{$query_p}%"]);
-                
+
                 // Searching by Total Upfront (Base + Upsale Upfront)
                 $q->orWhereRaw("(project_upfront + (SELECT COALESCE(SUM(upsale_upfront), 0) FROM upsales WHERE upsales.project_id = projects.id)) LIKE ?", ["%{$query_p}%"]);
 
                 // Searching by Milestone Received (Paid milestones excluding upfronts)
-                $paidMilestoneSubquery = "(SELECT COALESCE(SUM(milestone_value), 0) FROM project_milestones 
-                                            WHERE project_milestones.project_id = projects.id 
-                                            AND payment_status = 'Paid' 
-                                            AND milestone_type NOT IN ('upfront', 'upsale_upfront') 
+                $paidMilestoneSubquery = "(SELECT COALESCE(SUM(milestone_value), 0) FROM project_milestones
+                                            WHERE project_milestones.project_id = projects.id
+                                            AND payment_status = 'Paid'
+                                            AND milestone_type NOT IN ('upfront', 'upsale_upfront')
                                             AND milestone_name NOT IN ('Upfront', 'Upsale Upfront'))";
-                
+
                 $q->orWhereRaw("{$paidMilestoneSubquery} LIKE ?", ["%{$query_p}%"]);
 
                 // Searching by Balance Due
                 $grandTotalSubquery = "(project_value + (SELECT COALESCE(SUM(upsale_value), 0) FROM upsales WHERE upsales.project_id = projects.id))";
                 $totalUpfrontSubquery = "(project_upfront + (SELECT COALESCE(SUM(upsale_upfront), 0) FROM upsales WHERE upsales.project_id = projects.id))";
-                
+
                 $q->orWhereRaw("({$grandTotalSubquery} - {$totalUpfrontSubquery} - {$paidMilestoneSubquery}) LIKE ?", ["%{$query_p}%"]);
             });
 
