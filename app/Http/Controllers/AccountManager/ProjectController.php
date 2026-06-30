@@ -275,7 +275,7 @@ class ProjectController extends Controller
     {
         $data = $request->all();
         $project = Project::findOrfail($id);
-        $project->user_id = Auth::user()->id;
+        // $project->user_id = Auth::user()->id;
         $project->client_name = $data['client_name'];
         $project->business_name = $data['business_name'];
         $project->client_email = $data['client_email'];
